@@ -1,16 +1,22 @@
 package it.polimi.ingsw.PSP038.model;
 
-import java.util.Optional;
-
 import static it.polimi.ingsw.PSP038.model.ArgumentChecker.requireBetween;
+
+/**
+ * Immutable class representing the cells that make up the base layer
+ * of the board. They can be decorated using the CellDecorator class.
+ * Each cell has Cartesian coordinates ({@code x, y}) and height 0;
+ *
+ * @author Maximilien Groh (10683107)
+ */
 
 public final class Cell implements ICell {
     public static final int ROWS = 5;
     public static final int COLUMNS = 5;
     public static final int COUNT = ROWS * COLUMNS;
 
-    int x;
-    int y;
+    private final int x;
+    private final int y;
 
     /**
      * Constructs a cell with Cartesian coordinates.
@@ -22,8 +28,8 @@ public final class Cell implements ICell {
      */
 
     public Cell(int x, int y) throws IllegalArgumentException {
-        this.x = requireBetween(0, COLUMNS - 1, x);
-        this.y = requireBetween(0, ROWS - 1, y);
+        this.x = requireBetween(0, COLUMNS, x);
+        this.y = requireBetween(0, ROWS, y);
     }
 
     @Override
@@ -37,31 +43,8 @@ public final class Cell implements ICell {
     }
 
     @Override
-    public int height(){
+    public int height() {
         return 0;
-    }
-
-    @Override
-    public Optional<ICell> neighbor(Direction dir) {
-        int neighborX = x + dir.x();
-        int neighborY = y + dir.y();
-        return isOutOfBounds(neighborX, neighborY) ? Optional.empty() : Optional.of(new Cell(neighborX, neighborY));
-    }
-
-    private static boolean isOutOfBounds(int x, int y) {
-        return x < 0 || y < 0 || x >= COLUMNS || y >= ROWS;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        Cell other = (Cell) obj;
-        return x() == other.x() && y() == other.y();
     }
 
     @Override

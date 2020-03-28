@@ -1,6 +1,11 @@
 package it.polimi.ingsw.PSP038.model;
 
-import java.util.Optional;
+/**
+ * Interface that represents the abstract concept of cell.
+ * It is at the top of the Cell hierarchy.
+ *
+ * @author Maximilien Groh (10683107)
+ */
 
 public interface ICell {
 
@@ -29,23 +34,13 @@ public interface ICell {
     int height();
 
     /**
-     * Determines whether it is possible to move and build on the cell
+     * Determines whether the cell has a Dome on top of it
      *
-     * @return <b>true</b> if it is possible, <b>false</b> otherwise
+     * @return <b>true</b> if it is has a Dome, <b>false</b> otherwise
      */
 
-    default boolean canAddOnTop(){
-        return true;
+    default boolean hasDome() {
+        return false;
     }
 
-    /**
-     * Returns the neighbor of the cell in question in the given direction if there is one,
-     * the empty optional value otherwise.
-     *
-     * @param dir The direction of the neighbor cell.
-     * @return the neighbor of the cell in question in the given direction if there is one,
-     * the empty optional value otherwise.
-     */
-
-    Optional<ICell> neighbor(Direction dir);
 }

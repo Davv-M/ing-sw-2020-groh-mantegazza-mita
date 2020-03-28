@@ -3,11 +3,12 @@ package it.polimi.ingsw.PSP038.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.unmodifiableList;
 
 /**
- * Two-dimensional Board game represented by a one-dimensional list of {@Code Cell.COUNT}
+ * Two-dimensional Board game represented by a one-dimensional list of {@code Cell.COUNT}
  * sequences of blocks in row major order.
  *
  * @author Maximilien Groh (10683107)
@@ -30,7 +31,6 @@ public final class Board {
                             + " blocks");
         }
         this.cells = unmodifiableList(new ArrayList<>(cells));
-        ;
     }
 
     /**
@@ -65,5 +65,45 @@ public final class Board {
 
     private static int rowMajorIndex(int x, int y) {
         return y * Cell.COLUMNS + x;
+    }
+
+    /**
+     * Returns the neighbor of the given cell in the given direction if there is one,
+     * the empty optional value otherwise.
+     *
+     * @param cell the cell of which we want to find the neighbor
+     * @param dir  the direction where the neighbor lies
+     * @return the neighbor of the given cell in the given direction if there is one,
+     * the empty optional value otherwise.
+     */
+
+    public Optional<ICell> neighborOf(ICell cell, Direction dir) {
+        int neighborX = cell.x() + dir.x();
+        int neighborY = cell.y() + dir.y();
+
+        return isOutOfBounds(neighborX, neighborY) ? Optional.empty() : Optional.of(cellAt(neighborX, neighborY));
+    }
+
+    private static boolean isOutOfBounds(int x, int y) {
+        return x < 0 || y < 0 || x >= Cell.COLUMNS || y >= Cell.ROWS;
+    }
+
+    /**
+     * Returns a list of cells representing the neighbors of the given cell
+     *
+     * @param cell the cell of which we want to find the neighbors
+     * @return a list of cells representing the neighbors of the given cell
+     */
+
+    public List<ICell> neighbors(ICell cell) {
+        List<ICell> neighbors = new ArrayList<>();
+
+        for (Direction dir : Direction.values()) {
+            Optional<ICell> possibleNeighbor = neighborOf(cell, dir);
+            if (possibleNeighbor.isPresent()) {
+                neighbors.add(possibleNeighbor.get());
+            }
+        }
+        return neighbors;
     }
 }
