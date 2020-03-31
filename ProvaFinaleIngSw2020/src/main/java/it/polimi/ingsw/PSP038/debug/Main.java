@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP038.debug;
 
-import it.polimi.ingsw.PSP038.model.*;
+import it.polimi.ingsw.PSP038.model.Board;
 
 public class Main {
     /*public static void main(String[] args){
@@ -13,7 +13,7 @@ public class Main {
         ICell worker = new Worker(cell(0, 1, 3, true), Worker.Color.RED);
 
         System.out.println(((Worker) worker).color());
-    }*/
+    }
 
     private static ICell cell(int x, int y, int height, boolean hasDome) {
         if(hasDome){
@@ -23,5 +23,5 @@ public class Main {
         } else {
             return new TowerBlock(cell(x, y, height - 1, false));
         }
-    }
+    }*/
 }

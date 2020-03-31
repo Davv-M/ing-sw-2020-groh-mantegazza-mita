@@ -24,7 +24,7 @@ public final class Board {
      *                                  precisely {@code Cell.COUNT} cells
      */
 
-    public Board(List<ICell> cells) throws IllegalArgumentException {
+    private Board(List<ICell> cells) throws IllegalArgumentException {
         if (cells == null || cells.size() != Cell.COUNT) {
             throw new IllegalArgumentException(
                     "The game board must be made of precisely " + Cell.COUNT
@@ -39,7 +39,7 @@ public final class Board {
      * @return Board made of free cells
      */
 
-    public Board withFreeCells() {
+    public static Board withFreeCells() {
         List<ICell> freeCells = new LinkedList<>();
 
         for (int row = 0; row < Cell.ROWS; ++row) {
@@ -48,6 +48,28 @@ public final class Board {
             }
         }
         return new Board(freeCells);
+    }
+
+    /**
+     * Returns a copy of the board that contains
+     * the given cell or the same board if the
+     * argument is null
+     *
+     * @param cell the cell to insert
+     * @return a new board with the given cell
+     */
+
+    public Board withCell(ICell newCell) {
+        if (newCell == null) {
+            return this;
+        }
+        List<ICell> newBoardCells = new LinkedList<>(cells);
+        int index = rowMajorIndex(newCell.x(), newCell.y());
+
+        newBoardCells.remove(index);
+        newBoardCells.add(index, newCell);
+
+        return new Board(newBoardCells);
     }
 
     /**
@@ -61,10 +83,6 @@ public final class Board {
 
     public ICell cellAt(int x, int y) {
         return cells.get(rowMajorIndex(x, y));
-    }
-
-    private static int rowMajorIndex(int x, int y) {
-        return y * Cell.COLUMNS + x;
     }
 
     /**
@@ -82,10 +100,6 @@ public final class Board {
         int neighborY = cell.y() + dir.y();
 
         return isOutOfBounds(neighborX, neighborY) ? Optional.empty() : Optional.of(cellAt(neighborX, neighborY));
-    }
-
-    private static boolean isOutOfBounds(int x, int y) {
-        return x < 0 || y < 0 || x >= Cell.COLUMNS || y >= Cell.ROWS;
     }
 
     /**
@@ -106,4 +120,13 @@ public final class Board {
         }
         return neighbors;
     }
+
+    private static int rowMajorIndex(int x, int y) {
+        return y * Cell.COLUMNS + x;
+    }
+
+    private static boolean isOutOfBounds(int x, int y) {
+        return x < 0 || y < 0 || x >= Cell.COLUMNS || y >= Cell.ROWS;
+    }
+
 }

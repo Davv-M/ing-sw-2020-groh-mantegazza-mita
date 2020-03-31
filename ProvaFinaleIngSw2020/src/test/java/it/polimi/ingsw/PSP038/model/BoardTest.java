@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP038.model;
 
 import org.junit.Test;
+import it.polimi.ingsw.PSP038.model.*;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -9,9 +10,7 @@ import static org.junit.Assert.*;
 
 public class BoardTest {
 
-    /*Board sampleBoard = new Board(Arrays.asList());
-
-    @Test
+    /*@Test
     public void withFreeCells() {
     }
 
@@ -27,7 +26,7 @@ public class BoardTest {
     public void neighbors() {
     }
 
-    *//*@Test
+    @Test
     public void neighborOfUpperRightCornerCorrect() {
         Cell upperRight = new Cell(Cell.COLUMNS - 1, 0);
 
