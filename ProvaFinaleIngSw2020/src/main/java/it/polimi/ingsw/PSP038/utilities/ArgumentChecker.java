@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP038.model;
+package it.polimi.ingsw.PSP038.utilities;
 
 /**
  * Non instantiable class that provides methods used to control whether

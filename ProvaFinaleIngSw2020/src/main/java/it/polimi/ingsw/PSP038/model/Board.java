@@ -8,81 +8,57 @@ import java.util.Optional;
 import static java.util.Collections.unmodifiableList;
 
 /**
- * Two-dimensional Board game represented by a one-dimensional list of {@code Cell.COUNT}
+ * Two-dimensional Board game represented by a one-dimensional list of {@code board.TOTALCELLES}
  * sequences of blocks in row major order.
  *
  * @author Maximilien Groh (10683107)
  */
 
-public final class Board {
+public class Board {
 
-    private final List<ICell> cells;
-
-    /**
-     * @param cells list of cells that make up the board
-     * @throws IllegalArgumentException if the given list does not contain
-     *                                  precisely {@code Cell.COUNT} cells
-     */
-
-    private Board(List<ICell> cells) throws IllegalArgumentException {
-        if (cells == null || cells.size() != Cell.COUNT) {
-            throw new IllegalArgumentException(
-                    "The game board must be made of precisely " + Cell.COUNT
-                            + " blocks");
-        }
-        this.cells = unmodifiableList(new ArrayList<>(cells));
-    }
+    private List<Cell> cells;
+    public static final int ROWS = 5;
+    public static final int COLUMNS = 5;
+    public static final int TOTAL_CELLS = ROWS*COLUMNS;
 
     /**
-     * Returns a board made of free cells
+     * Board constructor's that made board of free cells
      *
      * @return Board made of free cells
      */
 
-    public static Board withFreeCells() {
-        List<ICell> freeCells = new LinkedList<>();
-
-        for (int row = 0; row < Cell.ROWS; ++row) {
-            for (int col = 0; col < Cell.COLUMNS; ++col) {
-                freeCells.add(new Cell(col, row));
+    public Board() {
+        cells = new LinkedList<>();
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                cells.add(new Cell(row, col));
             }
         }
-        return new Board(freeCells);
     }
 
-    /**
-     * Returns a copy of the board that contains
-     * the given cell or the same board if the
-     * argument is null
-     *
-     * @param cell the cell to insert
-     * @return a new board with the given cell
-     */
-
-    public Board withCell(ICell newCell) {
-        if (newCell == null) {
-            return this;
-        }
-        List<ICell> newBoardCells = new LinkedList<>(cells);
-        int index = rowMajorIndex(newCell.x(), newCell.y());
-
-        newBoardCells.remove(index);
-        newBoardCells.add(index, newCell);
-
-        return new Board(newBoardCells);
-    }
 
     /**
-     * Returns the cell of the board at the
-     * given coordinates
+     * Returns the cell of the board at the given coordinates
      *
-     * @param x horizontal coordinate of the cell
-     * @param y vertical coordinate of the cell
+     * @param x vertical coordinate of the cell
+     * @param y horizontal coordinate of the cell
      * @return Cell at given coordinates
      */
 
-    public ICell cellAt(int x, int y) {
+    public Cell cellAt(int x, int y) {
         return cells.get(rowMajorIndex(x, y));
+    }
+
+    /**
+     * Returns the cell's index
+     *
+     * @param x vertical coordinate of the cell
+     * @param y horizontal coordinate of the cell
+     * @return cell' index
+     */
+
+    private int rowMajorIndex(int x, int y) {
+        return (x * ROWS) + y;
     }
 
     /**
@@ -95,9 +71,9 @@ public final class Board {
      * the empty optional value otherwise.
      */
 
-    public Optional<ICell> neighborOf(ICell cell, Direction dir) {
-        int neighborX = cell.x() + dir.x();
-        int neighborY = cell.y() + dir.y();
+    public Optional<Cell> DirectionNeighbor(Cell cell, Direction dir) {
+        int neighborX = cell.getXCoordinate() + dir.x();
+        int neighborY = cell.getYCoordinate() + dir.y();
 
         return isOutOfBounds(neighborX, neighborY) ? Optional.empty() : Optional.of(cellAt(neighborX, neighborY));
     }
@@ -109,11 +85,11 @@ public final class Board {
      * @return a list of cells representing the neighbors of the given cell
      */
 
-    public List<ICell> neighbors(ICell cell) {
-        List<ICell> neighbors = new ArrayList<>();
+    public List<Cell> neighborsCells(Cell cell) {
+        List<Cell> neighbors = new ArrayList<>();
 
         for (Direction dir : Direction.values()) {
-            Optional<ICell> possibleNeighbor = neighborOf(cell, dir);
+            Optional<Cell> possibleNeighbor = DirectionNeighbor(cell, dir);
             if (possibleNeighbor.isPresent()) {
                 neighbors.add(possibleNeighbor.get());
             }
@@ -121,12 +97,16 @@ public final class Board {
         return neighbors;
     }
 
-    private static int rowMajorIndex(int x, int y) {
-        return y * Cell.COLUMNS + x;
-    }
+    /**
+     * Determines if the given coordinates are out of bound
+     *
+     * @param x horizontal coordinate of the cell
+     * @param y vertical coordinate of the cell
+     * @return <b>true</b> if it is , <b>false</b> otherwise
+     */
 
-    private static boolean isOutOfBounds(int x, int y) {
-        return x < 0 || y < 0 || x >= Cell.COLUMNS || y >= Cell.ROWS;
+    private boolean isOutOfBounds(int x, int y) {
+        return x < 0 || y < 0 || x >= ROWS || y >= COLUMNS;
     }
 
 }

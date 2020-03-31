@@ -1,21 +1,40 @@
 package it.polimi.ingsw.PSP038.model;
 
-import it.polimi.ingsw.PSP038.model.cards.DivinityCard;
+/**
+ * Class that represents a worker.
+ *
+ * @author Matteo Mita (10487862)
+ */
 
-public class Worker extends CellDecorator implements DivinityCard {
-
+public class Worker {
     private final Color color;
+    private final int numberOfTwo;
+    private int xCoordinate;
+    private int yCoordinate;
 
-    public Worker(ICell cellBelow, Color color){
-        super(cellBelow);
-        this.color = color;
+    /**
+     * Constructs a cell with the given parameters
+     *
+     * @param num is which one of the two player's worker are
+     * @param col color of player's worker
+     */
+
+    public Worker(int num, Color col){
+        numberOfTwo = num;
+        color = col;
+    }
+    
+    public void setPosition(int x, int y){
+        xCoordinate = x;
+        yCoordinate = y;
     }
 
-    public Color color(){
-        return color;
+    public int getXCoordinate(){ return xCoordinate; }
+
+    public int getYCoordinate(){ return yCoordinate; }
+
+    public Cell getPositionInTheBoard(Board board){
+        return board.cellAt(xCoordinate, yCoordinate);
     }
 
-    public enum Color {
-        YELLOW, BLUE, RED
-    }
 }
