@@ -20,7 +20,7 @@ public class Game {
         numOfPlayers=np;
         addPlayer(p);
         status=GameStatus.WAITING;
-        currentBoard=currentBoard.withFreeCells();
+        currentBoard= new Board();
     }
 
     public int getRound() {

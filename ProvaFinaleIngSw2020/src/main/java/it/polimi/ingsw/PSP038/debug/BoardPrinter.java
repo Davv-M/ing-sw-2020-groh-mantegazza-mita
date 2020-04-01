@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP038.debug;
 
 import it.polimi.ingsw.PSP038.model.Board;
 import it.polimi.ingsw.PSP038.model.Cell;
-import it.polimi.ingsw.PSP038.model.ICell;
 
 public final class BoardPrinter {
 
@@ -13,28 +12,28 @@ public final class BoardPrinter {
 
     public static void printBoard(Board board){
         printRowsSeparators();
-        for (int row = 0; row < Cell.ROWS; ++row) {
-            for (int col = 0; col < Cell.COLUMNS; ++col) {
+        for (int row = 0; row < Board.ROWS; ++row) {
+            for (int col = 0; col < Board.COLUMNS; ++col) {
                 System.out.print("|");
-                printTopCell(board.cellAt(col, row));
-                System.out.print("|");
-            }
-            System.out.println();
-            for (int col = 0; col < Cell.COLUMNS; ++col) {
-                System.out.print("|");
-                printUpperMiddleCell(board.cellAt(col, row));
+                printTopCell(board.cellAt(row, col));
                 System.out.print("|");
             }
             System.out.println();
-            for (int col = 0; col < Cell.COLUMNS; ++col) {
+            for (int col = 0; col < Board.COLUMNS; ++col) {
                 System.out.print("|");
-                printLowerMiddleCell(board.cellAt(col, row));
+                printUpperMiddleCell(board.cellAt(row, col));
                 System.out.print("|");
             }
             System.out.println();
-            for (int col = 0; col < Cell.COLUMNS; ++col) {
+            for (int col = 0; col < Board.COLUMNS; ++col) {
                 System.out.print("|");
-                printBottomCell(board.cellAt(col, row));
+                printLowerMiddleCell(board.cellAt(row, col));
+                System.out.print("|");
+            }
+            System.out.println();
+            for (int col = 0; col < Board.COLUMNS; ++col) {
+                System.out.print("|");
+                printBottomCell(board.cellAt(row, col));
                 System.out.print("|");
             }
             printRowsSeparators();
@@ -43,22 +42,22 @@ public final class BoardPrinter {
 
     private static void printRowsSeparators(){
         System.out.println();
-        for(int i = 0; i < Cell.COLUMNS; ++i){
+        for(int i = 0; i < Board.COLUMNS; ++i){
             System.out.print(" -- -- -- -- ");
         }
         System.out.println();
     }
 
-    private static void printTopCell(ICell cell){
-        if(cell.hasDome() && cell.height() == 3){
+    private static void printTopCell(Cell cell){
+        if(cell.hasDome() && cell.getHeight() == 3){
             printDome();
         } else {
             printFree();
         }
     }
 
-    private static void printUpperMiddleCell(ICell cell){
-            switch(cell.height()){
+    private static void printUpperMiddleCell(Cell cell){
+            switch(cell.getHeight()){
                 case 3:
                     printTowerBlock();
                     break;
@@ -74,8 +73,8 @@ public final class BoardPrinter {
             }
     }
 
-    private static void printLowerMiddleCell(ICell cell){
-        switch(cell.height()){
+    private static void printLowerMiddleCell(Cell cell){
+        switch(cell.getHeight()){
             case 3:
             case 2:
                 printTowerBlock();
@@ -92,8 +91,8 @@ public final class BoardPrinter {
         }
     }
 
-    private static void printBottomCell(ICell cell){
-        switch(cell.height()){
+    private static void printBottomCell(Cell cell){
+        switch(cell.getHeight()){
             case 3:
             case 2:
             case 1:

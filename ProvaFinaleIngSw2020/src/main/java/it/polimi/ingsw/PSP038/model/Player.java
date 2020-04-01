@@ -9,10 +9,25 @@ import java.util.Date;
 public class Player {
     private String nickname;
     private Date dateOfBirth;
-    //private Worker[2] workers;
-    public Player(String nickname, Date dateOfBirth) {
+    private Worker worker1;
+    private Worker worker2;
+    private Color color;
+    public Player(String nickname) {
         this.nickname = nickname;
-        this.dateOfBirth = dateOfBirth;
+        //this.dateOfBirth = dateOfBirth;
+    }
+
+    public void createWorkers(){
+        worker1 = new Worker(1, color);
+        worker2 = new Worker(2, color);
+    }
+
+    public Worker getWorker1() {
+        return worker1;
+    }
+
+    public Worker getWorker2() {
+        return worker2;
     }
 
     public String getNickname() {
@@ -22,4 +37,6 @@ public class Player {
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
+
 }
+

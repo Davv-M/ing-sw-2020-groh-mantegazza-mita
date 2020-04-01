@@ -1,62 +1,29 @@
 package it.polimi.ingsw.PSP038.debug;
 
-import it.polimi.ingsw.PSP038.model.*;
-
-import java.util.Scanner;
+import it.polimi.ingsw.PSP038.model.Board;
+import it.polimi.ingsw.PSP038.model.Player;
 
 public class Main {
-    /*public static void main(String[] args){
-        Board board = Board.withFreeCells();
-        BoardPrinter.printBoard(board);
-        board = board.withCell(new TowerBlock(new Cell(2, 2)));
-        BoardPrinter.printBoard(board);
-        board = board.withCell(cell(0, 1, 3, true));
-        BoardPrinter.printBoard(board);
-        ICell worker = new Worker(cell(0, 1, 3, true), Worker.Color.RED);
-
-        System.out.println(((Worker) worker).color());
-    }
-
-    private static ICell cell(int x, int y, int height, boolean hasDome) {
-        if(hasDome){
-            return new Dome(cell(x, y, height, false));
-        } else if (height == 0){
-            return new Cell(x, y);
-        } else {
-            return new TowerBlock(cell(x, y, height - 1, false));
-        }
-    }*/
-
     public static void main(String[] args) {
+        Board board = new Board();
+        board.cellAt(3,4).addLevel();
 
-        Board b = Board.withFreeCells();
+        board.cellAt(2,3).addLevel();
+        board.cellAt(2,3).addLevel();
 
-        int i=0;
-        while(i != 0) {
-            Scanner s = new Scanner(System.in);
-            System.out.println(" inserisci coordinata x : ");
-            int x = s.nextInt();
-            System.out.println(" inserisci coordinata y : ");
-            int y = s.nextInt();
-            ICell cell = b.cellAt(x, y);
-            ICell newCell = build(cell);
+        board.cellAt(0,0).addLevel();
+        board.cellAt(0,0).addLevel();
+        board.cellAt(0,0).addLevel();
+        board.cellAt(0,0).addDome();
 
-            b = Board.withCell(newCell);
-        }
+        board.cellAt(2,2).addDome();
+
+        Player player = new Player("Pippo01");
+        player.createWorkers();
+        player.getWorker1().setPosition(1,1);
+
+        BoardPrinter.printBoard(board);
+
     }
-
-    public static ICell build(ICell cell){
-        switch(cell.height()){
-            case 0 :
-            case 1 :
-            case 2 :
-                return new TowerBlock(cell);
-            case 3 :
-            default :
-                return new Dome(cell);
-        }
-    }
-
-
 
 }

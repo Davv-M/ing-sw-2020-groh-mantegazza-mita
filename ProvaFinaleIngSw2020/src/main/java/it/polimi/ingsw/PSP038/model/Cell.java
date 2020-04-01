@@ -1,54 +1,101 @@
 package it.polimi.ingsw.PSP038.model;
 
-import static it.polimi.ingsw.PSP038.model.ArgumentChecker.requireBetween;
-
 /**
- * Immutable class representing the cells that make up the base layer
- * of the board. They can be decorated using the CellDecorator class.
- * Each cell has Cartesian coordinates ({@code x, y}) and height 0;
+ * Class that represents a board's cell.
  *
  * @author Maximilien Groh (10683107)
  */
 
-public final class Cell implements ICell {
-    public static final int ROWS = 5;
-    public static final int COLUMNS = 5;
-    public static final int COUNT = ROWS * COLUMNS;
+public class Cell {
 
-    private final int x;
-    private final int y;
+    private int xCoordinate;
+    private int yCoordinate;
+    private int level;
+    private boolean hasDome;
+    private final int MAX_HEIGHT = 3;
 
     /**
-     * Constructs a cell with Cartesian coordinates.
+     * Constructs a cell with the given parameters
      *
-     * @param x Horizontal coordinate
-     * @param y Vertical coordinate
-     * @throws IllegalArgumentException if x isn't between 0 and {@code COLUMNS} or if y isn't
-     *                                  between 0 and {@code ROWS}
+     * @param x number of row
+     * @param y number of column
+     * @throws IllegalArgumentException
      */
 
     public Cell(int x, int y) throws IllegalArgumentException {
-        this.x = requireBetween(0, COLUMNS, x);
-        this.y = requireBetween(0, ROWS, y);
+        xCoordinate = x;
+        yCoordinate = y;
+        hasDome = false;
+        level = 0;
     }
 
-    @Override
-    public int x() {
-        return x;
+    /**
+     * Constructs a cell with the given parameters
+     *
+     * @param x number of row
+     * @param y number of column
+     * @param hDome <b>true</b> if it is has a Dome, <b>false</b> otherwise
+     * @throws IllegalArgumentException
+     */
+
+    public Cell(int x, int y, boolean hDome) throws IllegalArgumentException {
+        xCoordinate = x;
+        yCoordinate = y;
+        hasDome = hDome;
+        level = 0;
     }
 
-    @Override
-    public int y() {
-        return y;
-    }
+    /**
+     * Returns cell's x coordinate.
+     *
+     * @return cell's x coordinate.
+     */
 
-    @Override
-    public int height() {
-        return 0;
-    }
+    public int getXCoordinate() { return xCoordinate; }
 
-    @Override
-    public String toString() {
-        return "(" + x() + "," + y() + ")";
+    /**
+     * Returns cell's x coordinate.
+     *
+     * @return cell's x coordinate.
+     */
+
+    public int getYCoordinate() { return yCoordinate; }
+
+    /**
+     * Returns cell's height.
+     *
+     * @return cell's height.
+     */
+
+    public int getHeight() { return level; }
+
+    /**
+     * Determines whether the cell has a Dome on top of it
+     *
+     * @return <b>true</b> if it is has a Dome, <b>false</b> otherwise
+     */
+
+    public boolean hasDome() { return hasDome; }
+
+    /**
+     * Upgrade the cell's level
+     * @throws IncompatibleClassChangeError if the level is {@code MAX_HEIGHT}
+     */
+
+    public void addLevel() throws IncompatibleClassChangeError{
+        if (level< MAX_HEIGHT)
+            level++;
+        else throw new IncompatibleClassChangeError();
+        }
+
+    /**
+     * Add Dome
+     * @throws IncompatibleClassChangeError if the dome already exist
+     */
+
+    public void addDome() throws IncompatibleClassChangeError{
+        if (hasDome == false)
+            hasDome = true;
+        else throw new IncompatibleClassChangeError();
     }
 }
