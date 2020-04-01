@@ -55,7 +55,7 @@ public final class Board {
      * the given cell or the same board if the
      * argument is null
      *
-     * @param cell the cell to insert
+     * @param newCell the cell to insert
      * @return a new board with the given cell
      */
 

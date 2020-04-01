@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP038.debug;
 
-import it.polimi.ingsw.PSP038.model.Board;
+import it.polimi.ingsw.PSP038.model.*;
+
+import java.util.Scanner;
 
 public class Main {
     /*public static void main(String[] args){
@@ -24,4 +26,37 @@ public class Main {
             return new TowerBlock(cell(x, y, height - 1, false));
         }
     }*/
+
+    public static void main(String[] args) {
+
+        Board b = Board.withFreeCells();
+
+        int i=0;
+        while(i != 0) {
+            Scanner s = new Scanner(System.in);
+            System.out.println(" inserisci coordinata x : ");
+            int x = s.nextInt();
+            System.out.println(" inserisci coordinata y : ");
+            int y = s.nextInt();
+            ICell cell = b.cellAt(x, y);
+            ICell newCell = build(cell);
+
+            b = Board.withCell(newCell);
+        }
+    }
+
+    public static ICell build(ICell cell){
+        switch(cell.height()){
+            case 0 :
+            case 1 :
+            case 2 :
+                return new TowerBlock(cell);
+            case 3 :
+            default :
+                return new Dome(cell);
+        }
+    }
+
+
+
 }
