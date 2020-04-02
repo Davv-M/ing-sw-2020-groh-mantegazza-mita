@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP038.model;
+package it.polimi.ingsw.PSP38.model;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,7 @@
-package it.polimi.ingsw.PSP038.debug;
+package it.polimi.ingsw.PSP38.debug;
 
-import it.polimi.ingsw.PSP038.model.Board;
-import it.polimi.ingsw.PSP038.model.Cell;
+import it.polimi.ingsw.PSP38.model.Board;
+import it.polimi.ingsw.PSP38.model.Cell;
 
 public final class BoardPrinter {
 
@@ -49,7 +49,7 @@ public final class BoardPrinter {
     }
 
     private static void printTopCell(Cell cell){
-        if(cell.hasDome() && cell.getHeight() == 3){
+        if(cell.hasDome() && cell.getTowerHeight() == 3){
             printDome();
         } else {
             printFree();
@@ -57,7 +57,7 @@ public final class BoardPrinter {
     }
 
     private static void printUpperMiddleCell(Cell cell){
-            switch(cell.getHeight()){
+            switch(cell.getTowerHeight()){
                 case 3:
                     printTowerBlock();
                     break;
@@ -74,7 +74,7 @@ public final class BoardPrinter {
     }
 
     private static void printLowerMiddleCell(Cell cell){
-        switch(cell.getHeight()){
+        switch(cell.getTowerHeight()){
             case 3:
             case 2:
                 printTowerBlock();
@@ -92,7 +92,7 @@ public final class BoardPrinter {
     }
 
     private static void printBottomCell(Cell cell){
-        switch(cell.getHeight()){
+        switch(cell.getTowerHeight()){
             case 3:
             case 2:
             case 1:

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP038.model;
+package it.polimi.ingsw.PSP38.model;
 
 /**
  * Directions that a player can take to move. They represent the four cardinal

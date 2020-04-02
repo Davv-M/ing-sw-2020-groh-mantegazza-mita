@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP038.model;
+package it.polimi.ingsw.PSP38.model;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,32 +8,48 @@ import java.util.Optional;
 import static java.util.Collections.unmodifiableList;
 
 /**
- * Two-dimensional Board game represented by a one-dimensional list of {@code board.TOTALCELLES}
- * sequences of blocks in row major order.
+ * Immutable class representing a two-dimensional Board game
+ * made by a one-dimensional list of {@code TOTAL_CELLS}
+ * cells in row major order.
  *
  * @author Maximilien Groh (10683107)
  */
 
-public class Board {
-
-    private List<Cell> cells;
+public final class Board {
     public static final int ROWS = 5;
     public static final int COLUMNS = 5;
-    public static final int TOTAL_CELLS = ROWS*COLUMNS;
+    public static final int TOTAL_CELLS = ROWS * COLUMNS;
+
+    private final List<Cell> cells;
 
     /**
-     * Board constructor's that made board of free cells
-     *
-     * @return Board made of free cells
+     * Board constructor that makes a board of free cells
      */
 
     public Board() {
         cells = new LinkedList<>();
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
-                cells.add(new Cell(row, col));
+                cells.add(new Cell(col, row));
             }
         }
+    }
+
+    /**
+     * Board constructor that makes a board with the given list of cells
+     *
+     * @param cells list of cells that make up the board
+     * @throws IllegalArgumentException if the given list does not contain
+     *                                  precisely {@code TOTAL_CELLS} cells
+     */
+
+    private Board(List<Cell> cells) throws IllegalArgumentException {
+        if (cells == null || cells.size() != Board.TOTAL_CELLS) {
+            throw new IllegalArgumentException(
+                    "The game board must be made of precisely " + Board.TOTAL_CELLS
+                            + " cells");
+        }
+        this.cells = unmodifiableList(new ArrayList<>(cells));
     }
 
 
@@ -50,15 +66,37 @@ public class Board {
     }
 
     /**
+     * Returns a copy of the board that contains
+     * the given cell or the same board if the
+     * argument is null
+     *
+     * @param newCell the cell to insert
+     * @return a new board with the given cell
+     */
+
+    public Board withCell(Cell newCell) {
+        if (newCell == null) {
+            return this;
+        }
+        List<Cell> newBoardCells = new LinkedList<>(cells);
+        int index = rowMajorIndex(newCell.getX(), newCell.getY());
+
+        newBoardCells.remove(index);
+        newBoardCells.add(index, newCell);
+
+        return new Board(newBoardCells);
+    }
+
+    /**
      * Returns the cell's index
      *
      * @param x vertical coordinate of the cell
      * @param y horizontal coordinate of the cell
-     * @return cell' index
+     * @return cell'index
      */
 
-    private int rowMajorIndex(int x, int y) {
-        return (x * ROWS) + y;
+    private static int rowMajorIndex(int x, int y) {
+        return (y * COLUMNS) + x;
     }
 
     /**
@@ -72,8 +110,8 @@ public class Board {
      */
 
     public Optional<Cell> DirectionNeighbor(Cell cell, Direction dir) {
-        int neighborX = cell.getXCoordinate() + dir.x();
-        int neighborY = cell.getYCoordinate() + dir.y();
+        int neighborX = cell.getX() + dir.x();
+        int neighborY = cell.getY() + dir.y();
 
         return isOutOfBounds(neighborX, neighborY) ? Optional.empty() : Optional.of(cellAt(neighborX, neighborY));
     }
@@ -98,15 +136,15 @@ public class Board {
     }
 
     /**
-     * Determines if the given coordinates are out of bound
+     * Determines if the given coordinates are out of bounds
      *
      * @param x horizontal coordinate of the cell
      * @param y vertical coordinate of the cell
-     * @return <b>true</b> if it is , <b>false</b> otherwise
+     * @return <b>true</b> if they are out of bounds , <b>false</b> otherwise
      */
 
     private boolean isOutOfBounds(int x, int y) {
-        return x < 0 || y < 0 || x >= ROWS || y >= COLUMNS;
+        return x < 0 || y < 0 || x >= COLUMNS || y >= ROWS;
     }
 
 }
