@@ -25,7 +25,7 @@ public final class Cell {
      *                                  the given tower height is not between 0 and {@code TOWER_MAX_HEIGHT}
      */
 
-    private Cell(int x, int y, int towerHeight, boolean hasDome) throws IllegalArgumentException {
+    public Cell(int x, int y, int towerHeight, boolean hasDome) throws IllegalArgumentException {
         this.x = requireBetween(0, Board.COLUMNS - 1, x);
         this.y = requireBetween(0, Board.ROWS - 1, y);
         this.towerHeight = requireBetween(0, TOWER_MAX_HEIGHT, towerHeight);
