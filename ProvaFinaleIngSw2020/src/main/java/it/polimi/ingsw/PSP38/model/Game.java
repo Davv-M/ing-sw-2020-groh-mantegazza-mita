@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * This class contains the methods needed to manage the execution of a game
  * @author Davide Mantegazza (10568661)
  */
+
 public class Game {
     private ArrayList<Player> players;
     private int numOfPlayers;
@@ -53,7 +54,7 @@ public class Game {
      * @param p represents the player that's going to be added to the game
      * @throws NullPointerException is thrown if {@code p} is null
      */
-    public void addPlayer(Player p) throws NullPointerException{
+    /*public void addPlayer(Player p) throws NullPointerException{
         if(currentNumOfPlayers<numOfPlayers){
             if (p.getDateOfBirth().compareTo(players.get(0).getDateOfBirth())<0)
                 players.add(0, p);
@@ -64,8 +65,17 @@ public class Game {
         else{
             gameFull=true;
         }
-    }
+    }*/
 
+    public void addPlayer(Player p) throws NullPointerException{
+        if(currentNumOfPlayers<numOfPlayers){
+            players.add(p);
+            currentNumOfPlayers++;
+        }
+        else{
+            gameFull=true;
+        }
+    }
     /**
      *
      * @return the following player located in the player list
@@ -99,5 +109,9 @@ public class Game {
 
     public int getCurrentNumOfPlayers() {
         return currentNumOfPlayers;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 }

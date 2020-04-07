@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP38.model;
+/*package it.polimi.ingsw.PSP38.model;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -38,12 +38,12 @@ public class GameTest {
         assertTrue(g.isGameFull());
     }
 
-    /*@Test
+    @Test
     public void AddAPlayer(){
         Game g=new Game(2, f);
         String p1="carlo";
         Player f1 = new Player(p1);
         g.addPlayer(f1);
-        assertEquals("carlo", g.);
-    }*/
-}
+        assertEquals("carlo", (g.getPlayers().get(g.getPlayers().size()-1)));
+    }
+}*/
