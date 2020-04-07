@@ -10,24 +10,24 @@ import static java.util.Objects.requireNonNull;
 
 public final class Worker {
     private final Color color;
-    private final Cell cell;
+    private final Cell position;
 
     /**
      * Constructs a worker with the given parameters
      *
      * @param color the color of the worker
-     * @param cell  the cell below the worker
+     * @param position  the cell below the worker
      * @throws NullPointerException     if an argument is null
      * @throws IllegalArgumentException if the given cell has a dome on top
      */
 
-    public Worker(Color color, Cell cell) throws NullPointerException, IllegalArgumentException {
+    public Worker(Color color, Cell position) throws NullPointerException, IllegalArgumentException {
         this.color = requireNonNull(color);
 
-        if (requireNonNull(cell).hasDome()) {
+        if (requireNonNull(position).hasDome()) {
             throw new IllegalArgumentException("Workers can't stand on domes");
         }
-        this.cell = cell;
+        this.position = position;
     }
 
     /**
@@ -36,8 +36,8 @@ public final class Worker {
      * @return the cell on which the worker is standing
      */
 
-    public Cell getCell() {
-        return cell;
+    public Cell getPosition() {
+        return position;
     }
 
     /**

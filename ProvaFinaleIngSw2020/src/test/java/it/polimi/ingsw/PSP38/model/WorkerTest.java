@@ -22,7 +22,7 @@ public class WorkerTest {
 
     @Test
     public void getCell() {
-        assertEquals(cellTest, workerTest.getCell());
+        assertEquals(cellTest, workerTest.getPosition());
     }
 
     @Test

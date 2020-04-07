@@ -106,6 +106,23 @@ public final class Cell {
     }
 
     @Override
+    public int hashCode() {
+        return getY() * Board.COLUMNS + getX();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Cell other = (Cell) obj;
+        return getX() == other.getX() && getY() == other.getY();
+    }
+
+    @Override
     public String toString() {
         return "(" + x + "," + y + "," + towerHeight + "," + hasDome + ")";
     }

@@ -1,11 +1,9 @@
 package it.polimi.ingsw.PSP38.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * Immutable class representing a two-dimensional Board game
@@ -21,6 +19,7 @@ public final class Board {
     public static final int TOTAL_CELLS = ROWS * COLUMNS;
 
     private final List<Cell> cells;
+    private final List<Worker> workers;
 
     /**
      * Board constructor that makes a board of free cells
@@ -33,6 +32,7 @@ public final class Board {
                 cells.add(new Cell(col, row));
             }
         }
+        workers = unmodifiableList(new ArrayList<>());
     }
 
     /**
@@ -43,13 +43,18 @@ public final class Board {
      *                                  precisely {@code TOTAL_CELLS} cells
      */
 
-    private Board(List<Cell> cells) throws IllegalArgumentException {
+    private Board(List<Cell> cells, List<Worker> workers) throws IllegalArgumentException {
         if (cells == null || cells.size() != Board.TOTAL_CELLS) {
             throw new IllegalArgumentException(
                     "The game board must be made of precisely " + Board.TOTAL_CELLS
                             + " cells");
         }
         this.cells = unmodifiableList(new ArrayList<>(cells));
+        if (workers == null) {
+            throw new IllegalArgumentException(
+                    "The game board must be have workers");
+        }
+        this.workers = unmodifiableList(new ArrayList<>(workers));
     }
 
 
@@ -83,8 +88,29 @@ public final class Board {
 
         newBoardCells.remove(index);
         newBoardCells.add(index, newCell);
+        List<Worker> newBoardWorkers = new LinkedList<>(workers);
 
-        return new Board(newBoardCells);
+        return new Board(newBoardCells, newBoardWorkers);
+    }
+
+    /**
+     * Returns a copy of the board that contains
+     * the given cell or the same board if the
+     * argument is null
+     *
+     * @param worker      the worker that we want to move
+     * @param newPosition the new worker's position
+     * @return a new board with the given cell
+     * @throws IllegalArgumentException if worker not exist
+     */
+
+    public Board withWorker(Worker worker, Cell newPosition) {
+        if (!workers.contains(worker)) throw new IllegalArgumentException();
+        List<Cell> newBoardCells = new LinkedList<>(cells);
+        List<Worker> newBoardWorkers = new LinkedList<>(workers);
+        newBoardWorkers.remove(worker);
+        newBoardWorkers.add(new Worker(worker.getColor(), newPosition));
+        return new Board(newBoardCells, newBoardWorkers);
     }
 
     /**
@@ -109,7 +135,7 @@ public final class Board {
      * the empty optional value otherwise.
      */
 
-    public Optional<Cell> DirectionNeighbor(Cell cell, Direction dir) {
+    public Optional<Cell> directionNeighbor(Cell cell, Direction dir) {
         int neighborX = cell.getX() + dir.x();
         int neighborY = cell.getY() + dir.y();
 
@@ -127,7 +153,7 @@ public final class Board {
         List<Cell> neighbors = new ArrayList<>();
 
         for (Direction dir : Direction.values()) {
-            Optional<Cell> possibleNeighbor = DirectionNeighbor(cell, dir);
+            Optional<Cell> possibleNeighbor = directionNeighbor(cell, dir);
             if (possibleNeighbor.isPresent()) {
                 neighbors.add(possibleNeighbor.get());
             }
@@ -145,6 +171,22 @@ public final class Board {
 
     private boolean isOutOfBounds(int x, int y) {
         return x < 0 || y < 0 || x >= COLUMNS || y >= ROWS;
+    }
+
+    /**
+     * Create a map with Workers's positions
+     *
+    * @return the map
+     */
+
+    public Map<Cell, Worker> getWorkersPositions(){
+        Map<Cell, Worker> map = new HashMap<>();
+        for( Cell c : cells ){
+            for ( Worker w : workers ){
+                if ( w.getPosition().equals(c)) map.put(c,w);
+            }
+        }
+        return unmodifiableMap(map);
     }
 
 }
