@@ -13,17 +13,16 @@ public final class Worker {
     private final Cell position;
 
     /**
-     * Constructs a worker with the given parameters
+     * Construct a worker with the given parameters
      *
-     * @param color the color of the worker
-     * @param position  the cell below the worker
+     * @param color    the color of the worker
+     * @param position the cell below the worker
      * @throws NullPointerException     if an argument is null
      * @throws IllegalArgumentException if the given cell has a dome on top
      */
 
     public Worker(Color color, Cell position) throws NullPointerException, IllegalArgumentException {
         this.color = requireNonNull(color);
-
         if (requireNonNull(position).hasDome()) {
             throw new IllegalArgumentException("Workers can't stand on domes");
         }
@@ -31,8 +30,6 @@ public final class Worker {
     }
 
     /**
-     * Returns the cell on which the worker is standing
-     *
      * @return the cell on which the worker is standing
      */
 
@@ -41,8 +38,6 @@ public final class Worker {
     }
 
     /**
-     * Returns the worker's color
-     *
      * @return the worker's color
      */
 

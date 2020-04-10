@@ -38,12 +38,13 @@ public final class Board {
     /**
      * Board constructor that makes a board with the given list of cells
      *
-     * @param cells list of cells that make up the board
+     * @param cells   list of cells that make up the board
+     * @param workers list of workers present on the board
      * @throws IllegalArgumentException if the given list does not contain
      *                                  precisely {@code TOTAL_CELLS} cells
      */
 
-    private Board(List<Cell> cells, List<Worker> workers) throws IllegalArgumentException {
+    public Board(List<Cell> cells, List<Worker> workers) throws IllegalArgumentException {
         if (cells == null || cells.size() != Board.TOTAL_CELLS) {
             throw new IllegalArgumentException(
                     "The game board must be made of precisely " + Board.TOTAL_CELLS
@@ -71,6 +72,21 @@ public final class Board {
     }
 
     /**
+     * Returns the worker at the given cell
+     *
+     * @param cell where worker is
+     * @return worker at the given cell
+     */
+    public Worker workerAt(Cell cell) {
+        Worker worker = null;
+        for (Worker w : workers) {
+            if (w.getPosition().equals(cell))
+                worker = w;
+        }
+        return worker;
+    }
+
+    /**
      * Returns a copy of the board that contains
      * the given cell or the same board if the
      * argument is null
@@ -85,7 +101,6 @@ public final class Board {
         }
         List<Cell> newBoardCells = new LinkedList<>(cells);
         int index = rowMajorIndex(newCell.getX(), newCell.getY());
-
         newBoardCells.remove(index);
         newBoardCells.add(index, newCell);
         List<Worker> newBoardWorkers = new LinkedList<>(workers);
@@ -94,14 +109,12 @@ public final class Board {
     }
 
     /**
-     * Returns a copy of the board that contains
-     * the given cell or the same board if the
-     * argument is null
+     * Returns a copy of the board that contains the same cell
+     * and add or modify the worker's position
      *
      * @param worker      the worker that we want to move
      * @param newPosition the new worker's position
      * @return a new board with the given cell
-     * @throws IllegalArgumentException if worker not exist
      */
 
     public Board withWorker(Worker worker, Cell newPosition) {
@@ -153,9 +166,7 @@ public final class Board {
 
         for (Direction dir : Direction.values()) {
             Optional<Cell> possibleNeighbor = directionNeighbor(cell, dir);
-            if (possibleNeighbor.isPresent()) {
-                neighbors.add(possibleNeighbor.get());
-            }
+            possibleNeighbor.ifPresent(neighbors::add);
         }
         return neighbors;
     }
@@ -173,28 +184,20 @@ public final class Board {
     }
 
     /**
-     * Create a map with Workers's positions
+     * Create a map that associate workers with their cell position
      *
-    * @return the map
+     * @return the map
      */
 
-    public Map<Cell, Worker> getWorkersPositions(){
+    public Map<Cell, Worker> getWorkersPositions() {
         Map<Cell, Worker> map = new HashMap<>();
-        for( Cell c : cells ){
-            for ( Worker w : workers ){
-                if ( w.getPosition().equals(c)) map.put(c,w);
+        for (Cell c : cells) {
+            for (Worker w : workers) {
+                if (w.getPosition().equals(c)) map.put(c, w);
             }
         }
         return unmodifiableMap(map);
     }
 
-    public Worker workerAt(Cell cell){
-        Worker worker = null;
-        for (Worker w : workers){
-            if(w.getPosition().equals(cell))
-                worker = w;
-        }
-        return worker;
-    }
 
 }

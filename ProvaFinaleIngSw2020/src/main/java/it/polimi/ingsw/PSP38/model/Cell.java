@@ -88,7 +88,7 @@ public final class Cell {
      * Returns a copy of the cell with the specified tower height
      *
      * @param newTowerHeight the height of the new tower
-     * @return  a copy of the cell with the specified tower height
+     * @return a copy of the cell with the specified tower height
      */
 
     public Cell withTowerHeight(int newTowerHeight) {

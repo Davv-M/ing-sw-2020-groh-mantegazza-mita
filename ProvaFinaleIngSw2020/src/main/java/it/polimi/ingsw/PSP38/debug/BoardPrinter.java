@@ -122,4 +122,5 @@ public final class BoardPrinter {
     private static void printFree(){
         System.out.print(ANSI_GREEN_BACKGROUND + "           " + ANSI_RESET);
     }
+
 }
