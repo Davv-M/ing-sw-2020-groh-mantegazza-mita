@@ -15,17 +15,17 @@ public interface DivinityCard {
         return neighborCells;
     }
     default Board move(Worker w, Cell destinationCell, Board b){
-        Cell initialCell=w.getPosition();
-        Board newBoard=b.withWorker(w, destinationCell);
+        Cell initialCell = w.getPosition();
+        Board newBoard = b.withWorker(w, destinationCell);
         return newBoard;
     }
     default List<Cell> preBuild(Worker w, Board b){
-        List<Cell> neighborCells=b.neighborsCells(w.getPosition());
+        List<Cell> neighborCellsBuild = b.neighborsCells(w.getPosition());
         Map<Cell, Worker> workersPositions=b.getWorkersPositions();
-        neighborCells.removeIf(c -> workersPositions.containsKey(c) || c.hasDome());
+        neighborCellsBuild.removeIf(c -> workersPositions.containsKey(c) || c.hasDome());
         //Removes the current cell from the neighborCells list if the cell is already occupied or there is a complete tower or a tower whose level is
         //more than player+1
-        return neighborCells;
+        return neighborCellsBuild;
     }
     default Board build(Cell buildingCell, Board b){
         Cell newCell = buildingCell.getTowerHeight() == 3 ? buildingCell.withDome() : buildingCell.withTowerHeight(buildingCell.getTowerHeight() + 1);

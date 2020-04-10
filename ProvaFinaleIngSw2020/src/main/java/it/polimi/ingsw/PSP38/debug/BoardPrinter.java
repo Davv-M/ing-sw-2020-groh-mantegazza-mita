@@ -15,25 +15,25 @@ public final class BoardPrinter {
         for (int row = 0; row < Board.ROWS; ++row) {
             for (int col = 0; col < Board.COLUMNS; ++col) {
                 System.out.print("|");
-                printTopCell(board.cellAt(row, col));
+                printTopCell(board.cellAt(col, row));
                 System.out.print("|");
             }
             System.out.println();
             for (int col = 0; col < Board.COLUMNS; ++col) {
                 System.out.print("|");
-                printUpperMiddleCell(board.cellAt(row, col));
+                printUpperMiddleCell(board.cellAt(col, row));
                 System.out.print("|");
             }
             System.out.println();
             for (int col = 0; col < Board.COLUMNS; ++col) {
                 System.out.print("|");
-                printLowerMiddleCell(board.cellAt(row, col));
+                printLowerMiddleCell(board.cellAt(col, row));
                 System.out.print("|");
             }
             System.out.println();
             for (int col = 0; col < Board.COLUMNS; ++col) {
                 System.out.print("|");
-                printBottomCell(board.cellAt(row, col));
+                printBottomCell(board.cellAt(col, row));
                 System.out.print("|");
             }
             printRowsSeparators();

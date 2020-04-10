@@ -105,7 +105,6 @@ public final class Board {
      */
 
     public Board withWorker(Worker worker, Cell newPosition) {
-        if (!workers.contains(worker)) throw new IllegalArgumentException();
         List<Cell> newBoardCells = new LinkedList<>(cells);
         List<Worker> newBoardWorkers = new LinkedList<>(workers);
         newBoardWorkers.remove(worker);
@@ -187,6 +186,15 @@ public final class Board {
             }
         }
         return unmodifiableMap(map);
+    }
+
+    public Worker workerAt(Cell cell){
+        Worker worker = null;
+        for (Worker w : workers){
+            if(w.getPosition().equals(cell))
+                worker = w;
+        }
+        return worker;
     }
 
 }
