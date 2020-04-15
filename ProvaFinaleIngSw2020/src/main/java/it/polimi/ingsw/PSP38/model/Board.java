@@ -184,19 +184,17 @@ public final class Board {
     }
 
     /**
-     * Create a map that associate workers with their cell position
+     * Returns a map linking the workers (values) to the cells they occupy (keys).
      *
-     * @return the map
+     * @return a map linking bombs and the cells they occupy
      */
 
     public Map<Cell, Worker> getWorkersPositions() {
-        Map<Cell, Worker> map = new HashMap<>();
-        for (Cell c : cells) {
-            for (Worker w : workers) {
-                if (w.getPosition().equals(c)) map.put(c, w);
-            }
+        Map<Cell, Worker> occupiedCells = new HashMap<>();
+        for (Worker w : workers) {
+            occupiedCells.put(w.getPosition(), w);
         }
-        return unmodifiableMap(map);
+        return occupiedCells;
     }
 
 

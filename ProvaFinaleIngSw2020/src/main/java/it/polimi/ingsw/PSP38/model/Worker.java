@@ -51,7 +51,7 @@ public final class Worker {
      */
 
     public enum Color {
-        YELLOW, BLUE, RED
+        RED, PURPLE, YELLOW
     }
 
 }

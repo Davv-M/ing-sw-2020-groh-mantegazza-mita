@@ -9,7 +9,7 @@ import static it.polimi.ingsw.PSP38.utilities.ArgumentChecker.requireBetween;
  */
 
 public final class Cell {
-    public final int TOWER_MAX_HEIGHT = 3;
+    public static final int MAX_TOWER_HEIGHT = 3;
 
     private final int x;
     private final int y;
@@ -28,7 +28,7 @@ public final class Cell {
     public Cell(int x, int y, int towerHeight, boolean hasDome) throws IllegalArgumentException {
         this.x = requireBetween(0, Board.COLUMNS - 1, x);
         this.y = requireBetween(0, Board.ROWS - 1, y);
-        this.towerHeight = requireBetween(0, TOWER_MAX_HEIGHT, towerHeight);
+        this.towerHeight = requireBetween(0, MAX_TOWER_HEIGHT, towerHeight);
         this.hasDome = hasDome;
     }
 
