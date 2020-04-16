@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP38.controller;
 
 import it.polimi.ingsw.PSP38.model.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,9 @@ import java.util.Map;
  */
 
 public interface StrategyDivinityCard {
+    List<String> DIVINITY_CARDS_NAMES = Arrays.asList("Apollo", "Arthemis", "Athena",
+            "Atlas", "Demeter");
+
     /**
      * Returns a list of cells where the given worker can move
      *
@@ -39,7 +43,7 @@ public interface StrategyDivinityCard {
      */
 
     default Board move(Worker worker, Cell destinationCell, Board oldBoard) {
-        return oldBoard.withWorker(worker, destinationCell);
+        return oldBoard.moveWorker(worker, destinationCell);
     }
 
     /**

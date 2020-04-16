@@ -117,11 +117,26 @@ public final class Board {
      * @return a new board with the given cell
      */
 
-    public Board withWorker(Worker worker, Cell newPosition) {
+    public Board moveWorker(Worker worker, Cell newPosition) {
         List<Cell> newBoardCells = new LinkedList<>(cells);
         List<Worker> newBoardWorkers = new LinkedList<>(workers);
         newBoardWorkers.remove(worker);
         newBoardWorkers.add(new Worker(worker.getColor(), newPosition));
+        return new Board(newBoardCells, newBoardWorkers);
+    }
+
+    /**
+     * Returns a copy of the board that contains the same cell
+     * and add or modify the worker's position
+     *
+     * @param worker    the worker that we want place on the board
+     * @return a new board with the given cell
+     */
+
+    public Board withWorker(Worker worker) {
+        List<Cell> newBoardCells = new LinkedList<>(cells);
+        List<Worker> newBoardWorkers = new LinkedList<>(workers);
+        newBoardWorkers.add(worker);
         return new Board(newBoardCells, newBoardWorkers);
     }
 

@@ -1,3 +1,4 @@
+/*
 package it.polimi.ingsw.PSP38.debug;
 
 import it.polimi.ingsw.PSP38.model.Board;
@@ -41,3 +42,4 @@ public class Main {
     }
 
 }
+*/
