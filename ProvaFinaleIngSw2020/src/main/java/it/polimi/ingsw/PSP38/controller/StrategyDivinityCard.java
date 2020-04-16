@@ -29,7 +29,6 @@ public interface StrategyDivinityCard {
         //Removes all cells containing workers or domes or cells with tower height > cell.towerHeight + 1
         neighborCells.removeIf(c -> workersPositions.containsKey(c) || c.hasDome() || c.getTowerHeight() >
                 worker.getPosition().getTowerHeight() + 1);
-
         return neighborCells;
     }
 
