@@ -13,8 +13,7 @@ import java.util.Map;
  */
 
 public interface StrategyDivinityCard {
-    List<String> DIVINITY_CARDS_NAMES = Arrays.asList("Apollo", "Arthemis", "Athena",
-            "Atlas", "Demeter");
+    List<String> DIVINITY_CARDS_NAMES = Arrays.asList("Apollo", "Artemis", "Athena", "Atlas", "Demeter");
 
     /**
      * Returns a list of cells where the given worker can move

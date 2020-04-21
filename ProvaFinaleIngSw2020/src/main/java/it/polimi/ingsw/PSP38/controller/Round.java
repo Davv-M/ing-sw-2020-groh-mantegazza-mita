@@ -1,15 +1,17 @@
 package it.polimi.ingsw.PSP38.controller;
 
-import it.polimi.ingsw.PSP38.debug.BoardPrinter;
 import it.polimi.ingsw.PSP38.model.Board;
 import it.polimi.ingsw.PSP38.model.Cell;
 import it.polimi.ingsw.PSP38.model.Player;
 import it.polimi.ingsw.PSP38.model.Worker;
 
-import java.util.List;
-import java.util.Scanner;
+import it.polimi.ingsw.PSP38.virtualView.GameRequest;
 
-public class Round {
+import java.util.List;
+
+
+public class Round{
+
     Player player;
     StrategyDivinityCard strategy;
     public Round ( Player player , StrategyDivinityCard divinityCard){
@@ -19,42 +21,33 @@ public class Round {
 
 
     public Board play(Board currentBoard){
-        Scanner s = new Scanner(System.in);
-        System.out.println(player.getNickname()+ " insert the coordinates of the worker you want to move");
-        int x = s.nextInt();
-        int y = s.nextInt();
-        Cell cellUnderWorker = currentBoard.cellAt(x, y);
+        GameRequest gr = new GameRequest();
+        int[] xy;
+
+        xy = gr.requestCoordinates(" insert the coordinates of the worker you want to move - example:(column,row) ", player);
+        Cell cellUnderWorker = currentBoard.cellAt(xy[0],xy[1]);
         Worker workerSelected = currentBoard.workerAt(cellUnderWorker);
         List<Cell> possibleCellsMove = strategy.preMove(workerSelected, currentBoard);
-        System.out.println(player.getNickname()+ " these are the cells where you can move your worker :");
-        for ( Cell c: possibleCellsMove){
-            System.out.println(c);
-        }
+        gr.showPossibleCells(" these are the cells where you can move your worker :", player, possibleCellsMove);
 
-
-        System.out.println(player.getNickname()+ " insert the coordinates of the cell where you want to place your worker");
-        x = s.nextInt();
-        y = s.nextInt();
-        Cell cellDestination = currentBoard.cellAt(x,y);
+        xy = gr.requestCoordinates(" insert the coordinates of the cell where you want to place your worker - example:(column,row) ", player);
+        Cell cellDestination = currentBoard.cellAt(xy[0],xy[1]);
         Board boardAfterMove = strategy.move(workerSelected, cellDestination, currentBoard);
 
 
-        Cell cellUnderWorkerMoved = boardAfterMove.cellAt(x, y);
+        Cell cellUnderWorkerMoved = boardAfterMove.cellAt(xy[0], xy[1]);
         Worker workerMoved = boardAfterMove.workerAt(cellUnderWorkerMoved);
         List<Cell> possibleCellsBuild = strategy.preBuild(workerMoved, boardAfterMove);
-        System.out.println(player.getNickname()+" these are the cells where your worker can build :");
-        for ( Cell c2: possibleCellsBuild){
-            System.out.println(c2);
-        }
+        gr.showPossibleCells(" these are the cells where your worker can build :", player, possibleCellsBuild);
 
-
-        System.out.println(player.getNickname()+" insert the coordinates of the cell where you want your worker to build");
-        x = s.nextInt();
-        y = s.nextInt();
-        Cell cellDestinationBuild = boardAfterMove.cellAt(x,y);
+        xy = gr.requestCoordinates(" insert the coordinates of the cell where you want your worker to build - example:(column,row) ", player);
+        Cell cellDestinationBuild = boardAfterMove.cellAt(xy[0],xy[1]);
         Board boardAfterBuild = strategy.build(cellDestinationBuild, boardAfterMove);
-        BoardPrinter.printBoard(boardAfterBuild);
+
+
         return boardAfterBuild;
     }
+
+
 
 }

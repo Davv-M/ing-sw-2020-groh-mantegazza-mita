@@ -1,5 +1,6 @@
-package it.polimi.ingsw.PSP38.controller;
+package it.polimi.ingsw.PSP38.controller.divinityStrategy;
 
+import it.polimi.ingsw.PSP38.controller.StrategyDivinityCard;
 import it.polimi.ingsw.PSP38.model.*;
 import java.util.List;
 import java.util.Map;
