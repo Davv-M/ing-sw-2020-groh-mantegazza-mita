@@ -3,9 +3,9 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
-public class ServerClientHandler {
+public class ClientHandler {
 
-    public ServerClientHandler(){
+    public ClientHandler(){
         int porta = 4567;
         welcomeMessage();
         System.out.println("Try server connect");
@@ -50,7 +50,7 @@ public class ServerClientHandler {
 
 
     public static void main( String[] args) {
-        ServerClientHandler cv = new ServerClientHandler();
+        ClientHandler cv = new ClientHandler();
 
 
 
