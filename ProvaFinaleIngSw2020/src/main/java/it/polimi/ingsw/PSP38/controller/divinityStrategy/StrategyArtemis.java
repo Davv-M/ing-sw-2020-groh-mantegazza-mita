@@ -8,10 +8,10 @@ import java.util.Map;
 /**
  * Concrete implementation of Artemis' power, extends <code>StrategyDivinityCard</code> interface.
  * @author Davide Mantegazza (10568661)
- * @version 1.0
+ * @version 1.1
  */
 public class StrategyArtemis implements StrategyDivinityCard {
-    private boolean isSecondMove;
+    private boolean isSecondMove=false;
     /**
      * Returns a list of cells where the given worker can move
      *
@@ -36,6 +36,12 @@ public class StrategyArtemis implements StrategyDivinityCard {
         return neighborCells;
     }
 
+    @Override
+    public Board move(Worker worker, Cell destinationCell, Board oldBoard) {
+        setSecondMove();
+        return oldBoard.moveWorker(worker, destinationCell);
+    }
+
     /**
      * Getter method for <code>isSecondMove</code> parameter
      * @return the current value of <code>isSecondMove</code>
@@ -45,10 +51,9 @@ public class StrategyArtemis implements StrategyDivinityCard {
     }
 
     /**
-     * Setter method for <code>isSecondMove</code>
-     * @param secondMove Wanted value for <code>isSecondMove</code>
+     * This method inverts the state of the variable <code>isSecondMove</code>
      */
-    public void setSecondMove(boolean secondMove) {
-        isSecondMove = secondMove;
+    public void setSecondMove() {
+        isSecondMove = !isSecondMove;
     }
 }
