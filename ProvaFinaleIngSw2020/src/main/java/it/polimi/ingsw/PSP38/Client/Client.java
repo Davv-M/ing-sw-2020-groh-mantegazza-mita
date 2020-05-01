@@ -34,6 +34,7 @@ public class Client {
                     case ASK_NICKNAME: output.writeObject(askNickname());break;
                     case ASK_AGE: output.writeObject(askAge());break;
                     case ASK_NICKNAME_AGAIN: output.writeObject(askNicknameAgain());break;
+                    case ASK_DIVINITY_CARD: System.out.println("scegli le divinita che preferisci");break;
                     default: System.out.println("protocol error"); break;
                 }
             }
@@ -46,6 +47,7 @@ public class Client {
 
 
     }
+
 
 
     private static int askNumPlayer(){

@@ -8,5 +8,4 @@ public enum Protocol {
     ASK_NICKNAME_AGAIN,
     ASK_DIVINITY_CARD,
 
-
 }

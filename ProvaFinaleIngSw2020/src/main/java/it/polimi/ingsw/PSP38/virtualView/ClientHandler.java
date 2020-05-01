@@ -44,10 +44,8 @@ public class ClientHandler implements Runnable{
                 nickname = askNickname();
                 age = askAge();
                 controller.addPlayer(nickname, age);
-                checkGameFull();
-                System.out.println(controller.players);
+                controller.checkGameFull();
                 askYoungestPlayerCards();
-
 
             }
 
@@ -70,7 +68,6 @@ public class ClientHandler implements Runnable{
         }
         return 0;
     }
-
 
     public String askNickname() throws IOException{
         output.writeObject(Protocol.ASK_NICKNAME);
@@ -98,29 +95,19 @@ public class ClientHandler implements Runnable{
         return 0;
     }
 
-    public synchronized void checkGameFull(){
-        while(Server.getNumOfPlayer() > controller.numCurrentPlayers()){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if(Server.getNumOfPlayer() <= controller.numCurrentPlayers()) { notifyAll(); }
-    }
 
-    public void askYoungestPlayerCards(){
+
+    public void askYoungestPlayerCards() throws IOException{
         if (controller.youngestPlayer().equals(nickname)){
             String divinityName;
             for(int i=1; i<=Server.getNumOfPlayer(); i++ ){
-                try {
                     output.writeObject(Protocol.ASK_DIVINITY_CARD);
+                try {
                     divinityName = (String)input.readObject();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
+
 
                /* while (!availableDivinities.contains(divinityCard)) {
                     System.out.println("This divinity isn't available or has already been chosen. Please select a new one");
