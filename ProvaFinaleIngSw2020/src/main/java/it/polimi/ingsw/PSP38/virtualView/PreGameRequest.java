@@ -1,3 +1,4 @@
+/*
 package it.polimi.ingsw.PSP38.virtualView;
 
 import it.polimi.ingsw.PSP38.controller.StrategyDivinityCard;
@@ -157,3 +158,4 @@ public class PreGameRequest {
 
 
 }
+*/

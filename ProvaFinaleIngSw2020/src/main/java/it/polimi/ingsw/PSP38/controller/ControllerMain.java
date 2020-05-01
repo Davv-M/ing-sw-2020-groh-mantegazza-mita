@@ -1,3 +1,4 @@
+/*
 package it.polimi.ingsw.PSP38.controller;
 
 import it.polimi.ingsw.PSP38.model.*;
@@ -40,7 +41,7 @@ public class ControllerMain{
 
         List<Round> rounds = new LinkedList<>();
         for (Player p : players) {
-            rounds.add(new Round(p, playersDivinities.get(p)));
+            rounds.add(new Round(p,playersDivinities.get(p)));
         }
 
 
@@ -69,3 +70,4 @@ public class ControllerMain{
 
 }
 
+*/

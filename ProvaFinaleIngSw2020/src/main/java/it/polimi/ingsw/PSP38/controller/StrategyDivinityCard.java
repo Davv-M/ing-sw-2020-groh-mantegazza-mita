@@ -13,7 +13,23 @@ import java.util.Map;
  */
 
 public interface StrategyDivinityCard {
-    List<String> DIVINITY_CARDS_NAMES = Arrays.asList("Apollo", "Artemis", "Athena", "Atlas", "Demeter");
+
+     /**
+     * Enum Card's Name
+     */
+    enum Name{
+        APOLLO,
+        ARTEMIS,
+        ATHENA,
+        ATLAS,
+        DEMETER,
+        HEPHAESTUS,
+        MINOTAUR,
+        PAN,
+        PROMETHEUS,
+    }
+
+
 
     /**
      * Returns a list of cells where the given worker can move

@@ -44,5 +44,9 @@ public class Player {
     public Worker.Color getColor() {
         return color;
     }
+
+    public String toString(){
+        return getNickname()+getAge()+getColor();
+    }
 }
 
