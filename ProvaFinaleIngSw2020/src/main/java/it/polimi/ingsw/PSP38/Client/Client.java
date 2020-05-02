@@ -29,12 +29,13 @@ public class Client {
             while(true){
                 Protocol p = (Protocol)input.readObject();
                 switch (p){
-                    case NOTIFY_GAME_FULL: System.out.println("Game is alredy started.. please try later");break;
+                    case NOTIFY_GAME_FULL: System.out.println("Game full.. please try later");break;
                     case ASK_NUM_PLAYER: output.writeObject(askNumPlayer());break;
                     case ASK_NICKNAME: output.writeObject(askNickname());break;
                     case ASK_AGE: output.writeObject(askAge());break;
                     case ASK_NICKNAME_AGAIN: output.writeObject(askNicknameAgain());break;
                     case ASK_DIVINITY_CARD: System.out.println("scegli le divinita che preferisci");break;
+                    case NOTIFY_WAITING_MESSAGE: System.out.println("in attesa che il tuo avverario scelga il numero di giocatori");break;
                     default: System.out.println("protocol error"); break;
                 }
             }
@@ -73,7 +74,7 @@ public class Client {
         System.out.println("inserisci la tua età ");
         int age = scanner.nextInt();
         while(age < 8){
-            System.out.println("sei troppo piccolo ");
+            System.out.println("sei troppo piccolo (8+) ");
             age = scanner.nextInt();
         }
         return age;

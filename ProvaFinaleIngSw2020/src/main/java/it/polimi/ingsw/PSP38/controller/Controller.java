@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP38.controller;
 
-import it.polimi.ingsw.PSP38.controller.divinityStrategy.*;
 import it.polimi.ingsw.PSP38.model.Player;
 import it.polimi.ingsw.PSP38.model.Worker;
 import it.polimi.ingsw.PSP38.virtualView.Server;
@@ -8,6 +7,8 @@ import it.polimi.ingsw.PSP38.virtualView.Server;
 import java.util.*;
 
 public class Controller {
+    private int numOfPlayer = 0;
+    private boolean first = true;
     public static List<Player> players = new LinkedList<>();
     private List<String> illegalNicknames = new LinkedList<>();
     private List<Worker.Color> availableColors = new LinkedList<>(Arrays.asList(Worker.Color.values()));
@@ -16,6 +17,12 @@ public class Controller {
 
     public Controller(){ }
 
+    public synchronized void setNumOfPlayer(int numOfPlayer) {
+        this.numOfPlayer = numOfPlayer;
+        notifyAll();
+    }
+
+    public synchronized int getNumOfPlayer() {return numOfPlayer;}
 
     public synchronized boolean isNicknameAvailable(String nickname){return (!illegalNicknames.contains(nickname));}
 
@@ -32,7 +39,7 @@ public class Controller {
     public synchronized String youngestPlayer (){return players.get(players.size()-1).getNickname();}
 
     public synchronized void checkGameFull(){
-        while(Server.getNumOfPlayer() > numCurrentPlayers()){
+        while(getNumOfPlayer() > numCurrentPlayers()){
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -40,6 +47,23 @@ public class Controller {
             }
         }
         notifyAll();
+    }
+
+    public synchronized boolean checkImFirst(){
+        if (first){
+          first = false;
+          return true;
+        }else{
+            return false;
+        }
+    }
+
+    public synchronized void waitMe(){
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

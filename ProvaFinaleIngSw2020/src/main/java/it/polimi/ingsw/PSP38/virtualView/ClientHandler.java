@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP38.virtualView;
 
 import it.polimi.ingsw.PSP38.controller.Controller;
-import it.polimi.ingsw.PSP38.controller.StrategyDivinityCard;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,9 +10,8 @@ import java.net.Socket;
 public class ClientHandler implements Runnable{
     private Socket clientSocket;
     private String nickname;
-    private int age;
+    private int clientNum;
     private static Controller controller = new Controller();
-    private static Object lock = new Object();
     private static int contPlayer = 0;
     private ObjectOutputStream output;
     private ObjectInputStream input;
@@ -29,24 +27,19 @@ public class ClientHandler implements Runnable{
 
     }
 
-
+    @Override
     public void run() {
         try {
-            if (contPlayer >= Server.getNumOfPlayer() && Server.getNumOfPlayer() != 0 ){
-                notifyGameFull();
-            } else {
-                synchronized (lock) {
-                    contPlayer++;
-                    if (Server.getNumOfPlayer() == 0) {
-                        Server.setNumOfPlayer(askNumPlayer());
-                    }
-                }
+            contPlayer++;
+            clientNum = contPlayer;
+            firstPlayerSetNumOfPlayers();
+            notifyExtraClient();
+            if(clientNum <= controller.getNumOfPlayer()) {
                 nickname = askNickname();
-                age = askAge();
+                int age = askAge();
                 controller.addPlayer(nickname, age);
                 controller.checkGameFull();
                 askYoungestPlayerCards();
-
             }
 
         }catch (IOException e) {
@@ -55,8 +48,31 @@ public class ClientHandler implements Runnable{
 
     }
 
+    private void notifyExtraClient() throws IOException{
+        if(this.clientNum>controller.getNumOfPlayer()){
+            notifyGameFull();
+            controller.waitMe();
+        }
+
+    }
+
+    private void firstPlayerSetNumOfPlayers() throws IOException {
+        if(controller.checkImFirst()){
+            controller.setNumOfPlayer(askNumPlayer());
+        }else{
+            if(controller.getNumOfPlayer() == 0){
+                notifyWaitingMessage();
+                controller.waitMe();
+            }
+        }
+    }
+
     public void notifyGameFull() throws IOException{
         output.writeObject(Protocol.NOTIFY_GAME_FULL);
+    }
+
+    public void notifyWaitingMessage() throws IOException{
+        output.writeObject(Protocol.NOTIFY_WAITING_MESSAGE);
     }
 
     public int askNumPlayer() throws IOException{
@@ -100,7 +116,7 @@ public class ClientHandler implements Runnable{
     public void askYoungestPlayerCards() throws IOException{
         if (controller.youngestPlayer().equals(nickname)){
             String divinityName;
-            for(int i=1; i<=Server.getNumOfPlayer(); i++ ){
+            for(int i=1; i<=controller.getNumOfPlayer(); i++ ){
                     output.writeObject(Protocol.ASK_DIVINITY_CARD);
                 try {
                     divinityName = (String)input.readObject();

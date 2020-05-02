@@ -7,5 +7,6 @@ public enum Protocol {
     NOTIFY_GAME_FULL,
     ASK_NICKNAME_AGAIN,
     ASK_DIVINITY_CARD,
+    NOTIFY_WAITING_MESSAGE,
 
 }
