@@ -66,5 +66,28 @@ public class Controller {
         }
     }
 
+    public synchronized List<StrategyDivinityCard.Name> getAvailableDivinityCards(){ return availableDivinityCards; }
+
+    public synchronized boolean isSelectedCardCorrect(String selectedCard){
+        try{
+            StrategyDivinityCard.Name selectedCardEnum  = StrategyDivinityCard.Name.valueOf(selectedCard);
+            if(this.availableDivinityCards.contains(selectedCardEnum)) {
+                return true;
+            }else{
+                return false;
+            }
+        }catch (IllegalArgumentException e){
+            return false;
+        }
+
+    }
+
+    public synchronized void setSelectedCard(String selectedCard){
+       StrategyDivinityCard.Name selectedCardEnum  = StrategyDivinityCard.Name.valueOf(selectedCard);
+       this.selectedCard.add(selectedCardEnum);
+       this.availableDivinityCards.remove(selectedCardEnum);
+
+    }
+
 
 }
