@@ -86,7 +86,7 @@ public class PreGameRequest {
                 System.out.println("Please insert an integers coordinates");
             }
             if (x < 0 || x>= Board.COLUMNS || y < 0 || y>= Board.ROWS)
-                System.out.println("Remeber column between: 0 and "+(Board.COLUMNS-1) +" & row between: 0 and "+ (Board.ROWS-1));
+                System.out.println("Remember column between: 0 and "+(Board.COLUMNS-1) +" & row between: 0 and "+ (Board.ROWS-1));
         } while ( x < 0 || x>= Board.COLUMNS || y < 0 || y>= Board.ROWS );
         startingPosition = new Cell(x, y);
         return new Worker(player.getColor(), startingPosition);

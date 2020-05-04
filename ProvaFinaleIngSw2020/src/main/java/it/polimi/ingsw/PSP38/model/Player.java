@@ -6,6 +6,9 @@ package it.polimi.ingsw.PSP38.model;
  * @author Davide Mantegazza (10568661)
  */
 public class Player {
+    public static final int MIN_AGE = 8;
+    public static final int MAX_AGE = 99;
+
     private final String nickname;
     private final int age;
     private final Worker.Color color;
@@ -45,8 +48,8 @@ public class Player {
         return color;
     }
 
-    public String toString(){
-        return getNickname()+getAge()+getColor();
+    public String toString() {
+        return "Nickname : " + getNickname() + ", age : " + getAge() + ", worker color : " + getColor();
     }
 }
 

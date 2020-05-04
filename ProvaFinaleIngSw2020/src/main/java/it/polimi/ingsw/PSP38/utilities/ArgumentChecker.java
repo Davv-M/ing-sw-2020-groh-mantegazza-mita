@@ -51,9 +51,7 @@ public final class ArgumentChecker {
     public static int requireBetween(int lowerBound, int upperBound, int value)
             throws IllegalArgumentException {
         if (value < lowerBound || value > upperBound) {
-            throw new IllegalArgumentException("Expected a value between "
-                    + lowerBound + "and " + upperBound + ", value was " + value
-                    + " instead !");
+            throw new IllegalArgumentException("Please enter an integer between " + lowerBound + " and " + upperBound);
         } else {
             return value;
         }
