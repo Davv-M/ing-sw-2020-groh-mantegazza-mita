@@ -31,7 +31,7 @@ public class Server {
     }
 
     public static synchronized int updateContPlayer(){
-        return contPlayer++;
+        return ++contPlayer;
     }
 
 

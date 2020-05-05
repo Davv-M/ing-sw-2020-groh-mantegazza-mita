@@ -17,6 +17,7 @@ public class ClientHandler implements Runnable {
 
     public ClientHandler(Socket clientSocket) {
         clientNum = Server.updateContPlayer();
+        System.out.println(clientNum);
         try {
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             input = new ObjectInputStream(clientSocket.getInputStream());
@@ -39,7 +40,6 @@ public class ClientHandler implements Runnable {
                 controller.checkGameFull();
                 askYoungestPlayerCards();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,7 +63,7 @@ public class ClientHandler implements Runnable {
     }
 
     private void firstPlayerSetNumOfPlayers() throws IOException {
-        if (clientNum == 0) {
+        if (clientNum == 1) {
             controller.setNumOfPlayers(askNumPlayers());
         } else if (controller.getNumOfPlayers() == 0) {
             notifyMessage("Please wait for the first player to select the number of players");
@@ -82,7 +82,7 @@ public class ClientHandler implements Runnable {
         try {
             nickname = (String) input.readObject();
             while (!controller.isNicknameAvailable(nickname)) {
-                notifyMessage("The nickname already exists");
+                notifyMessage("The nickname already exists. Please choose another one");
                 output.writeObject(Protocol.ASK_STRING);
                 nickname = (String) input.readObject();
             }
@@ -139,7 +139,7 @@ public class ClientHandler implements Runnable {
                 e.printStackTrace();
             }
         } while (true);
-
+        //System.out.println(num);
         return num;
     }
 

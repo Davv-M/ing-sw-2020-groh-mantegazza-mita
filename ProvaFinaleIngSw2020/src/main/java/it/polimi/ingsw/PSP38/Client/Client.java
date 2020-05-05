@@ -17,6 +17,7 @@ public class Client {
 
     public static void main(String[] args) {
         Socket serverSocket;
+        //InetAddress ipServer=new InetAddress(192.168.1.5);
         try {
             serverSocket = new Socket(InetAddress.getLocalHost(), Server.SERVER_SOCKET_PORT);
         } catch (IOException e) {
