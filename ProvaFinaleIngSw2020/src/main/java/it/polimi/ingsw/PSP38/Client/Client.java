@@ -20,6 +20,7 @@ public class Client {
         //InetAddress ipServer=new InetAddress(192.168.1.5);
         try {
             serverSocket = new Socket(InetAddress.getLocalHost(), Server.SERVER_SOCKET_PORT);
+            System.out.println(InetAddress.getLocalHost());
         } catch (IOException e) {
             System.out.println("server unreachable");
             return;
@@ -71,15 +72,15 @@ public class Client {
     private static void askInt() throws IOException {
         Scanner scanner = new Scanner(System.in);
         int number;
-        do{
+        do {
             try {
                 number = scanner.nextInt();
                 break;
-            } catch(InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Please insert an integer");
                 scanner.nextLine();
             }
-        } while(true);
+        } while (true);
         output.writeObject(number);
     }
 
