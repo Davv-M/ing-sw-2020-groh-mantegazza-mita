@@ -3,7 +3,7 @@
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import it.polimi.ingsw.PSP38.model.Game.*;
+import it.polimi.ingsw.PSP38.server.model.Game.*;
 
 import static org.junit.Assert.*;
 

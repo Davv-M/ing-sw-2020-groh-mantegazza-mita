@@ -1,6 +1,9 @@
 package it.polimi.ingsw.PSP38.model;
 
 
+import it.polimi.ingsw.PSP38.server.model.Board;
+import it.polimi.ingsw.PSP38.server.model.Cell;
+import it.polimi.ingsw.PSP38.server.model.Direction;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
