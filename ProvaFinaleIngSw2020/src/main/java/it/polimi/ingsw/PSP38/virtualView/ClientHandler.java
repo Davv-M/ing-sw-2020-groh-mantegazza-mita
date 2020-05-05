@@ -1,12 +1,12 @@
 package it.polimi.ingsw.PSP38.virtualView;
 
 import it.polimi.ingsw.PSP38.controller.Controller;
-import it.polimi.ingsw.PSP38.model.Player;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ClientHandler implements Runnable {
@@ -36,11 +36,10 @@ public class ClientHandler implements Runnable {
                 nickname = askNickname();
                 int age = askAge();
                 controller.addPlayer(nickname, age);
-                controller.checkGameFull(clientNum);
+                controller.checkGameFull();
                 askYoungestPlayerCards();
-                controller.createGame();
                 askDivinity();
-                controller.print();
+                controller.createGame();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -103,32 +102,24 @@ public class ClientHandler implements Runnable {
 
     public void askYoungestPlayerCards() throws IOException {
         if (controller.youngestPlayer().equals(nickname)) {
-            StringBuilder message = new StringBuilder(nickname + ", please select a divinity card from this list :\n");
-            controller.getAvailableDivinityCards().forEach(card -> message.append(card).append("\n"));
-            notifyMessage(message.toString());
-
             for (int i = 0; i < controller.getNumOfPlayers(); ++i) {
-                notifyMessage("please select a divinity card. (selected " + i + "/" + controller.getNumOfPlayers() + ")");
-                do {
-                    try {
-                        output.writeObject(Protocol.ASK_STRING);
-                        String selectedCard = (String) input.readObject();
-                        if (controller.isSelectedCardCorrectFromAvailableCards(selectedCard)) {
-                            controller.setSelectedCard(selectedCard);
-                            break;
-                        } else {
-                            notifyMessage("This divinity isn't available or has already been chosen. Please select a new one");
-                        }
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } while (true);
+                askDivinity(controller::setSelectedCards);
             }
-            controller.updatePlayers();
-            controller.wakeUpClients();
+            controller.updateTurn();
         } else {
+            notifyMessage("Please wait for " + controller.youngestPlayer() +
+                    " to choose the divinity cards that will be used in this game.");
             controller.pauseClient();
         }
+    }
+
+    public void askDivinity() throws IOException {
+        while (!controller.getCurrentPlayerTurn().equals(nickname)) {
+            notifyMessage("It's " + controller.getCurrentPlayerTurn() + "'s turn, please wait.");
+            controller.pauseClient();
+        }
+        askDivinity(controller::setPlayerDivinity);
+        controller.updateTurn();
     }
 
     private int askInt(Function<Integer, Integer> checkBounds) throws IOException {
@@ -147,22 +138,18 @@ public class ClientHandler implements Runnable {
         return num;
     }
 
-    public void askDivinity() throws IOException {
-        while (!controller.getCurrentPlayerTurn().getNickname().equals(nickname)) {
-            controller.pauseClient();
-        }
-        System.out.println("client num = " + nickname + " è uscito dal while");
-
+    public void askDivinity(Consumer<String> setCollection) throws IOException {
         StringBuilder message = new StringBuilder(nickname + ", please select a divinity card from this list :\n");
-        controller.getSelectedCards().forEach(card -> message.append(card).append("\n"));
+        controller.getAvailableDivinityCards().forEach(card -> message.append(card).append("\n"));
         notifyMessage(message.toString());
 
+        String string;
         do {
             try {
                 output.writeObject(Protocol.ASK_STRING);
-                String selectedCard = (String) input.readObject();
-                if (controller.isSelectedCardCorrectFromSelectedCards(selectedCard)) {
-                    controller.setPlayerDivinity(controller.getCurrentPlayerTurn(), selectedCard);
+                string = (String) input.readObject();
+                if (controller.isSelectedCardCorrect(string)) {
+                    setCollection.accept(string);
                     break;
                 } else {
                     notifyMessage("This divinity isn't available or has already been chosen. Please select a new one");
@@ -171,8 +158,6 @@ public class ClientHandler implements Runnable {
                 e.printStackTrace();
             }
         } while (true);
-        controller.updatePlayers();
-        controller.wakeUpClients();
     }
 
 }

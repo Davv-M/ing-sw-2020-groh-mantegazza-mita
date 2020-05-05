@@ -17,7 +17,6 @@ public class Client {
 
     public static void main(String[] args) {
         Socket serverSocket;
-        //InetAddress ipServer=new InetAddress(192.168.1.5);
         try {
             serverSocket = new Socket(InetAddress.getLocalHost(), Server.SERVER_SOCKET_PORT);
             System.out.println(InetAddress.getLocalHost());
@@ -31,16 +30,17 @@ public class Client {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
 
             while (true) {
+                final Scanner scanner = new Scanner(System.in);
                 Protocol p = (Protocol) input.readObject();
                 switch (p) {
                     case NOTIFY_MESSAGE:
                         notifyMessage();
                         break;
                     case ASK_INT:
-                        askInt();
+                        askInt(scanner);
                         break;
                     case ASK_STRING:
-                        askString();
+                        askString(scanner);
                         break;
                     default:
                         System.out.println("protocol error");
@@ -64,13 +64,11 @@ public class Client {
         }
     }
 
-    private static void askString() throws IOException {
-        Scanner scanner = new Scanner(System.in);
+    private static void askString(Scanner scanner) throws IOException {
         output.writeObject(scanner.nextLine());
     }
 
-    private static void askInt() throws IOException {
-        Scanner scanner = new Scanner(System.in);
+    private static void askInt(Scanner scanner) throws IOException {
         int number;
         do {
             try {

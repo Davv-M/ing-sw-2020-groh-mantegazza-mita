@@ -15,7 +15,7 @@ public class Controller {
     private static String youngestPlayer;
     private final List<String> illegalNicknames = new LinkedList<>();
     private final List<Worker.Color> availableColors = new LinkedList<>(Arrays.asList(Worker.Color.values()));
-    private final List<StrategyDivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(StrategyDivinityCard.Name.values()));
+    private List<StrategyDivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(StrategyDivinityCard.Name.values()));
     private final List<StrategyDivinityCard.Name> selectedCards = new LinkedList<>();
     private Game game;
     private final Map<Player, StrategyDivinityCard> playersDivinities = new HashMap<>();
@@ -25,7 +25,7 @@ public class Controller {
 
     public synchronized void setNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
         this.numOfPlayers = numOfPlayers;
-        wakeUpClients();
+        notifyAll();
     }
 
     public synchronized int getNumOfPlayers() {
@@ -59,33 +59,40 @@ public class Controller {
         return youngestPlayer;
     }
 
-    public synchronized void checkGameFull(int clientNum) {
+    public synchronized void checkGameFull() {
         if (getNumOfPlayers() > players.size()) {
-            System.out.println(clientNum + " is paused");
             pauseClient();
         } else {
-            wakeUpClients();
-            System.out.println(clientNum + " has woken up every other client");
+            notifyAll();
         }
     }
 
     public synchronized void pauseClient() {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public synchronized void wakeUpClients(){
+    public synchronized void updateTurn() {
+        players.add(players.remove(0));
         notifyAll();
+    }
+
+    public synchronized void createGame() {
+        game = new Game(players);
+    }
+
+    public synchronized String getCurrentPlayerTurn() {
+        return players.get(0).getNickname();
     }
 
     public synchronized List<StrategyDivinityCard.Name> getAvailableDivinityCards() {
         return availableDivinityCards;
     }
 
-    public synchronized boolean isSelectedCardCorrectFromAvailableCards(String selectedCard) {
+    public synchronized boolean isSelectedCardCorrect(String selectedCard) {
         try {
             StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
             return availableDivinityCards.contains(selectedCardEnum);
@@ -94,42 +101,20 @@ public class Controller {
         }
     }
 
-    public synchronized boolean isSelectedCardCorrectFromSelectedCards(String selectedCard) {
-        try {
-            StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
-            return selectedCards.contains(selectedCardEnum);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    public synchronized void setSelectedCard(String selectedCard) {
+    public synchronized void setSelectedCards(String selectedCard) {
         StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
         selectedCards.add(selectedCardEnum);
         availableDivinityCards.remove(selectedCardEnum);
+        if (selectedCards.size() == getNumOfPlayers()) {
+            availableDivinityCards = new LinkedList<>(selectedCards);
+        }
     }
 
-    public synchronized void createGame(){
-        game = new Game(players);
-    }
-
-    public synchronized Player updatePlayers(){
-        players.add(players.remove(0));
-        return players.get(0);
-    }
-
-    public synchronized Player getCurrentPlayerTurn(){
-        return players.get(0);
-    }
-
-    public synchronized  List<StrategyDivinityCard.Name> getSelectedCards() {
-        return selectedCards;
-    }
-
-    public synchronized void setPlayerDivinity(Player player, String selectedCard){
+    public synchronized void setPlayerDivinity(String selectedCard) {
         StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
-        playersDivinities.put(player, stringToStrategy(selectedCard));
-        selectedCards.remove(selectedCardEnum);
+        Player currentPlayer = players.stream().filter(p -> p.getNickname().equals(getCurrentPlayerTurn())).findFirst().get();
+        playersDivinities.put(currentPlayer, stringToStrategy(selectedCard));
+        availableDivinityCards.remove(selectedCardEnum);
     }
 
     private synchronized StrategyDivinityCard stringToStrategy(String selectedCard) {
@@ -148,22 +133,5 @@ public class Controller {
             default:
                 throw new IllegalArgumentException("Illegal divinity card");
         }
-    }
-
-    public synchronized void print(){
-        for(Player p: players){
-            System.out.println("players :");
-            System.out.println(p);
-            System.out.println();
-        }
-        for(String n: illegalNicknames){
-            System.out.println("illegal nicknames :");
-            System.out.println(n);
-            System.out.println();
-        }
-        System.out.println("map : ");
-        System.out.println(playersDivinities);
-        System.out.println();
-
     }
 }
