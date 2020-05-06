@@ -1,9 +1,8 @@
 package it.polimi.ingsw.PSP38.server.controller;
 
 import it.polimi.ingsw.PSP38.common.WorkerColor;
-import it.polimi.ingsw.PSP38.server.model.Game;
+import it.polimi.ingsw.PSP38.server.model.*;
 import it.polimi.ingsw.PSP38.server.controller.divinityStrategies.*;
-import it.polimi.ingsw.PSP38.server.model.Player;
 import it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker;
 
 import java.util.*;
@@ -111,8 +110,7 @@ public class Controller {
 
     public synchronized void setPlayerDivinity(String selectedCard) {
         StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
-        Player currentPlayer = players.stream().filter(p -> p.getNickname().equals(getCurrentPlayerTurn())).findFirst().get();
-        playersDivinities.put(currentPlayer, stringToStrategy(selectedCard));
+        playersDivinities.put(nicknameToPlayer(getCurrentPlayerTurn()), stringToStrategy(selectedCard));
         availableDivinityCards.remove(selectedCardEnum);
     }
 
@@ -132,5 +130,33 @@ public class Controller {
             default:
                 throw new IllegalArgumentException("Illegal divinity card");
         }
+    }
+
+    public synchronized List<Byte> getEncodedBoard(){
+        return BoardEncoder.bytesForBoard(game.getCurrentBoard());
+    }
+
+    public synchronized int checkXCoordinate(int x) throws IllegalArgumentException{
+        return ArgumentChecker.requireBetween(0, Board.COLUMNS - 1, x);
+    }
+
+    public synchronized int checkYCoordinate(int y) throws IllegalArgumentException{
+        return ArgumentChecker.requireBetween(0, Board.ROWS - 1, y);
+    }
+
+    public synchronized void placeWorker(int x, int y, String nickname) throws IllegalArgumentException{
+        Cell cell = game.getCurrentBoard().cellAt(x, y);
+        Player player = nicknameToPlayer(nickname);
+        if(cell.hasDome()){
+            throw new IllegalArgumentException("you can't place a worker on a cell cell containing a dome!");
+        } else if(game.getCurrentBoard().getWorkersPositions().containsKey(cell)){
+            throw new IllegalArgumentException("This cell already contains a worker");
+        }
+        game.setCurrentBoard(game.getCurrentBoard().withWorker(new Worker(player.getColor(), cell)));
+    }
+
+    private synchronized Player nicknameToPlayer(String nickname) {
+        Optional<Player> player = players.stream().filter(p -> p.getNickname().equals(nickname)).findFirst();
+        return player.orElse(null);
     }
 }

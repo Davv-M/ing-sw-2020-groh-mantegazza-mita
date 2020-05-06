@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP38.server.virtualView;
+package it.polimi.ingsw.PSP38.server.controller;
 
 import it.polimi.ingsw.PSP38.common.BytesForBoard;
 import it.polimi.ingsw.PSP38.server.model.Board;

@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP38.server.virtualView;
 
 import it.polimi.ingsw.PSP38.common.Protocol;
 import it.polimi.ingsw.PSP38.server.controller.Controller;
+import it.polimi.ingsw.PSP38.server.model.Game;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -41,6 +42,7 @@ public class ClientHandler implements Runnable {
                 askYoungestPlayerCards();
                 askDivinity();
                 controller.createGame();
+                placeWorkers();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,6 +65,13 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    private void notifyNotYourTurn() throws IOException {
+        while (!controller.getCurrentPlayerTurn().equals(nickname)) {
+            notifyMessage("It's " + controller.getCurrentPlayerTurn() + "'s turn, please wait.");
+            controller.pauseClient();
+        }
+    }
+
     private void firstPlayerSetNumOfPlayers() throws IOException {
         if (clientNum == 1) {
             controller.setNumOfPlayers(askNumPlayers());
@@ -72,12 +81,12 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public int askNumPlayers() throws IOException {
+    private int askNumPlayers() throws IOException {
         notifyMessage("You are the first player to join this game. Please insert the number of players (between 2 and 3)");
         return askInt(controller::checkNumOfPlayers);
     }
 
-    public String askNickname() throws IOException {
+    private String askNickname() throws IOException {
         notifyMessage("Choose your nickname");
         output.writeObject(Protocol.ASK_STRING);
         try {
@@ -95,13 +104,13 @@ public class ClientHandler implements Runnable {
         return nickname;
     }
 
-    public int askAge() throws IOException {
+    private int askAge() throws IOException {
         notifyMessage("How old are you? (integer between 8 and 99)");
         return askInt(controller::checkAge);
     }
 
 
-    public void askYoungestPlayerCards() throws IOException {
+    private void askYoungestPlayerCards() throws IOException {
         if (controller.youngestPlayer().equals(nickname)) {
             for (int i = 0; i < controller.getNumOfPlayers(); ++i) {
                 askDivinity(controller::setSelectedCards);
@@ -114,11 +123,8 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void askDivinity() throws IOException {
-        while (!controller.getCurrentPlayerTurn().equals(nickname)) {
-            notifyMessage("It's " + controller.getCurrentPlayerTurn() + "'s turn, please wait.");
-            controller.pauseClient();
-        }
+    private void askDivinity() throws IOException {
+        notifyNotYourTurn();
         askDivinity(controller::setPlayerDivinity);
         controller.updateTurn();
     }
@@ -139,7 +145,7 @@ public class ClientHandler implements Runnable {
         return num;
     }
 
-    public void askDivinity(Consumer<String> setCollection) throws IOException {
+    private void askDivinity(Consumer<String> setCollection) throws IOException {
         StringBuilder message = new StringBuilder(nickname + ", please select a divinity card from this list :\n");
         controller.getAvailableDivinityCards().forEach(card -> message.append(card).append("\n"));
         notifyMessage(message.toString());
@@ -159,6 +165,35 @@ public class ClientHandler implements Runnable {
                 e.printStackTrace();
             }
         } while (true);
+    }
+
+    private void displayBoard() throws IOException {
+        output.writeObject(Protocol.DISPLAY_BOARD);
+        output.writeObject(controller.getEncodedBoard());
+    }
+
+    private void placeWorkers() throws  IOException {
+        notifyNotYourTurn();
+        displayBoard();
+        notifyMessage("It's time to place your workers on the board.");
+        for(int i = 0; i < Game.WORKERS_PER_PLAYER; ++i){
+            int x;
+            int y;
+            do {
+                try {
+                    notifyMessage("Please insert the x coordinate for your Worker number " + (i+1) + ":");
+                    x = askInt(controller::checkXCoordinate);
+                    notifyMessage("Please insert the y coordinate for your Worker number " + (i+1) + ":");
+                    y = askInt(controller::checkYCoordinate);
+                    controller.placeWorker(x, y, nickname);
+                    break;
+                } catch (IllegalArgumentException e) {
+                    notifyMessage(e.getMessage());
+                }
+            }while(true);
+            displayBoard();
+        }
+        controller.updateTurn();
     }
 
 }

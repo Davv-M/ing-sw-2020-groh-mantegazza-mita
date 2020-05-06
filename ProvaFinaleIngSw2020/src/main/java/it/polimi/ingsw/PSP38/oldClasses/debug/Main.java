@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP38.common.WorkerColor;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Worker;
-import it.polimi.ingsw.PSP38.server.virtualView.BoardEncoder;
+import it.polimi.ingsw.PSP38.server.controller.BoardEncoder;
 
 public class Main {
     public static void main(String[] args) {
