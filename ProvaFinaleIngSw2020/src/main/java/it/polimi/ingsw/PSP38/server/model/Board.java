@@ -71,21 +71,6 @@ public final class Board {
     }
 
     /**
-     * Returns the worker at the given cell
-     *
-     * @param cell where worker is
-     * @return worker at the given cell
-     */
-    public Worker workerAt(Cell cell) {
-        Worker worker = null;
-        for (Worker w : workers) {
-            if (w.getPosition().equals(cell))
-                worker = w;
-        }
-        return worker;
-    }
-
-    /**
      * Returns a copy of the board that contains
      * the given cell or the same board if the
      * argument is null

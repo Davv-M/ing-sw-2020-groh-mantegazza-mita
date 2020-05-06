@@ -16,13 +16,13 @@ import java.util.List;
 public class Server {
     public final static int SERVER_SOCKET_PORT = 3457;
     private static int contPlayer = 0;
-    private static List<ClientHandler> listForSpuriousWakeUp = new LinkedList<>();
+    private static final List<ClientHandler> listForSpuriousWakeUp = new LinkedList<>();
 
     /**
      * Main method of the server side of Santorini that supervises the creation of a thread for each client connected to
      * the server
+     *
      * @param args
-     * @throws IOException in case of issues with input and/or output streams associated with the clients
      */
     public static void main(String[] args) {
         ServerSocket serverSocket;
@@ -59,6 +59,7 @@ public class Server {
 
     /**
      * Synchronized method used to update the current amount of players
+     *
      * @return the parameter <code>contPlayer</code> increased by one
      */
     public static synchronized int updateContPlayer(){

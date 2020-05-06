@@ -9,7 +9,7 @@ import it.polimi.ingsw.PSP38.server.virtualView.Server;
 
 import java.util.*;
 
-public class Controller {
+public class Controller extends Observable {
     private int numOfPlayers = 0;
     private static final List<Player> players = new LinkedList<>();
     private static String youngestPlayer;
@@ -89,7 +89,7 @@ public class Controller {
     }
 
     public synchronized void createGame() {
-        game = new Game(players);
+        game = new Game();
     }
 
     public synchronized String getCurrentPlayerTurn() {
@@ -171,10 +171,14 @@ public class Controller {
             throw new IllegalArgumentException("This cell already contains a worker");
         }
         game.setCurrentBoard(game.getCurrentBoard().withWorker(new Worker(player.getColor(), cell)));
+        setChanged();
+        notifyObservers();
     }
 
     private synchronized Player nicknameToPlayer(String nickname) {
         Optional<Player> player = players.stream().filter(p -> p.getNickname().equals(nickname)).findFirst();
         return player.orElse(null);
     }
+
+
 }

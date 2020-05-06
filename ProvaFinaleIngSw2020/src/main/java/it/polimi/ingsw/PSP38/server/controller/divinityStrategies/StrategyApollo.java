@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.server.controller.divinityStrategies;
 
 import it.polimi.ingsw.PSP38.server.controller.StrategyDivinityCard;
+import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Worker;
@@ -14,6 +15,8 @@ import java.util.Map;
  */
 
 public class StrategyApollo implements StrategyDivinityCard {
+
+    public static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD);
 
     /**
      * Returns a list of cells where the given worker can move
@@ -45,17 +48,14 @@ public class StrategyApollo implements StrategyDivinityCard {
      */
     @Override
     public Board move(Worker worker, Cell destinationCell, Board oldBoard) {
-
-        Board boardUpdated;
-        Worker challengerWorker = oldBoard.workerAt(destinationCell);
         Cell oldCell = worker.getPosition();
-        boardUpdated = oldBoard.moveWorker(worker, destinationCell);
-        if (challengerWorker != null) {
+        Board boardUpdated = oldBoard.moveWorker(worker, destinationCell);
+        if (oldBoard.getWorkersPositions().containsKey(destinationCell)) {
+            Worker challengerWorker = oldBoard.getWorkersPositions().get(destinationCell);
             boardUpdated = boardUpdated.moveWorker(challengerWorker, oldCell);
         }
 
         return boardUpdated;
-
     }
 
 }

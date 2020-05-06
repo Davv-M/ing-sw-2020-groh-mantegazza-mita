@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP38.server.model;
 
 import it.polimi.ingsw.PSP38.common.WorkerColor;
-import it.polimi.ingsw.PSP38.server.model.Cell;
 
 import static java.util.Objects.requireNonNull;
 

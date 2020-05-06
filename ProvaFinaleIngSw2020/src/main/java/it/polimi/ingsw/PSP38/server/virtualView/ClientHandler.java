@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler implements Observer, Runnable {
     private String nickname;
     private final int clientNum;
     private static final Controller controller = new Controller();
@@ -27,6 +29,7 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        controller.addObserver(this);
     }
 
     public void setImInWait(boolean imInWait) {
@@ -50,6 +53,7 @@ public class ClientHandler implements Runnable {
                 askDivinity();
                 controller.createGame();
                 placeWorkers();
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -198,10 +202,21 @@ public class ClientHandler implements Runnable {
                     notifyMessage(e.getMessage());
                 }
             }while(true);
-            displayBoard();
+
         }
         controller.updateTurn();
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if(!(o instanceof Controller)){
+            throw new IllegalArgumentException();
+        }
+        try {
+            displayBoard();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

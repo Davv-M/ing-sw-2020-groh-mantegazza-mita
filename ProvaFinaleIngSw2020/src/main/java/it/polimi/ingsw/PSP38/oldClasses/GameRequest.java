@@ -29,7 +29,7 @@ public class GameRequest {
                 System.out.println("Please insert an integers coordinates");
             }
             if (incorrectCoordinates)
-                System.out.println(" please "+ player.getNickname() +" remeber column between: 0 and "+(Board.COLUMNS-1) +" & row between: 0 and "+ (Board.ROWS-1));
+                System.out.println(" please "+ player.getNickname() +" remember column between: 0 and "+(Board.COLUMNS-1) +" & row between: 0 and "+ (Board.ROWS-1));
         } while (incorrectCoordinates);
 
         return coordinates;
