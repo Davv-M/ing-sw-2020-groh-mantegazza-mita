@@ -4,6 +4,8 @@ import it.polimi.ingsw.PSP38.common.WorkerColor;
 import it.polimi.ingsw.PSP38.server.model.*;
 import it.polimi.ingsw.PSP38.server.controller.divinityStrategies.*;
 import it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker;
+import it.polimi.ingsw.PSP38.server.virtualView.ClientHandler;
+import it.polimi.ingsw.PSP38.server.virtualView.Server;
 
 import java.util.*;
 
@@ -23,7 +25,7 @@ public class Controller {
 
     public synchronized void setNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
         this.numOfPlayers = numOfPlayers;
-        notifyAll();
+        wakeUpAll();
     }
 
     public synchronized int getNumOfPlayers() {
@@ -57,25 +59,33 @@ public class Controller {
         return youngestPlayer;
     }
 
-    public synchronized void checkGameFull() {
+    public synchronized void checkGameFull(ClientHandler ch) {
         if (getNumOfPlayers() > players.size()) {
-            pauseClient();
+            pauseClient(ch);
         } else {
-            notifyAll();
+            wakeUpAll();
         }
     }
 
-    public synchronized void pauseClient() {
+    public synchronized void pauseClient(ClientHandler ch) {
         try {
-            wait();
+            ch.setImInWait(true);
+            while(ch.getImInWait()){
+                wait();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    public synchronized void wakeUpAll(){
+        Server.wakeUpAll();
+        notifyAll();
+    }
+
     public synchronized void updateTurn() {
         players.add(players.remove(0));
-        notifyAll();
+        wakeUpAll();
     }
 
     public synchronized void createGame() {
@@ -127,6 +137,14 @@ public class Controller {
                 return new StrategyAtlas();
             case DEMETER:
                 return new StrategyDemeter();
+            case HEPHAESTUS:
+                return new StrategyHephaestus();
+            case MINOTAUR:
+                return new StrategyMinotaur();
+            case PAN:
+                return new StrategyPan();
+            case PROMETHEUS:
+                return new StrategyPrometheus();
             default:
                 throw new IllegalArgumentException("Illegal divinity card");
         }

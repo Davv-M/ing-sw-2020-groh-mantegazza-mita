@@ -17,6 +17,7 @@ public class ClientHandler implements Runnable {
     private static final Controller controller = new Controller();
     private ObjectOutputStream output;
     private ObjectInputStream input;
+    private boolean imInWait = false;
 
     public ClientHandler(Socket clientSocket) {
         clientNum = Server.updateContPlayer();
@@ -28,6 +29,12 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    public void setImInWait(boolean imInWait) {
+        this.imInWait = imInWait;
+    }
+
+    public boolean getImInWait(){ return imInWait;}
+
     @Override
     public void run() {
         try {
@@ -38,7 +45,7 @@ public class ClientHandler implements Runnable {
                 nickname = askNickname();
                 int age = askAge();
                 controller.addPlayer(nickname, age);
-                controller.checkGameFull();
+                controller.checkGameFull(this);
                 askYoungestPlayerCards();
                 askDivinity();
                 controller.createGame();
@@ -61,14 +68,14 @@ public class ClientHandler implements Runnable {
     private void notifyExtraClient() throws IOException {
         if (this.clientNum > controller.getNumOfPlayers()) {
             notifyMessage("game full, please try later");
-            controller.pauseClient();
+            controller.pauseClient(this);
         }
     }
 
     private void notifyNotYourTurn() throws IOException {
         while (!controller.getCurrentPlayerTurn().equals(nickname)) {
             notifyMessage("It's " + controller.getCurrentPlayerTurn() + "'s turn, please wait.");
-            controller.pauseClient();
+            controller.pauseClient(this);
         }
     }
 
@@ -77,7 +84,7 @@ public class ClientHandler implements Runnable {
             controller.setNumOfPlayers(askNumPlayers());
         } else if (controller.getNumOfPlayers() == 0) {
             notifyMessage("Please wait for the first player to select the number of players");
-            controller.pauseClient();
+            controller.pauseClient(this);
         }
     }
 
@@ -119,7 +126,7 @@ public class ClientHandler implements Runnable {
         } else {
             notifyMessage("Please wait for " + controller.youngestPlayer() +
                     " to choose the divinity cards that will be used in this game.");
-            controller.pauseClient();
+            controller.pauseClient(this);
         }
     }
 
