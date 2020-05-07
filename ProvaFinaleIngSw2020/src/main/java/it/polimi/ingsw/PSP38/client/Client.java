@@ -69,6 +69,7 @@ public class Client {
 
     private static void askString(Scanner scanner) throws IOException {
         output.writeObject(scanner.nextLine());
+        output.flush();
     }
 
     private static void askInt(Scanner scanner) throws IOException {
@@ -78,27 +79,27 @@ public class Client {
                 number = scanner.nextInt();
                 break;
             } catch (InputMismatchException e) {
-                System.out.println("Please insert an integer");
-                scanner.nextLine();
+                String error = scanner.nextLine();
+                System.out.println(error + " is not an Integer");
+                System.out.println("Please insert an integer (between 2 and 3)");
             }
         } while (true);
-        output.writeObject(number);
+        output.writeInt(number);
+        output.flush();
     }
 
     private static void displayBoard() throws IOException{
-        try {
-            int rows = Byte.toUnsignedInt((byte) input.readObject());
-            int columns = Byte.toUnsignedInt((byte) input.readObject());
-            List<Byte> encodedBoard = new ArrayList<>(rows * columns);
-            for(int row = 0; row < rows; ++row){
-                for( int col = 0; col < columns; ++col){
-                    encodedBoard.add((byte) input.readObject());
-                }
+        System.out.println("Board live:");
+        int rows = Byte.toUnsignedInt(input.readByte());
+        int columns = Byte.toUnsignedInt(input.readByte());
+        List<Byte> encodedBoard = new ArrayList<>(rows * columns);
+        for(int row = 0; row < rows; ++row){
+            for( int col = 0; col < columns; ++col){
+                encodedBoard.add(input.readByte());
             }
-            BoardPrinter printer = new BoardPrinter(rows, columns);
-            printer.printBoard(encodedBoard);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
+        BoardPrinter printer = new BoardPrinter(rows, columns);
+        printer.printBoard(encodedBoard);
+
     }
 }

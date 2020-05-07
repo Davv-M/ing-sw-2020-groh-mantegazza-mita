@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class Controller extends Observable {
+    private final Object lock = new Object();
     private final List<String> illegalNicknames = new LinkedList<>();
     private final List<StrategyDivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(StrategyDivinityCard.Name.values()));
     private final Game game = new Game();
     private final Map<Player, StrategyDivinityCard> playersDivinities = new HashMap<>();
+
 
     public Controller() {
     }
@@ -25,16 +27,17 @@ public class Controller extends Observable {
         return nickname;
     }
 
-    private synchronized int checkNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
+    private int checkNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
         return ArgumentChecker.requireBetween(Game.MIN_NUMBER_OF_PLAYERS, Game.MAX_NUMBER_OF_PLAYERS, numOfPlayers);
     }
 
-    private synchronized int checkAge(int age) throws IllegalArgumentException {
+    private int checkAge(int age) throws IllegalArgumentException {
         return ArgumentChecker.requireBetween(Player.MIN_AGE, Player.MAX_AGE, age);
     }
 
-    private synchronized void checkGameFull(ClientHandler ch) {
+    private synchronized void checkGameFull(ClientHandler ch) throws IOException{
         if (game.getTotNumPlayers() > game.getCurrNumPlayers()) {
+            ch.notifyMessage("Wait all players will be ready");
             pauseClient(ch);
         } else {
             wakeUpAll();
@@ -56,11 +59,11 @@ public class Controller extends Observable {
         return card;
     }
 
-    public synchronized int checkXCoordinate(int x) throws IllegalArgumentException{
+    public int checkXCoordinate(int x) throws IllegalArgumentException{
         return ArgumentChecker.requireBetween(0, Board.COLUMNS - 1, x);
     }
 
-    public synchronized int checkYCoordinate(int y) throws IllegalArgumentException{
+    public int checkYCoordinate(int y) throws IllegalArgumentException{
         return ArgumentChecker.requireBetween(0, Board.ROWS - 1, y);
     }
 
@@ -94,7 +97,7 @@ public class Controller extends Observable {
         wakeUpAll();
     }
 
-    private synchronized StrategyDivinityCard stringToStrategy(String selectedCard) {
+    private StrategyDivinityCard stringToStrategy(String selectedCard) {
         StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
         switch (selectedCardEnum) {
             case APOLLO:
@@ -155,6 +158,7 @@ public class Controller extends Observable {
     private void notifyExtraClient(ClientHandler client) throws IOException {
         if (client.clientNum > game.getTotNumPlayers()) {
             client.notifyMessage("game full, please try later.");
+            client.notifyMessage("If you want to see the match stay connected");
             pauseClient(client);
         }
     }
@@ -162,8 +166,11 @@ public class Controller extends Observable {
     private String askNickname(ClientHandler client) throws IOException {
         client.notifyMessage("Choose your nickname.");
         String nickname = client.askString(this::checkNickname);
-        illegalNicknames.add(nickname);
-        client.setNickname(nickname);
+        synchronized (lock){
+            illegalNicknames.add(nickname);
+            client.setNickname(nickname);
+        }
+
         return nickname;
     }
 
@@ -217,7 +224,7 @@ public class Controller extends Observable {
 
     private void placeWorkers(ClientHandler client) throws  IOException {
         notifyNotYourTurn(client);
-        //displayAllClients();
+        displayAllClients();
         client.notifyMessage("It's time to place your workers on the board.\n");
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
         for(int i = 0; i < Game.WORKERS_PER_PLAYER; ++i){
@@ -249,8 +256,17 @@ public class Controller extends Observable {
         return cell;
     }
 
-    private void displayAllClients(){
+    private synchronized void displayAllClients(){
         setChanged();
         notifyObservers();
     }
+
+
+
+
+
+
+
+
+
 }

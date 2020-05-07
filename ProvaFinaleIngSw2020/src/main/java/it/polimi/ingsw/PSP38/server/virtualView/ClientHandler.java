@@ -48,7 +48,9 @@ public class ClientHandler implements Observer, Runnable {
 
     public void notifyMessage(String message) throws IOException {
         output.writeObject(Protocol.NOTIFY_MESSAGE);
+        output.flush();
         output.writeObject(message);
+        output.flush();
     }
 
     public int askInt(Function<Integer, Integer> checkInt) throws IOException {
@@ -56,12 +58,11 @@ public class ClientHandler implements Observer, Runnable {
         do {
             try {
                 output.writeObject(Protocol.ASK_INT);
-                num = checkInt.apply((int) input.readObject());
+                output.flush();
+                num = checkInt.apply(input.readInt());
                 break;
             } catch (IllegalArgumentException e) {
                 notifyMessage(e.getMessage());
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
             }
         } while (true);
         return num;
@@ -72,6 +73,7 @@ public class ClientHandler implements Observer, Runnable {
         do {
             try {
                 output.writeObject(Protocol.ASK_STRING);
+                output.flush();
                 string = checkString.apply((String) input.readObject());
                 break;
             } catch (IllegalArgumentException e) {
@@ -85,8 +87,10 @@ public class ClientHandler implements Observer, Runnable {
 
     public void displayBoard() throws IOException {
         output.writeObject(Protocol.DISPLAY_BOARD);
+        output.flush();
         for(byte b : controller.getEncodedBoard()){
-            output.writeObject(b);
+            output.writeByte(b);
+            output.flush();
         }
     }
 

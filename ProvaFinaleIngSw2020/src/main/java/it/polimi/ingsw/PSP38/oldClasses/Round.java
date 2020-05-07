@@ -50,5 +50,25 @@ public class Round{
 
 
 
+
+
+ private synchronized void playYourTurn(ClientHandler client) throws  IOException {
+        notifyNotYourTurn(client);
+        client.notifyMessage("select the whorker who want to move\n");
+        Player clientPlayer = game.nicknameToPlayer(client.getNickname());
+        rounds.add(new Round(clientPlayer,playersDivinities.get(clientPlayer)));
+        for(int i = 0; i < Game.WORKERS_PER_PLAYER; ++i){
+            client.notifyMessage("Place your worker number " + (i + 1));
+            Cell cell = askCell(client);
+            game.setCurrentBoard(game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell)));
+            displayAllClients();
+        }
+        updateTurn();
+    }
+
+
+     private final List<Round> rounds = new LinkedList<>();
+
+
 }
 */
