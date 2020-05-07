@@ -124,6 +124,7 @@ public final class Cell {
 
     @Override
     public String toString() {
-        return "(" + x + "," + y + "," + towerHeight + "," + hasDome + ")";
+        return "position : (" + x + "," + y + "), tower height :"
+                + towerHeight + ", has Dome : " + hasDome;
     }
 }

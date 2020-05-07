@@ -7,10 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.InputMismatchException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Client {
     public final static int SERVER_SOCKET_PORT = 3457;
@@ -90,8 +87,16 @@ public class Client {
 
     private static void displayBoard() throws IOException{
         try {
-            List<Byte> encodedBoard = (LinkedList<Byte>) input.readObject();
-            BoardPainter.printBoard(encodedBoard);
+            int rows = Byte.toUnsignedInt((byte) input.readObject());
+            int columns = Byte.toUnsignedInt((byte) input.readObject());
+            List<Byte> encodedBoard = new ArrayList<>(rows * columns);
+            for(int row = 0; row < rows; ++row){
+                for( int col = 0; col < columns; ++col){
+                    encodedBoard.add((byte) input.readObject());
+                }
+            }
+            BoardPrinter printer = new BoardPrinter(rows, columns);
+            printer.printBoard(encodedBoard);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

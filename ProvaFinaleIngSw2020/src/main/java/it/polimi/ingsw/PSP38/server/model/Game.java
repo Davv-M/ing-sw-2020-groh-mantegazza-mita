@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP38.server.model;
 
-import it.polimi.ingsw.PSP38.server.model.Board;
-import it.polimi.ingsw.PSP38.server.model.Player;
+import it.polimi.ingsw.PSP38.common.WorkerColor;
 
 import java.util.*;
 
@@ -15,25 +14,21 @@ public class Game {
     public static final int MAX_NUMBER_OF_PLAYERS = 3;
     public static final int MIN_NUMBER_OF_PLAYERS = 2;
     public static final int WORKERS_PER_PLAYER = 2;
+    private int totNumPlayers = 0;
     private final List<Player> players = new LinkedList<>();
-    private Board currentBoard;
+    private Board currentBoard = new Board();
+    private final List<WorkerColor> availableColors = new LinkedList<>(Arrays.asList(WorkerColor.values()));
 
     /**
      * constructor of the Game class.
-     *
-     * @throws NullPointerException is thrown if no player is submitted
      */
-    public Game() throws NullPointerException {
-        currentBoard = new Board();
+    public Game(){
     }
 
-    public void addPlayer(Player player){
+    public void addPlayer(String nickname, int age){
+        Player player = new Player(nickname, age, availableColors.remove(0));
         players.add(player);
         players.sort(Comparator.comparingInt(Player::getAge));
-    }
-
-    public int getNumberOfPlayers(){
-        return players.size();
     }
 
     public synchronized String youngestPlayer() {
@@ -47,17 +42,36 @@ public class Game {
         return currentBoard;
     }
 
-    /**
-     * @param currentBoard update the currentBoard of the game
-     */
-
-    public void setCurrentBoard(Board currentBoard) {
-        this.currentBoard = currentBoard;
+    public Player getCurrentPlayerTurn(){
+        return players.get(0);
     }
 
-    public synchronized Player nicknameToPlayer(String nickname) {
+    public void setTotNumPlayers(int totNumPlayers) {
+        this.totNumPlayers = totNumPlayers;
+    }
+
+    public int getTotNumPlayers(){
+        return totNumPlayers;
+    }
+
+    public int getCurrNumPlayers(){
+        return players.size();
+    }
+
+    /**
+     * @param board update the currentBoard of the game
+     */
+
+    public void setCurrentBoard(Board board) {
+        this.currentBoard = board;
+    }
+
+    public Player nicknameToPlayer(String nickname) {
         Optional<Player> player = players.stream().filter(p -> p.getNickname().equals(nickname)).findFirst();
         return player.orElse(null);
     }
 
+    public void updateTurn(){
+        players.add(players.remove(0));
+    }
 }

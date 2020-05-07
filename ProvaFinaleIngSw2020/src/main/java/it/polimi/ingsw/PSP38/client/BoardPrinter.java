@@ -4,9 +4,9 @@ import it.polimi.ingsw.PSP38.common.WorkerColor;
 
 import java.util.List;
 
-public class BoardPainter {
-    public static final int BOARD_ROWS = 5;
-    public static final int BOARD_COLUMNS = 5;
+public class BoardPrinter {
+    private final int boardRows;
+    private final int boardColumns;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
@@ -17,11 +17,16 @@ public class BoardPainter {
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     public static final String UNICODE_PERSON = "\ud80c\udc4c";
 
-    public static void printBoard(List<Byte> encodedBoard) {
+    public BoardPrinter(int boardRows, int boardColumns){
+        this.boardRows = boardRows;
+        this.boardColumns = boardColumns;
+    }
+
+    public void printBoard(List<Byte> encodedBoard) {
         printRowsSeparators();
-        for (int row = 0; row < BOARD_ROWS; ++row) {
+        for (int row = 0; row < boardRows; ++row) {
             System.out.print("|");
-            for (int col = 0; col < BOARD_COLUMNS; ++col) {
+            for (int col = 0; col < boardColumns; ++col) {
                 printFree();
                 System.out.print("|");
             }
@@ -34,17 +39,17 @@ public class BoardPainter {
         }
     }
 
-    private static void printRowsSeparators() {
-        for (int i = 0; i < BOARD_COLUMNS; ++i) {
+    private void printRowsSeparators() {
+        for (int i = 0; i < boardColumns; ++i) {
             System.out.print(" -- -- -- --");
         }
         System.out.println();
     }
 
 
-    private static void printRowTopLayer(List<Byte> encodedBoard, int row) {
+    private void printRowTopLayer(List<Byte> encodedBoard, int row) {
         System.out.print("|");
-        for (int col = 0; col < BOARD_COLUMNS; ++col) {
+        for (int col = 0; col < boardColumns; ++col) {
             byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));
             if (BoardDecoder.towerHeight(encodedCell) == 3) {
                 if (BoardDecoder.hasDome(encodedCell)) {
@@ -62,9 +67,9 @@ public class BoardPainter {
         System.out.println();
     }
 
-    private static void printRowUpperMidLayer(List<Byte> encodedBoard, int row) {
+    private void printRowUpperMidLayer(List<Byte> encodedBoard, int row) {
         System.out.print("|");
-        for (int col = 0; col < BOARD_COLUMNS; ++col) {
+        for (int col = 0; col < boardColumns; ++col) {
             byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));
 
             switch (BoardDecoder.towerHeight(encodedCell)) {
@@ -89,9 +94,9 @@ public class BoardPainter {
         System.out.println();
     }
 
-    private static void printRowLowerMidLayer(List<Byte> encodedBoard, int row) {
+    private void printRowLowerMidLayer(List<Byte> encodedBoard, int row) {
         System.out.print("|");
-        for (int col = 0; col < BOARD_COLUMNS; ++col) {
+        for (int col = 0; col < boardColumns; ++col) {
             byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));
 
             switch (BoardDecoder.towerHeight(encodedCell)) {
@@ -116,9 +121,9 @@ public class BoardPainter {
         System.out.println();
     }
 
-    private static void printRowBottomLayer(List<Byte> encodedBoard, int row) {
+    private void printRowBottomLayer(List<Byte> encodedBoard, int row) {
         System.out.print("|");
-        for (int col = 0; col < BOARD_COLUMNS; ++col) {
+        for (int col = 0; col < boardColumns; ++col) {
             byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));
 
             switch (BoardDecoder.towerHeight(encodedCell)) {

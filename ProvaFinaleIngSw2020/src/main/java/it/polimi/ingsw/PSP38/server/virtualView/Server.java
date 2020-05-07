@@ -1,9 +1,6 @@
 package it.polimi.ingsw.PSP38.server.virtualView;
 
-import it.polimi.ingsw.PSP38.server.virtualView.ClientHandler;
-
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -28,7 +25,7 @@ public class Server {
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(SERVER_SOCKET_PORT);
-            System.out.println("Server started");
+            System.out.println("Server online");
             //System.out.println("Server IP: "+ InetAddress.getLocalHost());
             do {
                 Socket clientSocket = serverSocket.accept();
@@ -52,8 +49,8 @@ public class Server {
      * <code>setImInWait</code> of <code>ClientHandler</code>
      */
     public static void wakeUpAll(){
-        for(ClientHandler ch : listForSpuriousWakeUp){
-            ch.setImInWait(false);
+        for(ClientHandler client : listForSpuriousWakeUp){
+            client.setPaused(false);
         }
     }
 

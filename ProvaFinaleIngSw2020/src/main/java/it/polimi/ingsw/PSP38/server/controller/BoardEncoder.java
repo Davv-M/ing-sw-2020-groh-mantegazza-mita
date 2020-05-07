@@ -12,6 +12,8 @@ public class BoardEncoder {
     public static List<Byte> bytesForBoard(Board board){
 
         List<Byte> bytesForBoard = new LinkedList<>();
+        bytesForBoard.add((byte)Board.ROWS);
+        bytesForBoard.add((byte)Board.COLUMNS);
         for(int row = 0; row < Board.ROWS; ++row){
             for(int col = 0; col < Board.COLUMNS; ++col){
                 Cell cell = board.cellAt(col, row);

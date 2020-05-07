@@ -1,76 +1,82 @@
 package it.polimi.ingsw.PSP38.server.controller;
 
-import it.polimi.ingsw.PSP38.common.WorkerColor;
 import it.polimi.ingsw.PSP38.server.model.*;
 import it.polimi.ingsw.PSP38.server.controller.divinityStrategies.*;
 import it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker;
 import it.polimi.ingsw.PSP38.server.virtualView.ClientHandler;
 import it.polimi.ingsw.PSP38.server.virtualView.Server;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Controller extends Observable {
-    private int numOfPlayers = 0;
-    private static final List<Player> players = new LinkedList<>();
-    private static String youngestPlayer;
     private final List<String> illegalNicknames = new LinkedList<>();
-    private final List<WorkerColor> availableColors = new LinkedList<>(Arrays.asList(WorkerColor.values()));
-    private List<StrategyDivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(StrategyDivinityCard.Name.values()));
-    private final List<StrategyDivinityCard.Name> selectedCards = new LinkedList<>();
-    private Game game;
+    private final List<StrategyDivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(StrategyDivinityCard.Name.values()));
+    private final Game game = new Game();
     private final Map<Player, StrategyDivinityCard> playersDivinities = new HashMap<>();
 
     public Controller() {
     }
 
-    public synchronized void setNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
-        this.numOfPlayers = numOfPlayers;
-        wakeUpAll();
+    private synchronized String checkNickname(String nickname) throws IllegalArgumentException{
+        if(illegalNicknames.contains(nickname)){
+            throw new IllegalArgumentException("This nickname is unavailable. Please choose a new one.");
+        }
+        return nickname;
     }
 
-    public synchronized int getNumOfPlayers() {
-        return numOfPlayers;
-    }
-
-    public synchronized boolean isNicknameAvailable(String nickname) {
-        return (!illegalNicknames.contains(nickname));
-    }
-
-    public synchronized int checkNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
+    private synchronized int checkNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
         return ArgumentChecker.requireBetween(Game.MIN_NUMBER_OF_PLAYERS, Game.MAX_NUMBER_OF_PLAYERS, numOfPlayers);
     }
 
-    public synchronized int checkAge(int age) throws IllegalArgumentException {
+    private synchronized int checkAge(int age) throws IllegalArgumentException {
         return ArgumentChecker.requireBetween(Player.MIN_AGE, Player.MAX_AGE, age);
     }
 
-    public synchronized void addIllegalNickname(String nickname) {
-        illegalNicknames.add(nickname);
-    }
-
-    public synchronized void addPlayer(String nickname, int age) {
-        Player newPlayer = new Player(nickname, age, availableColors.remove(0));
-        players.add(newPlayer);
-        players.sort(Comparator.comparingInt(Player::getAge));
-        youngestPlayer = players.get(0).getNickname();
-    }
-
-    public synchronized String youngestPlayer() {
-        return youngestPlayer;
-    }
-
-    public synchronized void checkGameFull(ClientHandler ch) {
-        if (getNumOfPlayers() > players.size()) {
+    private synchronized void checkGameFull(ClientHandler ch) {
+        if (game.getTotNumPlayers() > game.getCurrNumPlayers()) {
             pauseClient(ch);
         } else {
             wakeUpAll();
         }
     }
 
-    public synchronized void pauseClient(ClientHandler ch) {
+    private synchronized String checkDivinityCard(String card) throws IllegalArgumentException{
+        StrategyDivinityCard.Name selectedCardEnum;
         try {
-            ch.setImInWait(true);
-            while(ch.getImInWait()){
+            selectedCardEnum = StrategyDivinityCard.Name.valueOf(card.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("This divinity card doesn't exist. Please select a new one.");
+        }
+
+        if(!availableDivinityCards.contains(selectedCardEnum)){
+            throw new IllegalArgumentException("This divinity card has already been chosen. Please select a new one.");
+        }
+
+        return card;
+    }
+
+    public synchronized int checkXCoordinate(int x) throws IllegalArgumentException{
+        return ArgumentChecker.requireBetween(0, Board.COLUMNS - 1, x);
+    }
+
+    public synchronized int checkYCoordinate(int y) throws IllegalArgumentException{
+        return ArgumentChecker.requireBetween(0, Board.ROWS - 1, y);
+    }
+
+    private synchronized Cell checkIsFreeCell(Cell cell) throws IllegalArgumentException{
+        if(cell.hasDome()){
+            throw new IllegalArgumentException("you can't place a worker on a cell cell containing a dome!");
+        } else if(game.getCurrentBoard().getWorkersPositions().containsKey(cell)){
+            throw new IllegalArgumentException("This cell already contains a worker");
+        }
+        return cell;
+    }
+
+    private synchronized void pauseClient(ClientHandler client) {
+        try {
+            client.setPaused(true);
+            while(client.isPaused()){
                 wait();
             }
         } catch (InterruptedException e) {
@@ -78,50 +84,14 @@ public class Controller extends Observable {
         }
     }
 
-    public synchronized void wakeUpAll(){
+    private synchronized void wakeUpAll(){
         Server.wakeUpAll();
         notifyAll();
     }
 
-    public synchronized void updateTurn() {
-        players.add(players.remove(0));
+    private synchronized void updateTurn() {
+        game.updateTurn();
         wakeUpAll();
-    }
-
-    public synchronized void createGame() {
-        game = new Game();
-    }
-
-    public synchronized String getCurrentPlayerTurn() {
-        return players.get(0).getNickname();
-    }
-
-    public synchronized List<StrategyDivinityCard.Name> getAvailableDivinityCards() {
-        return availableDivinityCards;
-    }
-
-    public synchronized boolean isSelectedCardCorrect(String selectedCard) {
-        try {
-            StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
-            return availableDivinityCards.contains(selectedCardEnum);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    public synchronized void setSelectedCards(String selectedCard) {
-        StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
-        selectedCards.add(selectedCardEnum);
-        availableDivinityCards.remove(selectedCardEnum);
-        if (selectedCards.size() == getNumOfPlayers()) {
-            availableDivinityCards = new LinkedList<>(selectedCards);
-        }
-    }
-
-    public synchronized void setPlayerDivinity(String selectedCard) {
-        StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
-        playersDivinities.put(nicknameToPlayer(getCurrentPlayerTurn()), stringToStrategy(selectedCard));
-        availableDivinityCards.remove(selectedCardEnum);
     }
 
     private synchronized StrategyDivinityCard stringToStrategy(String selectedCard) {
@@ -154,31 +124,133 @@ public class Controller extends Observable {
         return BoardEncoder.bytesForBoard(game.getCurrentBoard());
     }
 
-    public synchronized int checkXCoordinate(int x) throws IllegalArgumentException{
-        return ArgumentChecker.requireBetween(0, Board.COLUMNS - 1, x);
-    }
-
-    public synchronized int checkYCoordinate(int y) throws IllegalArgumentException{
-        return ArgumentChecker.requireBetween(0, Board.ROWS - 1, y);
-    }
-
-    public synchronized void placeWorker(int x, int y, String nickname) throws IllegalArgumentException{
-        Cell cell = game.getCurrentBoard().cellAt(x, y);
-        Player player = nicknameToPlayer(nickname);
-        if(cell.hasDome()){
-            throw new IllegalArgumentException("you can't place a worker on a cell cell containing a dome!");
-        } else if(game.getCurrentBoard().getWorkersPositions().containsKey(cell)){
-            throw new IllegalArgumentException("This cell already contains a worker");
+    public void start(ClientHandler client) throws IOException {
+        welcomeMessage(client);
+        firstPlayerSetNumOfPlayers(client);
+        notifyExtraClient(client);
+        if (client.clientNum <= game.getTotNumPlayers()) {
+            game.addPlayer(askNickname(client), askAge(client));
+            checkGameFull(client);
+            askYoungestPlayerCards(client);
+            askDivinity(client);
+            placeWorkers(client);
         }
-        game.setCurrentBoard(game.getCurrentBoard().withWorker(new Worker(player.getColor(), cell)));
+    }
+
+    private void welcomeMessage(ClientHandler client) throws IOException {
+        client.notifyMessage("Welcome to SANTORINI\n");
+    }
+
+    private void firstPlayerSetNumOfPlayers(ClientHandler client) throws IOException {
+        if (client.clientNum == 1) {
+            client.notifyMessage("You are the first player to join this game. Please insert the number of players (between 2 and 3)");
+            game.setTotNumPlayers(client.askInt(this::checkNumOfPlayers));
+            wakeUpAll();
+        } else if (game.getTotNumPlayers() == 0) {
+            client.notifyMessage("Please wait for the first player to select the number of players.");
+            pauseClient(client);
+        }
+    }
+
+    private void notifyExtraClient(ClientHandler client) throws IOException {
+        if (client.clientNum > game.getTotNumPlayers()) {
+            client.notifyMessage("game full, please try later.");
+            pauseClient(client);
+        }
+    }
+
+    private String askNickname(ClientHandler client) throws IOException {
+        client.notifyMessage("Choose your nickname.");
+        String nickname = client.askString(this::checkNickname);
+        illegalNicknames.add(nickname);
+        client.setNickname(nickname);
+        return nickname;
+    }
+
+    private int askAge(ClientHandler client) throws IOException {
+        client.notifyMessage("How old are you? (integer between 8 and 99)");
+        return client.askInt(this::checkAge);
+    }
+
+    private void askYoungestPlayerCards(ClientHandler client) throws IOException {
+        if (game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {
+            List<StrategyDivinityCard.Name> selectedDivinityCards = new LinkedList<>();
+            for (int i = 0; i < game.getTotNumPlayers(); ++i) {
+                displayAvailableDivinities(client);
+                String card = client.askString(this::checkDivinityCard);
+                StrategyDivinityCard.Name cardEnum = StrategyDivinityCard.Name.valueOf(card.toUpperCase());
+                selectedDivinityCards.add(cardEnum);
+                availableDivinityCards.remove(cardEnum);
+            }
+            availableDivinityCards.clear();
+            availableDivinityCards.addAll(selectedDivinityCards);
+            updateTurn();
+        } else {
+            client.notifyMessage("Please wait for " + game.getCurrentPlayerTurn().getNickname() +
+                    " to choose the divinity cards that will be used in this game.");
+            pauseClient(client);
+        }
+    }
+
+    private void askDivinity(ClientHandler client) throws IOException {
+        notifyNotYourTurn(client);
+        displayAvailableDivinities(client);
+        String card = client.askString(this::checkDivinityCard);
+        StrategyDivinityCard.Name cardEnum = StrategyDivinityCard.Name.valueOf(card.toUpperCase());
+        playersDivinities.put(game.getCurrentPlayerTurn(), stringToStrategy(card));
+        availableDivinityCards.remove(cardEnum);
+        updateTurn();
+    }
+
+    private void notifyNotYourTurn(ClientHandler client) throws IOException {
+        while (!game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {
+            client.notifyMessage("It's " + game.getCurrentPlayerTurn().getNickname() + "'s turn, please wait.");
+            pauseClient(client);
+        }
+    }
+
+    private void displayAvailableDivinities(ClientHandler client) throws IOException {
+        StringBuilder message = new StringBuilder(client.getNickname() + ", please select a divinity card from this list :\n");
+        availableDivinityCards.forEach(card -> message.append(card).append("\n"));
+        client.notifyMessage(message.toString());
+    }
+
+    private void placeWorkers(ClientHandler client) throws  IOException {
+        notifyNotYourTurn(client);
+        //displayAllClients();
+        client.notifyMessage("It's time to place your workers on the board.\n");
+        Player clientPlayer = game.nicknameToPlayer(client.getNickname());
+        for(int i = 0; i < Game.WORKERS_PER_PLAYER; ++i){
+            client.notifyMessage("Place your worker number " + (i + 1));
+            Cell cell = askCell(client);
+            game.setCurrentBoard(game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell)));
+            displayAllClients();
+        }
+        updateTurn();
+    }
+
+    private Cell askCell(ClientHandler client) throws IOException{
+        Cell cell;
+        int x;
+        int y;
+        do {
+            try {
+                client.notifyMessage("Please insert the x coordinate :");
+                x = client.askInt(this::checkXCoordinate);
+                client.notifyMessage("Please insert the y coordinate :");
+                y = client.askInt(this::checkYCoordinate);
+                cell = checkIsFreeCell(game.getCurrentBoard().cellAt(x, y));
+                break;
+            } catch (IllegalArgumentException e) {
+                client.notifyMessage(e.getMessage());
+            }
+        }while(true);
+        System.out.println(cell);
+        return cell;
+    }
+
+    private void displayAllClients(){
         setChanged();
         notifyObservers();
     }
-
-    private synchronized Player nicknameToPlayer(String nickname) {
-        Optional<Player> player = players.stream().filter(p -> p.getNickname().equals(nickname)).findFirst();
-        return player.orElse(null);
-    }
-
-
 }

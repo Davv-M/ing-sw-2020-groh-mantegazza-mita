@@ -1,11 +1,9 @@
 package it.polimi.ingsw.PSP38.oldClasses.debug;
 
-import it.polimi.ingsw.PSP38.client.BoardPainter;
 import it.polimi.ingsw.PSP38.common.WorkerColor;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Worker;
-import it.polimi.ingsw.PSP38.server.controller.BoardEncoder;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,7 +21,6 @@ public class Main {
         board = board.withWorker(new Worker(WorkerColor.RED, cell4));
         board = board.withWorker(new Worker(WorkerColor.YELLOW, cell3));
 
-        BoardPainter.printBoard(BoardEncoder.bytesForBoard(board));
     }
 
 }
