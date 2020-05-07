@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP38.server.model;
 
+import it.polimi.ingsw.PSP38.common.WorkerColor;
+
 import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
@@ -68,6 +70,20 @@ public final class Board {
 
     public Cell cellAt(int x, int y) {
         return cells.get(rowMajorIndex(x, y));
+    }
+
+    /**
+     * DA SISTEMARE !!!!!!!!!!!!!
+     */
+
+    public Worker workerAt(Cell cellUnderWorker){
+        Worker worker = null;
+        for(Worker w: workers){
+            if(w.getPosition().equals(cellUnderWorker)) {
+                worker = w;
+            }
+        }
+        return worker;
     }
 
     /**

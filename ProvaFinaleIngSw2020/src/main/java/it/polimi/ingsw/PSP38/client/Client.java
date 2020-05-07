@@ -88,8 +88,7 @@ public class Client {
         output.flush();
     }
 
-    private static void displayBoard() throws IOException{
-        System.out.println("Board live:");
+    private synchronized static void displayBoard() throws IOException{
         int rows = Byte.toUnsignedInt(input.readByte());
         int columns = Byte.toUnsignedInt(input.readByte());
         List<Byte> encodedBoard = new ArrayList<>(rows * columns);

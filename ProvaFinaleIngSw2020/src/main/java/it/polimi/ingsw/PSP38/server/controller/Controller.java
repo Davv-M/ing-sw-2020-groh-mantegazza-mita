@@ -15,6 +15,7 @@ public class Controller extends Observable {
     private final List<StrategyDivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(StrategyDivinityCard.Name.values()));
     private final Game game = new Game();
     private final Map<Player, StrategyDivinityCard> playersDivinities = new HashMap<>();
+    private final List<Round> rounds = new LinkedList<>();
 
 
     public Controller() {
@@ -37,7 +38,7 @@ public class Controller extends Observable {
 
     private synchronized void checkGameFull(ClientHandler ch) throws IOException{
         if (game.getTotNumPlayers() > game.getCurrNumPlayers()) {
-            ch.notifyMessage("Wait all players will be ready");
+            ch.notifyMessage("Hold on all players will be ready in few seconds");
             pauseClient(ch);
         } else {
             wakeUpAll();
@@ -70,11 +71,13 @@ public class Controller extends Observable {
     private synchronized Cell checkIsFreeCell(Cell cell) throws IllegalArgumentException{
         if(cell.hasDome()){
             throw new IllegalArgumentException("you can't place a worker on a cell cell containing a dome!");
-        } else if(game.getCurrentBoard().getWorkersPositions().containsKey(cell)){
-            throw new IllegalArgumentException("This cell already contains a worker");
-        }
+        } //else if(game.getCurrentBoard().getWorkersPositions().containsKey(cell)){
+            //throw new IllegalArgumentException("This cell already contains a worker");
+        //}
         return cell;
     }
+
+
 
     private synchronized void pauseClient(ClientHandler client) {
         try {
@@ -137,6 +140,9 @@ public class Controller extends Observable {
             askYoungestPlayerCards(client);
             askDivinity(client);
             placeWorkers(client);
+            do{
+                playGame(client);
+            }while(true);
         }
     }
 
@@ -236,7 +242,7 @@ public class Controller extends Observable {
         updateTurn();
     }
 
-    private Cell askCell(ClientHandler client) throws IOException{
+    public Cell askCell(ClientHandler client) throws IOException{
         Cell cell;
         int x;
         int y;
@@ -256,10 +262,23 @@ public class Controller extends Observable {
         return cell;
     }
 
+
     private synchronized void displayAllClients(){
         setChanged();
         notifyObservers();
     }
+
+    private synchronized void playGame(ClientHandler client) throws  IOException {
+        notifyNotYourTurn(client);
+        Player clientPlayer = game.nicknameToPlayer(client.getNickname());
+        rounds.add(new Round(clientPlayer,playersDivinities.get(clientPlayer),client));
+        game.setCurrentBoard(rounds.get(rounds.size()-1).play(game.getCurrentBoard(),this));
+        displayAllClients();
+        updateTurn();
+
+    }
+
+
 
 
 
