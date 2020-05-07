@@ -26,26 +26,22 @@ public class Round {
         client.notifyMessage("select the worker who want to move");
         Cell cellUnderWorker = controller.askCell(client);
         Worker workerSelected = currentBoard.workerAt(cellUnderWorker);
-        List<Cell> possibleCellsMove = strategy.preFirstMove(workerSelected, currentBoard);
+        List<Cell> possibleCellsMove = strategy.preMove(workerSelected, currentBoard);
         client.notifyMessage("these are the cells where you can move your worker:");
         client.notifyMessage(possibleCellsMove.toString());
         client.notifyMessage("insert the coordinates of the cell where you want to place your worker");
         Cell cell = controller.askCell(client);
         Cell cellDestination = currentBoard.cellAt(cell.getX(),cell.getY());
-        Board boardAfterFirstMove = strategy.firstMove(workerSelected, cellDestination, currentBoard);
-
-
-
-
+        Board boardAfterMove = strategy.move(workerSelected, cellDestination, currentBoard);
         Cell cellUnderWorkerMoved = boardAfterMove.cellAt(cellDestination.getX(),cellDestination.getY());
         Worker workerMoved = boardAfterMove.workerAt(cellUnderWorkerMoved);
-        List<Cell> possibleCellsBuild = strategy.preFirstBuild(workerMoved, boardAfterMove);
+        List<Cell> possibleCellsBuild = strategy.preBuild(workerMoved, boardAfterMove);
         client.notifyMessage("these are the cells where you can build:");
         client.notifyMessage(possibleCellsBuild.toString());
         client.notifyMessage("insert the coordinates of the cell where you want your worker to build");
         Cell cell1 = controller.askCell(client);
         Cell cellDestinationBuild = boardAfterMove.cellAt(cell1.getX(),cell1.getY());
-        Board boardAfterBuild = strategy.firstBuild(cellDestinationBuild, boardAfterMove);
+        Board boardAfterBuild = strategy.build(cellDestinationBuild, boardAfterMove);
         return boardAfterBuild;
     }
 }
