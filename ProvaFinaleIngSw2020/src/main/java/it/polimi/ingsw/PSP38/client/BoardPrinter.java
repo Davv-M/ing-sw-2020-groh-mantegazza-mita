@@ -155,13 +155,13 @@ public class BoardPrinter {
     private static void printWorker(WorkerColor color) {
         String workerColor;
         switch(color){
-            case RED:
+            case BLACK:
                 workerColor = ANSI_RED_BACKGROUND;
                 break;
-            case PURPLE:
+            case WHITE:
                 workerColor = ANSI_PURPLE_BACKGROUND;
                 break;
-            case YELLOW:
+            case BLUE:
                 workerColor = ANSI_YELLOW_BACKGROUND;
                 break;
             default:

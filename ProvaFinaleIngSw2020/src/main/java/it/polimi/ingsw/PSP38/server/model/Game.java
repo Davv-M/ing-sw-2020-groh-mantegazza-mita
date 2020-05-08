@@ -31,10 +31,6 @@ public class Game {
         players.sort(Comparator.comparingInt(Player::getAge));
     }
 
-    public synchronized String youngestPlayer() {
-        return players.get(0).getNickname();
-    }
-
     /**
      * @return the currentBoard of the game
      */

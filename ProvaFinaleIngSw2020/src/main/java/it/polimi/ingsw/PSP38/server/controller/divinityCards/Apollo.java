@@ -1,6 +1,6 @@
-package it.polimi.ingsw.PSP38.server.controller.divinityStrategies;
+package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 
-import it.polimi.ingsw.PSP38.server.controller.StrategyDivinityCard;
+import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
 import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Matteo Mita (10487862)
  */
 
-public class StrategyApollo implements StrategyDivinityCard {
+public class Apollo extends DivinityCard {
 
     public static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD);
 
@@ -24,17 +24,14 @@ public class StrategyApollo implements StrategyDivinityCard {
      * @param worker       the worker that has to be moved
      * @param currentBoard the current board of the game
      */
-
     @Override
     public List<Cell> preMove(Worker worker, Board currentBoard) {
         List<Cell> neighborCells = currentBoard.neighborsCells(worker.getPosition());
         Map<Cell, Worker> workersPositions = currentBoard.getWorkersPositions();
         //Removes all cells containing workers' player who call the method, domes or cells with tower height > cell.towerHeight + 1
-        neighborCells.removeIf(c -> c.hasDome() || c.getTowerHeight() > worker.getPosition().getTowerHeight() + 1);
+        neighborCells.removeIf(c -> currentBoard.hasDomeAt(c) || currentBoard.heightOf(c) > currentBoard.heightOf(worker.getPosition()) + 1);
         neighborCells.removeIf(c -> workersPositions.containsKey(c) && workersPositions.get(c).getColor() == worker.getColor());
         return neighborCells;
-
-
     }
 
 
@@ -43,16 +40,16 @@ public class StrategyApollo implements StrategyDivinityCard {
      *
      * @param worker          the worker that has to be moved
      * @param destinationCell the cell where the worker has to be moved
-     * @param oldBoard        the current board of the game
+     * @param currentBoard        the current board of the game
      * @return the updated board
      */
     @Override
-    public Board move(Worker worker, Cell destinationCell, Board oldBoard) {
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard) {
         Cell oldCell = worker.getPosition();
-        Board boardUpdated = oldBoard.moveWorker(worker, destinationCell);
-        if (oldBoard.getWorkersPositions().containsKey(destinationCell)) {
-            Worker challengerWorker = oldBoard.getWorkersPositions().get(destinationCell);
-            boardUpdated = boardUpdated.moveWorker(challengerWorker, oldCell);
+        Board boardUpdated = currentBoard.withWorker(worker, destinationCell);
+        if (currentBoard.getWorkersPositions().containsKey(destinationCell)) {
+            Worker challengerWorker = currentBoard.getWorkersPositions().get(destinationCell);
+            boardUpdated = boardUpdated.withWorker(challengerWorker, oldCell);
         }
 
         return boardUpdated;

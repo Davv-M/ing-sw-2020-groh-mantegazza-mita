@@ -10,18 +10,7 @@ import static org.junit.Assert.*;
 public class WorkerTest {
 
     Cell cellTest = new Cell(0,0);
-    Cell cellWitDomeTest = cellTest.withDome();
-    Worker workerTest = new Worker(WorkerColor.YELLOW, cellTest);
-
-    @Test(expected = NullPointerException.class)
-    public void ConstructorWithoutColour(){
-        new Worker(null, cellTest);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void ConstructorWithoutCell(){
-        new Worker(WorkerColor.RED, cellWitDomeTest);
-    }
+    Worker workerTest = new Worker(WorkerColor.BLUE, cellTest);
 
     @Test
     public void getCell() {
@@ -30,6 +19,6 @@ public class WorkerTest {
 
     @Test
     public void getColor() {
-        assertEquals(WorkerColor.YELLOW, workerTest.getColor());
+        assertEquals(WorkerColor.BLUE, workerTest.getColor());
     }
 }

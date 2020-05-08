@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Protocol;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,6 +12,7 @@ import java.util.*;
 
 public class Client {
     public final static int SERVER_SOCKET_PORT = 3457;
+    private static BoardComponent sc;
 
     private static ObjectInputStream input;
     private static ObjectOutputStream output;
@@ -28,7 +30,7 @@ public class Client {
         try {
             input = new ObjectInputStream(serverSocket.getInputStream());
             output = new ObjectOutputStream(serverSocket.getOutputStream());
-
+            createUI();
             while (true) {
                 final Scanner scanner = new Scanner(System.in);
                 Protocol p = (Protocol) input.readObject();
@@ -69,7 +71,6 @@ public class Client {
 
     private static void askString(Scanner scanner) throws IOException {
         output.writeObject(scanner.nextLine());
-        output.flush();
     }
 
     private static void askInt(Scanner scanner) throws IOException {
@@ -88,17 +89,29 @@ public class Client {
         output.flush();
     }
 
-    private synchronized static void displayBoard() throws IOException{
-        int rows = Byte.toUnsignedInt(input.readByte());
-        int columns = Byte.toUnsignedInt(input.readByte());
-        List<Byte> encodedBoard = new ArrayList<>(rows * columns);
-        for(int row = 0; row < rows; ++row){
-            for( int col = 0; col < columns; ++col){
-                encodedBoard.add(input.readByte());
+    private static void displayBoard() throws IOException {
+        byte rows = input.readByte();
+        byte columns = input.readByte();
+        List<Byte> encodedBoard = new LinkedList<>();
+        encodedBoard.add(rows);
+        encodedBoard.add(columns);
+        for (int row = 0; row < rows; ++row) {
+            for (int col = 0; col < columns; ++col) {
+                byte b = input.readByte();
+                encodedBoard.add(b);
             }
         }
-        BoardPrinter printer = new BoardPrinter(rows, columns);
-        printer.printBoard(encodedBoard);
+        sc.setEncodedBoard(encodedBoard);
+    }
 
+    public static void createUI() {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sc = new BoardComponent();
+        frame.add(sc);
+        frame.getContentPane().setPreferredSize(sc.getPreferredSize());
+        frame.pack();
+        frame.setVisible(true);
+        sc.requestFocusInWindow();
     }
 }

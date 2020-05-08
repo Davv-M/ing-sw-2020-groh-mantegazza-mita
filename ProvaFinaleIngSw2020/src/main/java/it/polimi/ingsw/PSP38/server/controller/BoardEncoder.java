@@ -16,9 +16,12 @@ public class BoardEncoder {
         bytesForBoard.add((byte)Board.COLUMNS);
         for(int row = 0; row < Board.ROWS; ++row){
             for(int col = 0; col < Board.COLUMNS; ++col){
-                Cell cell = board.cellAt(col, row);
-                byte b = byteForCell(cell);
-                if(board.getWorkersPositions().containsKey(cell)){
+                Cell cell = new Cell(col, row);
+                byte b = byteForTower(board.heightOf(cell));
+                if(board.hasDomeAt(cell)){
+                    b+= BytesForBoard.DOME;
+                }
+                else if(board.hasWorkerAt(cell)){
                     b += byteForWorker(board.getWorkersPositions().get(cell));
                 }
 
@@ -29,40 +32,29 @@ public class BoardEncoder {
         return bytesForBoard;
     }
 
-    private static byte byteForCell(Cell cell){
-        byte byteForCell;
-        switch(cell.getTowerHeight()){
+    private static byte byteForTower(int cellHeight){
+        switch(cellHeight){
             case 0:
-                byteForCell = 0;
-                break;
+                return 0;
             case 1:
-                byteForCell = BytesForBoard.TOWER_1;
-                break;
+                return BytesForBoard.TOWER_1;
             case 2:
-                byteForCell = BytesForBoard.TOWER_2;
-                break;
+                return BytesForBoard.TOWER_2;
             case 3:
-                byteForCell = BytesForBoard.TOWER_3;
-                break;
+                return BytesForBoard.TOWER_3;
             default:
                 throw new IllegalArgumentException("tower too high");
         }
-
-        if(cell.hasDome()){
-            byteForCell += BytesForBoard.DOME;
-        }
-
-        return byteForCell;
     }
 
     private static byte byteForWorker(Worker worker) {
         switch(worker.getColor()){
-            case RED:
-                return BytesForBoard.WORKER_RED;
-            case PURPLE:
-                return BytesForBoard.WORKER_PURPLE;
-            case YELLOW:
-                return BytesForBoard.WORKER_YELLOW;
+            case BLACK:
+                return BytesForBoard.WORKER_BLACK;
+            case WHITE:
+                return BytesForBoard.WORKER_WHITE;
+            case BLUE:
+                return BytesForBoard.WORKER_BLUE;
             default:
                 throw new IllegalArgumentException("impossible color");
         }

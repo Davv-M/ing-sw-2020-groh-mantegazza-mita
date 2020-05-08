@@ -19,16 +19,12 @@ public final class Worker {
      *
      * @param color    the color of the worker
      * @param position the cell below the worker
-     * @throws NullPointerException     if an argument is null
-     * @throws IllegalArgumentException if the given cell has a dome on top
+     * @throws NullPointerException if an argument is null
      */
 
-    public Worker(WorkerColor color, Cell position) throws NullPointerException, IllegalArgumentException {
+    public Worker(WorkerColor color, Cell position) throws NullPointerException {
         this.color = requireNonNull(color);
-        if (requireNonNull(position).hasDome()) {
-            throw new IllegalArgumentException("Workers can't stand on domes");
-        }
-        this.position = position;
+        this.position = requireNonNull(position);
     }
 
     /**
@@ -47,4 +43,20 @@ public final class Worker {
         return color;
     }
 
+    @Override
+    public int hashCode() {
+        return position.rowMajorIndex();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Worker other = (Worker) obj;
+        return position.equals(other.position) && color == other.getColor();
+    }
 }

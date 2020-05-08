@@ -1,10 +1,6 @@
 package it.polimi.ingsw.PSP38.server.model;
 
-import it.polimi.ingsw.PSP38.common.WorkerColor;
-
 import java.util.*;
-
-import static java.util.Collections.unmodifiableList;
 
 /**
  * Immutable class representing a two-dimensional Board game
@@ -17,139 +13,93 @@ import static java.util.Collections.unmodifiableList;
 public final class Board {
     public static final int ROWS = 5;
     public static final int COLUMNS = 5;
-    public static final int TOTAL_CELLS = ROWS * COLUMNS;
 
-    private final List<Cell> cells;
-    private final List<Worker> workers;
+    private final Set<Worker> workers;
+    private final Set<Tower> towers;
+    private final Set<Cell> cellsWithDomes;
 
     /**
-     * Board constructor that makes a board of free cells
+     * Board constructor that creates an empty board
      */
 
     public Board() {
-        cells = new LinkedList<>();
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                cells.add(new Cell(col, row));
-            }
-        }
-        workers = unmodifiableList(new ArrayList<>());
+        workers = Collections.unmodifiableSet(new HashSet<>());
+        towers = Collections.unmodifiableSet(new HashSet<>());
+        cellsWithDomes = Collections.unmodifiableSet(new HashSet<>());
     }
 
     /**
      * Board constructor that makes a board with the given list of cells
      *
-     * @param cells   list of cells that make up the board
+     * @param towers   list of towers present on the board
      * @param workers list of workers present on the board
-     * @throws IllegalArgumentException if the given list does not contain
-     *                                  precisely {@code TOTAL_CELLS} cells
+     * @param cellsWithDomes list of domes present on the board
+     * @throws NullPointerException if the workers list or the towers list is null
      */
 
-    public Board(List<Cell> cells, List<Worker> workers) throws IllegalArgumentException {
-        if (cells == null || cells.size() != Board.TOTAL_CELLS) {
-            throw new IllegalArgumentException(
-                    "The game board must be made of precisely " + Board.TOTAL_CELLS
-                            + " cells");
-        }
-        this.cells = List.copyOf(cells);
-        if (workers == null) {
-            throw new IllegalArgumentException(
-                    "The game board must be have workers");
-        }
-        this.workers = List.copyOf(workers);
-    }
-
-
-    /**
-     * Returns the cell of the board at the given coordinates
-     *
-     * @param x vertical coordinate of the cell
-     * @param y horizontal coordinate of the cell
-     * @return Cell at given coordinates
-     */
-
-    public Cell cellAt(int x, int y) {
-        return cells.get(rowMajorIndex(x, y));
-    }
-
-    /**
-     * DA SISTEMARE !!!!!!!!!!!!!
-     */
-
-    public Worker workerAt(Cell cellUnderWorker){
-        Worker worker = null;
-        for(Worker w: workers){
-            if(w.getPosition().equals(cellUnderWorker)) {
-                worker = w;
-            }
-        }
-        return worker;
+    private Board(Set<Worker> workers, Set<Tower> towers, Set<Cell> cellsWithDomes) throws NullPointerException{
+        this.workers = Set.copyOf(Objects.requireNonNull(workers));
+        this.towers = Set.copyOf(Objects.requireNonNull(towers));
+        this.cellsWithDomes = Set.copyOf(Objects.requireNonNull(cellsWithDomes));
     }
 
     /**
      * Returns a copy of the board that contains
-     * the given cell or the same board if the
+     * the given tower or the same board if the
      * argument is null
      *
-     * @param newCell the cell to insert
+     * @param tower the tower to place on the board
      * @return a new board with the given cell
      */
 
-    public Board withCell(Cell newCell) {
-        if (newCell == null) {
+    public Board withTower(Tower tower) {
+        if (tower == null) {
             return this;
         }
-        List<Cell> newBoardCells = new LinkedList<>(cells);
-        int index = rowMajorIndex(newCell.getX(), newCell.getY());
-        newBoardCells.remove(index);
-        newBoardCells.add(index, newCell);
-        List<Worker> newBoardWorkers = new LinkedList<>(workers);
+        Set<Tower> newBoardTowers = new HashSet<>(towers);
+        newBoardTowers.add(tower);
 
-        return new Board(newBoardCells, newBoardWorkers);
+        return new Board(workers, newBoardTowers, cellsWithDomes);
     }
 
     /**
-     * Returns a copy of the board that contains the same cell
-     * and add or modify the worker's position
+     * Returns a copy of the board with the given worker
+     * added or, if it was already present, with his position
+     * modified or the same board if one of the arguments is null
      *
-     * @param worker      the worker that we want to move
+     * @param worker      the worker that we want add
      * @param newPosition the new worker's position
-     * @return a new board with the given cell
+     * @return a new board with the worker added
      */
 
-    public Board moveWorker(Worker worker, Cell newPosition) {
-        List<Cell> newBoardCells = new LinkedList<>(cells);
-        List<Worker> newBoardWorkers = new LinkedList<>(workers);
+    public Board withWorker(Worker worker, Cell newPosition) {
+        if (worker == null || newPosition == null){
+            return this;
+        }
+        Set<Worker> newBoardWorkers = new HashSet<>(workers);
         newBoardWorkers.remove(worker);
         newBoardWorkers.add(new Worker(worker.getColor(), newPosition));
-        return new Board(newBoardCells, newBoardWorkers);
+
+        return new Board(newBoardWorkers, towers, cellsWithDomes);
     }
 
     /**
-     * Returns a copy of the board that contains the same cell
-     * and add or modify the worker's position
+     * Returns a copy of the board that contains
+     * a dome at the given position or
+     * the same board if the argument is null
      *
-     * @param worker    the worker that we want place on the board
-     * @return a new board with the given cell
+     * @param cell the cell at which the dome is placed
+     * @return a new board with the dome added
      */
 
-    public Board withWorker(Worker worker) {
-        List<Cell> newBoardCells = new LinkedList<>(cells);
-        List<Worker> newBoardWorkers = new LinkedList<>(workers);
-        newBoardWorkers.add(worker);
-        return new Board(newBoardCells, newBoardWorkers);
-    }
+    public Board withDome(Cell cell) {
+        if (cell == null){
+            return this;
+        }
+        Set<Cell> newBoardDomes = new HashSet<>(cellsWithDomes);
+        newBoardDomes.add(cell);
 
-    /**
-     * Returns the cell's index
-     *
-     * @param x vertical coordinate of the cell
-     * @param y horizontal coordinate of the cell
-     * @return cell'index
-     */
-
-    private static int rowMajorIndex(int x, int y) {
-        return (y * COLUMNS) + x;
+        return new Board(workers, towers, newBoardDomes);
     }
 
     /**
@@ -166,7 +116,7 @@ public final class Board {
         int neighborX = cell.getX() + dir.x();
         int neighborY = cell.getY() + dir.y();
 
-        return isOutOfBounds(neighborX, neighborY) ? Optional.empty() : Optional.of(cellAt(neighborX, neighborY));
+        return isOutOfBounds(neighborX, neighborY) ? Optional.empty() : Optional.of(new Cell(neighborX, neighborY));
     }
 
     /**
@@ -183,6 +133,7 @@ public final class Board {
             Optional<Cell> possibleNeighbor = directionNeighbor(cell, dir);
             possibleNeighbor.ifPresent(neighbors::add);
         }
+
         return neighbors;
     }
 
@@ -201,7 +152,7 @@ public final class Board {
     /**
      * Returns a map linking the workers (values) to the cells they occupy (keys).
      *
-     * @return a map linking bombs and the cells they occupy
+     * @return a map linking workers and the cells they occupy
      */
 
     public Map<Cell, Worker> getWorkersPositions() {
@@ -212,5 +163,50 @@ public final class Board {
         return occupiedCells;
     }
 
+    /**
+     * Returns a map linking the towers (values) to the cells they occupy (keys).
+     *
+     * @return a map linking towers and the cells they occupy
+     */
 
+    public Map<Cell, Tower> getTowersPositions() {
+        Map<Cell, Tower> occupiedCells = new HashMap<>();
+        for (Tower t : towers) {
+            occupiedCells.put(t.getPosition(), t);
+        }
+        return occupiedCells;
+    }
+
+    /**
+     * Determines if the given cell cointains a dome
+     *
+     * @param cell the cell that we want to check
+     * @return <b>true</b> if the cell contains a dome , <b>false</b> otherwise
+     */
+
+    public boolean hasDomeAt(Cell cell){
+        return cellsWithDomes.contains(cell);
+    }
+
+    /**
+     * Determines if the given cell cointains a worker
+     *
+     * @param cell the cell that we want to check
+     * @return <b>true</b> if the cell contains a worker , <b>false</b> otherwise
+     */
+
+    public boolean hasWorkerAt(Cell cell){
+        return getWorkersPositions().containsKey(cell);
+    }
+
+    /**
+     * Returns the height of the given cell
+     *
+     * @param cell the cell
+     * @return the height
+     */
+
+    public int heightOf(Cell cell){
+        return !getTowersPositions().containsKey(cell) ? 0 : getTowersPositions().get(cell).getHeight();
+    }
 }

@@ -14,18 +14,18 @@ public class BoardDecoder {
     }
 
     public static boolean hasWorker(byte b) {
-        return isAndEqual(b, BytesForBoard.WORKER_PURPLE)
-                || isAndEqual(b, BytesForBoard.WORKER_RED)
-                || isAndEqual(b, BytesForBoard.WORKER_YELLOW);
+        return isAndEqual(b, BytesForBoard.WORKER_WHITE)
+                || isAndEqual(b, BytesForBoard.WORKER_BLACK)
+                || isAndEqual(b, BytesForBoard.WORKER_BLUE);
     }
 
     public static WorkerColor workerColor(byte b) {
-        if (isAndEqual(b, BytesForBoard.WORKER_PURPLE)) {
-            return WorkerColor.PURPLE;
-        } else if (isAndEqual(b, BytesForBoard.WORKER_RED)) {
-            return WorkerColor.RED;
-        } else if (isAndEqual(b, BytesForBoard.WORKER_YELLOW)) {
-            return WorkerColor.YELLOW;
+        if (isAndEqual(b, BytesForBoard.WORKER_WHITE)) {
+            return WorkerColor.WHITE;
+        } else if (isAndEqual(b, BytesForBoard.WORKER_BLACK)) {
+            return WorkerColor.BLACK;
+        } else if (isAndEqual(b, BytesForBoard.WORKER_BLUE)) {
+            return WorkerColor.BLUE;
         } else {
             throw new IllegalArgumentException("color unknown");
         }

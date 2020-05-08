@@ -1,26 +1,37 @@
 package it.polimi.ingsw.PSP38.oldClasses.debug;
 
+import it.polimi.ingsw.PSP38.client.BoardComponent;
 import it.polimi.ingsw.PSP38.common.WorkerColor;
+import it.polimi.ingsw.PSP38.server.controller.BoardEncoder;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
+import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 public class Main {
-    public static void main(String[] args) {
-
+    private static BoardComponent sc;
+    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         Board board = new Board();
-        Cell cell1 = new Cell(0, 1, 3, false);
-        Cell cell2 = new Cell(1, 1, 2, true);
-        Cell cell3 = new Cell(3, 4, 1, false);
-        Cell cell4 = new Cell(3, 4, 1, false);
+        Cell cell = new Cell(0,1);
+        board = board.withWorker(new Worker(WorkerColor.BLACK, cell), cell);
+        List<Byte> encodedBoard = BoardEncoder.bytesForBoard(board);
+        createUI();
+        sc.setEncodedBoard(encodedBoard);
+    }
 
-        board = board.withCell(cell1);
-        board = board.withCell(cell2);
-        board = board.withCell(cell3);
-        board = board.withWorker(new Worker(WorkerColor.PURPLE, cell1));
-        board = board.withWorker(new Worker(WorkerColor.RED, cell4));
-        board = board.withWorker(new Worker(WorkerColor.YELLOW, cell3));
-
+    public static void createUI(){
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sc = new BoardComponent();
+        frame.add(sc);
+        frame.getContentPane().setPreferredSize(sc.getPreferredSize());
+        frame.pack();
+        frame.setVisible(true);
+        sc.requestFocusInWindow();
     }
 
 }
+

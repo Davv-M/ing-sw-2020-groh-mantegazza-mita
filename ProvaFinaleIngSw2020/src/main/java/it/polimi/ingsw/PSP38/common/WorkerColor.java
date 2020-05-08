@@ -6,7 +6,7 @@ package it.polimi.ingsw.PSP38.common;
  */
 
 public enum WorkerColor {
-    PURPLE,
-    RED,
-    YELLOW
+    WHITE,
+    BLACK,
+    BLUE
 }

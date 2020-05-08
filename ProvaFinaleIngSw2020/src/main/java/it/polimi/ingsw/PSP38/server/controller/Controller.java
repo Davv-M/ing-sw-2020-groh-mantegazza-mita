@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP38.server.controller;
 
 import it.polimi.ingsw.PSP38.server.model.*;
-import it.polimi.ingsw.PSP38.server.controller.divinityStrategies.*;
+import it.polimi.ingsw.PSP38.server.controller.divinityCards.*;
 import it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker;
 import it.polimi.ingsw.PSP38.server.virtualView.ClientHandler;
 import it.polimi.ingsw.PSP38.server.virtualView.Server;
@@ -12,9 +12,9 @@ import java.util.*;
 public class Controller extends Observable {
     private final Object lock = new Object();
     private final List<String> illegalNicknames = new LinkedList<>();
-    private final List<StrategyDivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(StrategyDivinityCard.Name.values()));
+    private final List<DivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(DivinityCard.Name.values()));
     private final Game game = new Game();
-    private final Map<Player, StrategyDivinityCard> playersDivinities = new HashMap<>();
+    private final Map<Player, DivinityCard> playersDivinities = new HashMap<>();
     private final List<Round> rounds = new LinkedList<>();
 
 
@@ -36,19 +36,19 @@ public class Controller extends Observable {
         return ArgumentChecker.requireBetween(Player.MIN_AGE, Player.MAX_AGE, age);
     }
 
-    private synchronized void checkGameFull(ClientHandler ch) throws IOException{
+    private synchronized void checkGameFull(ClientHandler client) throws IOException{
         if (game.getTotNumPlayers() > game.getCurrNumPlayers()) {
-            ch.notifyMessage("Hold on all players will be ready in few seconds");
-            pauseClient(ch);
+            client.notifyMessage("Hold on all players will be ready in few seconds");
+            pauseClient(client);
         } else {
             wakeUpAll();
         }
     }
 
     private synchronized String checkDivinityCard(String card) throws IllegalArgumentException{
-        StrategyDivinityCard.Name selectedCardEnum;
+        DivinityCard.Name selectedCardEnum;
         try {
-            selectedCardEnum = StrategyDivinityCard.Name.valueOf(card.toUpperCase());
+            selectedCardEnum = DivinityCard.Name.valueOf(card.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("This divinity card doesn't exist. Please select a new one.");
         }
@@ -69,11 +69,11 @@ public class Controller extends Observable {
     }
 
     private synchronized Cell checkIsFreeCell(Cell cell) throws IllegalArgumentException{
-        if(cell.hasDome()){
-            throw new IllegalArgumentException("you can't place a worker on a cell cell containing a dome!");
-        } //else if(game.getCurrentBoard().getWorkersPositions().containsKey(cell)){
-            //throw new IllegalArgumentException("This cell already contains a worker");
-        //}
+        /*if(cell.hasDome()){
+            throw new IllegalArgumentException("you can't place a worker on a cell containing a dome!");
+        } else if(game.getCurrentBoard().getWorkersPositions().containsKey(cell)){
+            throw new IllegalArgumentException("This cell already contains a worker");
+        }*/
         return cell;
     }
 
@@ -100,27 +100,27 @@ public class Controller extends Observable {
         wakeUpAll();
     }
 
-    private StrategyDivinityCard stringToStrategy(String selectedCard) {
-        StrategyDivinityCard.Name selectedCardEnum = StrategyDivinityCard.Name.valueOf(selectedCard.toUpperCase());
+    private DivinityCard stringToStrategy(String selectedCard) {
+        DivinityCard.Name selectedCardEnum = DivinityCard.Name.valueOf(selectedCard.toUpperCase());
         switch (selectedCardEnum) {
             case APOLLO:
-                return new StrategyApollo();
+                return new Apollo();
             case ARTEMIS:
-                return new StrategyArtemis();
+                return new Artemis();
             case ATHENA:
-                return new StrategyAthena();
+                return new Athena();
             case ATLAS:
-                return new StrategyAtlas();
+                return new Atlas();
             case DEMETER:
-                return new StrategyDemeter();
+                return new Demeter();
             case HEPHAESTUS:
-                return new StrategyHephaestus();
+                return new Hephaestus();
             case MINOTAUR:
-                return new StrategyMinotaur();
+                return new Minotaur();
             case PAN:
-                return new StrategyPan();
+                return new Pan();
             case PROMETHEUS:
-                return new StrategyPrometheus();
+                return new Prometheus();
             default:
                 throw new IllegalArgumentException("Illegal divinity card");
         }
@@ -187,11 +187,11 @@ public class Controller extends Observable {
 
     private void askYoungestPlayerCards(ClientHandler client) throws IOException {
         if (game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {
-            List<StrategyDivinityCard.Name> selectedDivinityCards = new LinkedList<>();
+            List<DivinityCard.Name> selectedDivinityCards = new LinkedList<>();
             for (int i = 0; i < game.getTotNumPlayers(); ++i) {
                 displayAvailableDivinities(client);
                 String card = client.askString(this::checkDivinityCard);
-                StrategyDivinityCard.Name cardEnum = StrategyDivinityCard.Name.valueOf(card.toUpperCase());
+                DivinityCard.Name cardEnum = DivinityCard.Name.valueOf(card.toUpperCase());
                 selectedDivinityCards.add(cardEnum);
                 availableDivinityCards.remove(cardEnum);
             }
@@ -209,7 +209,7 @@ public class Controller extends Observable {
         notifyNotYourTurn(client);
         displayAvailableDivinities(client);
         String card = client.askString(this::checkDivinityCard);
-        StrategyDivinityCard.Name cardEnum = StrategyDivinityCard.Name.valueOf(card.toUpperCase());
+        DivinityCard.Name cardEnum = DivinityCard.Name.valueOf(card.toUpperCase());
         playersDivinities.put(game.getCurrentPlayerTurn(), stringToStrategy(card));
         availableDivinityCards.remove(cardEnum);
         updateTurn();
@@ -230,13 +230,13 @@ public class Controller extends Observable {
 
     private void placeWorkers(ClientHandler client) throws  IOException {
         notifyNotYourTurn(client);
-        displayAllClients();
+        //displayAllClients();
         client.notifyMessage("It's time to place your workers on the board.\n");
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
         for(int i = 0; i < Game.WORKERS_PER_PLAYER; ++i){
             client.notifyMessage("Place your worker number " + (i + 1));
             Cell cell = askCell(client);
-            game.setCurrentBoard(game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell)));
+            game.setCurrentBoard(game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell), cell));
             displayAllClients();
         }
         updateTurn();
@@ -252,7 +252,7 @@ public class Controller extends Observable {
                 x = client.askInt(this::checkXCoordinate);
                 client.notifyMessage("Please insert the y coordinate :");
                 y = client.askInt(this::checkYCoordinate);
-                cell = checkIsFreeCell(game.getCurrentBoard().cellAt(x, y));
+                cell = checkIsFreeCell(new Cell(x, y));
                 break;
             } catch (IllegalArgumentException e) {
                 client.notifyMessage(e.getMessage());

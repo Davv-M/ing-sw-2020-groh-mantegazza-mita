@@ -9,39 +9,18 @@ import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.requireBetw
  */
 
 public final class Cell {
-    public static final int MAX_TOWER_HEIGHT = 3;
-
     private final int x;
     private final int y;
-    private final int towerHeight;
-    private final boolean hasDome;
 
     /**
      * @param x           x coordinate of the cell
      * @param y           y coordinate of the cell
-     * @param towerHeight the height of the cell's tower
-     * @param hasDome     boolean that indicates whether the cell has a dome or not
-     * @throws IllegalArgumentException if the coordinates are out of bounds or if
-     *                                  the given tower height is not between 0 and {@code TOWER_MAX_HEIGHT}
-     */
-
-    public Cell(int x, int y, int towerHeight, boolean hasDome) throws IllegalArgumentException {
-        this.x = requireBetween(0, Board.COLUMNS - 1, x);
-        this.y = requireBetween(0, Board.ROWS - 1, y);
-        this.towerHeight = requireBetween(0, MAX_TOWER_HEIGHT, towerHeight);
-        this.hasDome = hasDome;
-    }
-
-    /**
-     * Constructs a free cell with the given coordinates
-     *
-     * @param x x coordinate of the cell
-     * @param y y coordinate of the cell
      * @throws IllegalArgumentException if the coordinates are out of bounds
      */
 
     public Cell(int x, int y) throws IllegalArgumentException {
-        this(x, y, 0, false);
+        this.x = requireBetween(0, Board.COLUMNS - 1, x);
+        this.y = requireBetween(0, Board.ROWS - 1, y);
     }
 
     /**
@@ -65,49 +44,18 @@ public final class Cell {
     }
 
     /**
-     * Returns the cell's tower's height
+     * Returns cell's index in row major order.
      *
-     * @return the cell's tower's height
+     * @return cell's index in row major order.
      */
 
-    public int getTowerHeight() {
-        return towerHeight;
-    }
-
-    /**
-     * Determines whether the cell has a dome or not
-     *
-     * @return <b>true</b> if it has a dome , <b>false</b> otherwise
-     */
-
-    public boolean hasDome() {
-        return hasDome;
-    }
-
-    /**
-     * Returns a copy of the cell with the specified tower height
-     *
-     * @param newTowerHeight the height of the new tower
-     * @return a copy of the cell with the specified tower height
-     */
-
-    public Cell withTowerHeight(int newTowerHeight) {
-        return new Cell(x, y, newTowerHeight, hasDome);
-    }
-
-    /**
-     * Returns a copy of the cell with a dome on top
-     *
-     * @return Returns a copy of the cell with a dome on top
-     */
-
-    public Cell withDome() {
-        return new Cell(x, y, towerHeight, true);
+    public int rowMajorIndex() {
+        return getY() * Board.COLUMNS + getX();
     }
 
     @Override
     public int hashCode() {
-        return getY() * Board.COLUMNS + getX();
+        return rowMajorIndex();
     }
 
     @Override
@@ -124,7 +72,6 @@ public final class Cell {
 
     @Override
     public String toString() {
-        return "position : (" + x + "," + y + "), tower height :"
-                + towerHeight + ", has Dome : " + hasDome;
+        return "position : (" + x + "," + y + ")";
     }
 }
