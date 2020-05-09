@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP38.common;
 
+/**
+ * Class made of a series of unmodifiable byte parameters that represent the different status of a cell of the board
+ */
 public class BytesForBoard {
     public static final byte TOWER_1 = 1;
     public static final byte TOWER_2 = 2;
