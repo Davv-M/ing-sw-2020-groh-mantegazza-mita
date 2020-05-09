@@ -37,7 +37,7 @@ public final class Board {
      * @throws NullPointerException if the workers list or the towers list is null
      */
 
-    private Board(Set<Worker> workers, Set<Tower> towers, Set<Cell> cellsWithDomes) throws NullPointerException{
+    public Board(Set<Worker> workers, Set<Tower> towers, Set<Cell> cellsWithDomes) throws NullPointerException{
         this.workers = Set.copyOf(Objects.requireNonNull(workers));
         this.towers = Set.copyOf(Objects.requireNonNull(towers));
         this.cellsWithDomes = Set.copyOf(Objects.requireNonNull(cellsWithDomes));
@@ -55,7 +55,14 @@ public final class Board {
     public Board withTower(Tower tower) {
         if (tower == null) {
             return this;
+        } else if(getTowersPositions().containsKey(tower.getPosition())){
+            throw new IllegalArgumentException("this cell already contains a tower");
+        } else if(cellsWithDomes.contains(tower.getPosition())){
+            throw new IllegalArgumentException("this cell contains a dome");
+        } else if(getWorkersPositions().containsKey(tower.getPosition())){
+            throw new IllegalArgumentException("this cell contains a worker");
         }
+
         Set<Tower> newBoardTowers = new HashSet<>(towers);
         newBoardTowers.add(tower);
 
@@ -63,22 +70,46 @@ public final class Board {
     }
 
     /**
-     * Returns a copy of the board with the given worker
-     * added or, if it was already present, with his position
-     * modified or the same board if one of the arguments is null
+     * Returns a copy of the board that contains
+     * the given worker or the same board if the
+     * argument is null
      *
      * @param worker      the worker that we want add
-     * @param newPosition the new worker's position
      * @return a new board with the worker added
      */
 
-    public Board withWorker(Worker worker, Cell newPosition) {
-        if (worker == null || newPosition == null){
+    public Board withWorker(Worker worker) throws IllegalArgumentException{
+        if (worker == null){
+            return this;
+        } else if(getWorkersPositions().containsKey(worker.getPosition())){
+            throw new IllegalArgumentException("this cell already contains a worker");
+        } else if(cellsWithDomes.contains(worker.getPosition())){
+            throw new IllegalArgumentException("this cell contains a dome");
+        }
+
+        Set<Worker> newBoardWorkers = new HashSet<>(workers);
+        newBoardWorkers.add(worker);
+
+        return new Board(newBoardWorkers, towers, cellsWithDomes);
+    }
+
+    /**
+     * Returns a copy of the board without the
+     * given worker or the same board if the
+     * argument is null or if the worker wasn't
+     * on the board
+     *
+     * @param worker the worker to remove
+     * @return a new board with the worker removed
+     */
+
+    public Board withoutWorker(Worker worker){
+        if (worker == null){
             return this;
         }
+
         Set<Worker> newBoardWorkers = new HashSet<>(workers);
         newBoardWorkers.remove(worker);
-        newBoardWorkers.add(new Worker(worker.getColor(), newPosition));
 
         return new Board(newBoardWorkers, towers, cellsWithDomes);
     }
@@ -95,7 +126,10 @@ public final class Board {
     public Board withDome(Cell cell) {
         if (cell == null){
             return this;
+        } else if(getWorkersPositions().containsKey(cell)){
+            throw new IllegalArgumentException("this cell contains a worker");
         }
+
         Set<Cell> newBoardDomes = new HashSet<>(cellsWithDomes);
         newBoardDomes.add(cell);
 
@@ -112,7 +146,7 @@ public final class Board {
      * the empty optional value otherwise.
      */
 
-    public Optional<Cell> directionNeighbor(Cell cell, Direction dir) {
+    public Optional<Cell> neighborOf(Cell cell, Direction dir) {
         int neighborX = cell.getX() + dir.x();
         int neighborY = cell.getY() + dir.y();
 
@@ -126,11 +160,11 @@ public final class Board {
      * @return a list of cells representing the neighbors of the given cell
      */
 
-    public List<Cell> neighborsCells(Cell cell) {
-        List<Cell> neighbors = new ArrayList<>();
+    public Set<Cell> neighborsOf(Cell cell) {
+        Set<Cell> neighbors = new HashSet<>();
 
         for (Direction dir : Direction.values()) {
-            Optional<Cell> possibleNeighbor = directionNeighbor(cell, dir);
+            Optional<Cell> possibleNeighbor = neighborOf(cell, dir);
             possibleNeighbor.ifPresent(neighbors::add);
         }
 
@@ -156,11 +190,11 @@ public final class Board {
      */
 
     public Map<Cell, Worker> getWorkersPositions() {
-        Map<Cell, Worker> occupiedCells = new HashMap<>();
+        Map<Cell, Worker> workerCells = new HashMap<>();
         for (Worker w : workers) {
-            occupiedCells.put(w.getPosition(), w);
+            workerCells.put(w.getPosition(), w);
         }
-        return occupiedCells;
+        return workerCells;
     }
 
     /**
@@ -170,11 +204,11 @@ public final class Board {
      */
 
     public Map<Cell, Tower> getTowersPositions() {
-        Map<Cell, Tower> occupiedCells = new HashMap<>();
+        Map<Cell, Tower> towerCells = new HashMap<>();
         for (Tower t : towers) {
-            occupiedCells.put(t.getPosition(), t);
+            towerCells.put(t.getPosition(), t);
         }
-        return occupiedCells;
+        return towerCells;
     }
 
     /**
@@ -208,5 +242,19 @@ public final class Board {
 
     public int heightOf(Cell cell){
         return !getTowersPositions().containsKey(cell) ? 0 : getTowersPositions().get(cell).getHeight();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Board other = (Board) obj;
+        return workers.equals(other.workers) &&
+                towers.equals(other.towers) &&
+                cellsWithDomes.equals(other.cellsWithDomes);
     }
 }

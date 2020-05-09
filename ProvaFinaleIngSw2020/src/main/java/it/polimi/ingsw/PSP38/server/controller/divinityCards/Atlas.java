@@ -8,4 +8,9 @@ import java.util.List;
 public class Atlas extends DivinityCard {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE,
             WorkerAction.SPECIAL_ABILITY, WorkerAction.BUILD);
+
+    @Override
+    public List<WorkerAction> getMoveSequence() {
+        return moveSequence;
+    }
 }

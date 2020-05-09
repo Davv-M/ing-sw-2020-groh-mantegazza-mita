@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         Board board = new Board();
         Cell cell = new Cell(0,1);
-        board = board.withWorker(new Worker(WorkerColor.BLACK, cell), cell);
+        board = board.withWorker(new Worker(WorkerColor.BLACK, cell));
         List<Byte> encodedBoard = BoardEncoder.bytesForBoard(board);
         createUI();
         sc.setEncodedBoard(encodedBoard);

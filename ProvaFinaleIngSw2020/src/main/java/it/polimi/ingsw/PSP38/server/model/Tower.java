@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP38.server.model;
 
+import it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker;
+
 import java.util.Objects;
 
 public class Tower {
@@ -9,9 +11,9 @@ public class Tower {
     private final int height;
 
 
-    public Tower(Cell position, int height) throws NullPointerException{
+    public Tower(Cell position, int height) throws NullPointerException, IllegalArgumentException{
         this.position = Objects.requireNonNull(position);
-        this.height = height;
+        this.height = ArgumentChecker.requireBetween(0, MAX_HEIGHT, height);
     }
 
     public Cell getPosition(){

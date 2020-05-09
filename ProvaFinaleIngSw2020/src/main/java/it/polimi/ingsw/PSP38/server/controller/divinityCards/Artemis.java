@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
 import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,7 +12,10 @@ import java.util.List;
  * @version 1.1
  */
 public class Artemis extends DivinityCard {
-    public static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.SPECIAL_ABILITY, WorkerAction.BUILD);
+    private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.SPECIAL_ABILITY, WorkerAction.BUILD);
 
-
+    @Override
+    public List<WorkerAction> getMoveSequence() {
+        return moveSequence;
+    }
 }

@@ -48,9 +48,7 @@ public class ClientHandler implements Observer, Runnable {
 
     public void notifyMessage(String message) throws IOException {
         output.writeObject(Protocol.NOTIFY_MESSAGE);
-        output.flush();
         output.writeObject(message);
-        output.flush();
     }
 
     public int askInt(Function<Integer, Integer> checkInt) throws IOException {
@@ -58,7 +56,6 @@ public class ClientHandler implements Observer, Runnable {
         do {
             try {
                 output.writeObject(Protocol.ASK_INT);
-                output.flush();
                 num = checkInt.apply(input.readInt());
                 break;
             } catch (IllegalArgumentException e) {
@@ -73,7 +70,6 @@ public class ClientHandler implements Observer, Runnable {
         do {
             try {
                 output.writeObject(Protocol.ASK_STRING);
-                output.flush();
                 string = checkString.apply((String) input.readObject());
                 break;
             } catch (IllegalArgumentException e) {
@@ -87,11 +83,10 @@ public class ClientHandler implements Observer, Runnable {
 
     public void displayBoard() throws IOException {
         output.writeObject(Protocol.DISPLAY_BOARD);
-        output.flush();
         for(byte b : controller.getEncodedBoard()){
             output.writeByte(b);
-            output.flush();
         }
+        output.flush();
     }
 
     public String getNickname(){

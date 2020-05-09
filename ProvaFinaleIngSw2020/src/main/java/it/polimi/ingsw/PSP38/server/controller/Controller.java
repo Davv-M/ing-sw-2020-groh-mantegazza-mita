@@ -68,17 +68,6 @@ public class Controller extends Observable {
         return ArgumentChecker.requireBetween(0, Board.ROWS - 1, y);
     }
 
-    private synchronized Cell checkIsFreeCell(Cell cell) throws IllegalArgumentException{
-        /*if(cell.hasDome()){
-            throw new IllegalArgumentException("you can't place a worker on a cell containing a dome!");
-        } else if(game.getCurrentBoard().getWorkersPositions().containsKey(cell)){
-            throw new IllegalArgumentException("This cell already contains a worker");
-        }*/
-        return cell;
-    }
-
-
-
     private synchronized void pauseClient(ClientHandler client) {
         try {
             client.setPaused(true);
@@ -126,7 +115,7 @@ public class Controller extends Observable {
         }
     }
 
-    public synchronized List<Byte> getEncodedBoard(){
+    public List<Byte> getEncodedBoard(){
         return BoardEncoder.bytesForBoard(game.getCurrentBoard());
     }
 
@@ -229,21 +218,29 @@ public class Controller extends Observable {
     }
 
     private void placeWorkers(ClientHandler client) throws  IOException {
+        client.update(this, null);
         notifyNotYourTurn(client);
-        //displayAllClients();
         client.notifyMessage("It's time to place your workers on the board.\n");
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
         for(int i = 0; i < Game.WORKERS_PER_PLAYER; ++i){
             client.notifyMessage("Place your worker number " + (i + 1));
-            Cell cell = askCell(client);
-            game.setCurrentBoard(game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell), cell));
+            Board newBoard;
+            do{
+                Cell cell = askCell(client);
+                try{
+                    newBoard = game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell));
+                    break;
+                } catch (IllegalArgumentException e){
+                    client.notifyMessage(e.getMessage());
+                }
+            }while(true);
+            game.setCurrentBoard(newBoard);
             displayAllClients();
         }
         updateTurn();
     }
 
     public Cell askCell(ClientHandler client) throws IOException{
-        Cell cell;
         int x;
         int y;
         do {
@@ -252,18 +249,16 @@ public class Controller extends Observable {
                 x = client.askInt(this::checkXCoordinate);
                 client.notifyMessage("Please insert the y coordinate :");
                 y = client.askInt(this::checkYCoordinate);
-                cell = checkIsFreeCell(new Cell(x, y));
                 break;
             } catch (IllegalArgumentException e) {
                 client.notifyMessage(e.getMessage());
             }
         }while(true);
-        System.out.println(cell);
-        return cell;
+        return new Cell(x, y);
     }
 
 
-    private synchronized void displayAllClients(){
+    private void displayAllClients(){
         setChanged();
         notifyObservers();
     }

@@ -5,8 +5,7 @@ import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Interface representing a divinity card of the game Santorini.
@@ -15,9 +14,10 @@ import java.util.Map;
  */
 
 public abstract class DivinityCard {
+    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD);
 
     /**
-     * Enum Card's Name
+     * Different colors that a worker can have.
      */
     enum Name {
         APOLLO,
@@ -38,8 +38,8 @@ public abstract class DivinityCard {
      * @param worker       the worker that has to be moved
      * @param currentBoard the current board of the game
      */
-    public List<Cell> preMove(Worker worker, Board currentBoard) {
-        List<Cell> neighborCells = currentBoard.neighborsCells(worker.getPosition());
+    public Set<Cell> preMove(Worker worker, Board currentBoard) {
+        Set<Cell> neighborCells = currentBoard.neighborsOf(worker.getPosition());
         Map<Cell, Worker> workersPositions = currentBoard.getWorkersPositions();
 
         //Removes all cells containing workers or domes or cells with tower height > cell.towerHeight + 1
@@ -53,12 +53,15 @@ public abstract class DivinityCard {
      *
      * @param worker          the worker that has to be moved
      * @param destinationCell the cell where the worker has to be moved
-     * @param oldBoard        the current board of the game
+     * @param currentBoard    the current board of the game
      * @return the updated board
      */
 
-    public Board move(Worker worker, Cell destinationCell, Board oldBoard) {
-        return oldBoard.withWorker(worker, destinationCell);
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+        if (!preMove(worker, currentBoard).contains(destinationCell)) {
+            throw new IllegalArgumentException("you can't build on this cell.");
+        }
+        return currentBoard.withoutWorker(worker).withWorker(new Worker(worker.getColor(), destinationCell));
     }
 
     /**
@@ -68,8 +71,8 @@ public abstract class DivinityCard {
      * @param currentBoard the current board of the game
      * @return a list of possible cells where the given worker can build
      */
-    public List<Cell> preBuild(Worker worker, Board currentBoard) {
-        List<Cell> cellsCanBuild = currentBoard.neighborsCells(worker.getPosition());
+    public Set<Cell> preBuild(Worker worker, Board currentBoard) {
+        Set<Cell> cellsCanBuild = currentBoard.neighborsOf(worker.getPosition());
         Map<Cell, Worker> workersPositions = currentBoard.getWorkersPositions();
 
         //Removes the cells containing workers or domes
@@ -85,10 +88,17 @@ public abstract class DivinityCard {
      * @param currentBoard the current board of the game
      * @return the updated board with the updated cell's tower's height
      */
-    public Board build(Cell cell, Board currentBoard) {
+    public Board build(Worker worker, Cell cell, Board currentBoard) throws IllegalArgumentException {
+        if (!preBuild(worker, currentBoard).contains(cell)) {
+            throw new IllegalArgumentException("you can't build on this cell.");
+        }
         int currentHeight = currentBoard.heightOf(cell);
         return currentHeight == Tower.MAX_HEIGHT ?
                 currentBoard.withDome(cell) :
                 currentBoard.withTower(new Tower(cell, currentHeight + 1));
+    }
+
+    public List<WorkerAction> getMoveSequence() {
+        return moveSequence;
     }
 }

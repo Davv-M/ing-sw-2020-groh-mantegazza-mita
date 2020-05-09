@@ -7,4 +7,9 @@ import java.util.List;
 
 public class Demeter extends DivinityCard {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.SPECIAL_ABILITY);
+
+    @Override
+    public List<WorkerAction> getMoveSequence() {
+        return moveSequence;
+    }
 }
