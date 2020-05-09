@@ -218,8 +218,8 @@ public class Controller extends Observable {
     }
 
     private void placeWorkers(ClientHandler client) throws  IOException {
-        client.update(this, null);
         notifyNotYourTurn(client);
+        displayAllClients();
         client.notifyMessage("It's time to place your workers on the board.\n");
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
         for(int i = 0; i < Game.WORKERS_PER_PLAYER; ++i){
@@ -229,6 +229,7 @@ public class Controller extends Observable {
                 Cell cell = askCell(client);
                 try{
                     newBoard = game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell));
+                    displayAllClients();
                     break;
                 } catch (IllegalArgumentException e){
                     client.notifyMessage(e.getMessage());

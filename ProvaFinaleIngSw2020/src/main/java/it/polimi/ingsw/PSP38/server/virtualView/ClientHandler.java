@@ -19,6 +19,7 @@ public class ClientHandler implements Observer, Runnable {
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private boolean isPaused = false;
+    private final Object lock = new Object();
 
     public ClientHandler(Socket clientSocket) {
         clientNum = Server.updateContPlayer();
@@ -47,46 +48,59 @@ public class ClientHandler implements Observer, Runnable {
     }
 
     public void notifyMessage(String message) throws IOException {
-        output.writeObject(Protocol.NOTIFY_MESSAGE);
-        output.writeObject(message);
+        synchronized (lock){
+            output.writeObject(Protocol.NOTIFY_MESSAGE);
+            output.writeObject(message);
+        }
+
     }
 
     public int askInt(Function<Integer, Integer> checkInt) throws IOException {
         int num;
-        do {
-            try {
-                output.writeObject(Protocol.ASK_INT);
-                num = checkInt.apply(input.readInt());
-                break;
-            } catch (IllegalArgumentException e) {
-                notifyMessage(e.getMessage());
-            }
-        } while (true);
+        synchronized (lock) {
+
+            do {
+                try {
+                    output.writeObject(Protocol.ASK_INT);
+                    num = checkInt.apply(input.readInt());
+                    break;
+                } catch (IllegalArgumentException e) {
+                    notifyMessage(e.getMessage());
+                }
+            } while (true);
+        }
         return num;
     }
 
     public String askString(Function<String, String> checkString) throws IOException {
         String string;
-        do {
-            try {
-                output.writeObject(Protocol.ASK_STRING);
-                string = checkString.apply((String) input.readObject());
-                break;
-            } catch (IllegalArgumentException e) {
-                notifyMessage(e.getMessage());
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        } while (true);
+        synchronized (lock){
+            do {
+                try {
+                    output.writeObject(Protocol.ASK_STRING);
+                    string = checkString.apply((String) input.readObject());
+                    break;
+                } catch (IllegalArgumentException e) {
+                    notifyMessage(e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } while (true);
+        }
+
+
         return string;
     }
 
     public void displayBoard() throws IOException {
-        output.writeObject(Protocol.DISPLAY_BOARD);
-        for(byte b : controller.getEncodedBoard()){
-            output.writeByte(b);
+        synchronized (lock){
+            output.writeObject(Protocol.DISPLAY_BOARD);
+            for(byte b : controller.getEncodedBoard()){
+                output.writeByte(b);
+            }
+            output.flush();
         }
-        output.flush();
+
     }
 
     public String getNickname(){

@@ -55,8 +55,6 @@ public final class Board {
     public Board withTower(Tower tower) {
         if (tower == null) {
             return this;
-        } else if(getTowersPositions().containsKey(tower.getPosition())){
-            throw new IllegalArgumentException("this cell already contains a tower");
         } else if(cellsWithDomes.contains(tower.getPosition())){
             throw new IllegalArgumentException("this cell contains a dome");
         } else if(getWorkersPositions().containsKey(tower.getPosition())){

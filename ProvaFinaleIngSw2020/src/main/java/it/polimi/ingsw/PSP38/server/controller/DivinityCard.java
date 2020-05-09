@@ -59,7 +59,7 @@ public abstract class DivinityCard {
 
     public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
         if (!preMove(worker, currentBoard).contains(destinationCell)) {
-            throw new IllegalArgumentException("you can't build on this cell.");
+            throw new IllegalArgumentException("you can't move on this cell.");
         }
         return currentBoard.withoutWorker(worker).withWorker(new Worker(worker.getColor(), destinationCell));
     }

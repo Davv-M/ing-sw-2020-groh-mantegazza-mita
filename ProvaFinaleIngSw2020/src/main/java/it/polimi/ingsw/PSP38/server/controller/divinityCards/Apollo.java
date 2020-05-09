@@ -52,10 +52,10 @@ public class Apollo extends DivinityCard {
             throw new IllegalArgumentException("you can't move on this cell.");
         }
 
-        Board boardUpdated = currentBoard;
+        Board boardUpdated = currentBoard.withoutWorker(worker);
         if (currentBoard.hasWorkerAt(destinationCell)) {
             Worker challengerWorker = currentBoard.getWorkersPositions().get(destinationCell);
-            boardUpdated = currentBoard.withoutWorker(challengerWorker).
+            boardUpdated = boardUpdated.withoutWorker(challengerWorker).
                     withWorker(new Worker(challengerWorker.getColor(), oldCell));
         }
         return boardUpdated.withWorker(new Worker(worker.getColor(), destinationCell));
