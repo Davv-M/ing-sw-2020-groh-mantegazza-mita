@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP38.common;
 
 /**
- * Enumeration which represents the types of messages that can be sent by the server to the clients:<br>
+ * Enumeration which represents the type of messages that can be sent by the server to the clients:<br>
  *     -<code>NOTIFY_MESSAGE</code> is used if the server needs to send to one or more client a notification message
  *     (e. g. if someone has won the game)<br>
  *     -<code>ASK_INT</code> is used if the server needs to use an integer defined by the user through the client<br>

@@ -8,6 +8,7 @@ import it.polimi.ingsw.PSP38.server.virtualView.Server;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 
 public class Controller extends Observable {
     private final Object lock = new Object();
@@ -119,7 +120,7 @@ public class Controller extends Observable {
         return BoardEncoder.bytesForBoard(game.getCurrentBoard());
     }
 
-    public void start(ClientHandler client) throws IOException {
+    public void start(ClientHandler client) throws IOException, InterruptedException {
         welcomeMessage(client);
         firstPlayerSetNumOfPlayers(client);
         notifyExtraClient(client);
@@ -250,12 +251,11 @@ public class Controller extends Observable {
                 x = client.askInt(this::checkXCoordinate);
                 client.notifyMessage("Please insert the y coordinate :");
                 y = client.askInt(this::checkYCoordinate);
-                break;
+                return new Cell(x, y);
             } catch (IllegalArgumentException e) {
                 client.notifyMessage(e.getMessage());
             }
         }while(true);
-        return new Cell(x, y);
     }
 
 
@@ -264,24 +264,75 @@ public class Controller extends Observable {
         notifyObservers();
     }
 
-    private synchronized void playGame(ClientHandler client) throws  IOException {
+    private void playGame(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
-        rounds.add(new Round(clientPlayer,playersDivinities.get(clientPlayer),client));
-        game.setCurrentBoard(rounds.get(rounds.size()-1).play(game.getCurrentBoard(),this));
-        displayAllClients();
+        DivinityCard playerDivinity = playersDivinities.get(clientPlayer);
+        Worker selectedWorker = askWorker(client);
+        Cell newWorkerPosition = askMove(client, selectedWorker, playerDivinity);
+        selectedWorker = game.getCurrentBoard().workerAt(newWorkerPosition);
+        askBuild(client, selectedWorker, playerDivinity);
         updateTurn();
-
     }
 
+    public Worker askWorker(ClientHandler client) throws IOException {
+        client.notifyMessage("select the worker you want to move.");
+        Player clientPlayer = game.nicknameToPlayer(client.getNickname());
+        Cell cellUnderWorker;
+        Worker workerSelected;
+        do {
+             try{
+                cellUnderWorker = askCell(client);
+                workerSelected = game.getCurrentBoard().workerAt(cellUnderWorker);
+            }catch(NullPointerException e){
+                client.notifyMessage(e.getMessage());
+                continue;
+            }
 
+            if(clientPlayer.getColor() != workerSelected.getColor()){
+                client.notifyMessage("The selected worker isn't yours.");
+            } else{
+                return workerSelected;
+            }
+        }while(true);
+    }
 
+    public Cell askMove(ClientHandler client, Worker selectedWorker, DivinityCard playerDivinity) throws IOException {
+        Set<Cell> possibleCellsMove = playerDivinity.preMove(selectedWorker, game.getCurrentBoard());
+        client.notifyMessage("these are the cells where you can move your worker:");
+        client.notifyMessage(possibleCellsMove.toString());
+        client.notifyMessage("insert the coordinates of the cell where you want to place your worker");
+        Board updatedBoard;
+        do{
+            try{
+                Cell cellDestination = askCell(client);
+                updatedBoard = playerDivinity.move(selectedWorker, cellDestination, game.getCurrentBoard());
+                game.setCurrentBoard(updatedBoard);
+                displayAllClients();
+                return cellDestination;
+            }catch(IllegalArgumentException e){
+                client.notifyMessage(e.getMessage());
+            }
+        } while(true);
+    }
 
-
-
-
-
-
-
+    public void askBuild(ClientHandler client, Worker selectedWorker, DivinityCard playerDivinity) throws IOException{
+        Set<Cell> possibleCellsBuild = playerDivinity.preBuild(selectedWorker, game.getCurrentBoard());
+        client.notifyMessage("these are the cells where you can build:");
+        client.notifyMessage(possibleCellsBuild.toString());
+        client.notifyMessage("insert the coordinates of the cell where you want your worker to build");
+        Board updatedBoard;
+        do{
+            try{
+                Cell cellDestination = askCell(client);
+                updatedBoard = playerDivinity.build(selectedWorker, cellDestination, game.getCurrentBoard());
+                game.setCurrentBoard(updatedBoard);
+                displayAllClients();
+                break;
+            }catch(IllegalArgumentException e){
+                client.notifyMessage(e.getMessage());
+            }
+        } while(true);
+    }
 
 }

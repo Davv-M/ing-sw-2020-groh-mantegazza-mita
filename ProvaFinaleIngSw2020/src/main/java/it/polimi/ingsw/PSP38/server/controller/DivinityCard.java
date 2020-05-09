@@ -95,7 +95,8 @@ public abstract class DivinityCard {
         int currentHeight = currentBoard.heightOf(cell);
         return currentHeight == Tower.MAX_HEIGHT ?
                 currentBoard.withDome(cell) :
-                currentBoard.withTower(new Tower(cell, currentHeight + 1));
+                currentBoard.withoutTower(currentBoard.getTowersPositions().get(cell))
+                        .withTower(new Tower(cell, currentHeight + 1));
     }
 
     public List<WorkerAction> getMoveSequence() {

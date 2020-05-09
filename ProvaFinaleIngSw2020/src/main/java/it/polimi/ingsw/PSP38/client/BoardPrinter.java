@@ -2,11 +2,12 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.WorkerColor;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class BoardPrinter {
-    private final int boardRows;
-    private final int boardColumns;
+    private static int boardRows;
+    private static int boardColumns;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
@@ -17,12 +18,9 @@ public class BoardPrinter {
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     public static final String UNICODE_PERSON = "\ud80c\udc4c";
 
-    public BoardPrinter(int boardRows, int boardColumns){
-        this.boardRows = boardRows;
-        this.boardColumns = boardColumns;
-    }
-
-    public void printBoard(List<Byte> encodedBoard) {
+    public static void printBoard(List<Byte> encodedBoard) {
+        boardRows = encodedBoard.remove(0);
+        boardColumns = encodedBoard.remove(0);
         printRowsSeparators();
         for (int row = 0; row < boardRows; ++row) {
             System.out.print("|");
@@ -39,7 +37,7 @@ public class BoardPrinter {
         }
     }
 
-    private void printRowsSeparators() {
+    private static void printRowsSeparators() {
         for (int i = 0; i < boardColumns; ++i) {
             System.out.print(" -- -- -- --");
         }
@@ -47,7 +45,7 @@ public class BoardPrinter {
     }
 
 
-    private void printRowTopLayer(List<Byte> encodedBoard, int row) {
+    private static void printRowTopLayer(List<Byte> encodedBoard, int row) {
         System.out.print("|");
         for (int col = 0; col < boardColumns; ++col) {
             byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));
@@ -67,7 +65,7 @@ public class BoardPrinter {
         System.out.println();
     }
 
-    private void printRowUpperMidLayer(List<Byte> encodedBoard, int row) {
+    private static void printRowUpperMidLayer(List<Byte> encodedBoard, int row) {
         System.out.print("|");
         for (int col = 0; col < boardColumns; ++col) {
             byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));
@@ -94,7 +92,7 @@ public class BoardPrinter {
         System.out.println();
     }
 
-    private void printRowLowerMidLayer(List<Byte> encodedBoard, int row) {
+    private static void printRowLowerMidLayer(List<Byte> encodedBoard, int row) {
         System.out.print("|");
         for (int col = 0; col < boardColumns; ++col) {
             byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));
@@ -121,7 +119,7 @@ public class BoardPrinter {
         System.out.println();
     }
 
-    private void printRowBottomLayer(List<Byte> encodedBoard, int row) {
+    private static void printRowBottomLayer(List<Byte> encodedBoard, int row) {
         System.out.print("|");
         for (int col = 0; col < boardColumns; ++col) {
             byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));

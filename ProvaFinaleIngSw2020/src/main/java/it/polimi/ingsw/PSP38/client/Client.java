@@ -39,7 +39,6 @@ public class Client {
         try {
             input = new ObjectInputStream(serverSocket.getInputStream());
             output = new ObjectOutputStream(serverSocket.getOutputStream());
-            createUI();
             while (true) {
                 final Scanner scanner = new Scanner(System.in);
                 Protocol p = (Protocol) input.readObject();
@@ -120,16 +119,21 @@ public class Client {
     private static void displayBoard() throws IOException {
         byte rows = input.readByte();
         byte columns = input.readByte();
+        System.out.println("rows = " + rows);
+        System.out.println("columns = " + columns);
         List<Byte> encodedBoard = new LinkedList<>();
         encodedBoard.add(rows);
         encodedBoard.add(columns);
+        System.out.println("About to display encoded baord : ");
         for (int row = 0; row < rows; ++row) {
             for (int col = 0; col < columns; ++col) {
                 byte b = input.readByte();
+                System.out.print(b + ", ");
                 encodedBoard.add(b);
             }
         }
-        sc.setEncodedBoard(encodedBoard);
+        System.out.println();
+        BoardPrinter.printBoard(encodedBoard);
     }
 
     public static void createUI() {

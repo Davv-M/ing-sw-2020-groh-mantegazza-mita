@@ -112,6 +112,18 @@ public final class Board {
         return new Board(newBoardWorkers, towers, cellsWithDomes);
     }
 
+
+    public Board withoutTower(Tower tower){
+        if (tower == null){
+            return this;
+        }
+
+        Set<Tower> newBoardTowers = new HashSet<>(towers);
+        newBoardTowers.remove(tower);
+
+        return new Board(workers, newBoardTowers, cellsWithDomes);
+    }
+
     /**
      * Returns a copy of the board that contains
      * a dome at the given position or
@@ -229,6 +241,14 @@ public final class Board {
 
     public boolean hasWorkerAt(Cell cell){
         return getWorkersPositions().containsKey(cell);
+    }
+
+    public Worker workerAt(Cell cell){
+        if(!hasWorkerAt(cell)){
+            throw new NullPointerException("The selected cell doesn't contain a worker.");
+        }
+
+        return getWorkersPositions().get(cell);
     }
 
     /**

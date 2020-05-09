@@ -42,7 +42,7 @@ public class ClientHandler implements Observer, Runnable {
     public void run() {
         try {
             controller.start(this);
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -63,13 +63,12 @@ public class ClientHandler implements Observer, Runnable {
                 try {
                     output.writeObject(Protocol.ASK_INT);
                     num = checkInt.apply(input.readInt());
-                    break;
+                    return num;
                 } catch (IllegalArgumentException e) {
                     notifyMessage(e.getMessage());
                 }
             } while (true);
         }
-        return num;
     }
 
     public String askString(Function<String, String> checkString) throws IOException {
@@ -79,7 +78,7 @@ public class ClientHandler implements Observer, Runnable {
                 try {
                     output.writeObject(Protocol.ASK_STRING);
                     string = checkString.apply((String) input.readObject());
-                    break;
+                    return string;
                 } catch (IllegalArgumentException e) {
                     notifyMessage(e.getMessage());
                 } catch (ClassNotFoundException e) {
@@ -87,17 +86,17 @@ public class ClientHandler implements Observer, Runnable {
                 }
             } while (true);
         }
-
-
-        return string;
     }
 
     public void displayBoard() throws IOException {
         synchronized (lock){
             output.writeObject(Protocol.DISPLAY_BOARD);
+            System.out.println("About to display encoded board :");
             for(byte b : controller.getEncodedBoard()){
+                System.out.print(b + ", ");
                 output.writeByte(b);
             }
+            System.out.println();
             output.flush();
         }
 
