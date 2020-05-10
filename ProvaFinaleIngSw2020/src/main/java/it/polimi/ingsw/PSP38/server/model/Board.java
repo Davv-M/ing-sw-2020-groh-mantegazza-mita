@@ -161,8 +161,11 @@ public final class Board {
     public Optional<Cell> neighborOf(Cell cell, Direction dir) {
         int neighborX = cell.getX() + dir.x();
         int neighborY = cell.getY() + dir.y();
-
-        return isOutOfBounds(neighborX, neighborY) ? Optional.empty() : Optional.of(new Cell(neighborX, neighborY));
+        if(isOutOfBounds(neighborX, neighborY)){
+            return Optional.empty();
+        }else{
+           return Optional.of(new Cell(neighborX,neighborY));
+        }
     }
 
     /**

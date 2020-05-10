@@ -46,10 +46,10 @@ public enum Direction {
         return y;
     }
 
-    public static Direction coordinatesTodirection(int x, int y) {
-        double dist = Math.sqrt(x * x + y * y);
-        int nX = (int) (x / dist);
-        int nY = (int) (y / dist);
+    public static Direction coordinatesToDirection(int xWorker, int yWorker, int xDestination, int yDestination) {
+        int nX=xDestination-xWorker;
+        int nY=yDestination-yWorker;
+
         if (nX == 0 && nY == -1) {
             return N;
         } else if (nX == 1 && nY == -1) {
@@ -69,5 +69,7 @@ public enum Direction {
         } else {
             throw new IllegalArgumentException("unknown direction");
         }
+
+
     }
 }
