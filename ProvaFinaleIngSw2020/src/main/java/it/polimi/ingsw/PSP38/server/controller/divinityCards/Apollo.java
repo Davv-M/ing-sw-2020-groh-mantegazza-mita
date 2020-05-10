@@ -50,9 +50,9 @@ public class Apollo extends DivinityCard {
 
         Board boardUpdated = currentBoard.withoutWorker(worker);
         if (currentBoard.hasWorkerAt(destinationCell)) {
-            Worker challengerWorker = currentBoard.getWorkersPositions().get(destinationCell);
-            boardUpdated = boardUpdated.withoutWorker(challengerWorker).
-                    withWorker(challengerWorker.withPosition(oldCell));
+            Worker opponent = currentBoard.getWorkersPositions().get(destinationCell);
+            boardUpdated = boardUpdated.withoutWorker(opponent).
+                    withWorker(opponent.withPosition(oldCell));
         }
         return boardUpdated.withWorker(worker.withPosition(destinationCell));
     }

@@ -18,7 +18,10 @@ public class Artemis extends DivinityCard {
 
     @Override
     public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        return moveAndUpdatePreviousPosition(worker, destinationCell, currentBoard);
+        Board updatedBoard = super.move(worker, destinationCell, currentBoard);
+        previousPosition = worker.getPosition();
+
+        return updatedBoard;
     }
 
     @Override
@@ -27,18 +30,11 @@ public class Artemis extends DivinityCard {
             throw new IllegalArgumentException("You can't move back to your previous position");
         }
 
-        return moveAndUpdatePreviousPosition(worker, destinationCell, currentBoard);
+        return super.move(worker, destinationCell, currentBoard);
     }
 
     @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
-    }
-
-    private Board moveAndUpdatePreviousPosition(Worker worker, Cell destinationCell, Board currentBoard){
-        Board updatedBoard = super.move(worker, destinationCell, currentBoard);
-        previousPosition = worker.getPosition();
-
-        return updatedBoard;
     }
 }

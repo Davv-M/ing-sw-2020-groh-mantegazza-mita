@@ -138,6 +138,8 @@ public final class Board {
             return this;
         } else if(getWorkersPositions().containsKey(cell)){
             throw new IllegalArgumentException("this cell contains a worker");
+        } else if(cellsWithDomes.contains(cell)){
+            throw new IllegalArgumentException("this cell contains a dome");
         }
 
         Set<Cell> newBoardDomes = new HashSet<>(cellsWithDomes);
