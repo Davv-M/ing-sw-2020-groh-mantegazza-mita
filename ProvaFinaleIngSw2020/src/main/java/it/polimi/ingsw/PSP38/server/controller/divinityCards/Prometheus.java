@@ -8,10 +8,21 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class Prometheus extends DivinityCard {
     private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.SPECIAL_BUILD, WorkerAction.MOVE, WorkerAction.BUILD);
     private boolean hasBuiltFirstMove = false;
+
+    @Override
+    public Set<Cell> preMove(Worker worker, Board currentBoard) {
+        Set<Cell> neighborCells = currentBoard.neighborsOf(worker.getPosition());
+        if(hasBuiltFirstMove){
+            neighborCells.removeIf(c -> currentBoard.heightOf(c) > currentBoard.heightOf(worker.getPosition()));
+        }
+
+        return neighborCells;
+    }
 
     @Override
     public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
