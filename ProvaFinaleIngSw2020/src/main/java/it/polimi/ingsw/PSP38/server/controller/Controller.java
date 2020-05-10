@@ -141,19 +141,20 @@ public class Controller extends Observable {
 
     private void playGame(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
-        Player clientPlayer = game.nicknameToPlayer(client.getNickname());
-        DivinityCard clientDivinity = playersDivinities.get(clientPlayer);
-        Worker selectedWorker = askWorker(client);
+        if(game.getWinner() == null){
+            Player clientPlayer = game.nicknameToPlayer(client.getNickname());
+            DivinityCard clientDivinity = playersDivinities.get(clientPlayer);
+            Worker selectedWorker = askWorker(client);
 
-        for (WorkerAction action : clientDivinity.getMoveSequence()) {
-            Cell previousPosition = selectedWorker.getPosition();
-            selectedWorker = selectedWorker.withPosition(askWorkerAction(client, selectedWorker, clientDivinity, action));
-            if (clientDivinity.isWinner(game.getCurrentBoard(), previousPosition, selectedWorker.getPosition())) {
-                game.setWinner(clientPlayer);
-                break;
+            for (WorkerAction action : clientDivinity.getMoveSequence()) {
+                Cell previousPosition = selectedWorker.getPosition();
+                selectedWorker = selectedWorker.withPosition(askWorkerAction(client, selectedWorker, clientDivinity, action));
+                if (clientDivinity.isWinner(game.getCurrentBoard(), previousPosition, selectedWorker.getPosition())) {
+                    game.setWinner(clientPlayer);
+                    break;
+                }
             }
         }
-
         updateTurn();
     }
 
@@ -226,7 +227,9 @@ public class Controller extends Observable {
 
     private void notifyNotYourTurn(ClientHandler client) throws IOException {
         while (!game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {
-            client.notifyMessage("It's " + game.getCurrentPlayerTurn().getNickname() + "'s turn, please wait.");
+            if(game.getWinner() == null){
+                client.notifyMessage("It's " + game.getCurrentPlayerTurn().getNickname() + "'s turn, please wait.");
+            }
             pauseClient(client);
         }
     }

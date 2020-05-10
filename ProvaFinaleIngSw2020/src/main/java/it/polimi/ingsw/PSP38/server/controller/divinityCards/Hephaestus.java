@@ -28,7 +28,7 @@ public class Hephaestus extends DivinityCard implements OptionalAction {
             if(currentBoard.heightOf(destinationCell) == 3){
                 throw new IllegalArgumentException("Your second build can't be a dome");
             }
-        }
+        }else throw new IllegalArgumentException("You must build twice on the same cell");
 
         return super.build(worker, destinationCell, currentBoard);
     }
