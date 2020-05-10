@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.function.Function;
@@ -42,7 +41,7 @@ public class ClientHandler implements Observer, Runnable {
     public void run() {
         try {
             controller.start(this);
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -91,12 +90,9 @@ public class ClientHandler implements Observer, Runnable {
     public void displayBoard() throws IOException {
         synchronized (lock){
             output.writeObject(Protocol.DISPLAY_BOARD);
-            System.out.println("About to display encoded board :");
             for(byte b : controller.getEncodedBoard()){
-                System.out.print(b + ", ");
                 output.writeByte(b);
             }
-            System.out.println();
             output.flush();
         }
 

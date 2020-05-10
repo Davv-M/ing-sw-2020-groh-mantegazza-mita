@@ -14,7 +14,7 @@ import java.util.*;
  */
 
 public abstract class DivinityCard {
-    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD);
+    private final List<WorkerAction> moveSequence;
 
     /**
      * Different colors that a worker can have.
@@ -31,6 +31,14 @@ public abstract class DivinityCard {
         PROMETHEUS,
     }
 
+    public DivinityCard(List<WorkerAction> moveSequence){
+        this.moveSequence = List.copyOf(moveSequence);
+    }
+
+    public DivinityCard() {
+        this(Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD));
+    }
+
 
     /**
      * Returns a list of cells where the given worker can move
@@ -40,11 +48,8 @@ public abstract class DivinityCard {
      */
     public Set<Cell> preMove(Worker worker, Board currentBoard) {
         Set<Cell> neighborCells = currentBoard.neighborsOf(worker.getPosition());
-        Map<Cell, Worker> workersPositions = currentBoard.getWorkersPositions();
+        neighborCells.removeIf(c -> currentBoard.heightOf(c) > currentBoard.heightOf(worker.getPosition()) + 1);
 
-        //Removes all cells containing workers or domes or cells with tower height > cell.towerHeight + 1
-        neighborCells.removeIf(c -> workersPositions.containsKey(c) || currentBoard.hasDomeAt(c) || currentBoard.heightOf(c) >
-                currentBoard.heightOf(worker.getPosition()) + 1);
         return neighborCells;
     }
 
@@ -59,9 +64,10 @@ public abstract class DivinityCard {
 
     public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
         if (!preMove(worker, currentBoard).contains(destinationCell)) {
-            throw new IllegalArgumentException("you can't move on this cell.");
+            throw new IllegalArgumentException("You can't move on that cell.");
         }
-        return currentBoard.withoutWorker(worker).withWorker(new Worker(worker.getColor(), destinationCell));
+
+        return currentBoard.withoutWorker(worker).withWorker(worker.withPosition(destinationCell));
     }
 
     /**
@@ -72,34 +78,45 @@ public abstract class DivinityCard {
      * @return a list of possible cells where the given worker can build
      */
     public Set<Cell> preBuild(Worker worker, Board currentBoard) {
-        Set<Cell> cellsCanBuild = currentBoard.neighborsOf(worker.getPosition());
-        Map<Cell, Worker> workersPositions = currentBoard.getWorkersPositions();
 
-        //Removes the cells containing workers or domes
-        cellsCanBuild.removeIf(c -> workersPositions.containsKey(c) || currentBoard.hasDomeAt(c));
-
-        return cellsCanBuild;
+        return currentBoard.neighborsOf(worker.getPosition());
     }
 
     /**
      * Adds a tower level or a dome to the given cell, depending on the current tower's height and returns the updated board
      *
-     * @param cell         the cell on which to build
+     * @param destinationCell         the cell on which to build
      * @param currentBoard the current board of the game
      * @return the updated board with the updated cell's tower's height
      */
-    public Board build(Worker worker, Cell cell, Board currentBoard) throws IllegalArgumentException {
-        if (!preBuild(worker, currentBoard).contains(cell)) {
-            throw new IllegalArgumentException("you can't build on this cell.");
+    public Board build(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+        if (!preBuild(worker, currentBoard).contains(destinationCell)) {
+            throw new IllegalArgumentException("you can't build on that cell.");
         }
-        int currentHeight = currentBoard.heightOf(cell);
+
+        int currentHeight = currentBoard.heightOf(destinationCell);
         return currentHeight == Tower.MAX_HEIGHT ?
-                currentBoard.withDome(cell) :
-                currentBoard.withoutTower(currentBoard.getTowersPositions().get(cell))
-                        .withTower(new Tower(cell, currentHeight + 1));
+                currentBoard.withDome(destinationCell) :
+                currentBoard.withoutTower(currentBoard.getTowersPositions().get(destinationCell))
+                        .withTower(new Tower(destinationCell, currentHeight + 1));
+    }
+
+    public Board specialMove(Worker worker, Cell destinationCell, Board currentBoard){
+        return currentBoard;
+    }
+
+    public Board specialBuild(Worker worker, Cell destinationCell, Board currentBoard){
+        return currentBoard;
     }
 
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
     }
+
+    public boolean isWinner(Board board, Cell previousPosition, Cell currentPosition) {
+        return !previousPosition.equals(currentPosition) &&
+                board.heightOf(currentPosition) == 3 &&
+                board.heightOf(previousPosition) == 2;
+    }
+
 }

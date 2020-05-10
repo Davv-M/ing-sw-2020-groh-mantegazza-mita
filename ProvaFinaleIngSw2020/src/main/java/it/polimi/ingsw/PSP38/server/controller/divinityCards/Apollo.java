@@ -1,13 +1,10 @@
 package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 
 import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
-import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,8 +26,7 @@ public class Apollo extends DivinityCard {
     public Set<Cell> preMove(Worker worker, Board currentBoard) {
         Set<Cell> neighborCells = currentBoard.neighborsOf(worker.getPosition());
         Map<Cell, Worker> workersPositions = currentBoard.getWorkersPositions();
-        //Removes all cells containing workers' player who call the method, domes or cells with tower height > cell.towerHeight + 1
-        neighborCells.removeIf(c -> currentBoard.hasDomeAt(c) || currentBoard.heightOf(c) > currentBoard.heightOf(worker.getPosition()) + 1);
+        neighborCells.removeIf(c -> currentBoard.heightOf(c) > currentBoard.heightOf(worker.getPosition()) + 1);
         neighborCells.removeIf(c -> currentBoard.hasWorkerAt(c) && workersPositions.get(c).getColor() == worker.getColor());
         return neighborCells;
     }
@@ -49,16 +45,16 @@ public class Apollo extends DivinityCard {
         Cell oldCell = worker.getPosition();
 
         if (!preMove(worker, currentBoard).contains(destinationCell)) {
-            throw new IllegalArgumentException("you can't move on this cell.");
+            throw new IllegalArgumentException("you can't move on that cell.");
         }
 
         Board boardUpdated = currentBoard.withoutWorker(worker);
         if (currentBoard.hasWorkerAt(destinationCell)) {
             Worker challengerWorker = currentBoard.getWorkersPositions().get(destinationCell);
             boardUpdated = boardUpdated.withoutWorker(challengerWorker).
-                    withWorker(new Worker(challengerWorker.getColor(), oldCell));
+                    withWorker(challengerWorker.withPosition(oldCell));
         }
-        return boardUpdated.withWorker(new Worker(worker.getColor(), destinationCell));
+        return boardUpdated.withWorker(worker.withPosition(destinationCell));
     }
 
 }

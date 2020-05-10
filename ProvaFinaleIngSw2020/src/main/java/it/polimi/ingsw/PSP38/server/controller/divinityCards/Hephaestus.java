@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Hephaestus extends DivinityCard {
-    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.SPECIAL_ABILITY);
+    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.SPECIAL_BUILD);
 
     @Override
     public List<WorkerAction> getMoveSequence() {

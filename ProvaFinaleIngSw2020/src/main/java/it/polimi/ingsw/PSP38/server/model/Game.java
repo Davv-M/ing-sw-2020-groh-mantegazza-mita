@@ -14,6 +14,8 @@ public class Game {
     public static final int MAX_NUMBER_OF_PLAYERS = 3;
     public static final int MIN_NUMBER_OF_PLAYERS = 2;
     public static final int WORKERS_PER_PLAYER = 2;
+
+    private Player winner = null;
     private int totNumPlayers = 0;
     private final List<Player> players = new LinkedList<>();
     private Board currentBoard = new Board();
@@ -65,6 +67,14 @@ public class Game {
     public Player nicknameToPlayer(String nickname) {
         Optional<Player> player = players.stream().filter(p -> p.getNickname().equals(nickname)).findFirst();
         return player.orElse(null);
+    }
+
+    public void setWinner(Player player){
+        winner = player;
+    }
+
+    public Player getWinner(){
+        return winner;
     }
 
     public void updateTurn(){

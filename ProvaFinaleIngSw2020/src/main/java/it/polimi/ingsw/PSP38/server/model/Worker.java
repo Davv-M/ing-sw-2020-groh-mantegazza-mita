@@ -43,6 +43,10 @@ public final class Worker {
         return color;
     }
 
+    public Worker withPosition(Cell position){
+        return position == null ? this : new Worker(color, position);
+    }
+
     @Override
     public int hashCode() {
         return position.rowMajorIndex();

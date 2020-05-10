@@ -8,22 +8,15 @@ import it.polimi.ingsw.PSP38.server.virtualView.Server;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Function;
 
 public class Controller extends Observable {
-    private final Object lock = new Object();
     private final List<String> illegalNicknames = new LinkedList<>();
     private final List<DivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(DivinityCard.Name.values()));
     private final Game game = new Game();
     private final Map<Player, DivinityCard> playersDivinities = new HashMap<>();
-    private final List<Round> rounds = new LinkedList<>();
 
-
-    public Controller() {
-    }
-
-    private synchronized String checkNickname(String nickname) throws IllegalArgumentException{
-        if(illegalNicknames.contains(nickname)){
+    private synchronized String checkNickname(String nickname) throws IllegalArgumentException {
+        if (illegalNicknames.contains(nickname)) {
             throw new IllegalArgumentException("This nickname is unavailable. Please choose a new one.");
         }
         return nickname;
@@ -37,7 +30,7 @@ public class Controller extends Observable {
         return ArgumentChecker.requireBetween(Player.MIN_AGE, Player.MAX_AGE, age);
     }
 
-    private synchronized void checkGameFull(ClientHandler client) throws IOException{
+    private synchronized void checkGameFull(ClientHandler client) throws IOException {
         if (game.getTotNumPlayers() > game.getCurrNumPlayers()) {
             client.notifyMessage("Hold on all players will be ready in few seconds");
             pauseClient(client);
@@ -46,7 +39,7 @@ public class Controller extends Observable {
         }
     }
 
-    private synchronized String checkDivinityCard(String card) throws IllegalArgumentException{
+    private synchronized String checkDivinityCard(String card) throws IllegalArgumentException {
         DivinityCard.Name selectedCardEnum;
         try {
             selectedCardEnum = DivinityCard.Name.valueOf(card.toUpperCase());
@@ -54,25 +47,33 @@ public class Controller extends Observable {
             throw new IllegalArgumentException("This divinity card doesn't exist. Please select a new one.");
         }
 
-        if(!availableDivinityCards.contains(selectedCardEnum)){
+        if (!availableDivinityCards.contains(selectedCardEnum)) {
             throw new IllegalArgumentException("This divinity card has already been chosen. Please select a new one.");
         }
 
         return card;
     }
 
-    public int checkXCoordinate(int x) throws IllegalArgumentException{
+    private int checkXCoordinate(int x) throws IllegalArgumentException {
         return ArgumentChecker.requireBetween(0, Board.COLUMNS - 1, x);
     }
 
-    public int checkYCoordinate(int y) throws IllegalArgumentException{
+    private int checkYCoordinate(int y) throws IllegalArgumentException {
         return ArgumentChecker.requireBetween(0, Board.ROWS - 1, y);
+    }
+
+    private synchronized String checkYesOrNo(String answer) throws IllegalArgumentException {
+        if (answer.equalsIgnoreCase("yes") || answer.equalsIgnoreCase("no")) {
+            return answer;
+        } else {
+            throw new IllegalArgumentException("Please answer with either \"yes\" or \"no\".");
+        }
     }
 
     private synchronized void pauseClient(ClientHandler client) {
         try {
             client.setPaused(true);
-            while(client.isPaused()){
+            while (client.isPaused()) {
                 wait();
             }
         } catch (InterruptedException e) {
@@ -80,7 +81,7 @@ public class Controller extends Observable {
         }
     }
 
-    private synchronized void wakeUpAll(){
+    private synchronized void wakeUpAll() {
         Server.wakeUpAll();
         notifyAll();
     }
@@ -116,11 +117,11 @@ public class Controller extends Observable {
         }
     }
 
-    public List<Byte> getEncodedBoard(){
+    public List<Byte> getEncodedBoard() {
         return BoardEncoder.bytesForBoard(game.getCurrentBoard());
     }
 
-    public void start(ClientHandler client) throws IOException, InterruptedException {
+    public void start(ClientHandler client) throws IOException {
         welcomeMessage(client);
         firstPlayerSetNumOfPlayers(client);
         notifyExtraClient(client);
@@ -130,10 +131,30 @@ public class Controller extends Observable {
             askYoungestPlayerCards(client);
             askDivinity(client);
             placeWorkers(client);
-            do{
+            do {
                 playGame(client);
-            }while(true);
+            } while (game.getWinner() == null);
+
+            notifyWinner(client);
         }
+    }
+
+    private void playGame(ClientHandler client) throws IOException {
+        notifyNotYourTurn(client);
+        Player clientPlayer = game.nicknameToPlayer(client.getNickname());
+        DivinityCard clientDivinity = playersDivinities.get(clientPlayer);
+        Worker selectedWorker = askWorker(client);
+
+        for (WorkerAction action : clientDivinity.getMoveSequence()) {
+            Cell previousPosition = selectedWorker.getPosition();
+            selectedWorker = selectedWorker.withPosition(askWorkerAction(client, selectedWorker, clientDivinity, action));
+            if (clientDivinity.isWinner(game.getCurrentBoard(), previousPosition, selectedWorker.getPosition())) {
+                game.setWinner(clientPlayer);
+                break;
+            }
+        }
+
+        updateTurn();
     }
 
     private void welcomeMessage(ClientHandler client) throws IOException {
@@ -162,10 +183,8 @@ public class Controller extends Observable {
     private String askNickname(ClientHandler client) throws IOException {
         client.notifyMessage("Choose your nickname.");
         String nickname = client.askString(this::checkNickname);
-        synchronized (lock){
-            illegalNicknames.add(nickname);
-            client.setNickname(nickname);
-        }
+        illegalNicknames.add(nickname);
+        client.setNickname(nickname);
 
         return nickname;
     }
@@ -218,31 +237,31 @@ public class Controller extends Observable {
         client.notifyMessage(message.toString());
     }
 
-    private void placeWorkers(ClientHandler client) throws  IOException {
+    private void placeWorkers(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
         displayAllClients();
         client.notifyMessage("It's time to place your workers on the board.\n");
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
-        for(int i = 0; i < Game.WORKERS_PER_PLAYER; ++i){
+        for (int i = 0; i < Game.WORKERS_PER_PLAYER; ++i) {
             client.notifyMessage("Place your worker number " + (i + 1));
             Board newBoard;
-            do{
+            do {
                 Cell cell = askCell(client);
-                try{
+                try {
                     newBoard = game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell));
                     displayAllClients();
                     break;
-                } catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     client.notifyMessage(e.getMessage());
                 }
-            }while(true);
+            } while (true);
             game.setCurrentBoard(newBoard);
             displayAllClients();
         }
         updateTurn();
     }
 
-    public Cell askCell(ClientHandler client) throws IOException{
+    private Cell askCell(ClientHandler client) throws IOException {
         int x;
         int y;
         do {
@@ -255,84 +274,85 @@ public class Controller extends Observable {
             } catch (IllegalArgumentException e) {
                 client.notifyMessage(e.getMessage());
             }
-        }while(true);
+        } while (true);
     }
 
 
-    private void displayAllClients(){
+    private void displayAllClients() {
         setChanged();
         notifyObservers();
     }
 
-    private void playGame(ClientHandler client) throws IOException {
-        notifyNotYourTurn(client);
-        Player clientPlayer = game.nicknameToPlayer(client.getNickname());
-        DivinityCard playerDivinity = playersDivinities.get(clientPlayer);
-        Worker selectedWorker = askWorker(client);
-        Cell newWorkerPosition = askMove(client, selectedWorker, playerDivinity);
-        selectedWorker = game.getCurrentBoard().workerAt(newWorkerPosition);
-        askBuild(client, selectedWorker, playerDivinity);
-        updateTurn();
+    private void notifyWinner(ClientHandler client) throws IOException {
+        if (game.getWinner().getNickname().equals(client.getNickname())) {
+            client.notifyMessage("You win!");
+        } else {
+            client.notifyMessage("You lose! The winner is " + client.getNickname());
+        }
     }
 
-    public Worker askWorker(ClientHandler client) throws IOException {
+    private Worker askWorker(ClientHandler client) throws IOException {
         client.notifyMessage("select the worker you want to move.");
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
         Cell cellUnderWorker;
         Worker workerSelected;
         do {
-             try{
+            try {
                 cellUnderWorker = askCell(client);
                 workerSelected = game.getCurrentBoard().workerAt(cellUnderWorker);
-            }catch(NullPointerException e){
+            } catch (NullPointerException e) {
                 client.notifyMessage(e.getMessage());
                 continue;
             }
 
-            if(clientPlayer.getColor() != workerSelected.getColor()){
+            if (clientPlayer.getColor() != workerSelected.getColor()) {
                 client.notifyMessage("The selected worker isn't yours.");
-            } else{
+            } else {
                 return workerSelected;
             }
-        }while(true);
+        } while (true);
     }
 
-    public Cell askMove(ClientHandler client, Worker selectedWorker, DivinityCard playerDivinity) throws IOException {
-        Set<Cell> possibleCellsMove = playerDivinity.preMove(selectedWorker, game.getCurrentBoard());
-        client.notifyMessage("these are the cells where you can move your worker:");
-        client.notifyMessage(possibleCellsMove.toString());
-        client.notifyMessage("insert the coordinates of the cell where you want to place your worker");
+    private Cell askWorkerAction(ClientHandler client, Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action) throws IOException {
+        Cell workerPosition = selectedWorker.getPosition();
+        if (action == WorkerAction.SPECIAL_MOVE || action == WorkerAction.SPECIAL_BUILD) {
+            client.notifyMessage("Do you want to use your special ability ?");
+            if (client.askString(this::checkYesOrNo).equalsIgnoreCase("no")) {
+                return workerPosition;
+            }
+        }
+
         Board updatedBoard;
-        do{
-            try{
-                Cell cellDestination = askCell(client);
-                updatedBoard = playerDivinity.move(selectedWorker, cellDestination, game.getCurrentBoard());
+        do {
+            try {
+                client.notifyMessage("Select the cell where you want to " + action);
+                Cell destinationCell = askCell(client);
+                switch (action) {
+                    case MOVE:
+                        updatedBoard = clientDivinty.move(selectedWorker, destinationCell, game.getCurrentBoard());
+                        workerPosition = destinationCell;
+                        break;
+                    case BUILD:
+                        updatedBoard = clientDivinty.build(selectedWorker, destinationCell, game.getCurrentBoard());
+                        break;
+                    case SPECIAL_MOVE:
+                        updatedBoard = clientDivinty.specialMove(selectedWorker, destinationCell, game.getCurrentBoard());
+                        workerPosition = destinationCell;
+                        break;
+                    case SPECIAL_BUILD:
+                        updatedBoard = clientDivinty.specialBuild(selectedWorker, destinationCell, game.getCurrentBoard());
+                        break;
+                    default:
+                        throw new IllegalArgumentException("WorkerAction " + action + " unknown.");
+                }
                 game.setCurrentBoard(updatedBoard);
                 displayAllClients();
-                return cellDestination;
-            }catch(IllegalArgumentException e){
+                return workerPosition;
+            } catch (IllegalArgumentException e) {
                 client.notifyMessage(e.getMessage());
             }
-        } while(true);
+        } while (true);
     }
 
-    public void askBuild(ClientHandler client, Worker selectedWorker, DivinityCard playerDivinity) throws IOException{
-        Set<Cell> possibleCellsBuild = playerDivinity.preBuild(selectedWorker, game.getCurrentBoard());
-        client.notifyMessage("these are the cells where you can build:");
-        client.notifyMessage(possibleCellsBuild.toString());
-        client.notifyMessage("insert the coordinates of the cell where you want your worker to build");
-        Board updatedBoard;
-        do{
-            try{
-                Cell cellDestination = askCell(client);
-                updatedBoard = playerDivinity.build(selectedWorker, cellDestination, game.getCurrentBoard());
-                game.setCurrentBoard(updatedBoard);
-                displayAllClients();
-                break;
-            }catch(IllegalArgumentException e){
-                client.notifyMessage(e.getMessage());
-            }
-        } while(true);
-    }
 
 }

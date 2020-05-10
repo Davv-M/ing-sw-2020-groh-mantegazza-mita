@@ -6,7 +6,7 @@ import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import java.util.List;
 
 public class Demeter extends DivinityCard {
-    private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.SPECIAL_ABILITY);
+    private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.SPECIAL_BUILD);
 
     @Override
     public List<WorkerAction> getMoveSequence() {

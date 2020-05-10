@@ -24,7 +24,7 @@ public class Client {
     /**
      *Main method for the client side of Santorini. This main method executes the operations needed to connect the client
      * to the server and decodes the messages received from the server (for details regarding the encoding used, refer to
-     * the documentation of class <code>Protocol</code>
+     * the documentation of class <code>Protocol</code>)
      */
     public static void main(String[] args) {
         Socket serverSocket;
@@ -96,9 +96,7 @@ public class Client {
      * of the same client
      * @param scanner is the scanner object from which the integer is fetched
      * @throws IOException if the integer is unreadable
-     * @throws InputMismatchException if one of the follwing events happens:<br>
-     * - the inserted value is not an integer<br>
-     * - the inserted value is not between 2 and 3 (if <code>askInt</code> is used to select the number of players)
+     * @throws InputMismatchException if the inserted value is not an integer
      */
     private static void askInt(Scanner scanner) throws IOException {
         int number;
@@ -109,7 +107,6 @@ public class Client {
             } catch (InputMismatchException e) {
                 String error = scanner.nextLine();
                 System.out.println(error + " is not an Integer");
-                System.out.println("Please insert an integer (between 2 and 3)");
             }
         } while (true);
         output.writeInt(number);
@@ -119,20 +116,15 @@ public class Client {
     private static void displayBoard() throws IOException {
         byte rows = input.readByte();
         byte columns = input.readByte();
-        System.out.println("rows = " + rows);
-        System.out.println("columns = " + columns);
         List<Byte> encodedBoard = new LinkedList<>();
         encodedBoard.add(rows);
         encodedBoard.add(columns);
-        System.out.println("About to display encoded baord : ");
         for (int row = 0; row < rows; ++row) {
             for (int col = 0; col < columns; ++col) {
                 byte b = input.readByte();
-                System.out.print(b + ", ");
                 encodedBoard.add(b);
             }
         }
-        System.out.println();
         BoardPrinter.printBoard(encodedBoard);
     }
 

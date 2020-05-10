@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Prometheus extends DivinityCard {
-    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.SPECIAL_ABILITY, WorkerAction.MOVE, WorkerAction.BUILD);
+    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.SPECIAL_BUILD, WorkerAction.MOVE, WorkerAction.BUILD);
 
     @Override
     public List<WorkerAction> getMoveSequence() {
