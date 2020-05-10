@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Concrete implementation of Artemis' power, extends <code>StrategyDivinityCard</code> interface.
@@ -37,5 +38,9 @@ public class Artemis extends DivinityCard implements OptionalAction {
     @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
+    }
+
+    public Cell getPreviousPosition() {
+        return previousPosition;
     }
 }
