@@ -101,14 +101,6 @@ public abstract class DivinityCard {
                         .withTower(new Tower(destinationCell, currentHeight + 1));
     }
 
-    public Board specialMove(Worker worker, Cell destinationCell, Board currentBoard){
-        return currentBoard;
-    }
-
-    public Board specialBuild(Worker worker, Cell destinationCell, Board currentBoard){
-        return currentBoard;
-    }
-
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
     }

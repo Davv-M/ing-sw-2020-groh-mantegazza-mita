@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 
 import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
+import it.polimi.ingsw.PSP38.server.controller.OptionalAction;
 import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
@@ -9,8 +10,8 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 import java.util.Arrays;
 import java.util.List;
 
-public class Hephaestus extends DivinityCard {
-    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.SPECIAL_BUILD);
+public class Hephaestus extends DivinityCard implements OptionalAction {
+    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.OPTIONAL_ACTION);
     private Cell previousBuild = null;
 
     @Override
@@ -22,7 +23,7 @@ public class Hephaestus extends DivinityCard {
     }
 
     @Override
-    public Board specialBuild(Worker worker, Cell destinationCell, Board currentBoard) {
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
         if(destinationCell.equals(previousBuild)){
             if(currentBoard.heightOf(destinationCell) == 3){
                 throw new IllegalArgumentException("Your second build can't be a dome");

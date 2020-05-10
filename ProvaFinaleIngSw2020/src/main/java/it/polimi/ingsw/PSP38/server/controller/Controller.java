@@ -315,39 +315,43 @@ public class Controller extends Observable {
 
     private Cell askWorkerAction(ClientHandler client, Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action) throws IOException {
         Cell workerPosition = selectedWorker.getPosition();
-        if (action == WorkerAction.SPECIAL_MOVE || action == WorkerAction.SPECIAL_BUILD) {
+        Board currentBoard = game.getCurrentBoard();
+        boolean useAbility = true;
+        if (action == WorkerAction.OPTIONAL_ACTION || action == WorkerAction.OPTIONAL_ABILITY) {
             client.notifyMessage("Do you want to use your special ability ?");
-            if (client.askString(this::checkYesOrNo).equalsIgnoreCase("no")) {
-                return workerPosition;
+            String answer = client.askString(this::checkYesOrNo);
+            if (answer.equalsIgnoreCase("no")) {
+                if(action == WorkerAction.OPTIONAL_ACTION){
+                    return workerPosition;
+                } else {
+                    useAbility = false;
+                }
             }
         }
 
-        Board updatedBoard;
         do {
             try {
-                client.notifyMessage("Select the cell where you want to " + action);
+                client.notifyMessage(action.question());
                 Cell destinationCell = askCell(client);
                 switch (action) {
                     case MOVE:
-                        updatedBoard = clientDivinty.move(selectedWorker, destinationCell, game.getCurrentBoard());
-                        workerPosition = destinationCell;
+                        currentBoard = clientDivinty.move(selectedWorker, destinationCell, currentBoard);
                         break;
                     case BUILD:
-                        updatedBoard = clientDivinty.build(selectedWorker, destinationCell, game.getCurrentBoard());
+                        currentBoard = clientDivinty.build(selectedWorker, destinationCell, currentBoard);
                         break;
-                    case SPECIAL_MOVE:
-                        updatedBoard = clientDivinty.specialMove(selectedWorker, destinationCell, game.getCurrentBoard());
-                        workerPosition = destinationCell;
+                    case OPTIONAL_ACTION:
+                        currentBoard = ((OptionalAction) clientDivinty).optionalAction(selectedWorker, destinationCell, currentBoard);
                         break;
-                    case SPECIAL_BUILD:
-                        updatedBoard = clientDivinty.specialBuild(selectedWorker, destinationCell, game.getCurrentBoard());
+                    case OPTIONAL_ABILITY:
+                        currentBoard = ((OptionalAbility) clientDivinty).optionalAbility(useAbility, selectedWorker, destinationCell, currentBoard);
                         break;
                     default:
                         throw new IllegalArgumentException("WorkerAction " + action + " unknown.");
                 }
-                game.setCurrentBoard(updatedBoard);
+                game.setCurrentBoard(currentBoard);
                 displayAllClients();
-                return workerPosition;
+                return currentBoard.hasWorkerAt(destinationCell) ? destinationCell : workerPosition;
             } catch (IllegalArgumentException e) {
                 client.notifyMessage(e.getMessage());
             }

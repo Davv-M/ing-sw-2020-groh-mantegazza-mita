@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 
 import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
+import it.polimi.ingsw.PSP38.server.controller.OptionalAction;
 import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
@@ -10,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public class Prometheus extends DivinityCard {
-    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.SPECIAL_BUILD, WorkerAction.MOVE, WorkerAction.BUILD);
+public class Prometheus extends DivinityCard implements OptionalAction {
+    private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.OPTIONAL_ACTION, WorkerAction.MOVE, WorkerAction.BUILD);
     private boolean hasBuiltFirstMove = false;
 
     @Override
@@ -36,7 +37,7 @@ public class Prometheus extends DivinityCard {
     }
 
     @Override
-    public Board specialBuild(Worker worker, Cell destinationCell, Board currentBoard) {
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
         Board updatedBoard = super.build(worker, destinationCell, currentBoard);
         hasBuiltFirstMove = true;
         return updatedBoard;
