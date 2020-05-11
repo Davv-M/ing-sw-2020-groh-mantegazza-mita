@@ -28,6 +28,8 @@ public class Client {
      */
     public static void main(String[] args) {
         Socket serverSocket;
+        SetupWindow setw = new SetupWindow();
+        setw.setVisible(true);
         try {
             serverSocket = new Socket(InetAddress.getLocalHost(), SERVER_SOCKET_PORT);
             System.out.println(InetAddress.getLocalHost());
