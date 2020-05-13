@@ -54,6 +54,7 @@ public class ClientHandler implements Observer, Runnable {
 
     }
 
+
     public int askInt(Function<Integer, Integer> checkInt) throws IOException {
         int num;
         synchronized (lock) {

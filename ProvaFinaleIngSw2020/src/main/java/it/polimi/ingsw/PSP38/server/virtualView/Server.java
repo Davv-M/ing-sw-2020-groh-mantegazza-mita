@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public class Server {
-    public final static int SERVER_SOCKET_PORT = 3457;
+    public final static int SERVER_SOCKET_PORT = 3456;
     private static int contPlayer = 0;
     private static final List<ClientHandler> listForSpuriousWakeUp = new LinkedList<>();
 
@@ -32,7 +32,6 @@ public class Server {
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 listForSpuriousWakeUp.add(clientHandler);
                 Thread threadClient = new Thread(clientHandler);
-
                 threadClient.start();
             } while (true);
 
@@ -40,7 +39,6 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     }
 

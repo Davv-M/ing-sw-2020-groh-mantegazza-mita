@@ -70,7 +70,7 @@ public class Controller extends Observable {
         }
     }
 
-    private synchronized void pauseClient(ClientHandler client) {
+    private synchronized void pauseClient(ClientHandler client) throws IOException{
         try {
             client.setPaused(true);
             while (client.isPaused()) {
