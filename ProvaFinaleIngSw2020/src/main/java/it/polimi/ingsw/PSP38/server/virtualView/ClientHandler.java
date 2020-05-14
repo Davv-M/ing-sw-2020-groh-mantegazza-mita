@@ -29,6 +29,21 @@ public class ClientHandler implements Observer, Runnable {
             e.printStackTrace();
         }
         controller.addObserver(this);
+        VerifierClientConnection verifierClientConnection = new VerifierClientConnection(this, clientNum);
+        Thread verifier = new Thread(verifierClientConnection);
+        verifier.start();
+    }
+
+    public boolean sendAck(){
+        try{
+            synchronized (lock){
+                output.writeObject(Protocol.ACK);
+                return input.readBoolean();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void setPaused(boolean bool) {

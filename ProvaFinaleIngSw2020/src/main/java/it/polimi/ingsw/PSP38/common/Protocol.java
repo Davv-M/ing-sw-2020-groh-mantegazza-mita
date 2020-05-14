@@ -13,4 +13,5 @@ public enum Protocol {
     ASK_INT,
     ASK_STRING,
     DISPLAY_BOARD,
+    ACK,
 }

@@ -72,6 +72,7 @@ public class Client extends Observable implements Observer {
             if(protocolRead == Protocol.DISPLAY_BOARD) {
                 displayBoard();
             }
+
     }
 
     /**
