@@ -34,16 +34,11 @@ public class ClientHandler implements Observer, Runnable {
         verifier.start();
     }
 
-    public boolean sendAck(){
-        try{
+    public boolean sendAck()throws IOException{
             synchronized (lock){
                 output.writeObject(Protocol.ACK);
                 return input.readBoolean();
             }
-        }catch (IOException e){
-            e.printStackTrace();
-            return false;
-        }
     }
 
     public void setPaused(boolean bool) {

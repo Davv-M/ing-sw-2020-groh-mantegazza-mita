@@ -21,8 +21,8 @@ public class VerifierClientConnection implements Runnable{
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (IOException e){
+            System.out.println("client number "+numClient+" disconnected");
         }
-        System.out.println("client number "+numClient+" disconnected");
-        //solleverà un eccezzione
     }
 }
