@@ -3,7 +3,9 @@ package it.polimi.ingsw.PSP38.client;
 import it.polimi.ingsw.PSP38.common.Protocol;
 import it.polimi.ingsw.PSP38.common.utilities.Observer;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Observable;
@@ -22,12 +24,10 @@ public class Client extends Observable implements Observer {
     private static ServerHandler nextInputObserver;
     //private static BoardComponent sc;
 
-    public static void main(String[] args) {
-        //SetupWindow setw = new SetupWindow();
-        //setw.setVisible(true);
+    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         Socket serverSocket;
         try {
-            serverSocket = new Socket(InetAddress.getLocalHost(), SERVER_SOCKET_PORT);
+            serverSocket = new Socket(InetAddress.getByName("127.0.0.1"), SERVER_SOCKET_PORT);
             System.out.println(InetAddress.getLocalHost());
             ServerHandler serverHandler = new ServerHandler(serverSocket);
             nextInputObserver = serverHandler;
@@ -38,6 +38,10 @@ public class Client extends Observable implements Observer {
             return;
         }
         System.out.println("Connected");
+        /*SwingUtilities.invokeAndWait(() -> {
+            ConnectionWindow connect = new ConnectionWindow();
+            connect.createConnectionWindow();
+        });*/
         while(true){
             dataInput = scanner.nextLine();
             notifyReadSomething();
