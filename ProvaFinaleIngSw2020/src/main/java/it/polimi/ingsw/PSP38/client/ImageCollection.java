@@ -20,7 +20,7 @@ public final class ImageCollection {
     /**
      * Uses the given string to locate a directory and constructs an image
      * collection with the images that are found in it. The images are
-     * associated with the 3-digit number found at the beginning of their name.
+     * associated with the 2-digit number found at the beginning of their name.
      * If files fail to be read, they are simply ignored.
      *
      * @param dirName The name of the directory.

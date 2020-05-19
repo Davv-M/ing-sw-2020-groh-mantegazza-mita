@@ -43,6 +43,11 @@ public final class Worker {
         return color;
     }
 
+    /**
+     * @param position the new position
+     * @return a copy of the worker with the given position
+     */
+
     public Worker withPosition(Cell position){
         return position == null ? this : new Worker(color, position);
     }

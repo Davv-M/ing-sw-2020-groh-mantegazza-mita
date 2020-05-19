@@ -21,12 +21,6 @@ public class Game {
     private Board currentBoard = new Board();
     private final List<WorkerColor> availableColors = new LinkedList<>(Arrays.asList(WorkerColor.values()));
 
-    /**
-     * constructor of the Game class.
-     */
-    public Game(){
-    }
-
     public void addPlayer(String nickname, int age){
         Player player = new Player(nickname, age, availableColors.remove(0));
         players.add(player);

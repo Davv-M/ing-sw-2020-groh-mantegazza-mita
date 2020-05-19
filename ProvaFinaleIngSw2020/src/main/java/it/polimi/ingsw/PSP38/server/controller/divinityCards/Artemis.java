@@ -15,7 +15,7 @@ import java.util.Map;
  * Concrete implementation of Artemis' power, extends <code>StrategyDivinityCard</code> interface.
  */
 public class Artemis extends DivinityCard implements OptionalAction {
-    private final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.OPTIONAL_ACTION, WorkerAction.BUILD);
+    private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.OPTIONAL_ACTION, WorkerAction.BUILD);
     private Cell previousPosition = null;
 
     @Override

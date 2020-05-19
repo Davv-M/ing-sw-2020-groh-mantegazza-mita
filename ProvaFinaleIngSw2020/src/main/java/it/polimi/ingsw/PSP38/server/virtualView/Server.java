@@ -19,7 +19,6 @@ public class Server {
      * Main method of the server side of Santorini that supervises the creation of a thread for each client connected to
      * the server
      *
-     * @param args
      */
     public static void main(String[] args) {
         ServerSocket serverSocket;
@@ -44,7 +43,7 @@ public class Server {
 
     /**
      * This method wakes up all the clients put into the <code>listForSpuriousWakeUp</code> linked list through the mehod
-     * <code>setImInWait</code> of <code>ClientHandler</code>
+     * <code>setPaused</code> of <code>ClientHandler</code>
      */
     public static void wakeUpAll(){
         for(ClientHandler client : listForSpuriousWakeUp){

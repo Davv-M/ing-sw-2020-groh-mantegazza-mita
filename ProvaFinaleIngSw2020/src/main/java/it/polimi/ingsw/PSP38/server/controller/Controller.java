@@ -96,22 +96,30 @@ public class Controller extends Observable {
         switch (selectedCardEnum) {
             case APOLLO:
                 return new Apollo();
+            case ARES:
+                return new Ares();
             case ARTEMIS:
                 return new Artemis();
             case ATHENA:
                 return new Athena();
             case ATLAS:
                 return new Atlas();
+            case CHARON:
+                return new Charon();
             case DEMETER:
                 return new Demeter();
             case HEPHAESTUS:
                 return new Hephaestus();
+            case HESTIA:
+                return new Hestia();
             case MINOTAUR:
                 return new Minotaur();
             case PAN:
                 return new Pan();
             case PROMETHEUS:
                 return new Prometheus();
+            case ZEUS:
+                return new Zeus();
             default:
                 throw new IllegalArgumentException("Illegal divinity card");
         }
@@ -290,7 +298,7 @@ public class Controller extends Observable {
         if (game.getWinner().getNickname().equals(client.getNickname())) {
             client.notifyMessage("You win!");
         } else {
-            client.notifyMessage("You lose! The winner is " + client.getNickname());
+            client.notifyMessage("You lose! The winner is " + game.getWinner().getNickname());
         }
     }
 

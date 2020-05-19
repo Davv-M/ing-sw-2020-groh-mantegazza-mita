@@ -46,10 +46,15 @@ public enum Direction {
         return y;
     }
 
-    public static Direction coordinatesToDirection(int xWorker, int yWorker, int xDestination, int yDestination) {
-        int nX=xDestination-xWorker;
-        int nY=yDestination-yWorker;
+    /**
+     * Converts a normalized vector in a direction
+     *
+     * @param nX vector's x coordinate
+     * @param nY vector's y coordinate
+     * @return the corresponding direction
+     */
 
+    public static Direction coordinatesToDirection(int nX, int nY) {
         if (nX == 0 && nY == -1) {
             return N;
         } else if (nX == 1 && nY == -1) {
@@ -69,7 +74,28 @@ public enum Direction {
         } else {
             throw new IllegalArgumentException("unknown direction");
         }
+    }
 
-
+    public Direction opposite() {
+        switch (this) {
+            case N:
+                return S;
+            case NE:
+                return SW;
+            case E:
+                return W;
+            case SE:
+                return NW;
+            case S:
+                return N;
+            case SW:
+                return NE;
+            case W:
+                return E;
+            case NW:
+                return SE;
+            default:
+                throw new IllegalArgumentException("unknown direction");
+        }
     }
 }

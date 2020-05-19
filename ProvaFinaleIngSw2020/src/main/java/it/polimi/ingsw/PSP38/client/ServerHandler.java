@@ -57,9 +57,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                 }
                 notifyClient();
             }
-        }catch (IOException e){
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
 

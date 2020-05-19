@@ -21,14 +21,18 @@ public abstract class DivinityCard {
      */
     enum Name {
         APOLLO,
+        ARES,
         ARTEMIS,
         ATHENA,
         ATLAS,
+        CHARON,
         DEMETER,
         HEPHAESTUS,
+        HESTIA,
         MINOTAUR,
         PAN,
         PROMETHEUS,
+        ZEUS
     }
 
     public DivinityCard(List<WorkerAction> moveSequence){
@@ -106,9 +110,7 @@ public abstract class DivinityCard {
     }
 
     public boolean isWinner(Board board, Cell previousPosition, Cell currentPosition) {
-        return !previousPosition.equals(currentPosition) &&
-                board.heightOf(currentPosition) == 3 &&
-                board.heightOf(previousPosition) == 2;
+        return board.heightOf(previousPosition) == 2 && board.heightOf(currentPosition) == 3;
     }
 
 }

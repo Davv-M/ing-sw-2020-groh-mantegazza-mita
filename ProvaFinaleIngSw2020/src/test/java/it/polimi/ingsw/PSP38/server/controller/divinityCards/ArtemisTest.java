@@ -15,13 +15,12 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 public class ArtemisTest {
-    HashSet<Worker> workers = new HashSet<Worker>();
+    HashSet<Worker> workers = new HashSet<>();
     HashSet<Tower> towers = new HashSet<>();
     HashSet<Cell> domes = new HashSet<>();
 
     @Test(expected = IllegalArgumentException.class)
     public void moveInACellOccupiedByAPlayer() {
-        Board testBoard = new Board();
         Cell cellw1 = new Cell(2, 2);
         Worker w1 = new Worker(WorkerColor.WHITE, cellw1);
         Cell cellw2 = new Cell(1, 2);
@@ -31,14 +30,13 @@ public class ArtemisTest {
         workers.add(w1);
         workers.add(w2);
         towers.add(t1);
-        testBoard = new Board(workers, towers, domes);
+        Board testBoard = new Board(workers, towers, domes);
         Artemis a = new Artemis();
         a.move(w1, cellw2, testBoard);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void moveInACellOccupiedByATower() {
-        Board testBoard = new Board();
         Cell cellw1 = new Cell(2, 2);
         Worker w1 = new Worker(WorkerColor.WHITE, cellw1);
         Cell cellw2 = new Cell(1, 2);
@@ -48,14 +46,13 @@ public class ArtemisTest {
         workers.add(w1);
         workers.add(w2);
         towers.add(t1);
-        testBoard = new Board(workers, towers, domes);
+        Board testBoard = new Board(workers, towers, domes);
         Artemis a = new Artemis();
         a.move(w1, cellt1, testBoard);
     }
 
     @Test
     public void checkCorrectValueOfPreviousPosition() {
-        Board testBoard = new Board();
         Cell cellw1 = new Cell(2, 2);
         Worker w1 = new Worker(WorkerColor.WHITE, cellw1);
         Cell cellw2 = new Cell(1, 2);
@@ -66,7 +63,7 @@ public class ArtemisTest {
         workers.add(w1);
         workers.add(w2);
         towers.add(t1);
-        testBoard = new Board(workers, towers, domes);
+        Board testBoard = new Board(workers, towers, domes);
         Artemis a = new Artemis();
         a.move(w1, cellf1, testBoard);
         assertEquals(2, a.getPreviousPosition().getX());
@@ -77,8 +74,6 @@ public class ArtemisTest {
     public void checkCorrectWorkerPositionAfterMove() {
         Board testBoard;
         Board updatedBoard;
-        Board expectedBoard;
-        HashSet<Worker> expectedWorkers = new HashSet<>();
         Cell cellw1 = new Cell(2, 2);
         Worker w1 = new Worker(WorkerColor.WHITE, cellw1);
         Cell cellw2 = new Cell(1, 2);
