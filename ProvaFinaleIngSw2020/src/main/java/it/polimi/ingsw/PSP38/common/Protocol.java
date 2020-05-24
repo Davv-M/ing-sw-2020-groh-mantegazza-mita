@@ -10,6 +10,7 @@ package it.polimi.ingsw.PSP38.common;
  */
 public enum Protocol {
     NOTIFY_MESSAGE,
+    NOTIFY_CUSTOM_STRING,
     ASK_INT,
     ASK_STRING,
     DISPLAY_BOARD,

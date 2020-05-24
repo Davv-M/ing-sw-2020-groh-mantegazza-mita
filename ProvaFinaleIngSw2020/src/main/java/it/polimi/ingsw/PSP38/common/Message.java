@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP38.common;
 
 /**
- *Enumeration class that contains all the possible messages that the server can send to the clients
+ *Enumeration class that contains all the possible messages that can be shown to the user
  * @author Davide Mantegazza (10568661)
  */
 public enum Message {
@@ -21,4 +21,11 @@ public enum Message {
     SELECT_WORKER,
     WORKER_NOT_YOURS,
     ASK_SPECIAL_ACTION,
+    ILLEGAL_ACTION,
+    ILLEGAL_NICKNAME,
+    WAIT_FOR_FULL_GAME,
+    DIVINITY_CARD_NOT_EXISTS,
+    DIVINITY_CARD_CHOSEN,
+    ILLEGAL_YES_OR_NO,
+    ILLEGAL_DIVINITY,
 }

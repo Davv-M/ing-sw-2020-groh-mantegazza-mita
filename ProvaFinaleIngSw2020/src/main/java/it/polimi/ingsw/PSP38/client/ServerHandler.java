@@ -21,6 +21,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     private final static Client nextRequestObserver = new Client();
     private static Protocol protocolRead;
     private static String message;
+    private static String customMessageString;
     private static List<Byte> board;
 
     /**
@@ -55,6 +56,9 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                     output.writeBoolean(true);
                     output.flush();
                 }
+                if (protocolRead== Protocol.NOTIFY_CUSTOM_STRING){
+                    setCustomMessageString();
+                }
                 notifyClient();
             }
         }catch (IOException | ClassNotFoundException e){
@@ -77,6 +81,20 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     private static void setMessage() throws IOException,ClassNotFoundException {
         message = (String) input.readObject();
 
+    }
+
+    /**
+     *
+     */
+    private static void setCustomMessageString() throws IOException, ClassNotFoundException {
+        customMessageString = (String) input.readObject();
+    }
+
+    /**
+     *
+     */
+    public static String getCustomMessageString() {
+        return customMessageString;
     }
 
     /**

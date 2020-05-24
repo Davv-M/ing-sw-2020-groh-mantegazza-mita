@@ -22,10 +22,13 @@ public class Client extends Observable implements Observer {
     private static final Scanner scanner = new Scanner(System.in);
     private static String dataInput;
     private static ServerHandler nextInputObserver;
+    private static MessageDecoder messageDecoder;
+    private static String customString;
     //private static BoardComponent sc;
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         Socket serverSocket;
+        messageDecoder=new MessageDecoderCLI();
         try {
             serverSocket = new Socket(InetAddress.getByName("127.0.0.1"), SERVER_SOCKET_PORT);
             System.out.println(InetAddress.getLocalHost());
@@ -70,13 +73,16 @@ public class Client extends Observable implements Observer {
     @Override
     public void update(){
         Protocol protocolRead = ServerHandler.getProtocol();
-            if(protocolRead == Protocol.NOTIFY_MESSAGE) {
-                printMessage(ServerHandler.getMessage());
-            }
-            if(protocolRead == Protocol.DISPLAY_BOARD) {
-                displayBoard();
-            }
-
+        if(protocolRead == Protocol.NOTIFY_MESSAGE) {
+            printMessage(ServerHandler.getMessage());
+        }
+        if(protocolRead == Protocol.DISPLAY_BOARD) {
+            displayBoard();
+        }
+        if (protocolRead==Protocol.NOTIFY_CUSTOM_STRING){
+            customString=ServerHandler.getCustomMessageString();
+            messageDecoder.update();
+        }
     }
 
     /**
@@ -109,4 +115,8 @@ public class Client extends Observable implements Observer {
         frame.setVisible(true);
         sc.requestFocusInWindow();
     }*/
+
+    public static String getCustomString() {
+        return customString;
+    }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP38.server.virtualView;
 
+import it.polimi.ingsw.PSP38.common.Message;
 import it.polimi.ingsw.PSP38.common.Protocol;
 import it.polimi.ingsw.PSP38.server.controller.Controller;
 
@@ -62,6 +63,21 @@ public class ClientHandler implements Observer, Runnable {
             output.writeObject(message);
         }
 
+    }
+
+    public void newNotifyMessage(Message message) throws IOException {
+        synchronized (lock){
+            output.writeObject(Protocol.NOTIFY_MESSAGE);
+            output.writeObject(message);
+        }
+
+    }
+
+    public void notifyMessageString(String customString) throws IOException {
+        synchronized (lock){
+            output.writeObject(Protocol.NOTIFY_CUSTOM_STRING);
+            output.writeObject(customString);
+        }
     }
 
 

@@ -1,9 +1,10 @@
 package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Message;
+import it.polimi.ingsw.PSP38.common.utilities.Observer;
 
 public class MessageDecoderCLI implements MessageDecoder{
-
+    private String customStringRead;
     @Override
     public void decodeMessage(Message m){
         switch (m){
@@ -25,19 +26,26 @@ public class MessageDecoderCLI implements MessageDecoder{
             case SET_AGE:
                 System.out.println("How old are you? (integer between 8 and 99)");
                 break;
-            case WAIT_FOR_DIVINITIES: //attendi scelta divinità
-            case NOT_YOUR_TURN: //segnala che è il turno di qualcun altro
+            case WAIT_FOR_DIVINITIES:
+                System.out.println("Please wait for "+customStringRead+
+                        " to choose the divinity cards that will be used in this game");
+                break;
+            case NOT_YOUR_TURN:
+                System.out.println("It's "+customStringRead+"'s turn, please wait");
+                break;
             case PLACE_YOUR_WORKERS:
                 System.out.println("Please place all of your workers on the board");
                 break;
-            case PLACE_A_WORKER://posiziona un worker specifico
+            case PLACE_A_WORKER:
+                System.out.println("Place your worker number "+customStringRead);
             case SET_CELL_COORDS:
                 System.out.println("Please insert the cell's coordinates (x, y)");
                 break;
             case YOU_WIN:
                 System.out.println("You are the winner!");
                 break;
-            case YOU_LOSE://segnala chi ha vinto
+            case YOU_LOSE:
+                System.out.println("You lose! The winner is "+customStringRead);
             case SELECT_WORKER:
                 System.out.println("Player, please select the worker you want to move");//inserire nickname giocatore
                 break;
@@ -46,8 +54,36 @@ public class MessageDecoderCLI implements MessageDecoder{
                 break;
             case ASK_SPECIAL_ACTION:
                 System.out.println("Do you want to use your special ability");
+                break;
+            case ILLEGAL_ACTION:
+                System.out.println("Unknown worker action");
+                break;
+            case ILLEGAL_NICKNAME:
+                System.out.println("This nickname is unavailable, please choose another one");
+                break;
+            case WAIT_FOR_FULL_GAME:
+                System.out.println("Hold on, all the players will be ready in a few seconds");
+                break;
+            case DIVINITY_CARD_NOT_EXISTS:
+                System.out.println("This divinity card doesn't exist. Please select a new one");
+                break;
+            case DIVINITY_CARD_CHOSEN:
+                System.out.println("This divinity card has already been chosen. Please select a new one");
+                break;
+            case ILLEGAL_YES_OR_NO:
+                System.out.println("Please answer with either \"yes\" or \"no\"");
+                break;
+            case ILLEGAL_DIVINITY:
+                System.out.println("Illegal divinity card");
+                break;
             default:
                 System.out.println("Message not recognized");
+                break;
         }
+    }
+
+    @Override
+    public void update() {
+        customStringRead=Client.getCustomString();
     }
 }

@@ -368,6 +368,4 @@ public class Controller extends Observable {
             }
         } while (true);
     }
-
-
 }
