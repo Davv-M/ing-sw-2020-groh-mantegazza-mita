@@ -23,6 +23,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     private static String message;
     private static String customMessageString;
     private static List<Byte> board;
+    private static final Object lock = new Object();
 
     /**
      * Is the only class constructor
@@ -41,25 +42,46 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     /**
      * This method executes the operations needed to listen server constantly
      */
-
     public void run() {
         try {
             while (true) {
-                protocolRead = (Protocol) input.readObject();
-                if (protocolRead == Protocol.NOTIFY_MESSAGE) {
-                    setMessage();
+                switch ((Protocol) input.readObject()){
+                    case NOTIFY_MESSAGE:{
+                        protocolRead = Protocol.NOTIFY_MESSAGE;
+                        setMessage();
+                        notifyClient();
+                        break;
+                    }
+                    case DISPLAY_BOARD:{
+                        protocolRead = Protocol.DISPLAY_BOARD;
+                        setBoard();
+                        notifyClient();
+                        break;
+                    }
+                    case ASK_INT:{
+                        protocolRead = Protocol.ASK_INT;
+                        notifyClient();
+                        break;
+                    }
+                    case ASK_STRING:{
+                        protocolRead = Protocol.ASK_STRING;
+                        notifyClient();
+                        break;
+                    }
+                    case NOTIFY_CUSTOM_STRING:{
+                        protocolRead = Protocol.NOTIFY_CUSTOM_STRING;
+                        setCustomMessageString();
+                        notifyClient();
+                        break;
+                    }
+                    case PING:{
+                        returnPing();
+                        break;
+                    }
+                    default:
+                        System.out.println("protocol error");
                 }
-                if (protocolRead == Protocol.DISPLAY_BOARD) {
-                    setBoard();
-                }
-                if(protocolRead == Protocol.ACK) {
-                    output.writeBoolean(true);
-                    output.flush();
-                }
-                if (protocolRead== Protocol.NOTIFY_CUSTOM_STRING){
-                    setCustomMessageString();
-                }
-                notifyClient();
+
             }
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
@@ -67,6 +89,8 @@ public class ServerHandler extends Observable implements Observer, Runnable{
 
 
     }
+
+
 
     /**
      * notify observers that is available a new data or request from the server
@@ -120,7 +144,11 @@ public class ServerHandler extends Observable implements Observer, Runnable{
      * @param writeString is the string written
      */
     public static void writeString(String writeString)throws IOException{
-        output.writeObject(writeString);
+        synchronized (lock){
+            output.writeObject(Protocol.RETURN_STRING);
+            output.writeObject(writeString);
+        }
+
     }
 
     /**
@@ -128,9 +156,20 @@ public class ServerHandler extends Observable implements Observer, Runnable{
      * @param writeInt is the int written
      */
     public static void writeInt(int writeInt)throws IOException{
-        output.writeInt(writeInt);
-        output.flush();
+        synchronized (lock){
+            output.writeObject(Protocol.RETURN_INT);
+            output.writeInt(writeInt);
+            output.flush();
+        }
 
+
+
+    }
+
+    public static void returnPing()throws IOException{
+        synchronized (lock){
+            output.writeObject(Protocol.RETURN_PING);
+        }
 
     }
 

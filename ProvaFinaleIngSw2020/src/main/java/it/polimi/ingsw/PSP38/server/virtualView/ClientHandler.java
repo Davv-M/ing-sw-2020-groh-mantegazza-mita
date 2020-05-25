@@ -13,13 +13,15 @@ import java.util.Observer;
 import java.util.function.Function;
 
 public class ClientHandler implements Observer, Runnable {
-    String nickname = "";
+    String nickname = "anonymous";
     public final int clientNum;
     private static final Controller controller = new Controller();
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private boolean isPaused = false;
     private final Object lock = new Object();
+    private final DataReceiver dataReceiver;
+    private volatile boolean isDataReady = false;
 
     public ClientHandler(Socket clientSocket) {
         clientNum = Server.updateContPlayer();
@@ -30,15 +32,17 @@ public class ClientHandler implements Observer, Runnable {
             e.printStackTrace();
         }
         controller.addObserver(this);
-        VerifierClientConnection verifierClientConnection = new VerifierClientConnection(this, clientNum);
+        VerifierClientConnection verifierClientConnection = new VerifierClientConnection(this);
         Thread verifier = new Thread(verifierClientConnection);
         verifier.start();
+        dataReceiver = new DataReceiver(this);
+        Thread threadDataReceiver= new Thread(dataReceiver);
+        threadDataReceiver.start();
     }
 
-    public boolean sendAck()throws IOException{
+    public void ping()throws IOException{
             synchronized (lock){
-                output.writeObject(Protocol.ACK);
-                return input.readBoolean();
+                output.writeObject(Protocol.PING);
             }
     }
 
@@ -52,9 +56,7 @@ public class ClientHandler implements Observer, Runnable {
     public void run() {
         try {
             controller.start(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException ignored) { }
     }
 
     public void notifyMessage(String message) throws IOException {
@@ -83,35 +85,48 @@ public class ClientHandler implements Observer, Runnable {
 
     public int askInt(Function<Integer, Integer> checkInt) throws IOException {
         int num;
-        synchronized (lock) {
 
             do {
                 try {
-                    output.writeObject(Protocol.ASK_INT);
-                    num = checkInt.apply(input.readInt());
+                    synchronized (lock) {
+                        output.writeObject(Protocol.ASK_INT);
+                    }
+                    while (!isDataReady) {
+                        Thread.onSpinWait();
+
+                    }
+                    num = checkInt.apply(dataReceiver.getLastIntRead());
+                    isDataReady = false;
                     return num;
                 } catch (IllegalArgumentException e) {
                     notifyMessage(e.getMessage());
+                    isDataReady = false;
                 }
             } while (true);
-        }
+
     }
 
     public String askString(Function<String, String> checkString) throws IOException {
         String string;
-        synchronized (lock){
+
             do {
                 try {
-                    output.writeObject(Protocol.ASK_STRING);
-                    string = checkString.apply((String) input.readObject());
+                    synchronized (lock){
+                        output.writeObject(Protocol.ASK_STRING);
+                    }
+                    while (!isDataReady) {
+                        Thread.onSpinWait();
+
+                    }
+                    string = checkString.apply(dataReceiver.getLastStringRead());
+                    isDataReady = false;
                     return string;
                 } catch (IllegalArgumentException e) {
                     notifyMessage(e.getMessage());
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    isDataReady = false;
                 }
             } while (true);
-        }
+
     }
 
     public void displayBoard() throws IOException {
@@ -133,6 +148,9 @@ public class ClientHandler implements Observer, Runnable {
         this.nickname = nickname;
     }
 
+    public ObjectInputStream getInputStream(){
+        return input;
+    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -144,6 +162,10 @@ public class ClientHandler implements Observer, Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDataReady(){
+        isDataReady = true;
     }
 }
 

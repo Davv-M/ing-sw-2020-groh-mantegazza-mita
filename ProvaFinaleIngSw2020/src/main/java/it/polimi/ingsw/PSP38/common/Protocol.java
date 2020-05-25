@@ -12,7 +12,10 @@ public enum Protocol {
     NOTIFY_MESSAGE,
     NOTIFY_CUSTOM_STRING,
     ASK_INT,
+    RETURN_INT,
     ASK_STRING,
+    RETURN_STRING,
     DISPLAY_BOARD,
-    ACK,
+    PING,
+    RETURN_PING,
 }

@@ -4,25 +4,21 @@ import java.io.IOException;
 
 public class VerifierClientConnection implements Runnable{
     private final ClientHandler client;
-    private final int numClient;
 
-    public VerifierClientConnection(ClientHandler ch, int nc){
+    public VerifierClientConnection(ClientHandler ch){
         client = ch;
-        numClient = nc;
     }
 
     public void run(){
         try {
             while (true) {
-                if (!client.sendAck()){
-                    break;
-                }
-                Thread.sleep(3000);
+                client.ping();
+                Thread.sleep(10000);
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException e){
+
         } catch (IOException e){
-            System.out.println("client number "+numClient+" disconnected");
+            System.out.println("connection lost with: "+client.getNickname());
         }
     }
 }

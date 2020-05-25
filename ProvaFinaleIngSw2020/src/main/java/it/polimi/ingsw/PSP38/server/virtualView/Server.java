@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP38.server.virtualView;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,12 +29,12 @@ public class Server {
             //System.out.println("Server IP: "+ InetAddress.getLocalHost());
             do {
                 Socket clientSocket = serverSocket.accept();
+                clientSocket.setSoTimeout(20000);
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 listForSpuriousWakeUp.add(clientHandler);
                 Thread threadClient = new Thread(clientHandler);
                 threadClient.start();
             } while (true);
-
 
         } catch (IOException e) {
             e.printStackTrace();
