@@ -9,7 +9,7 @@ public class MessageDecoderCLI implements MessageDecoder{
     public void decodeMessage(Message m){
         switch (m){
             case WELCOME:
-                System.out.println("Welcome to Santorini");
+                System.out.println("Welcome to Santorini\n");
                 break;
             case INSERT_NUM_PLAYERS:
                 System.out.println("You are the first player to join this game. Please insert the number of players (between 2 and 3)");
@@ -76,6 +76,11 @@ public class MessageDecoderCLI implements MessageDecoder{
             case ILLEGAL_DIVINITY:
                 System.out.println("Illegal divinity card");
                 break;
+            case DISPLAY_DIVINITY_MESSAGE:
+                System.out.println(customStringRead+", please select a divinity card from this list :\n");
+                break;
+            case DISPLAY_DIVINITY:
+                System.out.println(customStringRead);
             default:
                 System.out.println("Message not recognized");
                 break;
