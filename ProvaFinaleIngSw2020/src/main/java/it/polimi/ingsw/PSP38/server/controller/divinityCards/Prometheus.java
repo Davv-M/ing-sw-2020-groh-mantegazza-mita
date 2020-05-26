@@ -44,6 +44,11 @@ public class Prometheus extends DivinityCard implements OptionalAction {
     }
 
     @Override
+    public WorkerAction typeOfAction(WorkerAction action) {
+        return action == WorkerAction.OPTIONAL_ACTION ? WorkerAction.BUILD : super.typeOfAction(action);
+    }
+
+    @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
     }

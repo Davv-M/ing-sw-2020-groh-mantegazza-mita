@@ -27,6 +27,11 @@ public class Atlas extends DivinityCard implements OptionalAbility {
     }
 
     @Override
+    public WorkerAction typeOfAction(WorkerAction action) {
+        return action == WorkerAction.OPTIONAL_ABILITY ? WorkerAction.BUILD : super.typeOfAction(action);
+    }
+
+    @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
     }

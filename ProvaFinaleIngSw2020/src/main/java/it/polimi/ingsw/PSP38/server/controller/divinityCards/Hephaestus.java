@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP38.server.controller.OptionalAction;
 import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
+import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
 import java.util.Arrays;
@@ -25,12 +26,17 @@ public class Hephaestus extends DivinityCard implements OptionalAction {
     @Override
     public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
         if(destinationCell.equals(previousBuild)){
-            if(currentBoard.heightOf(destinationCell) == 3){
+            if(currentBoard.heightOf(destinationCell) == Tower.MAX_HEIGHT){
                 throw new IllegalArgumentException("Your second build can't be a dome");
             }
         }else throw new IllegalArgumentException("You must build twice on the same cell");
 
         return super.build(worker, destinationCell, currentBoard);
+    }
+
+    @Override
+    public WorkerAction typeOfAction(WorkerAction action) {
+        return action == WorkerAction.OPTIONAL_ACTION ? WorkerAction.BUILD : super.typeOfAction(action);
     }
 
     @Override

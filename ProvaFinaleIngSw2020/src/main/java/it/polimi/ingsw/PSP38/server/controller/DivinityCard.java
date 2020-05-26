@@ -8,7 +8,7 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 import java.util.*;
 
 /**
- * Interface representing a divinity card of the game Santorini.
+ * Abstract class representing a divinity card of the game Santorini.
  *
  * @author Maximilien Groh (10683107), Davide Mantegazza (10568661), Matteo Mita (10487862)
  */
@@ -17,7 +17,7 @@ public abstract class DivinityCard {
     private final List<WorkerAction> moveSequence;
 
     /**
-     * Different colors that a worker can have.
+     * Different names that a divinity can have.
      */
     enum Name {
         APOLLO,
@@ -28,6 +28,7 @@ public abstract class DivinityCard {
         CHARON,
         DEMETER,
         HEPHAESTUS,
+        HERA,
         HESTIA,
         MINOTAUR,
         PAN,
@@ -105,12 +106,24 @@ public abstract class DivinityCard {
                         .withTower(new Tower(destinationCell, currentHeight + 1));
     }
 
+    public void checkOpponentMove(WorkerAction action, Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+
+    }
+
+    public WorkerAction typeOfAction(WorkerAction action){
+        return action;
+    }
+
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
     }
 
     public boolean isWinner(Board board, Cell previousPosition, Cell currentPosition) {
         return board.heightOf(previousPosition) == 2 && board.heightOf(currentPosition) == 3;
+    }
+
+    public boolean blockOpponentWinningCondition(Cell currentPosition){
+        return false;
     }
 
 }

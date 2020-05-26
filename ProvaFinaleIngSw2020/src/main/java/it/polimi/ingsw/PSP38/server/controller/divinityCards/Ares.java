@@ -16,7 +16,8 @@ public class Ares extends DivinityCard implements OptionalAction {
 
     @Override
     public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
-        Worker otherWorker = currentBoard.getWorkersPositions().values().stream().filter(w -> w.getColor() == worker.getColor() && !w.getPosition().equals(worker.getPosition())).findFirst().get();
+        Worker otherWorker = currentBoard.getWorkersPositions().values().stream().filter(w -> w.getColor() == worker.getColor() &&
+                !w.getPosition().equals(worker.getPosition())).findFirst().get();
         Set<Cell> otherWorkerNeighbors = currentBoard.neighborsOf(otherWorker.getPosition());
         otherWorkerNeighbors.removeIf(c -> currentBoard.hasDomeAt(c) || currentBoard.hasWorkerAt(c) || currentBoard.heightOf(c) == 0);
         if(!otherWorkerNeighbors.contains(destinationCell)){

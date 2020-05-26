@@ -27,6 +27,10 @@ public class Game {
         players.sort(Comparator.comparingInt(Player::getAge));
     }
 
+    public void removePlayer(Player player){
+        players.remove(player);
+    }
+
     /**
      * @return the currentBoard of the game
      */
@@ -36,6 +40,12 @@ public class Game {
 
     public Player getCurrentPlayerTurn(){
         return players.get(0);
+    }
+
+    public List<Player> getOpponents(){
+        List<Player> opponents = new LinkedList<>(players);
+        opponents.remove(getCurrentPlayerTurn());
+        return opponents;
     }
 
     public void setTotNumPlayers(int totNumPlayers) {

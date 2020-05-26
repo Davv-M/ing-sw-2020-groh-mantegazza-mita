@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP38.server.model;
 
+import it.polimi.ingsw.PSP38.common.WorkerColor;
+
 import java.util.*;
 
 /**
@@ -108,6 +110,17 @@ public final class Board {
 
         Set<Worker> newBoardWorkers = new HashSet<>(workers);
         newBoardWorkers.remove(worker);
+
+        return new Board(newBoardWorkers, towers, cellsWithDomes);
+    }
+
+    public Board withoutWorkers(WorkerColor color){
+        if(color == null){
+            return this;
+        }
+
+        Set<Worker> newBoardWorkers = new HashSet<>(workers);
+        newBoardWorkers.removeIf(w -> w.getColor() == color);
 
         return new Board(newBoardWorkers, towers, cellsWithDomes);
     }

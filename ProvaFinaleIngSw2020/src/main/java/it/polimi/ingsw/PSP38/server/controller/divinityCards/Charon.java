@@ -26,7 +26,7 @@ public class Charon extends DivinityCard implements OptionalAction {
                 int vectorY = destinationCell.getY() - worker.getPosition().getY();
 
                 Direction dir = Direction.coordinatesToDirection(vectorX, vectorY);
-                Optional<Cell> possibleNeighbor = currentBoard.neighborOf(destinationCell, dir.opposite());
+                Optional<Cell> possibleNeighbor = currentBoard.neighborOf(worker.getPosition(), dir.opposite());
                 if (possibleNeighbor.isPresent()
                         && !currentBoard.hasDomeAt(possibleNeighbor.get())
                         && !currentBoard.hasWorkerAt(possibleNeighbor.get())) {

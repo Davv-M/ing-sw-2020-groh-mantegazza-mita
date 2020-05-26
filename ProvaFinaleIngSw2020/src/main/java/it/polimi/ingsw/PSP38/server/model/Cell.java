@@ -53,6 +53,10 @@ public final class Cell {
         return getY() * Board.COLUMNS + getX();
     }
 
+    public boolean isOnPerimeter(){
+        return x == Board.COLUMNS - 1 || y == Board.ROWS - 1;
+    }
+
     @Override
     public int hashCode() {
         return rowMajorIndex();

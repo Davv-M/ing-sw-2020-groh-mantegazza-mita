@@ -70,7 +70,7 @@ public class Controller extends Observable {
         }
     }
 
-    private synchronized void pauseClient(ClientHandler client){
+    private synchronized void pauseClient(ClientHandler client) {
         try {
             client.setPaused(true);
             while (client.isPaused()) {
@@ -86,8 +86,16 @@ public class Controller extends Observable {
         notifyAll();
     }
 
-    private synchronized void updateTurn() {
-        game.updateTurn();
+    private synchronized void updateTurn(boolean hasCurrentPlayerLost) {
+        if(hasCurrentPlayerLost){
+            game.setCurrentBoard(game.getCurrentBoard().withoutWorkers(game.getCurrentPlayerTurn().getColor()));
+            game.removePlayer(game.getCurrentPlayerTurn());
+            if(game.getCurrNumPlayers() == 1){
+                game.setWinner(game.getCurrentPlayerTurn());
+            }
+        } else {
+            game.updateTurn();
+        }
         wakeUpAll();
     }
 
@@ -110,6 +118,8 @@ public class Controller extends Observable {
                 return new Demeter();
             case HEPHAESTUS:
                 return new Hephaestus();
+            case HERA:
+                return new Hera();
             case HESTIA:
                 return new Hestia();
             case MINOTAUR:
@@ -149,21 +159,39 @@ public class Controller extends Observable {
 
     private void playGame(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
-        if(game.getWinner() == null){
+        boolean hasCurrentPlayerLost = false;
+        if (game.getWinner() == null) {
             Player clientPlayer = game.nicknameToPlayer(client.getNickname());
             DivinityCard clientDivinity = playersDivinities.get(clientPlayer);
             Worker selectedWorker = askWorker(client);
 
             for (WorkerAction action : clientDivinity.getMoveSequence()) {
+                if(!canTakeAction(selectedWorker, clientDivinity, action)){
+                    if(action.isOptional()){
+                        continue;
+                    } else {
+                        client.notifyMessage("You can't finish your turn. You lose.");
+                        hasCurrentPlayerLost = true;
+                        break;
+                    }
+                }
                 Cell previousPosition = selectedWorker.getPosition();
                 selectedWorker = selectedWorker.withPosition(askWorkerAction(client, selectedWorker, clientDivinity, action));
+
+
                 if (clientDivinity.isWinner(game.getCurrentBoard(), previousPosition, selectedWorker.getPosition())) {
-                    game.setWinner(clientPlayer);
-                    break;
+                    boolean cantWin = false;
+                    for(Player p : game.getOpponents()){
+                        cantWin = playersDivinities.get(p).blockOpponentWinningCondition(selectedWorker.getPosition());
+                    }
+                    if(!cantWin){
+                        game.setWinner(clientPlayer);
+                        break;
+                    }
                 }
             }
         }
-        updateTurn();
+        updateTurn(hasCurrentPlayerLost);
     }
 
     private void welcomeMessage(ClientHandler client) throws IOException {
@@ -215,7 +243,7 @@ public class Controller extends Observable {
             }
             availableDivinityCards.clear();
             availableDivinityCards.addAll(selectedDivinityCards);
-            updateTurn();
+            updateTurn(false);
         } else {
             client.notifyMessage("Please wait for " + game.getCurrentPlayerTurn().getNickname() +
                     " to choose the divinity cards that will be used in this game.");
@@ -230,12 +258,12 @@ public class Controller extends Observable {
         DivinityCard.Name cardEnum = DivinityCard.Name.valueOf(card.toUpperCase());
         playersDivinities.put(game.getCurrentPlayerTurn(), stringToStrategy(card));
         availableDivinityCards.remove(cardEnum);
-        updateTurn();
+        updateTurn(false);
     }
 
     private void notifyNotYourTurn(ClientHandler client) throws IOException {
         while (!game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {
-            if(game.getWinner() == null){
+            if (game.getWinner() == null) {
                 client.notifyMessage("It's " + game.getCurrentPlayerTurn().getNickname() + "'s turn, please wait.");
             }
             pauseClient(client);
@@ -269,7 +297,7 @@ public class Controller extends Observable {
             game.setCurrentBoard(newBoard);
             displayAllClients();
         }
-        updateTurn();
+        updateTurn(false);
     }
 
     private Cell askCell(ClientHandler client) throws IOException {
@@ -328,11 +356,11 @@ public class Controller extends Observable {
         Cell workerPosition = selectedWorker.getPosition();
         Board currentBoard = game.getCurrentBoard();
         boolean useAbility = true;
-        if (action == WorkerAction.OPTIONAL_ACTION || action == WorkerAction.OPTIONAL_ABILITY) {
+        if (action.isOptional()) {
             client.notifyMessage("Do you want to use your special ability ?");
             String answer = client.askString(this::checkYesOrNo);
             if (answer.equalsIgnoreCase("no")) {
-                if(action == WorkerAction.OPTIONAL_ACTION){
+                if (action == WorkerAction.OPTIONAL_ACTION) {
                     return workerPosition;
                 } else {
                     useAbility = false;
@@ -344,22 +372,10 @@ public class Controller extends Observable {
             try {
                 client.notifyMessage(action.question());
                 Cell destinationCell = askCell(client);
-                switch (action) {
-                    case MOVE:
-                        currentBoard = clientDivinty.move(selectedWorker, destinationCell, currentBoard);
-                        break;
-                    case BUILD:
-                        currentBoard = clientDivinty.build(selectedWorker, destinationCell, currentBoard);
-                        break;
-                    case OPTIONAL_ACTION:
-                        currentBoard = ((OptionalAction) clientDivinty).optionalAction(selectedWorker, destinationCell, currentBoard);
-                        break;
-                    case OPTIONAL_ABILITY:
-                        currentBoard = ((OptionalAbility) clientDivinty).optionalAbility(useAbility, selectedWorker, destinationCell, currentBoard);
-                        break;
-                    default:
-                        throw new IllegalArgumentException("WorkerAction " + action + " unknown.");
+                for(Player p : game.getOpponents()){
+                    playersDivinities.get(p).checkOpponentMove(clientDivinty.typeOfAction(action), selectedWorker, destinationCell, currentBoard);
                 }
+                currentBoard = takeAction(selectedWorker, destinationCell, currentBoard, clientDivinty, action, useAbility);
                 game.setCurrentBoard(currentBoard);
                 displayAllClients();
                 return currentBoard.hasWorkerAt(destinationCell) ? destinationCell : workerPosition;
@@ -367,5 +383,36 @@ public class Controller extends Observable {
                 client.notifyMessage(e.getMessage());
             }
         } while (true);
+    }
+
+    private boolean canTakeAction(Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action){
+        for(int row = 0; row < Board.ROWS; ++row){
+            for(int col = 0; col < Board.COLUMNS; ++col){
+                Cell cell = new Cell(col, row);
+                Board board = game.getCurrentBoard();
+                try{
+                    takeAction(selectedWorker, cell, board, clientDivinty, action, true);
+                    return true;
+                } catch (IllegalArgumentException ignored){
+
+                }
+            }
+        }
+        return false;
+    }
+
+    private Board takeAction(Worker selectedWorker, Cell cell, Board board, DivinityCard clientDivinty, WorkerAction action, boolean useAbility) throws IllegalArgumentException{
+        switch (action) {
+            case MOVE:
+                return clientDivinty.move(selectedWorker, cell, board);
+            case BUILD:
+                return clientDivinty.build(selectedWorker, cell, board);
+            case OPTIONAL_ACTION:
+                return ((OptionalAction) clientDivinty).optionalAction(selectedWorker, cell, board);
+            case OPTIONAL_ABILITY:
+                return ((OptionalAbility) clientDivinty).optionalAbility(useAbility, selectedWorker, cell, board);
+            default:
+                throw new IllegalArgumentException("WorkerAction " + action + " unknown.");
+        }
     }
 }

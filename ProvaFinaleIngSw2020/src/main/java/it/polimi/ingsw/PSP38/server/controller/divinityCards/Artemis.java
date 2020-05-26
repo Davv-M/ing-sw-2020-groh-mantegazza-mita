@@ -36,6 +36,11 @@ public class Artemis extends DivinityCard implements OptionalAction {
     }
 
     @Override
+    public WorkerAction typeOfAction(WorkerAction action) {
+        return action == WorkerAction.OPTIONAL_ACTION ? WorkerAction.MOVE : super.typeOfAction(action);
+    }
+
+    @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
     }
