@@ -1,0 +1,238 @@
+Index: src/main/java/it/polimi/ingsw/PSP38/client/Client.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.PSP38.client;\r\n\r\nimport it.polimi.ingsw.PSP38.common.Protocol;\r\n\r\nimport java.io.IOException;\r\nimport java.io.ObjectInputStream;\r\nimport java.io.ObjectOutputStream;\r\nimport java.net.InetAddress;\r\nimport java.net.Socket;\r\nimport java.util.*;\r\n\r\npublic class Client {\r\n    public final static int SERVER_SOCKET_PORT = 3457;\r\n\r\n    private static ObjectInputStream input;\r\n    private static ObjectOutputStream output;\r\n\r\n    public static void main(String[] args) {\r\n        Socket serverSocket;\r\n        try {\r\n            serverSocket = new Socket(InetAddress.getLocalHost(), SERVER_SOCKET_PORT);\r\n            System.out.println(InetAddress.getLocalHost());\r\n        } catch (IOException e) {\r\n            System.out.println(\"server unreachable\");\r\n            return;\r\n        }\r\n        System.out.println(\"Connected\");\r\n        try {\r\n            input = new ObjectInputStream(serverSocket.getInputStream());\r\n            output = new ObjectOutputStream(serverSocket.getOutputStream());\r\n\r\n            while (true) {\r\n                final Scanner scanner = new Scanner(System.in);\r\n                Protocol p = (Protocol) input.readObject();\r\n                switch (p) {\r\n                    case NOTIFY_MESSAGE:\r\n                        notifyMessage();\r\n                        break;\r\n                    case ASK_INT:\r\n                        askInt(scanner);\r\n                        break;\r\n                    case ASK_STRING:\r\n                        askString(scanner);\r\n                        break;\r\n                    case DISPLAY_BOARD:\r\n                        displayBoard();\r\n                        break;\r\n                    default:\r\n                        System.out.println(\"protocol error\");\r\n                        break;\r\n                }\r\n            }\r\n\r\n        } catch (IOException | ClassNotFoundException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n\r\n    }\r\n\r\n    private static void notifyMessage() throws IOException {\r\n        try {\r\n            String message = (String) input.readObject();\r\n            System.out.println(message);\r\n        } catch (ClassNotFoundException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private static void askString(Scanner scanner) throws IOException {\r\n        output.writeObject(scanner.nextLine());\r\n        output.flush();\r\n    }\r\n\r\n    private static void askInt(Scanner scanner) throws IOException {\r\n        int number;\r\n        do {\r\n            try {\r\n                number = scanner.nextInt();\r\n                break;\r\n            } catch (InputMismatchException e) {\r\n                String error = scanner.nextLine();\r\n                System.out.println(error + \" is not an Integer\");\r\n                System.out.println(\"Please insert an integer (between 2 and 3)\");\r\n            }\r\n        } while (true);\r\n        output.writeInt(number);\r\n        output.flush();\r\n    }\r\n\r\n    private synchronized static void displayBoard() throws IOException{\r\n        int rows = Byte.toUnsignedInt(input.readByte());\r\n        int columns = Byte.toUnsignedInt(input.readByte());\r\n        List<Byte> encodedBoard = new ArrayList<>(rows * columns);\r\n        for(int row = 0; row < rows; ++row){\r\n            for( int col = 0; col < columns; ++col){\r\n                encodedBoard.add(input.readByte());\r\n            }\r\n        }\r\n        BoardPrinter printer = new BoardPrinter(rows, columns);\r\n        printer.printBoard(encodedBoard);\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/it/polimi/ingsw/PSP38/client/Client.java	(revision edd06a7952047f8ff5cc2965be5229441727444f)
++++ src/main/java/it/polimi/ingsw/PSP38/client/Client.java	(date 1588950898889)
+@@ -9,12 +9,22 @@
+ import java.net.Socket;
+ import java.util.*;
+ 
++/**
++ * Executable class for the client side of Santorini
++ * connected to the server
++ */
++
+ public class Client {
+     public final static int SERVER_SOCKET_PORT = 3457;
+ 
+     private static ObjectInputStream input;
+     private static ObjectOutputStream output;
+ 
++    /**
++     *Main method for the client side of Santorini. This main method executes the operations needed to connect the client
++     * to the server and decodes the messages received from the server (for details regarding the encoding used, refer to
++     * the documentation of class <code>Protocol</code>
++     */
+     public static void main(String[] args) {
+         Socket serverSocket;
+         try {
+@@ -58,6 +68,10 @@
+ 
+     }
+ 
++    /**
++     * This method is used to show messages generated by the server on client's screen
++     * @throws IOException if the message cannot be read
++     */
+     private static void notifyMessage() throws IOException {
+         try {
+             String message = (String) input.readObject();
+@@ -67,11 +81,26 @@
+         }
+     }
+ 
++    /**
++     * This method is used to send to the server the string written into the client's input scanner through the output stream
++     * of the same client
++     * @param scanner is the scanner object from which the string is fetched
++     * @throws IOException if the string is unreadable
++     */
+     private static void askString(Scanner scanner) throws IOException {
+         output.writeObject(scanner.nextLine());
+         output.flush();
+     }
+ 
++    /**
++     * This method is used to send to the server the integer written into the client's input scanner through the output stream
++     * of the same client
++     * @param scanner is the scanner object from which the integer is fetched
++     * @throws IOException if the integer is unreadable
++     * @throws InputMismatchException if one of the follwing events happens:<br>
++     * - the inserted value is not an integer<br>
++     * - the inserted value is not between 2 and 3 (if <code>askInt</code> is used to select the number of players)
++     */
+     private static void askInt(Scanner scanner) throws IOException {
+         int number;
+         do {
+@@ -88,6 +117,10 @@
+         output.flush();
+     }
+ 
++    /**
++     *
++     * @throws IOException
++     */
+     private synchronized static void displayBoard() throws IOException{
+         int rows = Byte.toUnsignedInt(input.readByte());
+         int columns = Byte.toUnsignedInt(input.readByte());
+@@ -101,4 +134,4 @@
+         printer.printBoard(encodedBoard);
+ 
+     }
+-}
++}
+\ No newline at end of file
+Index: src/main/java/it/polimi/ingsw/PSP38/common/BytesForBoard.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.PSP38.common;\r\n\r\npublic class BytesForBoard {\r\n    public static final byte TOWER_1 = 1;\r\n    public static final byte TOWER_2 = 2;\r\n    public static final byte TOWER_3 = 4;\r\n    public static final byte DOME = 8;\r\n    public static final byte WORKER_PURPLE = 16;\r\n    public static final byte WORKER_RED = 32;\r\n    public static final byte WORKER_YELLOW = 64;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/it/polimi/ingsw/PSP38/common/BytesForBoard.java	(revision edd06a7952047f8ff5cc2965be5229441727444f)
++++ src/main/java/it/polimi/ingsw/PSP38/common/BytesForBoard.java	(date 1588959386123)
+@@ -1,5 +1,8 @@
+ package it.polimi.ingsw.PSP38.common;
+ 
++/**
++ * Class made of a series of unmodifiable byte parameters that represent the different status of a cell of the board
++ */
+ public class BytesForBoard {
+     public static final byte TOWER_1 = 1;
+     public static final byte TOWER_2 = 2;
+Index: src/main/java/it/polimi/ingsw/PSP38/common/Protocol.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.PSP38.common;\r\n\r\npublic enum Protocol {\r\n    NOTIFY_MESSAGE,\r\n    ASK_INT,\r\n    ASK_STRING,\r\n    DISPLAY_BOARD\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/it/polimi/ingsw/PSP38/common/Protocol.java	(revision edd06a7952047f8ff5cc2965be5229441727444f)
++++ src/main/java/it/polimi/ingsw/PSP38/common/Protocol.java	(date 1588959284442)
+@@ -1,5 +1,13 @@
+ package it.polimi.ingsw.PSP38.common;
+ 
++/**
++ * Enumeration which represents the types of messages that can be sent by the server to the clients:<br>
++ *     -<code>NOTIFY_MESSAGE</code> is used if the server needs to send to one or more client a notification message
++ *     (e. g. if someone has won the game)<br>
++ *     -<code>ASK_INT</code> is used if the server needs to use an integer defined by the user through the client<br>
++ *     -<code>ASK_STRING</code> is used if the server needs to use a string defined by the user through the client<br>
++ *     -<code>DISPLAY_BOARD</code> is used when the server asks the client to show the game board to the user
++ */
+ public enum Protocol {
+     NOTIFY_MESSAGE,
+     ASK_INT,
+Index: src/main/java/it/polimi/ingsw/PSP38/server/virtualView/Server.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.PSP38.server.virtualView;\r\n\r\nimport java.io.IOException;\r\nimport java.net.ServerSocket;\r\nimport java.net.Socket;\r\nimport java.util.LinkedList;\r\nimport java.util.List;\r\n\r\n/**\r\n * Executable class for the server side of Santorini\r\n */\r\n\r\npublic class Server {\r\n    public final static int SERVER_SOCKET_PORT = 3457;\r\n    private static int contPlayer = 0;\r\n    private static final List<ClientHandler> listForSpuriousWakeUp = new LinkedList<>();\r\n\r\n    /**\r\n     * Main method of the server side of Santorini that supervises the creation of a thread for each client connected to\r\n     * the server\r\n     *\r\n     * @param args\r\n     */\r\n    public static void main(String[] args) {\r\n        ServerSocket serverSocket;\r\n        try {\r\n            serverSocket = new ServerSocket(SERVER_SOCKET_PORT);\r\n            System.out.println(\"Server online\");\r\n            //System.out.println(\"Server IP: \"+ InetAddress.getLocalHost());\r\n            do {\r\n                Socket clientSocket = serverSocket.accept();\r\n                ClientHandler clientHandler = new ClientHandler(clientSocket);\r\n                listForSpuriousWakeUp.add(clientHandler);\r\n                Thread threadClient = new Thread(clientHandler);\r\n\r\n                threadClient.start();\r\n            } while (true);\r\n\r\n\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n\r\n    }\r\n\r\n    /**\r\n     * This method wakes up all the clients put into the <code>listForSpuriousWakeUp</code> linked list through the mehod\r\n     * <code>setImInWait</code> of <code>ClientHandler</code>\r\n     */\r\n    public static void wakeUpAll(){\r\n        for(ClientHandler client : listForSpuriousWakeUp){\r\n            client.setPaused(false);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Synchronized method used to update the current amount of players\r\n     *\r\n     * @return the parameter <code>contPlayer</code> increased by one\r\n     */\r\n    public static synchronized int updateContPlayer(){\r\n        return ++contPlayer;\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/it/polimi/ingsw/PSP38/server/virtualView/Server.java	(revision edd06a7952047f8ff5cc2965be5229441727444f)
++++ src/main/java/it/polimi/ingsw/PSP38/server/virtualView/Server.java	(date 1588948179470)
+@@ -18,15 +18,13 @@
+     /**
+      * Main method of the server side of Santorini that supervises the creation of a thread for each client connected to
+      * the server
+-     *
+-     * @param args
+      */
+     public static void main(String[] args) {
+         ServerSocket serverSocket;
+         try {
+             serverSocket = new ServerSocket(SERVER_SOCKET_PORT);
+             System.out.println("Server online");
+-            //System.out.println("Server IP: "+ InetAddress.getLocalHost());
++            //System.out.println("Server's local IP: "+ InetAddress.getLocalHost());
+             do {
+                 Socket clientSocket = serverSocket.accept();
+                 ClientHandler clientHandler = new ClientHandler(clientSocket);
+Index: src/main/java/it/polimi/ingsw/PSP38/client/BoardDecoder.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.polimi.ingsw.PSP38.client;\r\n\r\nimport it.polimi.ingsw.PSP38.common.BytesForBoard;\r\nimport it.polimi.ingsw.PSP38.common.WorkerColor;\r\n\r\npublic class BoardDecoder {\r\n\r\n    public static boolean isFree(byte b) {\r\n        return !(hasWorker(b) || hasDome(b));\r\n    }\r\n\r\n    public static boolean hasDome(byte b) {\r\n        return isAndEqual(b, BytesForBoard.DOME);\r\n    }\r\n\r\n    public static boolean hasWorker(byte b) {\r\n        return isAndEqual(b, BytesForBoard.WORKER_PURPLE)\r\n                || isAndEqual(b, BytesForBoard.WORKER_RED)\r\n                || isAndEqual(b, BytesForBoard.WORKER_YELLOW);\r\n    }\r\n\r\n    public static WorkerColor workerColor(byte b) {\r\n        if (isAndEqual(b, BytesForBoard.WORKER_PURPLE)) {\r\n            return WorkerColor.PURPLE;\r\n        } else if (isAndEqual(b, BytesForBoard.WORKER_RED)) {\r\n            return WorkerColor.RED;\r\n        } else if (isAndEqual(b, BytesForBoard.WORKER_YELLOW)) {\r\n            return WorkerColor.YELLOW;\r\n        } else {\r\n            throw new IllegalArgumentException(\"color unknown\");\r\n        }\r\n    }\r\n\r\n    public static int towerHeight(byte b) {\r\n        if(isAndEqual(b, BytesForBoard.TOWER_1)){\r\n            return 1;\r\n        } else if(isAndEqual(b, BytesForBoard.TOWER_2)){\r\n            return 2;\r\n        } else if(isAndEqual(b, BytesForBoard.TOWER_3)){\r\n            return 3;\r\n        } else{\r\n            return 0;\r\n        }\r\n    }\r\n\r\n    private static boolean isAndEqual(byte byteToCheck, byte flag){\r\n        return (byteToCheck & flag) == flag;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/it/polimi/ingsw/PSP38/client/BoardDecoder.java	(revision edd06a7952047f8ff5cc2965be5229441727444f)
++++ src/main/java/it/polimi/ingsw/PSP38/client/BoardDecoder.java	(date 1588957764810)
+@@ -3,22 +3,47 @@
+ import it.polimi.ingsw.PSP38.common.BytesForBoard;
+ import it.polimi.ingsw.PSP38.common.WorkerColor;
+ 
++/**
++ * This class includes methods used to decode the status of the cells of the board. For details regarding the encoding
++ * of the board's status, refer to the documentation of <code>BoardEncoder</code> class
++ */
+ public class BoardDecoder {
+ 
++    /**
++     * Method used to check if it's possible to move a worker or build something onto a given cell of the board
++     * @param b represents the encoded cell that will be checked
++     * @return true if the cell is not occupied by a worker and no dome has been built on it, false otherwise
++     */
+     public static boolean isFree(byte b) {
+         return !(hasWorker(b) || hasDome(b));
+     }
+ 
++    /**
++     * Method used to check if the given cell has a dome built on it
++     * @param b represents the encoded cell that will be checked
++     * @return true if the cell has a dome on it, false otherwise
++     */
+     public static boolean hasDome(byte b) {
+         return isAndEqual(b, BytesForBoard.DOME);
+     }
+ 
++    /**
++     * Method used to check if the given cell is occupied by a worker
++     * @param b represents the encoded cell that will be checked
++     * @return true if a worker of any color is stationing on it, false otherwise
++     */
+     public static boolean hasWorker(byte b) {
+         return isAndEqual(b, BytesForBoard.WORKER_PURPLE)
+                 || isAndEqual(b, BytesForBoard.WORKER_RED)
+                 || isAndEqual(b, BytesForBoard.WORKER_YELLOW);
+     }
+ 
++    /**
++     * Method used to determine the color of a worker
++     * @param b represents a generic encoded worker
++     * @return the color of the encoded worker
++     * @throws IllegalArgumentException if the code doesn't correspond to one of the defined colors
++     */
+     public static WorkerColor workerColor(byte b) {
+         if (isAndEqual(b, BytesForBoard.WORKER_PURPLE)) {
+             return WorkerColor.PURPLE;
+@@ -31,6 +56,11 @@
+         }
+     }
+ 
++    /**
++     * Method used to determine the height of a given tower
++     * @param b represents a generic encoded tower
++     * @return the height of the tower represented by <code>b</code>
++     */
+     public static int towerHeight(byte b) {
+         if(isAndEqual(b, BytesForBoard.TOWER_1)){
+             return 1;
+@@ -43,6 +73,12 @@
+         }
+     }
+ 
++    /**
++     * Auxiliary method used to check if two byte values are identical
++     * @param byteToCheck represents the first parameter to be checked
++     * @param flag represents the second parameter to be checked
++     * @return the result of the boolean operation <code>(byteToCheck & flag) == flag</code>
++     */
+     private static boolean isAndEqual(byte byteToCheck, byte flag){
+         return (byteToCheck & flag) == flag;
+     }
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_05_05_2020_09_13__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_05_05_2020_09_13__Default_Changelist_.xml
