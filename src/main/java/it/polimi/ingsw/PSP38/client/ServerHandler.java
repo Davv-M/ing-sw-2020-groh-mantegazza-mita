@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP38.client;
 
+import it.polimi.ingsw.PSP38.common.Message;
 import it.polimi.ingsw.PSP38.common.Protocol;
 import it.polimi.ingsw.PSP38.common.utilities.Observer;
 
@@ -20,7 +21,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     private static ObjectOutputStream output;
     private final static Client nextRequestObserver = new Client();
     private static Protocol protocolRead;
-    private static String message;
+    private static Message message;
     private static String customMessageString;
     private static List<Byte> board;
     private static final Object lock = new Object();
@@ -103,7 +104,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
      * set the last message received
      */
     private static void setMessage() throws IOException,ClassNotFoundException {
-        message = (String) input.readObject();
+        message = (Message) input.readObject();
 
     }
 
@@ -181,7 +182,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     /**
      * @return the last message read
      */
-    public static String getMessage(){ return message;}
+    public static Message getMessage(){ return message;}
 
     /**
      * @return the last board read

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Message;
-import it.polimi.ingsw.PSP38.common.utilities.Observer;
 
 public class MessageDecoderCLI implements MessageDecoder{
     private String customStringRead;
@@ -55,9 +54,6 @@ public class MessageDecoderCLI implements MessageDecoder{
             case ASK_SPECIAL_ACTION:
                 System.out.println("Do you want to use your special ability");
                 break;
-            case ILLEGAL_ACTION:
-                System.out.println("Unknown worker action");
-                break;
             case ILLEGAL_NICKNAME:
                 System.out.println("This nickname is unavailable, please choose another one");
                 break;
@@ -79,8 +75,33 @@ public class MessageDecoderCLI implements MessageDecoder{
             case DISPLAY_DIVINITY_MESSAGE:
                 System.out.println(customStringRead+", please select a divinity card from this list :\n");
                 break;
-            case DISPLAY_DIVINITY:
+            case DISPLAY_AVAILABLE_DIVINITIES:
                 System.out.println(customStringRead);
+                break;
+            case ILLEGAL_INT:
+                System.out.println("Integer not recognized");
+                break;
+            case ILLEGAL_STRING:
+                System.out.println("String not recognized");
+                break;
+            case UNABLE_TO_FINISH_TURN:
+                System.out.println("You can't finish your turn. You lose.");
+                break;
+            case ILLEGAL_ARGUMENT:
+                System.out.println("Illegal argument");
+                break;
+            case WORKER_MOVE:
+                System.out.println("Select the cell where you want to move");
+                break;
+            case WORKER_BUILD:
+                System.out.println("Select the cell where you want to build");
+                break;
+            case WORKER_OPTIONAL_ABILITY:
+                System.out.println("Select the cell where you want to DAFARE");
+                break;
+            case ILLEGAL_ACTION:
+                System.out.println("Unknown worker action");
+                break;
             default:
                 System.out.println("Message not recognized");
                 break;

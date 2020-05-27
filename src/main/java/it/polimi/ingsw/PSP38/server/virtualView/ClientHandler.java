@@ -59,15 +59,15 @@ public class ClientHandler implements Observer, Runnable {
         } catch (IOException ignored) { }
     }
 
-    public void notifyMessage(String message) throws IOException {
+    /*public void notifyMessage(String message) throws IOException {
         synchronized (lock){
             output.writeObject(Protocol.NOTIFY_MESSAGE);
             output.writeObject(message);
         }
 
-    }
+    }*/
 
-    public void newNotifyMessage(Message message) throws IOException {
+    public void notifyMessage(Message message) throws IOException {
         synchronized (lock){
             output.writeObject(Protocol.NOTIFY_MESSAGE);
             output.writeObject(message);
@@ -99,7 +99,7 @@ public class ClientHandler implements Observer, Runnable {
                     isDataReady = false;
                     return num;
                 } catch (IllegalArgumentException e) {
-                    notifyMessage(e.getMessage());
+                    notifyMessage(Message.ILLEGAL_INT);
                     isDataReady = false;
                 }
             } while (true);
@@ -122,7 +122,7 @@ public class ClientHandler implements Observer, Runnable {
                     isDataReady = false;
                     return string;
                 } catch (IllegalArgumentException e) {
-                    notifyMessage(e.getMessage());
+                    notifyMessage(Message.ILLEGAL_STRING);
                     isDataReady = false;
                 }
             } while (true);

@@ -74,7 +74,8 @@ public class Client extends Observable implements Observer {
     public void update(){
         Protocol protocolRead = ServerHandler.getProtocol();
         if(protocolRead == Protocol.NOTIFY_MESSAGE) {
-            printMessage(ServerHandler.getMessage());
+            //printMessage(ServerHandler.getMessage());
+            messageDecoder.decodeMessage(ServerHandler.getMessage());
         }
         if(protocolRead == Protocol.DISPLAY_BOARD) {
             displayBoard();

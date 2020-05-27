@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP38.server.controller;
 
+import it.polimi.ingsw.PSP38.common.Message;
 import it.polimi.ingsw.PSP38.server.model.*;
 import it.polimi.ingsw.PSP38.server.controller.divinityCards.*;
 import it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker;
@@ -32,7 +33,7 @@ public class Controller extends Observable {
 
     private synchronized void checkGameFull(ClientHandler client) throws IOException {
         if (game.getTotNumPlayers() > game.getCurrNumPlayers()) {
-            client.notifyMessage("Hold on all players will be ready in few seconds");
+            client.notifyMessage(Message.WAIT_FOR_FULL_GAME);
             pauseClient(client);
         } else {
             wakeUpAll();
@@ -170,7 +171,7 @@ public class Controller extends Observable {
                     if(action.isOptional()){
                         continue;
                     } else {
-                        client.notifyMessage("You can't finish your turn. You lose.");
+                        client.notifyMessage(Message.UNABLE_TO_FINISH_TURN);
                         hasCurrentPlayerLost = true;
                         break;
                     }
@@ -195,30 +196,30 @@ public class Controller extends Observable {
     }
 
     private void welcomeMessage(ClientHandler client) throws IOException {
-        client.notifyMessage("Welcome to SANTORINI\n");
+        client.notifyMessage(Message.WELCOME);
     }
 
     private void firstPlayerSetNumOfPlayers(ClientHandler client) throws IOException {
         if (client.clientNum == 1) {
-            client.notifyMessage("You are the first player to join this game. Please insert the number of players (between 2 and 3)");
+            client.notifyMessage(Message.INSERT_NUM_PLAYERS);
             game.setTotNumPlayers(client.askInt(this::checkNumOfPlayers));
             wakeUpAll();
         } else if (game.getTotNumPlayers() == 0) {
-            client.notifyMessage("Please wait for the first player to select the number of players.");
+            client.notifyMessage(Message.WAIT_FOR_NUM_PLAYERS);
             pauseClient(client);
         }
     }
 
     private void notifyExtraClient(ClientHandler client) throws IOException {
         if (client.clientNum > game.getTotNumPlayers()) {
-            client.notifyMessage("game full, please try later.");
-            client.notifyMessage("If you want to see the match stay connected");
+            client.notifyMessage(Message.GAME_FULL);
+            //client.notifyMessage("If you want to see the match stay connected");
             pauseClient(client);
         }
     }
 
     private String askNickname(ClientHandler client) throws IOException {
-        client.notifyMessage("Choose your nickname.");
+        client.notifyMessage(Message.CHOOSE_NICKNAME);
         String nickname = client.askString(this::checkNickname);
         illegalNicknames.add(nickname);
         client.setNickname(nickname);
@@ -227,7 +228,7 @@ public class Controller extends Observable {
     }
 
     private int askAge(ClientHandler client) throws IOException {
-        client.notifyMessage("How old are you? (integer between 8 and 99)");
+        client.notifyMessage(Message.SET_AGE);
         return client.askInt(this::checkAge);
     }
 
@@ -245,8 +246,8 @@ public class Controller extends Observable {
             availableDivinityCards.addAll(selectedDivinityCards);
             updateTurn(false);
         } else {
-            client.notifyMessage("Please wait for " + game.getCurrentPlayerTurn().getNickname() +
-                    " to choose the divinity cards that will be used in this game.");
+            client.notifyMessageString(game.getCurrentPlayerTurn().getNickname());
+            client.notifyMessage(Message.WAIT_FOR_DIVINITIES);
             pauseClient(client);
         }
     }
@@ -264,25 +265,30 @@ public class Controller extends Observable {
     private void notifyNotYourTurn(ClientHandler client) throws IOException {
         while (!game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {
             if (game.getWinner() == null) {
-                client.notifyMessage("It's " + game.getCurrentPlayerTurn().getNickname() + "'s turn, please wait.");
+                client.notifyMessageString(game.getCurrentPlayerTurn().getNickname());
+                client.notifyMessage(Message.NOT_YOUR_TURN);
             }
             pauseClient(client);
         }
     }
 
     private void displayAvailableDivinities(ClientHandler client) throws IOException {
-        StringBuilder message = new StringBuilder(client.getNickname() + ", please select a divinity card from this list :\n");
+        client.notifyMessageString(client.getNickname());
+        client.notifyMessage(Message.DISPLAY_DIVINITY_MESSAGE);
+        StringBuilder message = new StringBuilder();
         availableDivinityCards.forEach(card -> message.append(card).append("\n"));
-        client.notifyMessage(message.toString());
+        client.notifyMessageString(message.toString());
+        client.notifyMessage(Message.DISPLAY_AVAILABLE_DIVINITIES);
     }
 
     private void placeWorkers(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
         displayAllClients();
-        client.notifyMessage("It's time to place your workers on the board.\n");
+        client.notifyMessage(Message.PLACE_YOUR_WORKERS);
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
         for (int i = 0; i < Game.WORKERS_PER_PLAYER; ++i) {
-            client.notifyMessage("Place your worker number " + (i + 1));
+            client.notifyMessageString(String.valueOf(i+1));
+            client.notifyMessage(Message.PLACE_A_WORKER);
             Board newBoard;
             do {
                 Cell cell = askCell(client);
@@ -291,7 +297,7 @@ public class Controller extends Observable {
                     displayAllClients();
                     break;
                 } catch (IllegalArgumentException e) {
-                    client.notifyMessage(e.getMessage());
+                    client.notifyMessage(Message.ILLEGAL_ARGUMENT);
                 }
             } while (true);
             game.setCurrentBoard(newBoard);
@@ -305,13 +311,13 @@ public class Controller extends Observable {
         int y;
         do {
             try {
-                client.notifyMessage("Please insert the x coordinate :");
+                client.notifyMessage(Message.SET_CELL_COORDS);
                 x = client.askInt(this::checkXCoordinate);
-                client.notifyMessage("Please insert the y coordinate :");
+                //client.notifyMessage("Please insert the y coordinate :");
                 y = client.askInt(this::checkYCoordinate);
                 return new Cell(x, y);
             } catch (IllegalArgumentException e) {
-                client.notifyMessage(e.getMessage());
+                client.notifyMessage(Message.ILLEGAL_ARGUMENT);
             }
         } while (true);
     }
@@ -324,14 +330,15 @@ public class Controller extends Observable {
 
     private void notifyWinner(ClientHandler client) throws IOException {
         if (game.getWinner().getNickname().equals(client.getNickname())) {
-            client.notifyMessage("You win!");
+            client.notifyMessage(Message.YOU_WIN);
         } else {
-            client.notifyMessage("You lose! The winner is " + game.getWinner().getNickname());
+            client.notifyMessageString(game.getWinner().getNickname());
+            client.notifyMessage(Message.YOU_LOSE);
         }
     }
 
     private Worker askWorker(ClientHandler client) throws IOException {
-        client.notifyMessage("select the worker you want to move.");
+        client.notifyMessage(Message.SELECT_WORKER);
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
         Cell cellUnderWorker;
         Worker workerSelected;
@@ -340,12 +347,12 @@ public class Controller extends Observable {
                 cellUnderWorker = askCell(client);
                 workerSelected = game.getCurrentBoard().workerAt(cellUnderWorker);
             } catch (NullPointerException e) {
-                client.notifyMessage(e.getMessage());
+                client.notifyMessage(Message.ILLEGAL_ARGUMENT);
                 continue;
             }
 
             if (clientPlayer.getColor() != workerSelected.getColor()) {
-                client.notifyMessage("The selected worker isn't yours.");
+                client.notifyMessage(Message.WORKER_NOT_YOURS);
             } else {
                 return workerSelected;
             }
@@ -357,7 +364,7 @@ public class Controller extends Observable {
         Board currentBoard = game.getCurrentBoard();
         boolean useAbility = true;
         if (action.isOptional()) {
-            client.notifyMessage("Do you want to use your special ability ?");
+            client.notifyMessage(Message.ASK_SPECIAL_ACTION);
             String answer = client.askString(this::checkYesOrNo);
             if (answer.equalsIgnoreCase("no")) {
                 if (action == WorkerAction.OPTIONAL_ACTION) {
@@ -380,7 +387,7 @@ public class Controller extends Observable {
                 displayAllClients();
                 return currentBoard.hasWorkerAt(destinationCell) ? destinationCell : workerPosition;
             } catch (IllegalArgumentException e) {
-                client.notifyMessage(e.getMessage());
+                client.notifyMessage(Message.ILLEGAL_ARGUMENT);
             }
         } while (true);
     }

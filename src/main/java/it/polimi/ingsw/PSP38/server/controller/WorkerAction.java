@@ -1,22 +1,24 @@
 package it.polimi.ingsw.PSP38.server.controller;
 
+import it.polimi.ingsw.PSP38.common.Message;
+
 public enum WorkerAction {
     MOVE,
     BUILD,
     OPTIONAL_ACTION,
     OPTIONAL_ABILITY;
 
-    public String question(){
+    public Message question(){
         switch (this){
             case MOVE:
-                return "Select the cell where you want to move";
+                return Message.WORKER_MOVE;
             case BUILD:
-                return "Select the cell where you want to build";
+                return Message.WORKER_BUILD;
             case OPTIONAL_ACTION:
             case OPTIONAL_ABILITY:
-                return "Select the cell where you want to DAFARE";
+                return Message.WORKER_OPTIONAL_ABILITY;
             default:
-                throw new AssertionError("unknown WorkerAction");
+                return Message.ILLEGAL_ACTION;
         }
     }
 
