@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP38.server.model;
 
-import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.requireBetween;
+import static it.polimi.ingsw.PSP38.server.utilities.ArgumentChecker.requireBetween;
 
 /**
  * Immutable class that represents a board's cell.

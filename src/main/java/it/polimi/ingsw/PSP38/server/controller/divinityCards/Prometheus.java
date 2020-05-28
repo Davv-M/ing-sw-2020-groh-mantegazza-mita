@@ -16,24 +16,19 @@ public class Prometheus extends DivinityCard implements OptionalAction {
     private boolean hasBuiltFirstMove = false;
 
     @Override
-    public Set<Cell> preMove(Worker worker, Board currentBoard) {
-        Set<Cell> neighborCells = currentBoard.neighborsOf(worker.getPosition());
-        if(hasBuiltFirstMove){
-            neighborCells.removeIf(c -> currentBoard.heightOf(c) > currentBoard.heightOf(worker.getPosition()));
-        }
-
-        return neighborCells;
-    }
-
-    @Override
     public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        if (!preMove(worker, currentBoard).contains(destinationCell)) {
-            throw new IllegalArgumentException("You can't move on that cell.");
-        }
+        checkMove(worker, destinationCell, currentBoard);
+        checkSameHeight(worker, destinationCell, currentBoard);
         Board updatedBoard = currentBoard.withoutWorker(worker).withWorker(worker.withPosition(destinationCell));
         hasBuiltFirstMove = false;
 
         return updatedBoard;
+    }
+
+    private void checkSameHeight(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+        if(hasBuiltFirstMove && currentBoard.heightOf(destinationCell) > currentBoard.heightOf(worker.getPosition())){
+            throw new IllegalArgumentException("You can't jump on that tower because you've built on your first move.");
+        }
     }
 
     @Override

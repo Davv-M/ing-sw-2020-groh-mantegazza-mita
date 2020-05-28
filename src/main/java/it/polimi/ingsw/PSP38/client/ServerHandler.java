@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Message;
 import it.polimi.ingsw.PSP38.common.Protocol;
-import it.polimi.ingsw.PSP38.common.utilities.Observer;
+import it.polimi.ingsw.PSP38.server.utilities.Observer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

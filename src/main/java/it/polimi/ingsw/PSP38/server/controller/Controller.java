@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP38.server.controller;
 import it.polimi.ingsw.PSP38.common.Message;
 import it.polimi.ingsw.PSP38.server.model.*;
 import it.polimi.ingsw.PSP38.server.controller.divinityCards.*;
-import it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker;
+import it.polimi.ingsw.PSP38.server.utilities.ArgumentChecker;
 import it.polimi.ingsw.PSP38.server.virtualView.ClientHandler;
 import it.polimi.ingsw.PSP38.server.virtualView.Server;
 

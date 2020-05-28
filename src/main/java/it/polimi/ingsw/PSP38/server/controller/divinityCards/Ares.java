@@ -7,22 +7,21 @@ import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
+import static it.polimi.ingsw.PSP38.server.utilities.ArgumentChecker.*;
 
 import java.util.List;
-import java.util.Set;
 
 public class Ares extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.OPTIONAL_ACTION, WorkerAction.BUILD);
 
     @Override
-    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
         Worker otherWorker = currentBoard.getWorkersPositions().values().stream().filter(w -> w.getColor() == worker.getColor() &&
                 !w.getPosition().equals(worker.getPosition())).findFirst().get();
-        Set<Cell> otherWorkerNeighbors = currentBoard.neighborsOf(otherWorker.getPosition());
-        otherWorkerNeighbors.removeIf(c -> currentBoard.hasDomeAt(c) || currentBoard.hasWorkerAt(c) || currentBoard.heightOf(c) == 0);
-        if(!otherWorkerNeighbors.contains(destinationCell)){
-            throw new IllegalArgumentException("You can't remove blocks from this cell");
-        }
+        checkNeighbor(otherWorker, destinationCell, currentBoard);
+        checkDome(destinationCell, currentBoard);
+        checkWorker(destinationCell, currentBoard);
+        checkTower(destinationCell, currentBoard);
 
         Tower tower = currentBoard.getTowersPositions().get(destinationCell);
         Board newBoard = currentBoard.withoutTower(tower);

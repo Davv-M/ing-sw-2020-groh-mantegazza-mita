@@ -1,9 +1,8 @@
 package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Protocol;
-import it.polimi.ingsw.PSP38.common.utilities.Observer;
+import it.polimi.ingsw.PSP38.server.utilities.Observer;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;

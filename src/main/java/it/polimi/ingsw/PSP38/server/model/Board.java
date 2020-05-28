@@ -57,10 +57,6 @@ public final class Board {
     public Board withTower(Tower tower) {
         if (tower == null) {
             return this;
-        } else if(cellsWithDomes.contains(tower.getPosition())){
-            throw new IllegalArgumentException("this cell contains a dome");
-        } else if(getWorkersPositions().containsKey(tower.getPosition())){
-            throw new IllegalArgumentException("this cell contains a worker");
         }
 
         Set<Tower> newBoardTowers = new HashSet<>(towers);
@@ -79,12 +75,8 @@ public final class Board {
      */
 
     public Board withWorker(Worker worker) throws IllegalArgumentException{
-        if (worker == null){
+        if (worker == null) {
             return this;
-        } else if(getWorkersPositions().containsKey(worker.getPosition())){
-            throw new IllegalArgumentException("this cell already contains a worker");
-        } else if(cellsWithDomes.contains(worker.getPosition())){
-            throw new IllegalArgumentException("this cell contains a dome");
         }
 
         Set<Worker> newBoardWorkers = new HashSet<>(workers);
@@ -149,10 +141,6 @@ public final class Board {
     public Board withDome(Cell cell) {
         if (cell == null){
             return this;
-        } else if(getWorkersPositions().containsKey(cell)){
-            throw new IllegalArgumentException("this cell contains a worker");
-        } else if(cellsWithDomes.contains(cell)){
-            throw new IllegalArgumentException("this cell contains a dome");
         }
 
         Set<Cell> newBoardDomes = new HashSet<>(cellsWithDomes);
@@ -240,7 +228,7 @@ public final class Board {
     }
 
     /**
-     * Determines if the given cell cointains a dome
+     * Determines if the given cell contains a dome
      *
      * @param cell the cell that we want to check
      * @return <b>true</b> if the cell contains a dome , <b>false</b> otherwise
@@ -251,7 +239,7 @@ public final class Board {
     }
 
     /**
-     * Determines if the given cell cointains a worker
+     * Determines if the given cell contains a worker
      *
      * @param cell the cell that we want to check
      * @return <b>true</b> if the cell contains a worker , <b>false</b> otherwise

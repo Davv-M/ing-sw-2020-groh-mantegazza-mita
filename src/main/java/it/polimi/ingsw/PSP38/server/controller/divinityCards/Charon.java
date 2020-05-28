@@ -8,6 +8,8 @@ import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Direction;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
+import static it.polimi.ingsw.PSP38.server.utilities.ArgumentChecker.*;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -17,31 +19,22 @@ public class Charon extends DivinityCard implements OptionalAction {
 
     @Override
     public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
-        if(!currentBoard.neighborsOf(worker.getPosition()).contains(destinationCell)){
-            throw new IllegalArgumentException("You must select a neighboring cell");
-        }
-        if(currentBoard.hasWorkerAt(destinationCell)){
-            if(currentBoard.workerAt(destinationCell).getColor() != worker.getColor()){
-                int vectorX = destinationCell.getX() - worker.getPosition().getX();
-                int vectorY = destinationCell.getY() - worker.getPosition().getY();
+        checkNeighbor(worker, destinationCell, currentBoard);
+        checkWorkerSameColor(worker, destinationCell, currentBoard);
+        int vectorX = destinationCell.getX() - worker.getPosition().getX();
+        int vectorY = destinationCell.getY() - worker.getPosition().getY();
 
-                Direction dir = Direction.coordinatesToDirection(vectorX, vectorY);
-                Optional<Cell> possibleNeighbor = currentBoard.neighborOf(worker.getPosition(), dir.opposite());
-                if (possibleNeighbor.isPresent()
-                        && !currentBoard.hasDomeAt(possibleNeighbor.get())
-                        && !currentBoard.hasWorkerAt(possibleNeighbor.get())) {
+        Direction dir = Direction.coordinatesToDirection(vectorX, vectorY);
+        Optional<Cell> possibleNeighbor = currentBoard.neighborOf(worker.getPosition(), dir.opposite());
+        if (possibleNeighbor.isPresent()
+                && !currentBoard.hasDomeAt(possibleNeighbor.get())
+                && !currentBoard.hasWorkerAt(possibleNeighbor.get())) {
 
-                    Worker opponent = currentBoard.getWorkersPositions().get(destinationCell);
+            Worker opponent = currentBoard.getWorkersPositions().get(destinationCell);
 
-                    return currentBoard.withoutWorker(opponent).withWorker(opponent.withPosition(possibleNeighbor.get()));
-                } else {
-                    throw new IllegalArgumentException("the selected worker can't be moved");
-                }
-            } else {
-                throw new IllegalArgumentException("The worker you select can't be yours");
-            }
+            return currentBoard.withoutWorker(opponent).withWorker(opponent.withPosition(possibleNeighbor.get()));
         } else {
-            throw new IllegalArgumentException("You must select a worker");
+            throw new IllegalArgumentException("the selected worker can't be moved");
         }
     }
 

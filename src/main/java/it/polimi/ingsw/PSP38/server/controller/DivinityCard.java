@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
+import static it.polimi.ingsw.PSP38.server.utilities.ArgumentChecker.*;
 
 import java.util.*;
 
@@ -51,11 +52,11 @@ public abstract class DivinityCard {
      * @param worker       the worker that has to be moved
      * @param currentBoard the current board of the game
      */
-    public Set<Cell> preMove(Worker worker, Board currentBoard) {
-        Set<Cell> neighborCells = currentBoard.neighborsOf(worker.getPosition());
-        neighborCells.removeIf(c -> currentBoard.heightOf(c) > currentBoard.heightOf(worker.getPosition()) + 1);
-
-        return neighborCells;
+    public void checkMove(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+        checkNeighbor(worker, destinationCell, currentBoard);
+        checkDome(destinationCell, currentBoard);
+        checkHeight(worker, destinationCell, currentBoard);
+        checkWorker(destinationCell, currentBoard);
     }
 
     /**
@@ -68,10 +69,7 @@ public abstract class DivinityCard {
      */
 
     public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        if (!preMove(worker, currentBoard).contains(destinationCell)) {
-            throw new IllegalArgumentException("You can't move on that cell.");
-        }
-
+        checkMove(worker, destinationCell, currentBoard);
         return currentBoard.withoutWorker(worker).withWorker(worker.withPosition(destinationCell));
     }
 
@@ -80,11 +78,11 @@ public abstract class DivinityCard {
      *
      * @param worker       the worker that has to build
      * @param currentBoard the current board of the game
-     * @return a list of possible cells where the given worker can build
      */
-    public Set<Cell> preBuild(Worker worker, Board currentBoard) {
-
-        return currentBoard.neighborsOf(worker.getPosition());
+    public void checkBuild(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+        checkNeighbor(worker, destinationCell, currentBoard);
+        checkDome(destinationCell, currentBoard);
+        checkWorker(destinationCell, currentBoard);
     }
 
     /**
@@ -95,9 +93,7 @@ public abstract class DivinityCard {
      * @return the updated board with the updated cell's tower's height
      */
     public Board build(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        if (!preBuild(worker, currentBoard).contains(destinationCell)) {
-            throw new IllegalArgumentException("you can't build on that cell.");
-        }
+        checkBuild(worker, destinationCell, currentBoard);
 
         int currentHeight = currentBoard.heightOf(destinationCell);
         return currentHeight == Tower.MAX_HEIGHT ?
@@ -119,11 +115,12 @@ public abstract class DivinityCard {
     }
 
     public boolean isWinner(Board board, Cell previousPosition, Cell currentPosition) {
-        return board.heightOf(previousPosition) == 2 && board.heightOf(currentPosition) == 3;
+        return board.heightOf(previousPosition) == Tower.MAX_HEIGHT - 1 && board.heightOf(currentPosition) == Tower.MAX_HEIGHT;
     }
 
     public boolean blockOpponentWinningCondition(Cell currentPosition){
         return false;
     }
+
 
 }
