@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.server.controller;
 
 import it.polimi.ingsw.PSP38.common.Message;
+import it.polimi.ingsw.PSP38.common.Protocol;
 import it.polimi.ingsw.PSP38.server.model.*;
 import it.polimi.ingsw.PSP38.server.controller.divinityCards.*;
 import it.polimi.ingsw.PSP38.server.utilities.ArgumentChecker;
@@ -144,7 +145,7 @@ public class Controller extends Observable {
         welcomeMessage(client);
         firstPlayerSetNumOfPlayers(client);
         notifyExtraClient(client);
-        if (client.clientNum <= game.getTotNumPlayers()) {
+        if (client.getClientNum() <= game.getTotNumPlayers()) {
             game.addPlayer(askNickname(client), askAge(client));
             checkGameFull(client);
             askYoungestPlayerCards(client);
@@ -171,7 +172,8 @@ public class Controller extends Observable {
                     if(action.isOptional()){
                         continue;
                     } else {
-                        client.notifyMessage(Message.UNABLE_TO_FINISH_TURN);
+                        //client.notifyMessage(Message.UNABLE_TO_FINISH_TURN);
+                        client.notifyEndGame(Protocol.CANT_MOVE);
                         hasCurrentPlayerLost = true;
                         break;
                     }
@@ -195,12 +197,14 @@ public class Controller extends Observable {
         updateTurn(hasCurrentPlayerLost);
     }
 
+    public int getTotNumPlayers(){return game.getTotNumPlayers();}
+
     private void welcomeMessage(ClientHandler client) throws IOException {
         client.notifyMessage(Message.WELCOME);
     }
 
     private void firstPlayerSetNumOfPlayers(ClientHandler client) throws IOException {
-        if (client.clientNum == 1) {
+        if (client.getClientNum() == 1) {
             client.notifyMessage(Message.INSERT_NUM_PLAYERS);
             game.setTotNumPlayers(client.askInt(this::checkNumOfPlayers));
             wakeUpAll();
@@ -211,8 +215,9 @@ public class Controller extends Observable {
     }
 
     private void notifyExtraClient(ClientHandler client) throws IOException {
-        if (client.clientNum > game.getTotNumPlayers()) {
-            client.notifyMessage(Message.GAME_FULL);
+        if (client.getClientNum() > game.getTotNumPlayers()) {
+            client.notifyEndGame(Protocol.TOO_LATE);
+            //client.notifyMessage(Message.GAME_FULL);
             //client.notifyMessage("If you want to see the match stay connected");
             pauseClient(client);
         }

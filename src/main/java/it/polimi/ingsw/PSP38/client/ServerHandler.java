@@ -35,6 +35,9 @@ public class ServerHandler extends Observable implements Observer, Runnable{
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             input = new ObjectInputStream(serverSocket.getInputStream());
+            ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler(this);
+            Thread serverConnectionHandlerThread = new Thread(serverConnectionHandler);
+            serverConnectionHandlerThread.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,6 +46,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     /**
      * This method executes the operations needed to listen server constantly
      */
+
     public void run() {
         try {
             while (true) {
@@ -51,6 +55,10 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                         protocolRead = Protocol.NOTIFY_MESSAGE;
                         setMessage();
                         notifyClient();
+                        break;
+                    }
+                    case TOO_LATE:{
+                        endGame(Protocol.TOO_LATE);
                         break;
                     }
                     case DISPLAY_BOARD:{
@@ -69,6 +77,10 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                         notifyClient();
                         break;
                     }
+                    case CANT_MOVE:{
+                        endGame(Protocol.CANT_MOVE);
+                        break;
+                    }
                     case NOTIFY_CUSTOM_STRING:{
                         protocolRead = Protocol.NOTIFY_CUSTOM_STRING;
                         setCustomMessageString();
@@ -76,7 +88,10 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                         break;
                     }
                     case PING:{
-                        returnPing();
+                        break;
+                    }
+                    case CLIENT_LOST:{
+                        endGame(Protocol.CLIENT_LOST);
                         break;
                     }
                     default:
@@ -85,7 +100,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
 
             }
         }catch (IOException | ClassNotFoundException e){
-            e.printStackTrace();
+            serverLost();
         }
 
 
@@ -213,6 +228,37 @@ public class ServerHandler extends Observable implements Observer, Runnable{
             }
         }
     }
+
+    public void ping()throws IOException{
+        synchronized (lock){
+            output.writeObject(Protocol.PING);
+        }
+    }
+
+    public void endGame(Protocol protocolExit){
+        switch (protocolExit){
+            case TOO_LATE:{
+                System.out.println("game full, please try later.");
+                break;
+            }
+            case CLIENT_LOST:{
+                System.out.println("your challenger lost connection, please restart app");
+                break;
+            }
+            case CANT_MOVE:{
+                System.out.println("you can't move, You Lose!");
+                break;
+            }
+
+        }
+        System.exit(0);
+    }
+
+    public void serverLost(){
+        System.out.println("connection lost with server, please restart app ");
+        System.exit(0);
+    }
+
 
 
 }

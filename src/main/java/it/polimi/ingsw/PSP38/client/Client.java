@@ -30,6 +30,7 @@ public class Client extends Observable implements Observer {
         messageDecoder=new MessageDecoderCLI();
         try {
             serverSocket = new Socket(InetAddress.getByName("127.0.0.1"), SERVER_SOCKET_PORT);
+            serverSocket.setSoTimeout(6000);
             System.out.println(InetAddress.getLocalHost());
             ServerHandler serverHandler = new ServerHandler(serverSocket);
             nextInputObserver = serverHandler;

@@ -13,8 +13,8 @@ import java.util.Observer;
 import java.util.function.Function;
 
 public class ClientHandler implements Observer, Runnable {
-    String nickname = "anonymous";
-    public final int clientNum;
+    private String nickname = "anonymous";
+    private int clientNum;
     private static final Controller controller = new Controller();
     private ObjectOutputStream output;
     private ObjectInputStream input;
@@ -24,7 +24,7 @@ public class ClientHandler implements Observer, Runnable {
     private volatile boolean isDataReady = false;
 
     public ClientHandler(Socket clientSocket) {
-        clientNum = Server.updateContPlayer();
+        clientNum = Server.incrementContPlayer();
         try {
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             input = new ObjectInputStream(clientSocket.getInputStream());
@@ -32,9 +32,9 @@ public class ClientHandler implements Observer, Runnable {
             e.printStackTrace();
         }
         controller.addObserver(this);
-        VerifierClientConnection verifierClientConnection = new VerifierClientConnection(this);
-        Thread verifier = new Thread(verifierClientConnection);
-        verifier.start();
+        ClientConnectionHandler clientConnectionHandler = new ClientConnectionHandler(this);
+        Thread clientConnectionHandlerThread = new Thread(clientConnectionHandler);
+        clientConnectionHandlerThread.start();
         dataReceiver = new DataReceiver(this);
         Thread threadDataReceiver= new Thread(dataReceiver);
         threadDataReceiver.start();
@@ -45,6 +45,7 @@ public class ClientHandler implements Observer, Runnable {
                 output.writeObject(Protocol.PING);
             }
     }
+
 
     public void setPaused(boolean bool) {
         isPaused = bool;
@@ -166,6 +167,34 @@ public class ClientHandler implements Observer, Runnable {
 
     public void setDataReady(){
         isDataReady = true;
+    }
+
+    public int getClientNum(){ return clientNum;}
+
+    public void reduceClientNum(){ clientNum--; }
+
+    public int getTotNumPlayers(){
+        return controller.getTotNumPlayers();
+    }
+
+    public void notifyEndGame(Protocol protocolForEnd)throws IOException{
+        synchronized (lock){
+            switch (protocolForEnd){
+                case TOO_LATE:{
+                    output.writeObject(Protocol.TOO_LATE);
+                    break;
+                }
+                case CLIENT_LOST:{
+                    output.writeObject(Protocol.CLIENT_LOST);
+                    break;
+                }
+                case CANT_MOVE:{
+                    output.writeObject(Protocol.CANT_MOVE);
+                    break;
+                }
+            }
+
+        }
     }
 }
 

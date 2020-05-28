@@ -22,18 +22,18 @@ public class DataReceiver implements Runnable{
         try {
             while (true) {
                 Protocol protocolRead = (Protocol) input.readObject();
-                    switch (protocolRead) {
-                        case RETURN_PING:
-                            break;
-                        case RETURN_INT:
-                            lastIntRead = input.readInt();
-                            client.setDataReady();
-                            break;
-                        case RETURN_STRING:
-                            lastStringRead = (String) input.readObject();
-                            client.setDataReady();
-                            break;
-                    }
+                switch (protocolRead) {
+                    case PING:
+                        break;
+                    case RETURN_INT:
+                        lastIntRead = input.readInt();
+                        client.setDataReady();
+                        break;
+                    case RETURN_STRING:
+                        lastStringRead = (String) input.readObject();
+                        client.setDataReady();
+                        break;
+                }
 
             }
         }catch (IOException | ClassNotFoundException ignored){}
