@@ -1,4 +1,6 @@
-package it.polimi.ingsw.PSP38.client;
+package it.polimi.ingsw.PSP38.client.GUIComponents;
+
+import it.polimi.ingsw.PSP38.client.ImageCollection;
 
 import javax.swing.*;
 import java.awt.*;
