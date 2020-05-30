@@ -27,20 +27,22 @@ public class Client extends Observable implements Observer {
     private static ServerHandler nextInputObserver;
     private static MessageDecoder messageDecoder;
     private static String customString;
-    private static String argument;
     private static BoardComponent sc;
     private static Socket serverSocket;
     private static ConnectionComponent cc;
     private static SetNumOfPlayersComponent snpc;
+    private static SetupWindow setupWindow;
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         if (args.length==0) {
             SwingUtilities.invokeAndWait(() -> {
-                JFrame frame = createUI();
+                /*JFrame frame = createUI();
                 cc.createConnectionWindow();
                 snpc = new SetNumOfPlayersComponent();
                 snpc.createNumOfPlayers();
-                frame.add(snpc);
+                frame.add(snpc);*/
+                setupWindow = new SetupWindow();
+                setupWindow.createSetupWindow();
             });
         } else if (args[0].equalsIgnoreCase("cli")) {
             messageDecoder = new MessageDecoderCLI();
