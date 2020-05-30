@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP38.client;
+package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import javax.swing.*;
 import javax.swing.border.Border;

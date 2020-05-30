@@ -2,8 +2,11 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Message;
 
-public class MessageDecoderCLI implements MessageDecoder{
+import java.util.Scanner;
+
+public class GameModeCLI implements GameMode {
     private String customStringRead;
+    private Scanner scanner = new Scanner(System.in);
     @Override
     public void decodeMessage(Message m){
         switch (m){
@@ -106,6 +109,8 @@ public class MessageDecoderCLI implements MessageDecoder{
             case ILLEGAL_ACTION:
                 System.out.println("Unknown worker action");
                 break;
+            case WAIT:
+                System.out.println("Please wait");
             default:
                 System.out.println("Message not recognized");
                 break;
@@ -113,7 +118,17 @@ public class MessageDecoderCLI implements MessageDecoder{
     }
 
     @Override
-    public void update() {
+    public void updateCustomString() {
         customStringRead=Client.getCustomString();
+    }
+
+    @Override
+    public String nextInput() {
+        return scanner.nextLine();
+    }
+
+    @Override
+    public void displayBoard() {
+        BoardPrinter.printBoard(ServerHandler.readBoard());
     }
 }

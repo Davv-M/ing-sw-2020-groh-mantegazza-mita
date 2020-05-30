@@ -6,7 +6,7 @@ import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Direction;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
-import static it.polimi.ingsw.PSP38.server.utilities.ArgumentChecker.*;
+import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 
 import java.util.Optional;
 

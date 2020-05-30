@@ -1,4 +1,7 @@
-package it.polimi.ingsw.PSP38.client;
+package it.polimi.ingsw.PSP38.client.GUIComponents;
+
+import it.polimi.ingsw.PSP38.client.Client;
+import it.polimi.ingsw.PSP38.client.ImageCollection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,6 +29,7 @@ public class SetupWindow extends Observable implements ActionListener {
     private JTextField age;
     private JButton connectButton;
     private Color panelColor = new Color(0,0,0,0);
+    private final static Client clientUpdate = new Client();
 
     public void createSetupWindow(){
         mainSetupFrame.setSize(WIDTH, HEIGHT);
