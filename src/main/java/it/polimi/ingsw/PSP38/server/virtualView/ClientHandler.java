@@ -60,14 +60,6 @@ public class ClientHandler implements Observer, Runnable {
         } catch (IOException ignored) { }
     }
 
-    /*public void notifyMessage(String message) throws IOException {
-        synchronized (lock){
-            output.writeObject(Protocol.NOTIFY_MESSAGE);
-            output.writeObject(message);
-        }
-
-    }*/
-
     public void notifyMessage(Message message) throws IOException {
         synchronized (lock){
             output.writeObject(Protocol.NOTIFY_MESSAGE);
@@ -100,6 +92,7 @@ public class ClientHandler implements Observer, Runnable {
                     isDataReady = false;
                     return num;
                 } catch (IllegalArgumentException e) {
+                    notifyMessageString(e.getMessage());
                     notifyMessage(Message.ILLEGAL_INT);
                     isDataReady = false;
                 }
@@ -123,6 +116,7 @@ public class ClientHandler implements Observer, Runnable {
                     isDataReady = false;
                     return string;
                 } catch (IllegalArgumentException e) {
+                    notifyMessageString(e.getMessage());
                     notifyMessage(Message.ILLEGAL_STRING);
                     isDataReady = false;
                 }

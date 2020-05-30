@@ -316,12 +316,13 @@ public class Controller extends Observable {
         int y;
         do {
             try {
-                client.notifyMessage(Message.SET_CELL_COORDS);
+                client.notifyMessage(Message.SET_CELL_X_COORD);
                 x = client.askInt(this::checkXCoordinate);
-                //client.notifyMessage("Please insert the y coordinate :");
+                client.notifyMessage(Message.SET_CELL_Y_COORD);
                 y = client.askInt(this::checkYCoordinate);
                 return new Cell(x, y);
             } catch (IllegalArgumentException e) {
+                client.notifyMessageString(e.getMessage());
                 client.notifyMessage(Message.ILLEGAL_ARGUMENT);
             }
         } while (true);
@@ -392,6 +393,7 @@ public class Controller extends Observable {
                 displayAllClients();
                 return currentBoard.hasWorkerAt(destinationCell) ? destinationCell : workerPosition;
             } catch (IllegalArgumentException e) {
+                client.notifyMessageString(e.getMessage());
                 client.notifyMessage(Message.ILLEGAL_ARGUMENT);
             }
         } while (true);

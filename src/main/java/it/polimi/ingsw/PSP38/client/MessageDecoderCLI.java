@@ -37,8 +37,12 @@ public class MessageDecoderCLI implements MessageDecoder{
                 break;
             case PLACE_A_WORKER:
                 System.out.println("Place your worker number "+customStringRead);
-            case SET_CELL_COORDS:
-                System.out.println("Please insert the cell's coordinates (x, y)");
+                break;
+            case SET_CELL_X_COORD:
+                System.out.println("Please insert the cell's x coordinate");
+                break;
+            case SET_CELL_Y_COORD:
+                System.out.println("Please insert the cell's y coordinate");
                 break;
             case YOU_WIN:
                 System.out.println("You are the winner!");
@@ -79,16 +83,16 @@ public class MessageDecoderCLI implements MessageDecoder{
                 System.out.println(customStringRead);
                 break;
             case ILLEGAL_INT:
-                System.out.println("Integer not recognized");
+                System.out.println("Integer not recognized exception: "+customStringRead);
                 break;
             case ILLEGAL_STRING:
-                System.out.println("String not recognized");
+                System.out.println("String not recognized exception: "+customStringRead);
                 break;
             case UNABLE_TO_FINISH_TURN:
                 System.out.println("You can't finish your turn. You lose.");
                 break;
             case ILLEGAL_ARGUMENT:
-                System.out.println("Illegal argument");
+                System.out.println("Illegal argument exception: "+customStringRead);
                 break;
             case WORKER_MOVE:
                 System.out.println("Select the cell where you want to move");

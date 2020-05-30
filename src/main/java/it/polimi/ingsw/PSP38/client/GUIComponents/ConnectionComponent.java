@@ -1,4 +1,6 @@
-package it.polimi.ingsw.PSP38.client;
+package it.polimi.ingsw.PSP38.client.GUIComponents;
+
+import it.polimi.ingsw.PSP38.client.ServerHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +10,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class ConnectionWindow implements ActionListener {
+public class ConnectionComponent extends JComponent implements ActionListener {
     private final static int SERVER_SOCKET_PORT = 3456;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -19,14 +21,17 @@ public class ConnectionWindow implements ActionListener {
     private Socket serverSocket;
     private static ServerHandler nextInputObserver;
 
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(WIDTH, HEIGHT);
+    }
+
     public void createConnectionWindow(){
-        frame.setSize(WIDTH, HEIGHT);
-        frame.setLayout(new GridLayout(3,1));
+        setLayout(new GridLayout(3,1));
         JLabel title = new JLabel("santorini");
-        frame.add(title);
-        frame.add(createIpAddress());
-        frame.add(createConnectButton());
-        frame.setVisible(true);
+        add(title);
+        add(createIpAddress());
+        add(createConnectButton());
     }
 
     public JPanel createIpAddress() {
@@ -54,6 +59,7 @@ public class ConnectionWindow implements ActionListener {
             //System.out.println("Ip selezionato "+selectedIp);
             connectionHandling(selectedIp);
         }
+        setVisible(false);
     }
 
     public void connectionHandling(String address){
