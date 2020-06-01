@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
+import it.polimi.ingsw.PSP38.client.GameModeGUI;
 import it.polimi.ingsw.PSP38.client.ServerHandler;
 
 import javax.swing.*;
@@ -11,15 +12,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class ConnectionComponent extends JComponent implements ActionListener {
-    private final static int SERVER_SOCKET_PORT = 3456;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
-    private JFrame frame = new JFrame();
-    private JTextField ipAddress = new JTextField();
+    private final JTextField ipAddress = new JTextField();
     private JButton connectButton = new JButton();
-    private String selectedIp;
-    private Socket serverSocket;
-    private static ServerHandler nextInputObserver;
+
 
     @Override
     public Dimension getPreferredSize() {
@@ -55,8 +52,7 @@ public class ConnectionComponent extends JComponent implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==connectButton){
-            selectedIp=ipAddress.getText();
-            //System.out.println("Ip selezionato "+selectedIp);
+            String selectedIp = ipAddress.getText();
             connectionHandling(selectedIp);
         }
         setVisible(false);
@@ -65,9 +61,10 @@ public class ConnectionComponent extends JComponent implements ActionListener {
     public void connectionHandling(String address){
         try {
             InetAddress addr = InetAddress.getByName(address);
-            serverSocket = new Socket(addr, SERVER_SOCKET_PORT);
+            Socket serverSocket = new Socket(addr, GameModeGUI.SERVER_SOCKET_PORT);
+            GameModeGUI.setServerSocket(serverSocket);
             ServerHandler serverHandler = new ServerHandler(serverSocket);
-            nextInputObserver = serverHandler;
+            GameModeGUI.setServerHandler(serverHandler);
             Thread thread = new Thread(serverHandler);
             thread.start();
         } catch (IOException e) {

@@ -23,41 +23,25 @@ import java.util.Scanner;
  * and notify the class Client for all user inputs
  */
 public class Client extends Observable implements Observer {
-    private final static int SERVER_SOCKET_PORT = 3456;
-    private static final Scanner scanner = new Scanner(System.in);
     private static String dataInput;
     private static ServerHandler nextInputObserver;
     private static GameMode gameMode;
     private static String customString;
-    private static BoardComponent sc;
-    private static Socket serverSocket;
-    private static ConnectionComponent cc;
-    private static SetNumOfPlayersComponent snpc;
-    private static SetupWindow setupWindow;
-    private static String ipAddress;
 
-    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+
+    public static void main(String[] args){
         if (args.length==0) {
-            SwingUtilities.invokeAndWait(() -> {
-                /*JFrame frame = createUI();
-                cc.createConnectionWindow();
-                snpc = new SetNumOfPlayersComponent();
-                snpc.createNumOfPlayers();
-                frame.add(snpc);*/
-                setupWindow = new SetupWindow();
-                setupWindow.createSetupWindow();
-            });
+            gameMode = new GameModeGUI();
         } else if (args[0].equalsIgnoreCase("cli")) {
             gameMode = new GameModeCLI();
-            System.out.println("Insert ip address:");
-            ipAddress= scanner.nextLine();
-            connectionHandling(ipAddress, SERVER_SOCKET_PORT);
-            while (true) {
-                dataInput = gameMode.nextInput();
-                notifyReadSomething();
-            }
         } else {
             System.out.println("Parameter not recognized");
+            System.exit(0);
+        }
+
+        while (true) {
+            dataInput = gameMode.nextInput();
+            notifyReadSomething();
         }
     }
 
@@ -75,7 +59,6 @@ public class Client extends Observable implements Observer {
     public void update() {
         Protocol protocolRead = ServerHandler.getProtocol();
         if (protocolRead == Protocol.NOTIFY_MESSAGE) {
-            //printMessage(ServerHandler.getMessage());
             gameMode.decodeMessage(ServerHandler.getMessage());
         }
         if (protocolRead == Protocol.DISPLAY_BOARD) {
@@ -107,7 +90,7 @@ public class Client extends Observable implements Observer {
 
     }
 
-    public static JFrame createUI() {
+    /*public static JFrame createUI() {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         cc=new ConnectionComponent();
@@ -117,24 +100,15 @@ public class Client extends Observable implements Observer {
         frame.setVisible(true);
         cc.requestFocusInWindow();
         return frame;
-    }
+    }*/
 
     public static String getCustomString() {
         return customString;
     }
 
-    public static void connectionHandling(String address, int port){
-        try {
-            InetAddress addr = InetAddress.getByName(address);
-            serverSocket = new Socket(addr, port);
-            ServerHandler serverHandler = new ServerHandler(serverSocket);
-            nextInputObserver = serverHandler;
-            Thread thread = new Thread(serverHandler);
-            thread.start();
-        } catch (IOException e) {
-            System.out.println("server unreachable");
-            return;
-        }
-        System.out.println("Connected");
+    public static void setObserver(ServerHandler sh){
+        nextInputObserver = sh;
     }
+
+
 }

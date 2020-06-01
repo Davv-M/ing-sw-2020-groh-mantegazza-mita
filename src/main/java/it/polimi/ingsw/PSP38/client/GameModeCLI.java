@@ -2,11 +2,22 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Message;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class GameModeCLI implements GameMode {
     private String customStringRead;
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
+    private static Socket serverSocket;
+    private static ServerHandler nextInputObserver;
+
+    public GameModeCLI(){
+       connectionHandling();
+       Client.setObserver(nextInputObserver);
+    }
+
     @Override
     public void decodeMessage(Message m){
         switch (m){
@@ -130,5 +141,23 @@ public class GameModeCLI implements GameMode {
     @Override
     public void displayBoard() {
         BoardPrinter.printBoard(ServerHandler.readBoard());
+    }
+
+
+    public void connectionHandling(){
+        try {
+            System.out.println("insert Server IP address:");
+            String ipAddress= scanner.nextLine();
+            InetAddress address = InetAddress.getByName(ipAddress);
+            serverSocket = new Socket(address, SERVER_SOCKET_PORT);
+            ServerHandler serverHandler = new ServerHandler(serverSocket);
+            nextInputObserver = serverHandler;
+            Thread thread = new Thread(serverHandler);
+            thread.start();
+        } catch (IOException e) {
+            System.out.println("server unreachable");
+            return;
+        }
+        System.out.println("Connected");
     }
 }
