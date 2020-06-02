@@ -1,20 +1,30 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
+import it.polimi.ingsw.PSP38.client.GameModeGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SetNumOfPlayersComponent extends JComponent implements ActionListener {
+
     JButton twoPlayersButton;
     JButton threePlayersButton;
-    int numOfPlayerChosen;
+    GameModeGUI gmg;
 
-    public void createNumOfPlayers(){
-        setLayout(new GridLayout(2,1));
-        JLabel title = new JLabel("select num of players");
-        add(title);
-        add(createNumPlayerButton());
+
+    public SetNumOfPlayersComponent(GameModeGUI gmg){
+        this.gmg=gmg;
+        createSetNumPlayerWindow();
+
+    }
+
+    public void createSetNumPlayerWindow(){
+        JLabel message = new JLabel("inserisci il numero di giocatori");
+        gmg.frame.add(message);
+        gmg.frame.add(createNumPlayerButton());
+        gmg.frame.setVisible(true);
     }
 
     public JPanel createNumPlayerButton(){
@@ -32,13 +42,11 @@ public class SetNumOfPlayersComponent extends JComponent implements ActionListen
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==twoPlayersButton){
-            numOfPlayerChosen=2;
+            gmg.setStringRead("2");
         }
-        else
-        {
-            numOfPlayerChosen=3;
+        if(e.getSource()==threePlayersButton){
+            gmg.setStringRead("3");
         }
-        System.out.println(numOfPlayerChosen);
-        //setVisible(false);
+
     }
 }

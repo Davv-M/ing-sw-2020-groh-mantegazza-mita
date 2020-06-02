@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
+import it.polimi.ingsw.PSP38.client.Client;
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
 import it.polimi.ingsw.PSP38.client.ServerHandler;
 
@@ -62,9 +63,8 @@ public class ConnectionComponent extends JComponent implements ActionListener {
         try {
             InetAddress addr = InetAddress.getByName(address);
             Socket serverSocket = new Socket(addr, GameModeGUI.SERVER_SOCKET_PORT);
-            GameModeGUI.setServerSocket(serverSocket);
             ServerHandler serverHandler = new ServerHandler(serverSocket);
-            GameModeGUI.setServerHandler(serverHandler);
+            Client.setObserver(serverHandler);
             Thread thread = new Thread(serverHandler);
             thread.start();
         } catch (IOException e) {

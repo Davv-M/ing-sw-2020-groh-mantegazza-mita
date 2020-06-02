@@ -35,6 +35,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             input = new ObjectInputStream(serverSocket.getInputStream());
+            serverSocket.setSoTimeout(6000);
             ServerConnectionHandler serverConnectionHandler = new ServerConnectionHandler(this);
             Thread serverConnectionHandlerThread = new Thread(serverConnectionHandler);
             serverConnectionHandlerThread.start();
@@ -182,12 +183,6 @@ public class ServerHandler extends Observable implements Observer, Runnable{
 
     }
 
-    public static void returnPing()throws IOException{
-        synchronized (lock){
-            output.writeObject(Protocol.RETURN_PING);
-        }
-
-    }
 
     /**
      * @return the last protocol read

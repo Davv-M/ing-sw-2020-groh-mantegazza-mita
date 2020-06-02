@@ -11,11 +11,9 @@ public class GameModeCLI implements GameMode {
     private String customStringRead;
     private final Scanner scanner = new Scanner(System.in);
     private static Socket serverSocket;
-    private static ServerHandler nextInputObserver;
 
     public GameModeCLI(){
        connectionHandling();
-       Client.setObserver(nextInputObserver);
     }
 
     @Override
@@ -122,6 +120,7 @@ public class GameModeCLI implements GameMode {
                 break;
             case WAIT:
                 System.out.println("Please wait");
+                break;
             default:
                 System.out.println("Message not recognized");
                 break;
@@ -151,7 +150,7 @@ public class GameModeCLI implements GameMode {
             InetAddress address = InetAddress.getByName(ipAddress);
             serverSocket = new Socket(address, SERVER_SOCKET_PORT);
             ServerHandler serverHandler = new ServerHandler(serverSocket);
-            nextInputObserver = serverHandler;
+            Client.setObserver(serverHandler);
             Thread thread = new Thread(serverHandler);
             thread.start();
         } catch (IOException e) {
