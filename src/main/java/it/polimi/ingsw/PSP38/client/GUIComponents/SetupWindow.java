@@ -29,6 +29,9 @@ public class SetupWindow extends Observable implements ActionListener {
     private JTextField age;
     private JButton connectButton;
     private Color panelColor = new Color(0,0,0,0);
+    private Color bkgColor = new Color(25, 109,165);
+    private Color bkgTextColor = new Color(62,159,225);
+    private Color textColor  = Color.WHITE;
     private final static Client clientUpdate = new Client();
 
     public void createSetupWindow(){
@@ -41,7 +44,6 @@ public class SetupWindow extends Observable implements ActionListener {
     public JPanel createSetupPanel(){
         setupPanel = new JPanel();
         setupPanel.setLayout(new GridLayout(3,1));
-        Color bkgColor = new Color(255, 0,0);
         setupPanel.setBackground(bkgColor);
         setupPanel.add(createImagePanel());
         setupPanel.add(createControlPanel());
@@ -74,16 +76,22 @@ public class SetupWindow extends Observable implements ActionListener {
         controlPanel.setLayout(new GridLayout(6,1));
         controlPanel.setBackground(panelColor);
         ipLabel = new JLabel("IP address");
+        ipLabel.setForeground(textColor);
         controlPanel.add(ipLabel);
         ipAddress = new JTextField();
+        ipAddress.setBackground(bkgTextColor);
         controlPanel.add(ipAddress);
         nicknameLabel = new JLabel("Nickname");
+        nicknameLabel.setForeground(textColor);
         controlPanel.add(nicknameLabel);
         nickname = new JTextField();
+        nickname.setBackground(bkgTextColor);
         controlPanel.add(nickname);
         ageLabel = new JLabel("Age");
+        ageLabel.setForeground(textColor);
         controlPanel.add(ageLabel);
         age = new JTextField();
+        age.setBackground(bkgTextColor);
         controlPanel.add(age);
         return controlPanel;
     }
