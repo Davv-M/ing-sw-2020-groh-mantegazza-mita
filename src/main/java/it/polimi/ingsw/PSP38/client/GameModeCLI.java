@@ -147,7 +147,7 @@ public class GameModeCLI implements GameMode {
     }
 
 
-    public void connectionHandling(){
+    /*public void connectionHandling(){
         try {
             System.out.println("insert Server IP address:");
             String ipAddress= scanner.nextLine();
@@ -162,5 +162,5 @@ public class GameModeCLI implements GameMode {
             return;
         }
         System.out.println("Connected");
-    }
+    }*/
 }

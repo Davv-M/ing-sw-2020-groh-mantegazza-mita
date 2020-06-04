@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP38.client.GUIComponents;
+/*package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.Client;
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
@@ -73,4 +73,4 @@ public class ConnectionComponent extends JComponent implements ActionListener {
         }
         System.out.println("Connected");
     }
-}
+}*/

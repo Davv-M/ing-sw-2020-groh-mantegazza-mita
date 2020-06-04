@@ -1,9 +1,13 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
+import it.polimi.ingsw.PSP38.client.Client;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class GameWindow {
+public class GameWindow implements ActionListener {
     private static final int WIDTH = 500;
     private static final int HEIGHT = 500;
     private JFrame mainSetupFrame = new JFrame();
@@ -23,5 +27,18 @@ public class GameWindow {
         panelHolder.add(SetupPanels.createNamePanel(), "namePanel");
         panelHolder.add(SetupPanels.createAgePanel(),"agePanel");
         return panelHolder;
+    }
+
+    public JFrame getMainSetupFrame() {
+        return mainSetupFrame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==SetupPanels.getConnectButton()){
+            Client.connectionHandling(SetupPanels.getIpAddress().getText(),Client.getServerSocketPort());
+        }else if(e.getSource()==SetupPanels.getSubmitNicknameButton()){
+            //Client.
+        }
     }
 }

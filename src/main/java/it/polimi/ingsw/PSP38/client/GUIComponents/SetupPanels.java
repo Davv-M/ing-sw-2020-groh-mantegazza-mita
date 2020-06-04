@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
+import it.polimi.ingsw.PSP38.client.Client;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -24,6 +26,7 @@ public class SetupPanels {
         ipAddress = new JTextField();
         ipPanel.add(ipAddress);
         connectButton = new JButton("Connect");
+        connectButton.addActionListener(Client.getGameWindow());
         ipPanel.add(connectButton);
         return ipPanel;
     }
@@ -54,5 +57,21 @@ public class SetupPanels {
         submitAgeButton = new JButton("Submit age");
         agePanel.add(submitAgeButton);
         return agePanel;
+    }
+
+    public static JButton getConnectButton() {
+        return connectButton;
+    }
+
+    public static JTextField getIpAddress() {
+        return ipAddress;
+    }
+
+    public static JButton getSubmitNicknameButton() {
+        return submitNicknameButton;
+    }
+
+    public static JTextField getNickname() {
+        return nickname;
     }
 }

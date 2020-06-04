@@ -28,8 +28,6 @@ public class Client extends Observable implements Observer {
     private static Socket serverSocket;
     private static final Scanner ipScanner = new Scanner(System.in);
 
-
-
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         if (args.length==0) {
             gameMode = new GameModeGUI();
@@ -126,4 +124,11 @@ public class Client extends Observable implements Observer {
         gameMode.decodeMessage(Message.CONNECTED_TO_SERVER);
     }
 
+    public static GameWindow getGameWindow() {
+        return gameWindow;
+    }
+
+    public static int getServerSocketPort() {
+        return SERVER_SOCKET_PORT;
+    }
 }

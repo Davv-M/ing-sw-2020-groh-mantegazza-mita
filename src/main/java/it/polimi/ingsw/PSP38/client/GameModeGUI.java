@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP38.client;
 
-import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
+//import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
 import it.polimi.ingsw.PSP38.client.GUIComponents.SetNumOfPlayersComponent;
 import it.polimi.ingsw.PSP38.common.Message;
 
@@ -13,9 +13,9 @@ public class GameModeGUI implements GameMode {
     public JFrame frame;
     private String customStringRead;
 
-    public void welcome() {
+    /*public void welcome() {
         System.out.println("Welcome to Santorini");
-    }
+    }*/
 
     /*public GameModeGUI() {
         frame = new JFrame();
@@ -167,11 +167,20 @@ public class GameModeGUI implements GameMode {
     public void decodeMessage(Message m) {
         switch (m) {
             case WELCOME:
-                welcome();
+                //welcome();
                 break;
-            case INSERT_NUM_PLAYERS:
-                insertNumPlayer();
+            case INSERT_NUM_PLAYERS: {
+                Object[] options = {"2", "3"};
+                int n = JOptionPane.showOptionDialog(Client.getGameWindow().getMainSetupFrame(),
+                        "You are the first player to join this game. Please insert the number of players",
+                        null,
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        null);
                 break;
+                }
             case WAIT_FOR_NUM_PLAYERS:
                 waitForNumPlayer();
                 break;
@@ -300,13 +309,13 @@ public class GameModeGUI implements GameMode {
 
     }
 
-    @Override
+    /*@Override
     public void connectionHandling() {
         ConnectionComponent cc = new ConnectionComponent();
         cc.createConnectionWindow();
         frame.add(cc);
         frame.getContentPane().setPreferredSize(cc.getPreferredSize());
-    }
+    }*/
 
 
 }
