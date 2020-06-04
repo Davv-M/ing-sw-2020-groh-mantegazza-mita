@@ -17,13 +17,13 @@ public class GameModeGUI implements GameMode {
         System.out.println("Welcome to Santorini");
     }
 
-    public GameModeGUI() {
+    /*public GameModeGUI() {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         connectionHandling();
-    }
+    }*/
 
 
     public void insertNumPlayer() {

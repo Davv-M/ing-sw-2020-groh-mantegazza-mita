@@ -1,10 +1,17 @@
 package it.polimi.ingsw.PSP38.client;
 
+import it.polimi.ingsw.PSP38.client.GUIComponents.GameWindow;
 import it.polimi.ingsw.PSP38.common.Message;
 import it.polimi.ingsw.PSP38.common.Protocol;
 import it.polimi.ingsw.PSP38.common.utilities.Observer;
 
+import javax.swing.*;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.Observable;
+import java.util.Scanner;
 
 /**
  * Executable class for the client side of Santorini
@@ -12,22 +19,33 @@ import java.util.Observable;
  * and notify the class Client for all user inputs
  */
 public class Client extends Observable implements Observer {
+    private final static int SERVER_SOCKET_PORT = 3456;
     private static String dataInput;
     private static ServerHandler nextInputObserver;
     private static GameMode gameMode;
     private static String customString;
+    private static GameWindow gameWindow;
+    private static Socket serverSocket;
+    private static final Scanner ipScanner = new Scanner(System.in);
 
 
-    public static void main(String[] args){
+
+    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         if (args.length==0) {
             gameMode = new GameModeGUI();
+            SwingUtilities.invokeAndWait(() -> {
+                gameWindow=new GameWindow();
+                gameWindow.createGameWindow();
+            });
         } else if (args[0].equalsIgnoreCase("cli")) {
             gameMode = new GameModeCLI();
+            System.out.println("insert Server IP address:");
+            String ipAddress= ipScanner.nextLine();
+            connectionHandling(ipAddress,SERVER_SOCKET_PORT);
         } else {
             System.out.println("Parameter not recognized");
             System.exit(0);
         }
-
         while (true) {
             dataInput = gameMode.nextInput();
             notifyReadSomething();
@@ -93,5 +111,19 @@ public class Client extends Observable implements Observer {
         nextInputObserver = sh;
     }
 
+    public static void connectionHandling(String address, int port){
+        try {
+            InetAddress addr = InetAddress.getByName(address);
+            serverSocket = new Socket(addr, port);
+            ServerHandler serverHandler = new ServerHandler(serverSocket);
+            nextInputObserver = serverHandler;
+            Thread thread = new Thread(serverHandler);
+            thread.start();
+        } catch (IOException e) {
+            gameMode.decodeMessage(Message.SERVER_UNREACHEABLE);
+            return;
+        }
+        gameMode.decodeMessage(Message.CONNECTED_TO_SERVER);
+    }
 
 }

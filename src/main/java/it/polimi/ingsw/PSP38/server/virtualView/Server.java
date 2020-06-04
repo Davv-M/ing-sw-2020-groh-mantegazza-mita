@@ -26,7 +26,7 @@ public class Server {
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(SERVER_SOCKET_PORT);
-            System.out.println("Server online");
+            System.out.println("Server online on port "+SERVER_SOCKET_PORT);
             do {
                 Socket clientSocket = serverSocket.accept();
                 clientSocket.setSoTimeout(6000);

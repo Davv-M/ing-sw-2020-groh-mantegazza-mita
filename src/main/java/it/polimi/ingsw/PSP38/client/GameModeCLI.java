@@ -12,9 +12,9 @@ public class GameModeCLI implements GameMode {
     private final Scanner scanner = new Scanner(System.in);
     private static Socket serverSocket;
 
-    public GameModeCLI(){
+    /*public GameModeCLI(){
        connectionHandling();
-    }
+    }*/
 
     @Override
     public void decodeMessage(Message m){
@@ -121,6 +121,10 @@ public class GameModeCLI implements GameMode {
             case WAIT:
                 System.out.println("Please wait");
                 break;
+            case SERVER_UNREACHEABLE:
+                System.out.println("Server unreachable");
+            case CONNECTED_TO_SERVER:
+                System.out.println("Connected");
             default:
                 System.out.println("Message not recognized");
                 break;
