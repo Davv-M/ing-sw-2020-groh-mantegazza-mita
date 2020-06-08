@@ -38,7 +38,13 @@ public class GameWindow implements ActionListener {
         if(e.getSource()==SetupPanels.getConnectButton()){
             Client.connectionHandling(SetupPanels.getIpAddress().getText(),Client.getServerSocketPort());
         }else if(e.getSource()==SetupPanels.getSubmitNicknameButton()){
-            //Client.
+            Client.getGameMode().setStringRead(SetupPanels.getNickname().getText());
+        }else if(e.getSource()==SetupPanels.getSubmitAgeButton()){
+            Client.getGameMode().setStringRead(SetupPanels.getAge().getText());
         }
+    }
+
+    public JPanel getPanelHolder() {
+        return panelHolder;
     }
 }

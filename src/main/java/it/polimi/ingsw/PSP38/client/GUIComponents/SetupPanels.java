@@ -74,4 +74,12 @@ public class SetupPanels {
     public static JTextField getNickname() {
         return nickname;
     }
+
+    public static JButton getSubmitAgeButton() {
+        return submitAgeButton;
+    }
+
+    public static JTextField getAge() {
+        return age;
+    }
 }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP38.client.GUIComponents.SetNumOfPlayersComponent;
 import it.polimi.ingsw.PSP38.common.Message;
 
 import javax.swing.*;
+import java.awt.*;
 
 
 public class GameModeGUI implements GameMode {
@@ -167,7 +168,7 @@ public class GameModeGUI implements GameMode {
     public void decodeMessage(Message m) {
         switch (m) {
             case WELCOME:
-                //welcome();
+                System.out.println();
                 break;
             case INSERT_NUM_PLAYERS: {
                 Object[] options = {"2", "3"};
@@ -179,6 +180,15 @@ public class GameModeGUI implements GameMode {
                         null,
                         options,
                         null);
+                if (n==JOptionPane.YES_OPTION){
+                    Client.getGameMode().setStringRead("2");
+                    CardLayout cl = (CardLayout)(Client.getGameWindow().getPanelHolder().getLayout());
+                    cl.show(Client.getGameWindow().getPanelHolder(), "namePanel");
+                }else if(n==JOptionPane.NO_OPTION){
+                    Client.getGameMode().setStringRead("3");
+                    CardLayout cl = (CardLayout)(Client.getGameWindow().getPanelHolder().getLayout());
+                    cl.show(Client.getGameWindow().getPanelHolder(), "namePanel");
+                }
                 break;
                 }
             case WAIT_FOR_NUM_PLAYERS:
@@ -298,6 +308,7 @@ public class GameModeGUI implements GameMode {
         return dataReadFromClient;
     }
 
+    @Override
     public void setStringRead(String dataRead) {
         dataReadFromClient = dataRead;
         isDataReady = true;

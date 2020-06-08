@@ -2,8 +2,6 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Message;
 
-import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -145,6 +143,13 @@ public class GameModeCLI implements GameMode {
     public void displayBoard() {
         BoardPrinter.printBoard(ServerHandler.readBoard());
     }
+
+    @Override
+    public void setStringRead(String dataRead) {
+
+    }
+
+
 
 
     /*public void connectionHandling(){

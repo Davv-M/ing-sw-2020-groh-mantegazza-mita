@@ -131,4 +131,9 @@ public class Client extends Observable implements Observer {
     public static int getServerSocketPort() {
         return SERVER_SOCKET_PORT;
     }
+
+    public static GameMode getGameMode() {
+        return gameMode;
+    }
+
 }
