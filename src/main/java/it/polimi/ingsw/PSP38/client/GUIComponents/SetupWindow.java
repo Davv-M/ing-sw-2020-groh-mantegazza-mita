@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.Client;
+import it.polimi.ingsw.PSP38.client.GameModeGUI;
 import it.polimi.ingsw.PSP38.client.ImageCollection;
 
 import javax.imageio.ImageIO;
@@ -33,8 +34,10 @@ public class SetupWindow extends Observable implements ActionListener {
     private Color bkgTextColor = new Color(62,159,225);
     private Color textColor  = Color.WHITE;
     private final static Client clientUpdate = new Client();
+    private static GameModeGUI gameModeGUI;
 
-    public void createSetupWindow(){
+    public void createSetupWindow(GameModeGUI gmg){
+        gameModeGUI=gmg;
         mainSetupFrame.setSize(WIDTH, HEIGHT);
         mainSetupFrame.setTitle("Santorini");
         mainSetupFrame.add(createSetupPanel());
@@ -110,7 +113,14 @@ public class SetupWindow extends Observable implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==connectButton){
-
+            if (nickname.getText()==null||ipAddress.getText()==null||age.getText()==null){
+                System.out.println("errore inserimento");
+            }else {
+                gameModeGUI.setIP(ipAddress.getText());
+                gameModeGUI.setNickname(nickname.getText());
+                gameModeGUI.setAge(age.getText());
+                System.out.println("Pronto");
+            }
         }
     }
 
@@ -125,4 +135,8 @@ public class SetupWindow extends Observable implements ActionListener {
         }
         System.out.println("Connected");
     }*/
+
+    public JFrame getMainSetupFrame() {
+        return mainSetupFrame;
+    }
 }

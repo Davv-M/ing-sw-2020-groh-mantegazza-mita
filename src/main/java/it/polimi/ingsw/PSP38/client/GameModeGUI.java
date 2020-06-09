@@ -2,29 +2,36 @@ package it.polimi.ingsw.PSP38.client;
 
 //import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
 import it.polimi.ingsw.PSP38.client.GUIComponents.SetNumOfPlayersComponent;
+import it.polimi.ingsw.PSP38.client.GUIComponents.SetupPanels;
+import it.polimi.ingsw.PSP38.client.GUIComponents.SetupWindow;
 import it.polimi.ingsw.PSP38.common.Message;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 
 
 public class GameModeGUI implements GameMode {
     volatile boolean isDataReady = false;
     String dataReadFromClient;
+    static String nickname = "anonymous";
+    static String age;
     public JFrame frame;
     private String customStringRead;
+    private SetupWindow setupWindow;
 
     /*public void welcome() {
         System.out.println("Welcome to Santorini");
     }*/
 
-    /*public GameModeGUI() {
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-        connectionHandling();
-    }*/
+    public GameModeGUI() throws InvocationTargetException, InterruptedException {
+        SwingUtilities.invokeAndWait(() -> {
+                /*gameWindow=new GameWindow();
+                gameWindow.createGameWindow();*/
+            setupWindow=new SetupWindow();
+            setupWindow.createSetupWindow(this);
+        });
+    }
 
 
     public void insertNumPlayer() {
@@ -41,11 +48,11 @@ public class GameModeGUI implements GameMode {
     }
 
     public void chooseNickname() {
-        System.out.println("Choose your nickname");
+        setStringRead(nickname);
     }
 
     public void setAge() {
-        System.out.println("\"How old are you? (integer between 8 and 99)\"");
+        setStringRead(age);
     }
 
     public void waitForDivinities() {
@@ -123,6 +130,9 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitYourTurn() {
+        System.out.println(ServerHandler.getProtocol());
+        System.out.println(ServerHandler.getMessage());
+        System.out.println(dataReadFromClient);
         System.out.println("please wait");
 
     }
@@ -171,8 +181,8 @@ public class GameModeGUI implements GameMode {
                 System.out.println();
                 break;
             case INSERT_NUM_PLAYERS: {
-                Object[] options = {"2", "3"};
-                int n = JOptionPane.showOptionDialog(Client.getGameWindow().getMainSetupFrame(),
+                /*Object[] options = {"2", "3"};
+                int n = JOptionPane.showOptionDialog(setupWindow.getMainSetupFrame(),
                         "You are the first player to join this game. Please insert the number of players",
                         null,
                         JOptionPane.YES_NO_OPTION,
@@ -181,16 +191,20 @@ public class GameModeGUI implements GameMode {
                         options,
                         null);
                 if (n==JOptionPane.YES_OPTION){
-                    Client.getGameMode().setStringRead("2");
-                    CardLayout cl = (CardLayout)(Client.getGameWindow().getPanelHolder().getLayout());
+                    setStringRead("2");
+                    System.out.println("ciao1");
+                    /*CardLayout cl = (CardLayout)(Client.getGameWindow().getPanelHolder().getLayout());
                     cl.show(Client.getGameWindow().getPanelHolder(), "namePanel");
                 }else if(n==JOptionPane.NO_OPTION){
-                    Client.getGameMode().setStringRead("3");
-                    CardLayout cl = (CardLayout)(Client.getGameWindow().getPanelHolder().getLayout());
+                    setStringRead("3");
+                    System.out.println("ciao2");
+                    /*CardLayout cl = (CardLayout)(Client.getGameWindow().getPanelHolder().getLayout());
                     cl.show(Client.getGameWindow().getPanelHolder(), "namePanel");
+                }*/
+                System.out.println("Inserisci numero giocatori");
+                setStringRead("2");
                 }
                 break;
-                }
             case WAIT_FOR_NUM_PLAYERS:
                 waitForNumPlayer();
                 break;
@@ -286,8 +300,11 @@ public class GameModeGUI implements GameMode {
             case WAIT:
                 waitYourTurn();
                 break;
+            case CONNECTED_TO_SERVER:
+                break;
             default:
-                System.out.println("Message not recognized");
+                System.out.println("Message not recognized\n");
+                System.out.println(m);
                 break;
         }
     }
@@ -305,6 +322,7 @@ public class GameModeGUI implements GameMode {
             Thread.onSpinWait();
         }
         isDataReady = false;
+        System.out.println(dataReadFromClient+"aaaaaa");
         return dataReadFromClient;
     }
 
@@ -312,6 +330,7 @@ public class GameModeGUI implements GameMode {
     public void setStringRead(String dataRead) {
         dataReadFromClient = dataRead;
         isDataReady = true;
+        System.out.println("ho letto: "+dataReadFromClient);
     }
 
 
@@ -327,6 +346,20 @@ public class GameModeGUI implements GameMode {
         frame.add(cc);
         frame.getContentPane().setPreferredSize(cc.getPreferredSize());
     }*/
+
+
+    public static void setIP(String ipAddress){
+        Client.connectionHandling(ipAddress,Client.getServerSocketPort());
+    }
+
+    public static void setNickname(String nicknameRead){
+        nickname=nicknameRead;
+    }
+
+    public static void setAge(String ageRead){
+        age=ageRead;
+    }
+
 
 
 }

@@ -121,8 +121,10 @@ public class GameModeCLI implements GameMode {
                 break;
             case SERVER_UNREACHEABLE:
                 System.out.println("Server unreachable");
+                break;
             case CONNECTED_TO_SERVER:
                 System.out.println("Connected");
+                break;
             default:
                 System.out.println("Message not recognized");
                 break;

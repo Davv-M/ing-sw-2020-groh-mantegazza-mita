@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.client.GUIComponents.GameWindow;
+import it.polimi.ingsw.PSP38.client.GUIComponents.SetupWindow;
 import it.polimi.ingsw.PSP38.common.Message;
 import it.polimi.ingsw.PSP38.common.Protocol;
 import it.polimi.ingsw.PSP38.common.utilities.Observer;
@@ -27,14 +28,11 @@ public class Client extends Observable implements Observer {
     private static GameWindow gameWindow;
     private static Socket serverSocket;
     private static final Scanner ipScanner = new Scanner(System.in);
+    private static SetupWindow setupWindow;
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         if (args.length==0) {
             gameMode = new GameModeGUI();
-            SwingUtilities.invokeAndWait(() -> {
-                gameWindow=new GameWindow();
-                gameWindow.createGameWindow();
-            });
         } else if (args[0].equalsIgnoreCase("cli")) {
             gameMode = new GameModeCLI();
             System.out.println("insert Server IP address:");
@@ -85,6 +83,8 @@ public class Client extends Observable implements Observer {
             nextInputObserver.update();
         } else {
             gameMode.decodeMessage(Message.WAIT);
+            System.out.println(protocolRead);
+            System.out.println(ServerHandler.getMessage());
         }
 
     }
