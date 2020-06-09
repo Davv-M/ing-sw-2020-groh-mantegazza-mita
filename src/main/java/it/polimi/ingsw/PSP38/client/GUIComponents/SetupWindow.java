@@ -35,13 +35,15 @@ public class SetupWindow extends Observable implements ActionListener {
     private Color textColor  = Color.WHITE;
     private final static Client clientUpdate = new Client();
     private static GameModeGUI gameModeGUI;
+    private JLabel errorMessage;
 
-    public void createSetupWindow(GameModeGUI gmg){
+    public JFrame createSetupWindow(GameModeGUI gmg){
         gameModeGUI=gmg;
         mainSetupFrame.setSize(WIDTH, HEIGHT);
         mainSetupFrame.setTitle("Santorini");
         mainSetupFrame.add(createSetupPanel());
         mainSetupFrame.setVisible(true);
+        return mainSetupFrame;
     }
 
     public JPanel createSetupPanel(){
@@ -76,7 +78,7 @@ public class SetupWindow extends Observable implements ActionListener {
     }
     public JPanel createControlPanel(){
         controlPanel = new JPanel();
-        controlPanel.setLayout(new GridLayout(6,1));
+        controlPanel.setLayout(new GridLayout(7,1));
         controlPanel.setBackground(panelColor);
         ipLabel = new JLabel("IP address");
         ipLabel.setForeground(textColor);
@@ -96,6 +98,10 @@ public class SetupWindow extends Observable implements ActionListener {
         age = new JTextField();
         age.setBackground(bkgTextColor);
         controlPanel.add(age);
+        errorMessage = new JLabel( "");
+        errorMessage.setForeground(textColor);
+        errorMessage.setBackground(bkgColor);
+        controlPanel.add(errorMessage);
         return controlPanel;
     }
 
@@ -113,6 +119,19 @@ public class SetupWindow extends Observable implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==connectButton){
+            if (nickname.getText().isEmpty() || ipAddress.getText().isEmpty() || age.getText().isEmpty()){
+                errorMessage.setText("tutti i campi sono obbligatori");
+            }else {
+                gameModeGUI.setIP(ipAddress.getText());
+                gameModeGUI.setNickname(nickname.getText());
+                gameModeGUI.setAge(age.getText());
+            }
+        }
+    }
+
+    /*@Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==connectButton){
             if (nickname.getText()==null||ipAddress.getText()==null||age.getText()==null){
                 System.out.println("errore inserimento");
             }else {
@@ -122,7 +141,7 @@ public class SetupWindow extends Observable implements ActionListener {
                 System.out.println("Pronto");
             }
         }
-    }
+    }*/
 
     /*public void connectionHandling(String address){
         try {

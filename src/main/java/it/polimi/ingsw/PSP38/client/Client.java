@@ -74,17 +74,19 @@ public class Client extends Observable implements Observer {
         return dataInput;
     }
 
+
     /**
      * notify observers that is available a new data input from the client
      */
-    private static void notifyReadSomething() {
+    private static void notifyReadSomething(){
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException ignore) {}
         Protocol protocolRead = ServerHandler.getProtocol();
         if (protocolRead == Protocol.ASK_INT || protocolRead == Protocol.ASK_STRING) {
             nextInputObserver.update();
         } else {
             gameMode.decodeMessage(Message.WAIT);
-            System.out.println(protocolRead);
-            System.out.println(ServerHandler.getMessage());
         }
 
     }

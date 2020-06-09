@@ -10,6 +10,5 @@ public interface GameMode {
     void updateCustomString();
     String nextInput();
     void displayBoard();
-    //void connectionHandling();
     void setStringRead(String dataRead);
 }

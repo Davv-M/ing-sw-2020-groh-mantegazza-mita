@@ -5,39 +5,53 @@ import it.polimi.ingsw.PSP38.client.GUIComponents.SetNumOfPlayersComponent;
 import it.polimi.ingsw.PSP38.client.GUIComponents.SetupPanels;
 import it.polimi.ingsw.PSP38.client.GUIComponents.SetupWindow;
 import it.polimi.ingsw.PSP38.common.Message;
+import it.polimi.ingsw.PSP38.common.Protocol;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.List;
 
 
 public class GameModeGUI implements GameMode {
     volatile boolean isDataReady = false;
-    String dataReadFromClient;
-    static String nickname = "anonymous";
-    static String age;
-    public JFrame frame;
+    private String dataReadFromClient;
+    private static String nickname = "anonymous";
+    private static String age;
+    private JFrame frame;
     private String customStringRead;
     private SetupWindow setupWindow;
 
-    /*public void welcome() {
-        System.out.println("Welcome to Santorini");
-    }*/
 
     public GameModeGUI() throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeAndWait(() -> {
-                /*gameWindow=new GameWindow();
-                gameWindow.createGameWindow();*/
             setupWindow=new SetupWindow();
-            setupWindow.createSetupWindow(this);
+            frame = setupWindow.createSetupWindow(this);
         });
     }
 
+    public JFrame getFrame(){return frame;}
+
 
     public void insertNumPlayer() {
-        SetNumOfPlayersComponent snopc = new SetNumOfPlayersComponent(this);
-        frame.add(snopc);
+        Object[] options = {"2", "3"};
+                int n = JOptionPane.showOptionDialog(setupWindow.getMainSetupFrame(),
+                        "You are the first player to join this game. Please insert the number of players",
+                        null,
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        null);
+                if (n==JOptionPane.YES_OPTION){
+                    setStringRead("2");
+                }else if(n==JOptionPane.NO_OPTION){
+                    setStringRead("3");
+                }
     }
+
+
 
     public void waitForNumPlayer() {
         System.out.println("Please wait for the first player to select the number of players.");
@@ -48,11 +62,16 @@ public class GameModeGUI implements GameMode {
     }
 
     public void chooseNickname() {
+        System.out.println("inserisci il tuo nickname:");
         setStringRead(nickname);
+        System.out.println("nickname mandato");
     }
 
     public void setAge() {
+        System.out.println("inserisci la tua eta:");
         setStringRead(age);
+        System.out.println("eta mandata");
+
     }
 
     public void waitForDivinities() {
@@ -130,9 +149,6 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitYourTurn() {
-        System.out.println(ServerHandler.getProtocol());
-        System.out.println(ServerHandler.getMessage());
-        System.out.println(dataReadFromClient);
         System.out.println("please wait");
 
     }
@@ -178,32 +194,9 @@ public class GameModeGUI implements GameMode {
     public void decodeMessage(Message m) {
         switch (m) {
             case WELCOME:
-                System.out.println();
                 break;
-            case INSERT_NUM_PLAYERS: {
-                /*Object[] options = {"2", "3"};
-                int n = JOptionPane.showOptionDialog(setupWindow.getMainSetupFrame(),
-                        "You are the first player to join this game. Please insert the number of players",
-                        null,
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        options,
-                        null);
-                if (n==JOptionPane.YES_OPTION){
-                    setStringRead("2");
-                    System.out.println("ciao1");
-                    /*CardLayout cl = (CardLayout)(Client.getGameWindow().getPanelHolder().getLayout());
-                    cl.show(Client.getGameWindow().getPanelHolder(), "namePanel");
-                }else if(n==JOptionPane.NO_OPTION){
-                    setStringRead("3");
-                    System.out.println("ciao2");
-                    /*CardLayout cl = (CardLayout)(Client.getGameWindow().getPanelHolder().getLayout());
-                    cl.show(Client.getGameWindow().getPanelHolder(), "namePanel");
-                }*/
-                System.out.println("Inserisci numero giocatori");
-                setStringRead("2");
-                }
+            case INSERT_NUM_PLAYERS:
+                insertNumPlayer();
                 break;
             case WAIT_FOR_NUM_PLAYERS:
                 waitForNumPlayer();
@@ -322,15 +315,14 @@ public class GameModeGUI implements GameMode {
             Thread.onSpinWait();
         }
         isDataReady = false;
-        System.out.println(dataReadFromClient+"aaaaaa");
         return dataReadFromClient;
+
     }
 
     @Override
     public void setStringRead(String dataRead) {
         dataReadFromClient = dataRead;
         isDataReady = true;
-        System.out.println("ho letto: "+dataReadFromClient);
     }
 
 
@@ -338,15 +330,6 @@ public class GameModeGUI implements GameMode {
     public void displayBoard() {
 
     }
-
-    /*@Override
-    public void connectionHandling() {
-        ConnectionComponent cc = new ConnectionComponent();
-        cc.createConnectionWindow();
-        frame.add(cc);
-        frame.getContentPane().setPreferredSize(cc.getPreferredSize());
-    }*/
-
 
     public static void setIP(String ipAddress){
         Client.connectionHandling(ipAddress,Client.getServerSocketPort());

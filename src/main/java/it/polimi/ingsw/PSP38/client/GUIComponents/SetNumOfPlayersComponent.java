@@ -22,9 +22,9 @@ public class SetNumOfPlayersComponent extends JComponent implements ActionListen
 
     public void createSetNumPlayerWindow(){
         JLabel message = new JLabel("inserisci il numero di giocatori");
-        gmg.frame.add(message);
-        gmg.frame.add(createNumPlayerButton());
-        gmg.frame.setVisible(true);
+        gmg.getFrame().add(message);
+        gmg.getFrame().add(createNumPlayerButton());
+        gmg.getFrame().setVisible(true);
     }
 
     public JPanel createNumPlayerButton(){
