@@ -1,17 +1,11 @@
 package it.polimi.ingsw.PSP38.client;
 
 //import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
-import it.polimi.ingsw.PSP38.client.GUIComponents.SetNumOfPlayersComponent;
-import it.polimi.ingsw.PSP38.client.GUIComponents.SetupPanels;
-import it.polimi.ingsw.PSP38.client.GUIComponents.SetupWindow;
+import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
 import it.polimi.ingsw.PSP38.common.Message;
-import it.polimi.ingsw.PSP38.common.Protocol;
 
 import javax.swing.*;
-import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.List;
 
 
 public class GameModeGUI implements GameMode {
@@ -21,13 +15,13 @@ public class GameModeGUI implements GameMode {
     private static String age;
     private JFrame frame;
     private String customStringRead;
-    private SetupWindow setupWindow;
+    private SantoriniWindow santoriniWindow;
 
 
     public GameModeGUI() throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeAndWait(() -> {
-            setupWindow=new SetupWindow();
-            frame = setupWindow.createSetupWindow(this);
+            santoriniWindow =new SantoriniWindow();
+            frame = santoriniWindow.createSantoriniWindow(this);
         });
     }
 
@@ -36,7 +30,7 @@ public class GameModeGUI implements GameMode {
 
     public void insertNumPlayer() {
         Object[] options = {"2", "3"};
-                int n = JOptionPane.showOptionDialog(setupWindow.getMainSetupFrame(),
+                int n = JOptionPane.showOptionDialog(santoriniWindow.getMainSetupFrame(),
                         "You are the first player to join this game. Please insert the number of players",
                         null,
                         JOptionPane.YES_NO_OPTION,
@@ -46,6 +40,7 @@ public class GameModeGUI implements GameMode {
                         null);
                 if (n==JOptionPane.YES_OPTION){
                     setStringRead("2");
+
                 }else if(n==JOptionPane.NO_OPTION){
                     setStringRead("3");
                 }
@@ -343,6 +338,7 @@ public class GameModeGUI implements GameMode {
         age=ageRead;
     }
 
-
-
+    public SantoriniWindow getSantoriniWindow() {
+        return santoriniWindow;
+    }
 }

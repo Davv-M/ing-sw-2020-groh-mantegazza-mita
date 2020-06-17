@@ -1,12 +1,10 @@
 package it.polimi.ingsw.PSP38.client;
 
-import it.polimi.ingsw.PSP38.client.GUIComponents.GameWindow;
-import it.polimi.ingsw.PSP38.client.GUIComponents.SetupWindow;
+import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
 import it.polimi.ingsw.PSP38.common.Message;
 import it.polimi.ingsw.PSP38.common.Protocol;
 import it.polimi.ingsw.PSP38.common.utilities.Observer;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
@@ -25,17 +23,16 @@ public class Client extends Observable implements Observer {
     private static ServerHandler nextInputObserver;
     private static GameMode gameMode;
     private static String customString;
-    private static GameWindow gameWindow;
     private static Socket serverSocket;
     private static final Scanner ipScanner = new Scanner(System.in);
-    private static SetupWindow setupWindow;
+    private static SantoriniWindow santoriniWindow;
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         if (args.length==0) {
             gameMode = new GameModeGUI();
         } else if (args[0].equalsIgnoreCase("cli")) {
             gameMode = new GameModeCLI();
-            System.out.println("insert Server IP address:");
+            System.out.println("Insert server IP address:");
             String ipAddress= ipScanner.nextLine();
             connectionHandling(ipAddress,SERVER_SOCKET_PORT);
         } else {
@@ -124,10 +121,6 @@ public class Client extends Observable implements Observer {
             return;
         }
         gameMode.decodeMessage(Message.CONNECTED_TO_SERVER);
-    }
-
-    public static GameWindow getGameWindow() {
-        return gameWindow;
     }
 
     public static int getServerSocketPort() {

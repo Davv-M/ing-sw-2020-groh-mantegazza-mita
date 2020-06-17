@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP38.client.Client;
 import javax.swing.*;
 import java.awt.*;
 
-public class SetupPanels {
+public class SetupPanelsOLD {
     private static JPanel ipPanel;
     private static JPanel namePanel;
     private static JPanel agePanel;
@@ -26,7 +26,7 @@ public class SetupPanels {
         ipAddress = new JTextField();
         ipPanel.add(ipAddress);
         connectButton = new JButton("Connect");
-        connectButton.addActionListener(Client.getGameWindow());
+        //connectButton.addActionListener(Client.getGameWindow());
         ipPanel.add(connectButton);
         return ipPanel;
     }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
-import it.polimi.ingsw.PSP38.client.Client;
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
 import it.polimi.ingsw.PSP38.client.ImageCollection;
 
@@ -13,12 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Objects;
-import java.util.Observable;
 
-public class SetupWindow extends Observable implements ActionListener {
-    public static final int WIDTH = 600;
-    public static final int HEIGHT = 800;
-    private JFrame mainSetupFrame = new JFrame();
+public class StartPanel implements ActionListener {
     private JPanel setupPanel;
     private JPanel controlPanel;
     private JPanel buttonPanel;
@@ -33,20 +28,11 @@ public class SetupWindow extends Observable implements ActionListener {
     private Color bkgColor = new Color(25, 109,165);
     private Color bkgTextColor = new Color(62,159,225);
     private Color textColor  = Color.WHITE;
-    private final static Client clientUpdate = new Client();
-    private static GameModeGUI gameModeGUI;
     private JLabel errorMessage;
+    private GameModeGUI gameModeGUI;
 
-    public JFrame createSetupWindow(GameModeGUI gmg){
+    public JPanel createSetupPanel(GameModeGUI gmg){
         gameModeGUI=gmg;
-        mainSetupFrame.setSize(WIDTH, HEIGHT);
-        mainSetupFrame.setTitle("Santorini");
-        mainSetupFrame.add(createSetupPanel());
-        mainSetupFrame.setVisible(true);
-        return mainSetupFrame;
-    }
-
-    public JPanel createSetupPanel(){
         setupPanel = new JPanel();
         setupPanel.setLayout(new GridLayout(3,1));
         setupPanel.setBackground(bkgColor);
@@ -125,37 +111,9 @@ public class SetupWindow extends Observable implements ActionListener {
                 gameModeGUI.setIP(ipAddress.getText());
                 gameModeGUI.setNickname(nickname.getText());
                 gameModeGUI.setAge(age.getText());
+                CardLayout cl = (CardLayout)(gameModeGUI.getSantoriniWindow().getCardHolder().getLayout());
+                cl.show(gameModeGUI.getSantoriniWindow().getCardHolder(), "cardChoice");
             }
         }
-    }
-
-    /*@Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==connectButton){
-            if (nickname.getText()==null||ipAddress.getText()==null||age.getText()==null){
-                System.out.println("errore inserimento");
-            }else {
-                gameModeGUI.setIP(ipAddress.getText());
-                gameModeGUI.setNickname(nickname.getText());
-                gameModeGUI.setAge(age.getText());
-                System.out.println("Pronto");
-            }
-        }
-    }*/
-
-    /*public void connectionHandling(String address){
-        try {
-            InetAddress addr = InetAddress.getByName(address);
-            serverSocket = new Socket(addr, 3456);
-            //System.out.println(InetAddress.getLocalHost());
-        } catch (IOException e) {
-            System.out.println("server unreachable");
-            return;
-        }
-        System.out.println("Connected");
-    }*/
-
-    public JFrame getMainSetupFrame() {
-        return mainSetupFrame;
     }
 }

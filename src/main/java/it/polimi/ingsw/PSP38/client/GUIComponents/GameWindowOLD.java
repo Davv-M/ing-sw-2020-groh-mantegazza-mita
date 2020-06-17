@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GameWindow implements ActionListener {
+public class GameWindowOLD implements ActionListener {
     private static final int WIDTH = 500;
     private static final int HEIGHT = 500;
     private JFrame mainSetupFrame = new JFrame();
@@ -23,9 +23,9 @@ public class GameWindow implements ActionListener {
     public JPanel createPanelHolder(){
         panelHolder=new JPanel();
         panelHolder.setLayout(new CardLayout());
-        panelHolder.add(SetupPanels.createIPPanel(),"ipPanel");
-        panelHolder.add(SetupPanels.createNamePanel(), "namePanel");
-        panelHolder.add(SetupPanels.createAgePanel(),"agePanel");
+        panelHolder.add(SetupPanelsOLD.createIPPanel(),"ipPanel");
+        panelHolder.add(SetupPanelsOLD.createNamePanel(), "namePanel");
+        panelHolder.add(SetupPanelsOLD.createAgePanel(),"agePanel");
         return panelHolder;
     }
 
@@ -35,12 +35,12 @@ public class GameWindow implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==SetupPanels.getConnectButton()){
-            Client.connectionHandling(SetupPanels.getIpAddress().getText(),Client.getServerSocketPort());
-        }else if(e.getSource()==SetupPanels.getSubmitNicknameButton()){
-            Client.getGameMode().setStringRead(SetupPanels.getNickname().getText());
-        }else if(e.getSource()==SetupPanels.getSubmitAgeButton()){
-            Client.getGameMode().setStringRead(SetupPanels.getAge().getText());
+        if(e.getSource()== SetupPanelsOLD.getConnectButton()){
+            Client.connectionHandling(SetupPanelsOLD.getIpAddress().getText(),Client.getServerSocketPort());
+        }else if(e.getSource()== SetupPanelsOLD.getSubmitNicknameButton()){
+            Client.getGameMode().setStringRead(SetupPanelsOLD.getNickname().getText());
+        }else if(e.getSource()== SetupPanelsOLD.getSubmitAgeButton()){
+            Client.getGameMode().setStringRead(SetupPanelsOLD.getAge().getText());
         }
     }
 

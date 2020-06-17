@@ -66,7 +66,7 @@ public class GameModeCLI implements GameMode {
                 System.out.println("Player, this worker doesn't belong to you");
                 break;
             case ASK_SPECIAL_ACTION:
-                System.out.println("Do you want to use your special ability");
+                System.out.println("Do you want to use your special ability?");
                 break;
             case ILLEGAL_NICKNAME:
                 System.out.println("This nickname is unavailable, please choose another one");
