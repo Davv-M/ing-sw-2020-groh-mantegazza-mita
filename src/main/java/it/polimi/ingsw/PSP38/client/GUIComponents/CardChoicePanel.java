@@ -1,14 +1,14 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
-import it.polimi.ingsw.PSP38.client.GameMode;
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class CardChoicePanel {
-    private static JPanel mainCardPanel;
-    private static JPanel cardDescriptionPanel;
+    private JPanel mainCardPanel;
+    private JPanel cardDescriptionPanel;
+    private JPanel cardButtonsPanel;
     private GameModeGUI gameModeGUI;
 
     public JPanel createMainCardPanel(GameModeGUI gmg){
@@ -18,8 +18,17 @@ public class CardChoicePanel {
         return mainCardPanel;
     }
 
+    public JPanel createCardButtonsPanel(){
+        cardButtonsPanel = new JPanel(new GridLayout(4,4));
+        return cardButtonsPanel;
+    }
+
     public JPanel createDescriptionPanel(){
         cardDescriptionPanel = new JPanel();
         return cardDescriptionPanel;
+    }
+
+    public void initializeButtonPanel(){
+
     }
 }

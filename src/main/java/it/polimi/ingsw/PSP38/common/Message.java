@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP38.common;
 
 /**
- *Enumeration class that contains all the possible messages that can be shown to the user
+ *Enumeration class that contains all the possible messages that the server is able to send to the clients connected to it
  * @author Davide Mantegazza (10568661)
  */
 public enum Message {

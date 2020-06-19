@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP38.client;
 
 //import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
 import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
-import it.polimi.ingsw.PSP38.client.GUIComponents.WaitingPanel;
 import it.polimi.ingsw.PSP38.common.Message;
 
 import javax.swing.*;
@@ -32,7 +31,7 @@ public class GameModeGUI implements GameMode {
 
     public void insertNumPlayer() {
         Object[] options = {"2", "3"};
-                int n = JOptionPane.showOptionDialog(santoriniWindow.getMainSetupFrame(),
+                int n = JOptionPane.showOptionDialog(santoriniWindow.getStartPanel().getStartPanel(),
                         "You are the first player to join this game. Please insert the number of players",
                         null,
                         JOptionPane.YES_NO_OPTION,
@@ -137,11 +136,8 @@ public class GameModeGUI implements GameMode {
     public void waitForFullGame() {
         System.out.println("Hold on, all the players will be ready in a few seconds");
 
-
-        ImageIcon prova = new ImageIcon("santorini-hold-on.png");
-        JLabel background = new JLabel("",prova,JLabel.CENTER);
-        background.setBounds(0,0,1200,700);
-        frame.add(background);
+        CardLayout cl = (CardLayout)(getSantoriniWindow().getCardHolder().getLayout());
+        cl.show(getSantoriniWindow().getCardHolder(), "waitForPlayers");
     }
 
     public void divinityCardNotExists() {
@@ -178,8 +174,9 @@ public class GameModeGUI implements GameMode {
         System.out.println(customStringRead);
     }
 
-    private void display_divinity_message() {
-        System.out.println(customStringRead + ", please select a divinity card from this list :\n");
+    private void displayDivinityMessage() {
+        CardLayout cl = (CardLayout)(getSantoriniWindow().getCardHolder().getLayout());
+        cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
     }
 
     private void unableToFinishTurn() {
@@ -292,7 +289,7 @@ public class GameModeGUI implements GameMode {
                 illegalDivinity();
                 break;
             case DISPLAY_DIVINITY_MESSAGE:
-                display_divinity_message();
+                displayDivinityMessage();
                 break;
             case DISPLAY_AVAILABLE_DIVINITIES:
                 displayAvailableDivinities();

@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP38.common.Message;
 import java.net.Socket;
 import java.util.Scanner;
 
+
 public class GameModeCLI implements GameMode {
     private String customStringRead;
     private final Scanner scanner = new Scanner(System.in);

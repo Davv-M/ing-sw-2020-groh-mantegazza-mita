@@ -2,17 +2,9 @@ package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.Client;
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
-import it.polimi.ingsw.PSP38.client.ImageCollection;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Objects;
 import java.util.Observable;
 
 public class SantoriniWindow extends Observable /*implements ActionListener*/ {
@@ -20,7 +12,7 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
     public static final int HEIGHT = 650;
     private JFrame mainSetupFrame = new JFrame();
     private JPanel cardHolder;
-    private JPanel setupPanel;
+    /*private JPanel setupPanel;
     private JPanel controlPanel;
     private JPanel buttonPanel;
     private JLabel ipLabel;
@@ -33,12 +25,14 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
     private Color panelColor = new Color(0,0,0,0);
     private Color bkgColor = new Color(25, 109,165);
     private Color bkgTextColor = new Color(62,159,225);
-    private Color textColor  = Color.WHITE;
+    private Color textColor  = Color.WHITE;*/
     private final static Client clientUpdate = new Client();
     private static GameModeGUI gameModeGUI;
     private JLabel errorMessage;
     private StartPanel startPanel;
     private CardChoicePanel cardChoicePanel;
+    private WaitingPanel waitingPanel;
+
 
     public JFrame createSantoriniWindow(GameModeGUI gmg){
         gameModeGUI=gmg;
@@ -53,13 +47,15 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
         cardHolder = new JPanel();
         cardHolder.setLayout(new CardLayout());
         startPanel=new StartPanel();
-        cardHolder.add(startPanel.createSetupPanel(gameModeGUI), "setup");
+        cardHolder.add(startPanel.createStartPanel(gameModeGUI), "setup");
+        waitingPanel = new WaitingPanel();
+        cardHolder.add(waitingPanel.createWaitingPanel(), "waitForPlayers");
         cardChoicePanel=new CardChoicePanel();
         cardHolder.add(cardChoicePanel.createMainCardPanel(gameModeGUI), "cardChoice");
         return cardHolder;
     }
 
-    /*public JPanel createSetupPanel(){
+    /*public JPanel createStartPanel(){
         setupPanel = new JPanel();
         setupPanel.setLayout(new GridLayout(3,1));
         setupPanel.setBackground(bkgColor);
@@ -174,5 +170,9 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
 
     public JPanel getCardHolder() {
         return cardHolder;
+    }
+
+    public StartPanel getStartPanel() {
+        return startPanel;
     }
 }

@@ -11,16 +11,35 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class WaitingPanel {
+    private JPanel waitingPanel;
+    private JPanel imagePanel;
+    private JPanel hourglassPanel;
 
-   /* public JPanel waitingPanel() {
-
-        ImageIcon prova = new ImageIcon("santorini-hold-on.png");
-        JLabel background = new JLabel("",prova,JLabel.CENTER);
-        background.setBounds(0,0,1200,700);
-        add(background);
-        JPanel prova2 = new JPanel();
-
-        prova2.add(prova1);
-    }*/
+    public JPanel createWaitingPanel(){
+        waitingPanel = new JPanel();
+        waitingPanel.setLayout(new BorderLayout());
+        waitingPanel.add(createWaitImagePanel(), BorderLayout.CENTER);
+        return waitingPanel;
+    }
+    public JPanel createWaitImagePanel() {
+        Image waitImage=null;
+        imagePanel= new JPanel();
+        //imagePanel.setBackground(panelColor);
+        File dir = null;
+        try {
+            dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
+                    .getResource("santorini-hold-on.png")).toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        try {
+            waitImage= ImageIO.read(dir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JLabel logoLabel = new JLabel(new ImageIcon(waitImage));
+        imagePanel.add(logoLabel);
+        return imagePanel;
+    }
 
 }

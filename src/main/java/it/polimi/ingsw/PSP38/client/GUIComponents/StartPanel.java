@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class StartPanel implements ActionListener {
-    private JPanel setupPanel;
+    private JPanel startPanel;
     private JPanel controlPanel;
     private JPanel buttonPanel;
     private JLabel ipLabel;
@@ -30,15 +30,15 @@ public class StartPanel implements ActionListener {
     private Color textColor  = Color.WHITE;
     private GameModeGUI gameModeGUI;
 
-    public JPanel createSetupPanel(GameModeGUI gmg){
+    public JPanel createStartPanel(GameModeGUI gmg){
         gameModeGUI=gmg;
-        setupPanel = new JPanel();
-        setupPanel.setLayout(new GridLayout(3,1));
-        setupPanel.setBackground(bkgColor);
-        setupPanel.add(createImagePanel());
-        setupPanel.add(createControlPanel());
-        setupPanel.add(createButtonPanel());
-        return setupPanel;
+        startPanel = new JPanel();
+        startPanel.setLayout(new GridLayout(3,1));
+        startPanel.setBackground(bkgColor);
+        startPanel.add(createImagePanel());
+        startPanel.add(createControlPanel());
+        startPanel.add(createButtonPanel());
+        return startPanel;
     }
 
     public JPanel createImagePanel() {
@@ -106,9 +106,13 @@ public class StartPanel implements ActionListener {
                 gameModeGUI.setIP(ipAddress.getText());
                 gameModeGUI.setNickname(nickname.getText());
                 gameModeGUI.setAge(age.getText());
-                CardLayout cl = (CardLayout)(gameModeGUI.getSantoriniWindow().getCardHolder().getLayout());
-                cl.show(gameModeGUI.getSantoriniWindow().getCardHolder(), "cardChoice");
+                /*CardLayout cl = (CardLayout)(gameModeGUI.getSantoriniWindow().getCardHolder().getLayout());
+                cl.show(gameModeGUI.getSantoriniWindow().getCardHolder(), "cardChoice");*/
             }
         }
+    }
+
+    public JPanel getStartPanel() {
+        return startPanel;
     }
 }
