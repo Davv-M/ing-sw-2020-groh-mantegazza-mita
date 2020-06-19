@@ -2,9 +2,11 @@ package it.polimi.ingsw.PSP38.client;
 
 //import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
 import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
+import it.polimi.ingsw.PSP38.client.GUIComponents.WaitingPanel;
 import it.polimi.ingsw.PSP38.common.Message;
 
 import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 
 
@@ -46,27 +48,48 @@ public class GameModeGUI implements GameMode {
                 }
     }
 
+    public void illegalString() {
+        System.out.println("String not recognized exception: " + customStringRead);
+        String newString;
+        do{
+            newString = JOptionPane.showInputDialog(null, customStringRead,"String not recognized exception: ",JOptionPane.QUESTION_MESSAGE);
+        }while (newString.equals(""));
+        setStringRead(newString);
+    }
+
+    public void illegalInt() {
+        System.out.println("Integer not recognized exception: " + customStringRead);
+        String newStringInt;
+        do{
+            newStringInt = JOptionPane.showInputDialog(null,customStringRead,"Integer not recognized exception: ",JOptionPane.QUESTION_MESSAGE);
+        }while (newStringInt.equals(""));
+        setStringRead(newStringInt);
+    }
+
 
 
     public void waitForNumPlayer() {
         System.out.println("Please wait for the first player to select the number of players.");
+
     }
 
     public void gameFull() {
-        System.out.println("The game is currently full, please try later. If you want to see the match stay connected");
+        JOptionPane.showMessageDialog(null,"The game is currently full, please try later.","Game full ",JOptionPane.WARNING_MESSAGE);
     }
 
     public void chooseNickname() {
-        System.out.println("inserisci il tuo nickname:");
         setStringRead(nickname);
-        System.out.println("nickname mandato");
+    }
+
+    public void illegalNickname() {
+        String newNickname;
+        newNickname = JOptionPane.showInputDialog("This nickname is unavailable, please choose another one:");
+        nickname = newNickname;
+        setStringRead(newNickname);
     }
 
     public void setAge() {
-        System.out.println("inserisci la tua eta:");
         setStringRead(age);
-        System.out.println("eta mandata");
-
     }
 
     public void waitForDivinities() {
@@ -102,24 +125,23 @@ public class GameModeGUI implements GameMode {
         System.out.println("You lose! The winner is " + customStringRead);
     }
 
-    public void illegalString() {
-        System.out.println("String not recognized exception: " + customStringRead);
-    }
 
-    public void illegalInt() {
-        System.out.println("Integer not recognized exception: " + customStringRead);
-    }
+
 
     public void illegalArgument() {
         System.out.println("Illegal argument exception: " + customStringRead);
     }
 
-    public void illegalNickname() {
-        System.out.println("This nickname is unavailable, please choose another one");
-    }
+
 
     public void waitForFullGame() {
         System.out.println("Hold on, all the players will be ready in a few seconds");
+
+
+        ImageIcon prova = new ImageIcon("santorini-hold-on.png");
+        JLabel background = new JLabel("",prova,JLabel.CENTER);
+        background.setBounds(0,0,1200,700);
+        frame.add(background);
     }
 
     public void divinityCardNotExists() {
@@ -130,8 +152,7 @@ public class GameModeGUI implements GameMode {
         System.out.println("This divinity card has already been chosen. Please select a new one");
     }
 
-    public void illegalYesOrNo() {
-        System.out.println("Please answer with either \"yes\" or \"no\"");
+    public void illegalYesOrNo() {//non dovrebbe servire
     }
 
     public void illegalDivinity() {
@@ -145,6 +166,7 @@ public class GameModeGUI implements GameMode {
 
     public void waitYourTurn() {
         System.out.println("please wait");
+        JOptionPane.showMessageDialog(null, "please wait");
 
     }
 
@@ -181,7 +203,21 @@ public class GameModeGUI implements GameMode {
     }
 
     private void askSpecialAction() {
-        System.out.println("Do you want to use your special ability");
+        Object[] options = {"yes", "no"};
+        int n = JOptionPane.showOptionDialog(santoriniWindow.getMainSetupFrame(),
+                "Do you want to use your special ability",
+                null,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                null);
+        if (n==JOptionPane.YES_OPTION){
+            setStringRead("yes");
+
+        }else if(n==JOptionPane.NO_OPTION){
+            setStringRead("no");
+        }
     }
 
 

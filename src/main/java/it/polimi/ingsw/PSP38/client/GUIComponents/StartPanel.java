@@ -28,7 +28,6 @@ public class StartPanel implements ActionListener {
     private Color bkgColor = new Color(25, 109,165);
     private Color bkgTextColor = new Color(62,159,225);
     private Color textColor  = Color.WHITE;
-    private JLabel errorMessage;
     private GameModeGUI gameModeGUI;
 
     public JPanel createSetupPanel(GameModeGUI gmg){
@@ -64,7 +63,7 @@ public class StartPanel implements ActionListener {
     }
     public JPanel createControlPanel(){
         controlPanel = new JPanel();
-        controlPanel.setLayout(new GridLayout(7,1));
+        controlPanel.setLayout(new GridLayout(6,1));
         controlPanel.setBackground(panelColor);
         ipLabel = new JLabel("IP address");
         ipLabel.setForeground(textColor);
@@ -84,10 +83,6 @@ public class StartPanel implements ActionListener {
         age = new JTextField();
         age.setBackground(bkgTextColor);
         controlPanel.add(age);
-        errorMessage = new JLabel( "");
-        errorMessage.setForeground(textColor);
-        errorMessage.setBackground(bkgColor);
-        controlPanel.add(errorMessage);
         return controlPanel;
     }
 
@@ -106,7 +101,7 @@ public class StartPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==connectButton){
             if (nickname.getText().isEmpty() || ipAddress.getText().isEmpty() || age.getText().isEmpty()){
-                errorMessage.setText("tutti i campi sono obbligatori");
+                JOptionPane.showMessageDialog(null,"tutti i campi sono obbligatori","Login error ",JOptionPane.WARNING_MESSAGE);
             }else {
                 gameModeGUI.setIP(ipAddress.getText());
                 gameModeGUI.setNickname(nickname.getText());

@@ -17,7 +17,6 @@ public enum Protocol {
     RETURN_STRING,
     DISPLAY_BOARD,
     PING,
-    RETURN_PING,
     TOO_LATE,
     CLIENT_LOST,
     CANT_MOVE,
