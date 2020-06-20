@@ -62,6 +62,9 @@ public class Client extends Observable implements Observer {
             customString = ServerHandler.getCustomMessageString();
             gameMode.updateCustomString();
         }
+        if(protocolRead == Protocol.CANT_MOVE || protocolRead == Protocol.CLIENT_LOST || protocolRead == Protocol.TOO_LATE){
+            endGame(protocolRead);
+        }
     }
 
     /**
@@ -129,6 +132,30 @@ public class Client extends Observable implements Observer {
 
     public static GameMode getGameMode() {
         return gameMode;
+    }
+
+    public void endGame(Protocol protocolExit){
+        switch (protocolExit){
+            case TOO_LATE:{
+                gameMode.decodeMessage(Message.GAME_FULL);
+                break;
+            }
+            case CLIENT_LOST:{
+                gameMode.decodeMessage(Message.CLIENT_LOST);
+                break;
+            }
+            case CANT_MOVE:{
+                gameMode.decodeMessage(Message.CANT_MOVE);
+                break;
+            }
+
+        }
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 
 }

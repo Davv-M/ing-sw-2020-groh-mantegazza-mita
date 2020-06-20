@@ -59,7 +59,8 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                         break;
                     }
                     case TOO_LATE:{
-                        endGame(Protocol.TOO_LATE);
+                        protocolRead = Protocol.TOO_LATE;
+                        notifyClient();
                         break;
                     }
                     case DISPLAY_BOARD:{
@@ -79,7 +80,8 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                         break;
                     }
                     case CANT_MOVE:{
-                        endGame(Protocol.CANT_MOVE);
+                        protocolRead = Protocol.CANT_MOVE;
+                        notifyClient();
                         break;
                     }
                     case NOTIFY_CUSTOM_STRING:{
@@ -92,7 +94,8 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                         break;
                     }
                     case CLIENT_LOST:{
-                        endGame(Protocol.CLIENT_LOST);
+                        protocolRead = Protocol.CLIENT_LOST;
+                        notifyClient();
                         break;
                     }
                     default:
@@ -230,32 +233,15 @@ public class ServerHandler extends Observable implements Observer, Runnable{
         }
     }
 
-    public void endGame(Protocol protocolExit){
-        switch (protocolExit){
-            case TOO_LATE:{
-                System.out.println("game full, please try later.");
-                break;
-            }
-            case CLIENT_LOST:{
-                System.out.println("your challenger lost connection, please restart app");
-                break;
-            }
-            case CANT_MOVE:{
-                System.out.println("you can't move, You Lose!");
-                break;
-            }
 
-        }
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.exit(0);
-    }
 
     public void serverLost(){
-        System.out.println("connection lost with server, please restart app ");
+        protocolRead = Protocol.NOTIFY_MESSAGE;
+        message = Message.SERVER_LOST;
+        notifyClient();
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException ignore) { }
         System.exit(0);
     }
 

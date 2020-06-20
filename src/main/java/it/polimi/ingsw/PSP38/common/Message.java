@@ -41,4 +41,7 @@ public enum Message {
     WAIT,
     SERVER_UNREACHEABLE,
     CONNECTED_TO_SERVER,
+    CLIENT_LOST,
+    CANT_MOVE,
+    SERVER_LOST
 }

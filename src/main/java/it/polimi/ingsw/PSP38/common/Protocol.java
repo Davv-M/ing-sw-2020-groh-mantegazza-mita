@@ -19,5 +19,5 @@ public enum Protocol {
     PING,
     TOO_LATE,
     CLIENT_LOST,
-    CANT_MOVE,
+    CANT_MOVE
 }

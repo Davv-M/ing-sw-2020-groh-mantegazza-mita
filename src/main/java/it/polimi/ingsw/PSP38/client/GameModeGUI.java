@@ -73,8 +73,21 @@ public class GameModeGUI implements GameMode {
     }
 
     public void gameFull() {
-        JOptionPane.showMessageDialog(null,"The game is currently full, please try later.","Game full ",JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame,"The game is currently full, please try later.","Game full ",JOptionPane.WARNING_MESSAGE);
     }
+
+    public void clientLost() {
+        JOptionPane.showMessageDialog(frame,"your challenger lost connection, please restart app","Challenger lost",JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void cantMove() {
+        JOptionPane.showMessageDialog(frame,"you can't move, You Lose!","End Game",JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void serverLost() {
+        JOptionPane.showMessageDialog(frame,"connection lost with server, please restart app ","Server Lost",JOptionPane.WARNING_MESSAGE);
+    }
+
 
     public void chooseNickname() {
         setStringRead(nickname);
@@ -162,7 +175,7 @@ public class GameModeGUI implements GameMode {
 
     public void waitYourTurn() {
         System.out.println("please wait");
-        JOptionPane.showMessageDialog(null, "please wait");
+        JOptionPane.showMessageDialog(frame, "please wait");
 
     }
 
@@ -322,6 +335,15 @@ public class GameModeGUI implements GameMode {
                 waitYourTurn();
                 break;
             case CONNECTED_TO_SERVER:
+                break;
+            case CLIENT_LOST:
+                clientLost();
+                break;
+            case CANT_MOVE:
+                cantMove();
+                break;
+            case SERVER_LOST:
+                serverLost();
                 break;
             default:
                 System.out.println("Message not recognized\n");
