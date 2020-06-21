@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SetupPanelsOLD</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client.GUIComponents</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SetupPanelsOLD (it.polimi.ingsw.PSP38.client.GUIComponents)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SetupPanelsOLD</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client.GUIComponents;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.client.Client;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import javax.swing.*;
+<i>6</i>&nbsp;import java.awt.*;
+<i>7</i>&nbsp;
+<b class="nc"><i>8</i>&nbsp;public class SetupPanelsOLD {</b>
+<i>9</i>&nbsp;    private static JPanel ipPanel;
+<i>10</i>&nbsp;    private static JPanel namePanel;
+<i>11</i>&nbsp;    private static JPanel agePanel;
+<i>12</i>&nbsp;    private static JTextField ipAddress;
+<i>13</i>&nbsp;    private static JTextField nickname;
+<i>14</i>&nbsp;    private static JTextField age;
+<i>15</i>&nbsp;    private static JButton connectButton;
+<i>16</i>&nbsp;    private static JButton submitNicknameButton;
+<i>17</i>&nbsp;    private static JButton submitAgeButton;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    public static JPanel createIPPanel(){
+<b class="nc"><i>20</i>&nbsp;        ipPanel=new JPanel();</b>
+<b class="nc"><i>21</i>&nbsp;        ipPanel.setLayout(new GridLayout(4,1));</b>
+<b class="nc"><i>22</i>&nbsp;        JLabel title = new JLabel(&quot;santorini&quot;);</b>
+<b class="nc"><i>23</i>&nbsp;        ipPanel.add(title);</b>
+<b class="nc"><i>24</i>&nbsp;        JLabel ipLabel = new JLabel(&quot;input ip adderss&quot;);</b>
+<b class="nc"><i>25</i>&nbsp;        ipPanel.add(ipLabel);</b>
+<b class="nc"><i>26</i>&nbsp;        ipAddress = new JTextField();</b>
+<b class="nc"><i>27</i>&nbsp;        ipPanel.add(ipAddress);</b>
+<b class="nc"><i>28</i>&nbsp;        connectButton = new JButton(&quot;Connect&quot;);</b>
+<i>29</i>&nbsp;        //connectButton.addActionListener(Client.getGameWindow());
+<b class="nc"><i>30</i>&nbsp;        ipPanel.add(connectButton);</b>
+<b class="nc"><i>31</i>&nbsp;        return ipPanel;</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    public static JPanel createNamePanel(){
+<b class="nc"><i>35</i>&nbsp;        namePanel=new JPanel();</b>
+<b class="nc"><i>36</i>&nbsp;        namePanel.setLayout(new GridLayout(4,1));</b>
+<b class="nc"><i>37</i>&nbsp;        JLabel title = new JLabel(&quot;santorini&quot;);</b>
+<b class="nc"><i>38</i>&nbsp;        namePanel.add(title);</b>
+<b class="nc"><i>39</i>&nbsp;        JLabel ipLabel = new JLabel(&quot;nickname&quot;);</b>
+<b class="nc"><i>40</i>&nbsp;        namePanel.add(ipLabel);</b>
+<b class="nc"><i>41</i>&nbsp;        nickname = new JTextField();</b>
+<b class="nc"><i>42</i>&nbsp;        namePanel.add(nickname);</b>
+<b class="nc"><i>43</i>&nbsp;        submitNicknameButton = new JButton(&quot;Submit nickname&quot;);</b>
+<b class="nc"><i>44</i>&nbsp;        namePanel.add(submitNicknameButton);</b>
+<b class="nc"><i>45</i>&nbsp;        return namePanel;</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    public static JPanel createAgePanel(){
+<b class="nc"><i>49</i>&nbsp;        agePanel=new JPanel();</b>
+<b class="nc"><i>50</i>&nbsp;        agePanel.setLayout(new GridLayout(4,1));</b>
+<b class="nc"><i>51</i>&nbsp;        JLabel title = new JLabel(&quot;santorini&quot;);</b>
+<b class="nc"><i>52</i>&nbsp;        agePanel.add(title);</b>
+<b class="nc"><i>53</i>&nbsp;        JLabel ipLabel = new JLabel(&quot;insert your age&quot;);</b>
+<b class="nc"><i>54</i>&nbsp;        agePanel.add(ipLabel);</b>
+<b class="nc"><i>55</i>&nbsp;        age = new JTextField();</b>
+<b class="nc"><i>56</i>&nbsp;        agePanel.add(age);</b>
+<b class="nc"><i>57</i>&nbsp;        submitAgeButton = new JButton(&quot;Submit age&quot;);</b>
+<b class="nc"><i>58</i>&nbsp;        agePanel.add(submitAgeButton);</b>
+<b class="nc"><i>59</i>&nbsp;        return agePanel;</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    public static JButton getConnectButton() {
+<b class="nc"><i>63</i>&nbsp;        return connectButton;</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    public static JTextField getIpAddress() {
+<b class="nc"><i>67</i>&nbsp;        return ipAddress;</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    public static JButton getSubmitNicknameButton() {
+<b class="nc"><i>71</i>&nbsp;        return submitNicknameButton;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    public static JTextField getNickname() {
+<b class="nc"><i>75</i>&nbsp;        return nickname;</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    public static JButton getSubmitAgeButton() {
+<b class="nc"><i>79</i>&nbsp;        return submitAgeButton;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    public static JTextField getAge() {
+<b class="nc"><i>83</i>&nbsp;        return age;</b>
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-21 17:11</div>
+</div>
+</body>
+</html>

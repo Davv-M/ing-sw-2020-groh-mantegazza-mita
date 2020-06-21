@@ -15,6 +15,7 @@ import java.util.Objects;
 
 public class StartPanel implements ActionListener {
     private JPanel startPanel;
+    private JPanel imagePanel;
     private JPanel controlPanel;
     private JPanel buttonPanel;
     private JLabel ipLabel;
@@ -42,8 +43,9 @@ public class StartPanel implements ActionListener {
     }
 
     public JPanel createImagePanel() {
-        Image santoriniLogo=null;
-        JPanel imagePanel= new JPanel();
+        Image santoriniLogo = null;
+        Image santoriniLogoScaled;
+        imagePanel = new JPanel();
         imagePanel.setBackground(panelColor);
         File dir = null;
         try {
@@ -57,7 +59,8 @@ public class StartPanel implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JLabel logoLabel = new JLabel(new ImageIcon(santoriniLogo));
+        santoriniLogoScaled =santoriniLogo.getScaledInstance(450,-1,Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(santoriniLogoScaled));
         imagePanel.add(logoLabel);
         return imagePanel;
     }

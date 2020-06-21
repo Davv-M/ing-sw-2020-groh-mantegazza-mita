@@ -1,0 +1,109 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FirstCardSelectionWindow</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client.GUIComponents</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FirstCardSelectionWindow (it.polimi.ingsw.PSP38.client.GUIComponents)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FirstCardSelectionWindow</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client.GUIComponents;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import javax.swing.*;
+<i>4</i>&nbsp;import javax.swing.border.Border;
+<i>5</i>&nbsp;import java.awt.*;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public class FirstCardSelectionWindow extends JFrame {
+<i>8</i>&nbsp;    public static final int WIDTH = 800;
+<i>9</i>&nbsp;    public static final int HEIGHT = 600;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    public FirstCardSelectionWindow(){
+<b class="nc"><i>12</i>&nbsp;        super();</b>
+<b class="nc"><i>13</i>&nbsp;        setSize(WIDTH, HEIGHT);</b>
+<b class="nc"><i>14</i>&nbsp;        setTitle(&quot;Santorini&quot;);</b>
+<b class="nc"><i>15</i>&nbsp;        setLayout(new BorderLayout());</b>
+<i>16</i>&nbsp;
+<b class="nc"><i>17</i>&nbsp;        JPanel headerPanel = new JPanel();</b>
+<b class="nc"><i>18</i>&nbsp;        JLabel headerLabel = new JLabel(&quot;Please select three cards&quot;);</b>
+<b class="nc"><i>19</i>&nbsp;        headerPanel.add(headerLabel);</b>
+<b class="nc"><i>20</i>&nbsp;        add(headerPanel, BorderLayout.NORTH);</b>
+<i>21</i>&nbsp;
+<b class="nc"><i>22</i>&nbsp;        JPanel cardListPanel = new JPanel();</b>
+<i>23</i>&nbsp;
+<b class="nc"><i>24</i>&nbsp;        add(cardListPanel, BorderLayout.WEST);</b>
+<b class="nc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-21 17:11</div>
+</div>
+</body>
+</html>

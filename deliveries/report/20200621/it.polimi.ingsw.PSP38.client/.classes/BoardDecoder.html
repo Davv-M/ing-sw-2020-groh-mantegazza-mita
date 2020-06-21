@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BoardDecoder</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BoardDecoder (it.polimi.ingsw.PSP38.client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BoardDecoder</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.common.BytesForBoard;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP38.common.WorkerColor;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * This class includes methods used to decode the status of the cells of the board. For details regarding the encoding
+<i>8</i>&nbsp; * of the board&#39;s status, refer to the documentation of &lt;code&gt;BoardEncoder&lt;/code&gt; class
+<i>9</i>&nbsp; */
+<b class="nc"><i>10</i>&nbsp;public class BoardDecoder {</b>
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     * Method used to check if it&#39;s possible to move a worker or build something onto a given cell of the board
+<i>14</i>&nbsp;     * @param b represents the encoded cell that will be checked
+<i>15</i>&nbsp;     * @return true if the cell is not occupied by a worker and no dome has been built on it, false otherwise
+<i>16</i>&nbsp;     */
+<i>17</i>&nbsp;    public static boolean isFree(byte b) {
+<b class="nc"><i>18</i>&nbsp;        return !(hasWorker(b) || hasDome(b));</b>
+<i>19</i>&nbsp;    }
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Method used to check if the given cell has a dome built on it
+<i>23</i>&nbsp;     * @param b represents the encoded cell that will be checked
+<i>24</i>&nbsp;     * @return true if the cell has a dome on it, false otherwise
+<i>25</i>&nbsp;     */
+<i>26</i>&nbsp;    public static boolean hasDome(byte b) {
+<b class="nc"><i>27</i>&nbsp;        return isAndEqual(b, BytesForBoard.DOME);</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * Method used to check if the given cell is occupied by a worker
+<i>32</i>&nbsp;     * @param b represents the encoded cell that will be checked
+<i>33</i>&nbsp;     * @return true if a worker of any color is stationing on it, false otherwise
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    public static boolean hasWorker(byte b) {
+<b class="nc"><i>36</i>&nbsp;        return isAndEqual(b, BytesForBoard.WORKER_WHITE)</b>
+<b class="nc"><i>37</i>&nbsp;                || isAndEqual(b, BytesForBoard.WORKER_BLACK)</b>
+<b class="nc"><i>38</i>&nbsp;                || isAndEqual(b, BytesForBoard.WORKER_BLUE);</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Method used to determine the color of a worker
+<i>43</i>&nbsp;     * @param b represents a generic encoded worker
+<i>44</i>&nbsp;     * @return the color of the encoded worker
+<i>45</i>&nbsp;     * @throws IllegalArgumentException if the code doesn&#39;t correspond to one of the defined colors
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    public static WorkerColor workerColor(byte b) {
+<b class="nc"><i>48</i>&nbsp;        if (isAndEqual(b, BytesForBoard.WORKER_WHITE)) {</b>
+<b class="nc"><i>49</i>&nbsp;            return WorkerColor.WHITE;</b>
+<b class="nc"><i>50</i>&nbsp;        } else if (isAndEqual(b, BytesForBoard.WORKER_BLACK)) {</b>
+<b class="nc"><i>51</i>&nbsp;            return WorkerColor.BLACK;</b>
+<b class="nc"><i>52</i>&nbsp;        } else if (isAndEqual(b, BytesForBoard.WORKER_BLUE)) {</b>
+<b class="nc"><i>53</i>&nbsp;            return WorkerColor.BLUE;</b>
+<i>54</i>&nbsp;        } else {
+<b class="nc"><i>55</i>&nbsp;            throw new IllegalArgumentException(&quot;color unknown&quot;);</b>
+<i>56</i>&nbsp;        }
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Method used to determine the height of a given tower
+<i>61</i>&nbsp;     * @param b represents a generic encoded tower
+<i>62</i>&nbsp;     * @return the height of the tower represented by &lt;code&gt;b&lt;/code&gt;
+<i>63</i>&nbsp;     */
+<i>64</i>&nbsp;    public static int towerHeight(byte b) {
+<b class="nc"><i>65</i>&nbsp;        if(isAndEqual(b, BytesForBoard.TOWER_1)){</b>
+<b class="nc"><i>66</i>&nbsp;            return 1;</b>
+<b class="nc"><i>67</i>&nbsp;        } else if(isAndEqual(b, BytesForBoard.TOWER_2)){</b>
+<b class="nc"><i>68</i>&nbsp;            return 2;</b>
+<b class="nc"><i>69</i>&nbsp;        } else if(isAndEqual(b, BytesForBoard.TOWER_3)){</b>
+<b class="nc"><i>70</i>&nbsp;            return 3;</b>
+<i>71</i>&nbsp;        } else{
+<b class="nc"><i>72</i>&nbsp;            return 0;</b>
+<i>73</i>&nbsp;        }
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Auxiliary method used to check if two byte values are identical
+<i>78</i>&nbsp;     * @param byteToCheck represents the first parameter to be checked
+<i>79</i>&nbsp;     * @param flag represents the second parameter to be checked
+<i>80</i>&nbsp;     * @return the result of the boolean operation &lt;code&gt;(byteToCheck &amp; flag) == flag&lt;/code&gt;
+<i>81</i>&nbsp;     */
+<i>82</i>&nbsp;    private static boolean isAndEqual(byte byteToCheck, byte flag){
+<b class="nc"><i>83</i>&nbsp;        return (byteToCheck &amp; flag) == flag;</b>
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-21 17:11</div>
+</div>
+</body>
+</html>
