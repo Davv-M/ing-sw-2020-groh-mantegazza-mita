@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.client;
 
 //import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
+
 import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
 import it.polimi.ingsw.PSP38.common.Message;
 
@@ -21,50 +22,47 @@ public class GameModeGUI implements GameMode {
 
     public GameModeGUI() throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeAndWait(() -> {
-            santoriniWindow =new SantoriniWindow();
+            santoriniWindow = new SantoriniWindow();
             frame = santoriniWindow.createSantoriniWindow(this);
         });
     }
 
-    public JFrame getFrame(){return frame;}
+    public JFrame getFrame() {
+        return frame;
+    }
 
 
     public void insertNumPlayer() {
         Object[] options = {"2", "3"};
-                int n = JOptionPane.showOptionDialog(santoriniWindow.getStartPanel().getStartPanel(),
-                        "You are the first player to join this game. Please insert the number of players",
-                        null,
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        options,
-                        null);
-                if (n==JOptionPane.YES_OPTION){
-                    setStringRead("2");
+        int n = JOptionPane.showOptionDialog(santoriniWindow.getStartPanel().getStartPanel(),
+                "You are the first player to join this game. Please insert the number of players",
+                null,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                null);
+        if (n == JOptionPane.YES_OPTION) {
+            setStringRead("2");
 
-                }else if(n==JOptionPane.NO_OPTION){
-                    setStringRead("3");
-                }
+        } else if (n == JOptionPane.NO_OPTION) {
+            setStringRead("3");
+        }
     }
 
     public void illegalString() {
         System.out.println("String not recognized exception: " + customStringRead);
         String newString;
-        do{
-            newString = JOptionPane.showInputDialog(null, customStringRead,"String not recognized exception: ",JOptionPane.QUESTION_MESSAGE);
-        }while (newString.equals(""));
+        newString = JOptionPane.showInputDialog(null, customStringRead, "String not recognized exception: ", JOptionPane.QUESTION_MESSAGE);
         setStringRead(newString);
     }
 
     public void illegalInt() {
         System.out.println("Integer not recognized exception: " + customStringRead);
         String newStringInt;
-        do{
-            newStringInt = JOptionPane.showInputDialog(null,customStringRead,"Integer not recognized exception: ",JOptionPane.QUESTION_MESSAGE);
-        }while (newStringInt.equals(""));
+        newStringInt = JOptionPane.showInputDialog(null, customStringRead, "Integer not recognized exception: ", JOptionPane.QUESTION_MESSAGE);
         setStringRead(newStringInt);
     }
-
 
 
     public void waitForNumPlayer() {
@@ -73,19 +71,19 @@ public class GameModeGUI implements GameMode {
     }
 
     public void gameFull() {
-        JOptionPane.showMessageDialog(frame,"The game is currently full, please try later.","Game full ",JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "The game is currently full, please try later.", "Game full ", JOptionPane.WARNING_MESSAGE);
     }
 
     public void clientLost() {
-        JOptionPane.showMessageDialog(frame,"your challenger lost connection, please restart app","Challenger lost",JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "your challenger lost connection, please restart app", "Challenger lost", JOptionPane.WARNING_MESSAGE);
     }
 
     public void cantMove() {
-        JOptionPane.showMessageDialog(frame,"you can't move, You Lose!","End Game",JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "you can't move, You Lose!", "End Game", JOptionPane.WARNING_MESSAGE);
     }
 
     public void serverLost() {
-        JOptionPane.showMessageDialog(frame,"connection lost with server, please restart app ","Server Lost",JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "connection lost with server, please restart app ", "Server Lost", JOptionPane.WARNING_MESSAGE);
     }
 
 
@@ -130,43 +128,21 @@ public class GameModeGUI implements GameMode {
     }
 
     public void youWin() {
-        System.out.println("You are the winner!");
+        JOptionPane.showMessageDialog(frame, "You are the winner!", "You Win", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void youLose() {
-        System.out.println("You lose! The winner is " + customStringRead);
+        JOptionPane.showMessageDialog(frame, "You lose! The winner is " + customStringRead, "You Lose", JOptionPane.INFORMATION_MESSAGE);
+
     }
-
-
-
-
-    public void illegalArgument() {
-        System.out.println("Illegal argument exception: " + customStringRead);
-    }
-
 
 
     public void waitForFullGame() {
         System.out.println("Hold on, all the players will be ready in a few seconds");
-
-        CardLayout cl = (CardLayout)(getSantoriniWindow().getCardHolder().getLayout());
+        CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waitForPlayers");
     }
 
-    public void divinityCardNotExists() {
-        System.out.println("This divinity card doesn't exist. Please select a new one");
-    }
-
-    public void divinityCardChosen() {
-        System.out.println("This divinity card has already been chosen. Please select a new one");
-    }
-
-    public void illegalYesOrNo() {//non dovrebbe servire
-    }
-
-    public void illegalDivinity() {
-        System.out.println("Illegal divinity card");
-    }
 
     public void selectWorker() {
         System.out.println("Player, please select the worker you want to move");//inserire nickname giocatore
@@ -188,7 +164,7 @@ public class GameModeGUI implements GameMode {
     }
 
     private void displayDivinityMessage() {
-        CardLayout cl = (CardLayout)(getSantoriniWindow().getCardHolder().getLayout());
+        CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
     }
 
@@ -208,9 +184,6 @@ public class GameModeGUI implements GameMode {
         System.out.println("Select the cell where you want to DAFARE");
     }
 
-    private void illegalAction() {
-        System.out.println("Unknown worker action");
-    }
 
     private void askSpecialAction() {
         Object[] options = {"yes", "no"};
@@ -222,10 +195,10 @@ public class GameModeGUI implements GameMode {
                 null,
                 options,
                 null);
-        if (n==JOptionPane.YES_OPTION){
+        if (n == JOptionPane.YES_OPTION) {
             setStringRead("yes");
 
-        }else if(n==JOptionPane.NO_OPTION){
+        } else if (n == JOptionPane.NO_OPTION) {
             setStringRead("no");
         }
     }
@@ -381,19 +354,47 @@ public class GameModeGUI implements GameMode {
 
     }
 
-    public static void setIP(String ipAddress){
-        Client.connectionHandling(ipAddress,Client.getServerSocketPort());
+    public static void setIP(String ipAddress) {
+        Client.connectionHandling(ipAddress, Client.getServerSocketPort());
     }
 
-    public static void setNickname(String nicknameRead){
-        nickname=nicknameRead;
+    public static void setNickname(String nicknameRead) {
+        nickname = nicknameRead;
     }
 
-    public static void setAge(String ageRead){
-        age=ageRead;
+    public static void setAge(String ageRead) {
+        age = ageRead;
     }
 
     public SantoriniWindow getSantoriniWindow() {
         return santoriniWindow;
+    }
+
+
+    //in teoria non dovrebbero mai essere chiamati con GUI
+
+    public void illegalYesOrNo() {
+        System.out.println("Please answer with either \"yes\" or \"no\"");
+    }
+
+    public void illegalDivinity() {
+        System.out.println("Illegal divinity card");
+    }
+
+    public void divinityCardNotExists() {
+        System.out.println("This divinity card doesn't exist. Please select a new one");
+
+    }
+
+    public void divinityCardChosen() {
+        System.out.println("This divinity card has already been chosen. Please select a new one");
+    }
+
+    private void illegalAction() {
+        System.out.println("Unknown worker action");
+    }
+
+    public void illegalArgument() {
+        System.out.println("Illegal argument exception: " + customStringRead);
     }
 }
