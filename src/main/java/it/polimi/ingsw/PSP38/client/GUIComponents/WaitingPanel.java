@@ -14,21 +14,25 @@ public class WaitingPanel {
     private JPanel waitingPanel;
     private JPanel imagePanel;
     private JPanel hourglassPanel;
+    private JLabel waitLabel;
+    private JLabel hourglassLabel;
 
-    public JPanel createWaitingPanel(){
+    public JPanel createWaitingPanel(String imageURL){
         waitingPanel = new JPanel();
         waitingPanel.setLayout(new BorderLayout());
-        waitingPanel.add(createWaitImagePanel(), BorderLayout.CENTER);
+        waitingPanel.setBackground(Color.WHITE);
+        waitingPanel.add(createWaitImagePanel(imageURL), BorderLayout.CENTER);
+        waitingPanel.add(createHourglassPanel(), BorderLayout.SOUTH);
         return waitingPanel;
     }
-    public JPanel createWaitImagePanel() {
+    public JPanel createWaitImagePanel(String imageURL) {
         Image waitImage=null;
+        Image waitImageScaled;
         imagePanel= new JPanel();
-        //imagePanel.setBackground(panelColor);
         File dir = null;
         try {
             dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
-                    .getResource("santorini-hold-on.png")).toURI());
+                    .getResource(imageURL)).toURI());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -37,9 +41,32 @@ public class WaitingPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JLabel logoLabel = new JLabel(new ImageIcon(waitImage));
-        imagePanel.add(logoLabel);
+        waitImageScaled =waitImage.getScaledInstance(500,-1,Image.SCALE_SMOOTH);
+        waitLabel = new JLabel(new ImageIcon(waitImageScaled));
+        imagePanel.add(waitLabel);
         return imagePanel;
+    }
+
+    public JPanel createHourglassPanel(){
+        Image hourglass = null;
+        Image hourglassScaled;
+        hourglassPanel= new JPanel();
+        File dir = null;
+        try {
+            dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
+                    .getResource("hourglass.gif")).toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        try {
+            hourglass = ImageIO.read(dir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        hourglassScaled=hourglass.getScaledInstance(100,-1,Image.SCALE_DEFAULT);
+        hourglassLabel = new JLabel(new ImageIcon(hourglassScaled));
+        imagePanel.add(hourglassLabel);
+        return hourglassPanel;
     }
 
 }

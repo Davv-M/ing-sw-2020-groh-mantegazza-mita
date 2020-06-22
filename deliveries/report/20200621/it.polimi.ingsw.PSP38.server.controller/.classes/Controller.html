@@ -1,0 +1,541 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Controller</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.server.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Controller (it.polimi.ingsw.PSP38.server.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Controller</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 244)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Controller$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 246)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.server.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.common.Message;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP38.common.Protocol;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.*;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP38.server.controller.divinityCards.*;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP38.server.virtualView.ClientHandler;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP38.server.virtualView.Server;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.io.IOException;
+<i>12</i>&nbsp;import java.util.*;
+<i>13</i>&nbsp;
+<b class="nc"><i>14</i>&nbsp;public class Controller extends Observable {</b>
+<b class="nc"><i>15</i>&nbsp;    private final List&lt;String&gt; illegalNicknames = new LinkedList&lt;&gt;();</b>
+<b class="nc"><i>16</i>&nbsp;    private final List&lt;DivinityCard.Name&gt; availableDivinityCards = new LinkedList&lt;&gt;(Arrays.asList(DivinityCard.Name.values()));</b>
+<b class="nc"><i>17</i>&nbsp;    private final Game game = new Game();</b>
+<b class="nc"><i>18</i>&nbsp;    private final Map&lt;Player, DivinityCard&gt; playersDivinities = new HashMap&lt;&gt;();</b>
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    private synchronized String checkNickname(String nickname) throws IllegalArgumentException {
+<b class="nc"><i>21</i>&nbsp;        if (illegalNicknames.contains(nickname)) {</b>
+<b class="nc"><i>22</i>&nbsp;            throw new IllegalArgumentException(&quot;This nickname is unavailable. Please choose a new one.&quot;);</b>
+<i>23</i>&nbsp;        }
+<b class="nc"><i>24</i>&nbsp;        return nickname;</b>
+<i>25</i>&nbsp;    }
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    private int checkNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
+<b class="nc"><i>28</i>&nbsp;        return ArgumentChecker.requireBetween(Game.MIN_NUMBER_OF_PLAYERS, Game.MAX_NUMBER_OF_PLAYERS, numOfPlayers);</b>
+<i>29</i>&nbsp;    }
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    private int checkAge(int age) throws IllegalArgumentException {
+<b class="nc"><i>32</i>&nbsp;        return ArgumentChecker.requireBetween(Player.MIN_AGE, Player.MAX_AGE, age);</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    private synchronized void checkGameFull(ClientHandler client) throws IOException {
+<b class="nc"><i>36</i>&nbsp;        if (game.getTotNumPlayers() &gt; game.getCurrNumPlayers()) {</b>
+<b class="nc"><i>37</i>&nbsp;            client.notifyMessage(Message.WAIT_FOR_FULL_GAME);</b>
+<b class="nc"><i>38</i>&nbsp;            pauseClient(client);</b>
+<i>39</i>&nbsp;        } else {
+<b class="nc"><i>40</i>&nbsp;            wakeUpAll();</b>
+<i>41</i>&nbsp;        }
+<b class="nc"><i>42</i>&nbsp;    }</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    private synchronized String checkDivinityCard(String card) throws IllegalArgumentException {
+<i>45</i>&nbsp;        DivinityCard.Name selectedCardEnum;
+<i>46</i>&nbsp;        try {
+<b class="nc"><i>47</i>&nbsp;            selectedCardEnum = DivinityCard.Name.valueOf(card.toUpperCase());</b>
+<b class="nc"><i>48</i>&nbsp;        } catch (IllegalArgumentException e) {</b>
+<b class="nc"><i>49</i>&nbsp;            throw new IllegalArgumentException(&quot;This divinity card doesn&#39;t exist. Please select a new one.&quot;);</b>
+<b class="nc"><i>50</i>&nbsp;        }</b>
+<i>51</i>&nbsp;
+<b class="nc"><i>52</i>&nbsp;        if (!availableDivinityCards.contains(selectedCardEnum)) {</b>
+<b class="nc"><i>53</i>&nbsp;            throw new IllegalArgumentException(&quot;This divinity card has already been chosen. Please select a new one.&quot;);</b>
+<i>54</i>&nbsp;        }
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;        return card;</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    private int checkXCoordinate(int x) throws IllegalArgumentException {
+<b class="nc"><i>60</i>&nbsp;        return ArgumentChecker.requireBetween(0, Board.COLUMNS - 1, x);</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    private int checkYCoordinate(int y) throws IllegalArgumentException {
+<b class="nc"><i>64</i>&nbsp;        return ArgumentChecker.requireBetween(0, Board.ROWS - 1, y);</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    private synchronized String checkYesOrNo(String answer) throws IllegalArgumentException {
+<b class="nc"><i>68</i>&nbsp;        if (answer.equalsIgnoreCase(&quot;yes&quot;) || answer.equalsIgnoreCase(&quot;no&quot;)) {</b>
+<b class="nc"><i>69</i>&nbsp;            return answer;</b>
+<i>70</i>&nbsp;        } else {
+<b class="nc"><i>71</i>&nbsp;            throw new IllegalArgumentException(&quot;Please answer with either \&quot;yes\&quot; or \&quot;no\&quot;.&quot;);</b>
+<i>72</i>&nbsp;        }
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    private synchronized void pauseClient(ClientHandler client) {
+<i>76</i>&nbsp;        try {
+<b class="nc"><i>77</i>&nbsp;            client.setPaused(true);</b>
+<b class="nc"><i>78</i>&nbsp;            while (client.isPaused()) {</b>
+<b class="nc"><i>79</i>&nbsp;                wait();</b>
+<i>80</i>&nbsp;            }
+<b class="nc"><i>81</i>&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc"><i>82</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>83</i>&nbsp;        }</b>
+<b class="nc"><i>84</i>&nbsp;    }</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    private synchronized void wakeUpAll() {
+<b class="nc"><i>87</i>&nbsp;        Server.wakeUpAll();</b>
+<b class="nc"><i>88</i>&nbsp;        notifyAll();</b>
+<b class="nc"><i>89</i>&nbsp;    }</b>
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    private synchronized void updateTurn(boolean hasCurrentPlayerLost) {
+<b class="nc"><i>92</i>&nbsp;        if(hasCurrentPlayerLost){</b>
+<b class="nc"><i>93</i>&nbsp;            game.setCurrentBoard(game.getCurrentBoard().withoutWorkers(game.getCurrentPlayerTurn().getColor()));</b>
+<b class="nc"><i>94</i>&nbsp;            game.removePlayer(game.getCurrentPlayerTurn());</b>
+<b class="nc"><i>95</i>&nbsp;            if(game.getCurrNumPlayers() == 1){</b>
+<b class="nc"><i>96</i>&nbsp;                game.setWinner(game.getCurrentPlayerTurn());</b>
+<i>97</i>&nbsp;            }
+<i>98</i>&nbsp;        } else {
+<b class="nc"><i>99</i>&nbsp;            game.updateTurn();</b>
+<i>100</i>&nbsp;        }
+<b class="nc"><i>101</i>&nbsp;        wakeUpAll();</b>
+<b class="nc"><i>102</i>&nbsp;    }</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    private DivinityCard stringToStrategy(String selectedCard) {
+<b class="nc"><i>105</i>&nbsp;        DivinityCard.Name selectedCardEnum = DivinityCard.Name.valueOf(selectedCard.toUpperCase());</b>
+<b class="nc"><i>106</i>&nbsp;        switch (selectedCardEnum) {</b>
+<i>107</i>&nbsp;            case APOLLO:
+<b class="nc"><i>108</i>&nbsp;                return new Apollo();</b>
+<i>109</i>&nbsp;            case ARES:
+<b class="nc"><i>110</i>&nbsp;                return new Ares();</b>
+<i>111</i>&nbsp;            case ARTEMIS:
+<b class="nc"><i>112</i>&nbsp;                return new Artemis();</b>
+<i>113</i>&nbsp;            case ATHENA:
+<b class="nc"><i>114</i>&nbsp;                return new Athena();</b>
+<i>115</i>&nbsp;            case ATLAS:
+<b class="nc"><i>116</i>&nbsp;                return new Atlas();</b>
+<i>117</i>&nbsp;            case CHARON:
+<b class="nc"><i>118</i>&nbsp;                return new Charon();</b>
+<i>119</i>&nbsp;            case DEMETER:
+<b class="nc"><i>120</i>&nbsp;                return new Demeter();</b>
+<i>121</i>&nbsp;            case HEPHAESTUS:
+<b class="nc"><i>122</i>&nbsp;                return new Hephaestus();</b>
+<i>123</i>&nbsp;            case HERA:
+<b class="nc"><i>124</i>&nbsp;                return new Hera();</b>
+<i>125</i>&nbsp;            case HESTIA:
+<b class="nc"><i>126</i>&nbsp;                return new Hestia();</b>
+<i>127</i>&nbsp;            case MINOTAUR:
+<b class="nc"><i>128</i>&nbsp;                return new Minotaur();</b>
+<i>129</i>&nbsp;            case PAN:
+<b class="nc"><i>130</i>&nbsp;                return new Pan();</b>
+<i>131</i>&nbsp;            case PROMETHEUS:
+<b class="nc"><i>132</i>&nbsp;                return new Prometheus();</b>
+<i>133</i>&nbsp;            case ZEUS:
+<b class="nc"><i>134</i>&nbsp;                return new Zeus();</b>
+<i>135</i>&nbsp;            default:
+<b class="nc"><i>136</i>&nbsp;                throw new IllegalArgumentException(&quot;Illegal divinity card&quot;);</b>
+<i>137</i>&nbsp;        }
+<i>138</i>&nbsp;    }
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    public List&lt;Byte&gt; getEncodedBoard() {
+<b class="nc"><i>141</i>&nbsp;        return BoardEncoder.bytesForBoard(game.getCurrentBoard());</b>
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    public void start(ClientHandler client) throws IOException {
+<b class="nc"><i>145</i>&nbsp;        welcomeMessage(client);</b>
+<b class="nc"><i>146</i>&nbsp;        firstPlayerSetNumOfPlayers(client);</b>
+<b class="nc"><i>147</i>&nbsp;        notifyExtraClient(client);</b>
+<b class="nc"><i>148</i>&nbsp;        if (client.getClientNum() &lt;= game.getTotNumPlayers()) {</b>
+<b class="nc"><i>149</i>&nbsp;            game.addPlayer(askNickname(client), askAge(client));</b>
+<b class="nc"><i>150</i>&nbsp;            checkGameFull(client);</b>
+<b class="nc"><i>151</i>&nbsp;            askYoungestPlayerCards(client);</b>
+<b class="nc"><i>152</i>&nbsp;            askDivinity(client);</b>
+<b class="nc"><i>153</i>&nbsp;            placeWorkers(client);</b>
+<i>154</i>&nbsp;            do {
+<b class="nc"><i>155</i>&nbsp;                playGame(client);</b>
+<b class="nc"><i>156</i>&nbsp;            } while (game.getWinner() == null);</b>
+<i>157</i>&nbsp;
+<b class="nc"><i>158</i>&nbsp;            notifyWinner(client);</b>
+<i>159</i>&nbsp;        }
+<b class="nc"><i>160</i>&nbsp;    }</b>
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    private void playGame(ClientHandler client) throws IOException {
+<b class="nc"><i>163</i>&nbsp;        notifyNotYourTurn(client);</b>
+<b class="nc"><i>164</i>&nbsp;        boolean hasCurrentPlayerLost = false;</b>
+<b class="nc"><i>165</i>&nbsp;        if (game.getWinner() == null) {</b>
+<b class="nc"><i>166</i>&nbsp;            Player clientPlayer = game.nicknameToPlayer(client.getNickname());</b>
+<b class="nc"><i>167</i>&nbsp;            DivinityCard clientDivinity = playersDivinities.get(clientPlayer);</b>
+<b class="nc"><i>168</i>&nbsp;            Worker selectedWorker = askWorker(client);</b>
+<i>169</i>&nbsp;
+<b class="nc"><i>170</i>&nbsp;            for (WorkerAction action : clientDivinity.getMoveSequence()) {</b>
+<b class="nc"><i>171</i>&nbsp;                if(!canTakeAction(selectedWorker, clientDivinity, action)){</b>
+<b class="nc"><i>172</i>&nbsp;                    if(action.isOptional()){</b>
+<b class="nc"><i>173</i>&nbsp;                        continue;</b>
+<i>174</i>&nbsp;                    } else {
+<i>175</i>&nbsp;                        //client.notifyMessage(Message.UNABLE_TO_FINISH_TURN);
+<b class="nc"><i>176</i>&nbsp;                        client.notifyEndGame(Protocol.CANT_MOVE);</b>
+<b class="nc"><i>177</i>&nbsp;                        hasCurrentPlayerLost = true;</b>
+<b class="nc"><i>178</i>&nbsp;                        break;</b>
+<i>179</i>&nbsp;                    }
+<i>180</i>&nbsp;                }
+<b class="nc"><i>181</i>&nbsp;                Cell previousPosition = selectedWorker.getPosition();</b>
+<b class="nc"><i>182</i>&nbsp;                selectedWorker = selectedWorker.withPosition(askWorkerAction(client, selectedWorker, clientDivinity, action));</b>
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;
+<b class="nc"><i>185</i>&nbsp;                if (clientDivinity.isWinner(game.getCurrentBoard(), previousPosition, selectedWorker.getPosition())) {</b>
+<b class="nc"><i>186</i>&nbsp;                    boolean cantWin = false;</b>
+<b class="nc"><i>187</i>&nbsp;                    for(Player p : game.getOpponents()){</b>
+<b class="nc"><i>188</i>&nbsp;                        cantWin = playersDivinities.get(p).blockOpponentWinningCondition(selectedWorker.getPosition());</b>
+<b class="nc"><i>189</i>&nbsp;                    }</b>
+<b class="nc"><i>190</i>&nbsp;                    if(!cantWin){</b>
+<b class="nc"><i>191</i>&nbsp;                        game.setWinner(clientPlayer);</b>
+<b class="nc"><i>192</i>&nbsp;                        break;</b>
+<i>193</i>&nbsp;                    }
+<i>194</i>&nbsp;                }
+<b class="nc"><i>195</i>&nbsp;            }</b>
+<i>196</i>&nbsp;        }
+<b class="nc"><i>197</i>&nbsp;        updateTurn(hasCurrentPlayerLost);</b>
+<b class="nc"><i>198</i>&nbsp;    }</b>
+<i>199</i>&nbsp;
+<b class="nc"><i>200</i>&nbsp;    public int getTotNumPlayers(){return game.getTotNumPlayers();}</b>
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    private void welcomeMessage(ClientHandler client) throws IOException {
+<b class="nc"><i>203</i>&nbsp;        client.notifyMessage(Message.WELCOME);</b>
+<b class="nc"><i>204</i>&nbsp;    }</b>
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    private void firstPlayerSetNumOfPlayers(ClientHandler client) throws IOException {
+<b class="nc"><i>207</i>&nbsp;        if (client.getClientNum() == 1) {</b>
+<b class="nc"><i>208</i>&nbsp;            client.notifyMessage(Message.INSERT_NUM_PLAYERS);</b>
+<b class="nc"><i>209</i>&nbsp;            game.setTotNumPlayers(client.askInt(this::checkNumOfPlayers));</b>
+<b class="nc"><i>210</i>&nbsp;            wakeUpAll();</b>
+<b class="nc"><i>211</i>&nbsp;        } else if (game.getTotNumPlayers() == 0) {</b>
+<b class="nc"><i>212</i>&nbsp;            client.notifyMessage(Message.WAIT_FOR_NUM_PLAYERS);</b>
+<b class="nc"><i>213</i>&nbsp;            pauseClient(client);</b>
+<i>214</i>&nbsp;        }
+<b class="nc"><i>215</i>&nbsp;    }</b>
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;    private void notifyExtraClient(ClientHandler client) throws IOException {
+<b class="nc"><i>218</i>&nbsp;        if (client.getClientNum() &gt; game.getTotNumPlayers()) {</b>
+<b class="nc"><i>219</i>&nbsp;            client.notifyEndGame(Protocol.TOO_LATE);</b>
+<i>220</i>&nbsp;            //client.notifyMessage(Message.GAME_FULL);
+<i>221</i>&nbsp;            //client.notifyMessage(&quot;If you want to see the match stay connected&quot;);
+<b class="nc"><i>222</i>&nbsp;            pauseClient(client);</b>
+<i>223</i>&nbsp;        }
+<b class="nc"><i>224</i>&nbsp;    }</b>
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;    private String askNickname(ClientHandler client) throws IOException {
+<b class="nc"><i>227</i>&nbsp;        client.notifyMessage(Message.CHOOSE_NICKNAME);</b>
+<b class="nc"><i>228</i>&nbsp;        String nickname = client.askString(this::checkNickname);</b>
+<b class="nc"><i>229</i>&nbsp;        illegalNicknames.add(nickname);</b>
+<b class="nc"><i>230</i>&nbsp;        client.setNickname(nickname);</b>
+<i>231</i>&nbsp;
+<b class="nc"><i>232</i>&nbsp;        return nickname;</b>
+<i>233</i>&nbsp;    }
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;    private int askAge(ClientHandler client) throws IOException {
+<b class="nc"><i>236</i>&nbsp;        client.notifyMessage(Message.SET_AGE);</b>
+<b class="nc"><i>237</i>&nbsp;        return client.askInt(this::checkAge);</b>
+<i>238</i>&nbsp;    }
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;    private void askYoungestPlayerCards(ClientHandler client) throws IOException {
+<b class="nc"><i>241</i>&nbsp;        if (game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {</b>
+<b class="nc"><i>242</i>&nbsp;            List&lt;DivinityCard.Name&gt; selectedDivinityCards = new LinkedList&lt;&gt;();</b>
+<b class="nc"><i>243</i>&nbsp;            for (int i = 0; i &lt; game.getTotNumPlayers(); ++i) {</b>
+<b class="nc"><i>244</i>&nbsp;                displayAvailableDivinities(client);</b>
+<b class="nc"><i>245</i>&nbsp;                String card = client.askString(this::checkDivinityCard);</b>
+<b class="nc"><i>246</i>&nbsp;                DivinityCard.Name cardEnum = DivinityCard.Name.valueOf(card.toUpperCase());</b>
+<b class="nc"><i>247</i>&nbsp;                selectedDivinityCards.add(cardEnum);</b>
+<b class="nc"><i>248</i>&nbsp;                availableDivinityCards.remove(cardEnum);</b>
+<i>249</i>&nbsp;            }
+<b class="nc"><i>250</i>&nbsp;            availableDivinityCards.clear();</b>
+<b class="nc"><i>251</i>&nbsp;            availableDivinityCards.addAll(selectedDivinityCards);</b>
+<b class="nc"><i>252</i>&nbsp;            updateTurn(false);</b>
+<b class="nc"><i>253</i>&nbsp;        } else {</b>
+<b class="nc"><i>254</i>&nbsp;            client.notifyMessageString(game.getCurrentPlayerTurn().getNickname());</b>
+<b class="nc"><i>255</i>&nbsp;            client.notifyMessage(Message.WAIT_FOR_DIVINITIES);</b>
+<b class="nc"><i>256</i>&nbsp;            pauseClient(client);</b>
+<i>257</i>&nbsp;        }
+<b class="nc"><i>258</i>&nbsp;    }</b>
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    private void askDivinity(ClientHandler client) throws IOException {
+<b class="nc"><i>261</i>&nbsp;        notifyNotYourTurn(client);</b>
+<b class="nc"><i>262</i>&nbsp;        displayAvailableDivinities(client);</b>
+<b class="nc"><i>263</i>&nbsp;        String card = client.askString(this::checkDivinityCard);</b>
+<b class="nc"><i>264</i>&nbsp;        DivinityCard.Name cardEnum = DivinityCard.Name.valueOf(card.toUpperCase());</b>
+<b class="nc"><i>265</i>&nbsp;        playersDivinities.put(game.getCurrentPlayerTurn(), stringToStrategy(card));</b>
+<b class="nc"><i>266</i>&nbsp;        availableDivinityCards.remove(cardEnum);</b>
+<b class="nc"><i>267</i>&nbsp;        updateTurn(false);</b>
+<b class="nc"><i>268</i>&nbsp;    }</b>
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;    private void notifyNotYourTurn(ClientHandler client) throws IOException {
+<b class="nc"><i>271</i>&nbsp;        while (!game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {</b>
+<b class="nc"><i>272</i>&nbsp;            if (game.getWinner() == null) {</b>
+<b class="nc"><i>273</i>&nbsp;                client.notifyMessageString(game.getCurrentPlayerTurn().getNickname());</b>
+<b class="nc"><i>274</i>&nbsp;                client.notifyMessage(Message.NOT_YOUR_TURN);</b>
+<i>275</i>&nbsp;            }
+<b class="nc"><i>276</i>&nbsp;            pauseClient(client);</b>
+<i>277</i>&nbsp;        }
+<b class="nc"><i>278</i>&nbsp;    }</b>
+<i>279</i>&nbsp;
+<i>280</i>&nbsp;    private void displayAvailableDivinities(ClientHandler client) throws IOException {
+<b class="nc"><i>281</i>&nbsp;        client.notifyMessageString(client.getNickname());</b>
+<b class="nc"><i>282</i>&nbsp;        client.notifyMessage(Message.DISPLAY_DIVINITY_MESSAGE);</b>
+<b class="nc"><i>283</i>&nbsp;        StringBuilder message = new StringBuilder();</b>
+<b class="nc"><i>284</i>&nbsp;        availableDivinityCards.forEach(card -&gt; message.append(card).append(&quot;\n&quot;));</b>
+<b class="nc"><i>285</i>&nbsp;        client.notifyMessageString(message.toString());</b>
+<b class="nc"><i>286</i>&nbsp;        client.notifyMessage(Message.DISPLAY_AVAILABLE_DIVINITIES);</b>
+<b class="nc"><i>287</i>&nbsp;    }</b>
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;    private void placeWorkers(ClientHandler client) throws IOException {
+<b class="nc"><i>290</i>&nbsp;        notifyNotYourTurn(client);</b>
+<b class="nc"><i>291</i>&nbsp;        displayAllClients();</b>
+<b class="nc"><i>292</i>&nbsp;        client.notifyMessage(Message.PLACE_YOUR_WORKERS);</b>
+<b class="nc"><i>293</i>&nbsp;        Player clientPlayer = game.nicknameToPlayer(client.getNickname());</b>
+<b class="nc"><i>294</i>&nbsp;        for (int i = 0; i &lt; Game.WORKERS_PER_PLAYER; ++i) {</b>
+<b class="nc"><i>295</i>&nbsp;            client.notifyMessageString(String.valueOf(i+1));</b>
+<b class="nc"><i>296</i>&nbsp;            client.notifyMessage(Message.PLACE_A_WORKER);</b>
+<i>297</i>&nbsp;            Board newBoard;
+<i>298</i>&nbsp;            do {
+<b class="nc"><i>299</i>&nbsp;                Cell cell = askCell(client);</b>
+<i>300</i>&nbsp;                try {
+<b class="nc"><i>301</i>&nbsp;                    newBoard = game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell));</b>
+<b class="nc"><i>302</i>&nbsp;                    displayAllClients();</b>
+<b class="nc"><i>303</i>&nbsp;                    break;</b>
+<b class="nc"><i>304</i>&nbsp;                } catch (IllegalArgumentException e) {</b>
+<b class="nc"><i>305</i>&nbsp;                    client.notifyMessage(Message.ILLEGAL_ARGUMENT);</b>
+<i>306</i>&nbsp;                }
+<b class="nc"><i>307</i>&nbsp;            } while (true);</b>
+<b class="nc"><i>308</i>&nbsp;            game.setCurrentBoard(newBoard);</b>
+<b class="nc"><i>309</i>&nbsp;            displayAllClients();</b>
+<i>310</i>&nbsp;        }
+<b class="nc"><i>311</i>&nbsp;        updateTurn(false);</b>
+<b class="nc"><i>312</i>&nbsp;    }</b>
+<i>313</i>&nbsp;
+<i>314</i>&nbsp;    private Cell askCell(ClientHandler client) throws IOException {
+<i>315</i>&nbsp;        int x;
+<i>316</i>&nbsp;        int y;
+<i>317</i>&nbsp;        do {
+<i>318</i>&nbsp;            try {
+<b class="nc"><i>319</i>&nbsp;                client.notifyMessage(Message.SET_CELL_X_COORD);</b>
+<b class="nc"><i>320</i>&nbsp;                x = client.askInt(this::checkXCoordinate);</b>
+<b class="nc"><i>321</i>&nbsp;                client.notifyMessage(Message.SET_CELL_Y_COORD);</b>
+<b class="nc"><i>322</i>&nbsp;                y = client.askInt(this::checkYCoordinate);</b>
+<b class="nc"><i>323</i>&nbsp;                return new Cell(x, y);</b>
+<b class="nc"><i>324</i>&nbsp;            } catch (IllegalArgumentException e) {</b>
+<b class="nc"><i>325</i>&nbsp;                client.notifyMessageString(e.getMessage());</b>
+<b class="nc"><i>326</i>&nbsp;                client.notifyMessage(Message.ILLEGAL_ARGUMENT);</b>
+<i>327</i>&nbsp;            }
+<b class="nc"><i>328</i>&nbsp;        } while (true);</b>
+<i>329</i>&nbsp;    }
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;
+<i>332</i>&nbsp;    private void displayAllClients() {
+<b class="nc"><i>333</i>&nbsp;        setChanged();</b>
+<b class="nc"><i>334</i>&nbsp;        notifyObservers();</b>
+<b class="nc"><i>335</i>&nbsp;    }</b>
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    private void notifyWinner(ClientHandler client) throws IOException {
+<b class="nc"><i>338</i>&nbsp;        if (game.getWinner().getNickname().equals(client.getNickname())) {</b>
+<b class="nc"><i>339</i>&nbsp;            client.notifyMessage(Message.YOU_WIN);</b>
+<i>340</i>&nbsp;        } else {
+<b class="nc"><i>341</i>&nbsp;            client.notifyMessageString(game.getWinner().getNickname());</b>
+<b class="nc"><i>342</i>&nbsp;            client.notifyMessage(Message.YOU_LOSE);</b>
+<i>343</i>&nbsp;        }
+<b class="nc"><i>344</i>&nbsp;    }</b>
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;    private Worker askWorker(ClientHandler client) throws IOException {
+<b class="nc"><i>347</i>&nbsp;        client.notifyMessage(Message.SELECT_WORKER);</b>
+<b class="nc"><i>348</i>&nbsp;        Player clientPlayer = game.nicknameToPlayer(client.getNickname());</b>
+<i>349</i>&nbsp;        Cell cellUnderWorker;
+<i>350</i>&nbsp;        Worker workerSelected;
+<i>351</i>&nbsp;        do {
+<i>352</i>&nbsp;            try {
+<b class="nc"><i>353</i>&nbsp;                cellUnderWorker = askCell(client);</b>
+<b class="nc"><i>354</i>&nbsp;                workerSelected = game.getCurrentBoard().workerAt(cellUnderWorker);</b>
+<b class="nc"><i>355</i>&nbsp;            } catch (NullPointerException e) {</b>
+<b class="nc"><i>356</i>&nbsp;                client.notifyMessage(Message.ILLEGAL_ARGUMENT);</b>
+<b class="nc"><i>357</i>&nbsp;                continue;</b>
+<b class="nc"><i>358</i>&nbsp;            }</b>
+<i>359</i>&nbsp;
+<b class="nc"><i>360</i>&nbsp;            if (clientPlayer.getColor() != workerSelected.getColor()) {</b>
+<b class="nc"><i>361</i>&nbsp;                client.notifyMessage(Message.WORKER_NOT_YOURS);</b>
+<i>362</i>&nbsp;            } else {
+<b class="nc"><i>363</i>&nbsp;                return workerSelected;</b>
+<i>364</i>&nbsp;            }
+<i>365</i>&nbsp;        } while (true);
+<i>366</i>&nbsp;    }
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;    private Cell askWorkerAction(ClientHandler client, Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action) throws IOException {
+<b class="nc"><i>369</i>&nbsp;        Cell workerPosition = selectedWorker.getPosition();</b>
+<b class="nc"><i>370</i>&nbsp;        Board currentBoard = game.getCurrentBoard();</b>
+<b class="nc"><i>371</i>&nbsp;        boolean useAbility = true;</b>
+<b class="nc"><i>372</i>&nbsp;        if (action.isOptional()) {</b>
+<b class="nc"><i>373</i>&nbsp;            client.notifyMessage(Message.ASK_SPECIAL_ACTION);</b>
+<b class="nc"><i>374</i>&nbsp;            String answer = client.askString(this::checkYesOrNo);</b>
+<b class="nc"><i>375</i>&nbsp;            if (answer.equalsIgnoreCase(&quot;no&quot;)) {</b>
+<b class="nc"><i>376</i>&nbsp;                if (action == WorkerAction.OPTIONAL_ACTION) {</b>
+<b class="nc"><i>377</i>&nbsp;                    return workerPosition;</b>
+<i>378</i>&nbsp;                } else {
+<b class="nc"><i>379</i>&nbsp;                    useAbility = false;</b>
+<i>380</i>&nbsp;                }
+<i>381</i>&nbsp;            }
+<i>382</i>&nbsp;        }
+<i>383</i>&nbsp;
+<i>384</i>&nbsp;        do {
+<i>385</i>&nbsp;            try {
+<b class="nc"><i>386</i>&nbsp;                client.notifyMessage(action.question());</b>
+<b class="nc"><i>387</i>&nbsp;                Cell destinationCell = askCell(client);</b>
+<b class="nc"><i>388</i>&nbsp;                for(Player p : game.getOpponents()){</b>
+<b class="nc"><i>389</i>&nbsp;                    playersDivinities.get(p).checkOpponentMove(clientDivinty.typeOfAction(action), selectedWorker, destinationCell, currentBoard);</b>
+<b class="nc"><i>390</i>&nbsp;                }</b>
+<b class="nc"><i>391</i>&nbsp;                currentBoard = takeAction(selectedWorker, destinationCell, currentBoard, clientDivinty, action, useAbility);</b>
+<b class="nc"><i>392</i>&nbsp;                game.setCurrentBoard(currentBoard);</b>
+<b class="nc"><i>393</i>&nbsp;                displayAllClients();</b>
+<b class="nc"><i>394</i>&nbsp;                return currentBoard.hasWorkerAt(destinationCell) ? destinationCell : workerPosition;</b>
+<b class="nc"><i>395</i>&nbsp;            } catch (IllegalArgumentException e) {</b>
+<b class="nc"><i>396</i>&nbsp;                client.notifyMessageString(e.getMessage());</b>
+<b class="nc"><i>397</i>&nbsp;                client.notifyMessage(Message.ILLEGAL_ARGUMENT);</b>
+<i>398</i>&nbsp;            }
+<b class="nc"><i>399</i>&nbsp;        } while (true);</b>
+<i>400</i>&nbsp;    }
+<i>401</i>&nbsp;
+<i>402</i>&nbsp;    private boolean canTakeAction(Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action){
+<b class="nc"><i>403</i>&nbsp;        for(int row = 0; row &lt; Board.ROWS; ++row){</b>
+<b class="nc"><i>404</i>&nbsp;            for(int col = 0; col &lt; Board.COLUMNS; ++col){</b>
+<b class="nc"><i>405</i>&nbsp;                Cell cell = new Cell(col, row);</b>
+<b class="nc"><i>406</i>&nbsp;                Board board = game.getCurrentBoard();</b>
+<i>407</i>&nbsp;                try{
+<b class="nc"><i>408</i>&nbsp;                    takeAction(selectedWorker, cell, board, clientDivinty, action, true);</b>
+<b class="nc"><i>409</i>&nbsp;                    return true;</b>
+<b class="nc"><i>410</i>&nbsp;                } catch (IllegalArgumentException ignored){</b>
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;                }
+<i>413</i>&nbsp;            }
+<i>414</i>&nbsp;        }
+<b class="nc"><i>415</i>&nbsp;        return false;</b>
+<i>416</i>&nbsp;    }
+<i>417</i>&nbsp;
+<i>418</i>&nbsp;    private Board takeAction(Worker selectedWorker, Cell cell, Board board, DivinityCard clientDivinty, WorkerAction action, boolean useAbility) throws IllegalArgumentException{
+<b class="nc"><i>419</i>&nbsp;        switch (action) {</b>
+<i>420</i>&nbsp;            case MOVE:
+<b class="nc"><i>421</i>&nbsp;                return clientDivinty.move(selectedWorker, cell, board);</b>
+<i>422</i>&nbsp;            case BUILD:
+<b class="nc"><i>423</i>&nbsp;                return clientDivinty.build(selectedWorker, cell, board);</b>
+<i>424</i>&nbsp;            case OPTIONAL_ACTION:
+<b class="nc"><i>425</i>&nbsp;                return ((OptionalAction) clientDivinty).optionalAction(selectedWorker, cell, board);</b>
+<i>426</i>&nbsp;            case OPTIONAL_ABILITY:
+<b class="nc"><i>427</i>&nbsp;                return ((OptionalAbility) clientDivinty).optionalAbility(useAbility, selectedWorker, cell, board);</b>
+<i>428</i>&nbsp;            default:
+<b class="nc"><i>429</i>&nbsp;                throw new IllegalArgumentException(&quot;WorkerAction &quot; + action + &quot; unknown.&quot;);</b>
+<i>430</i>&nbsp;        }
+<i>431</i>&nbsp;    }
+<i>432</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-21 17:11</div>
+</div>
+</body>
+</html>

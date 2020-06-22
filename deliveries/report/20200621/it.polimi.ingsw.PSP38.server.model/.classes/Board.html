@@ -1,0 +1,367 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Board</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.server.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Board (it.polimi.ingsw.PSP38.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Board</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77,8%
+  </span>
+  <span class="absValue">
+    (14/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72%
+  </span>
+  <span class="absValue">
+    (54/ 75)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.server.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.common.WorkerColor;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.*;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * Immutable class representing a two-dimensional Board game
+<i>9</i>&nbsp; * made by a one-dimensional list of {@code TOTAL_CELLS}
+<i>10</i>&nbsp; * cells in row major order.
+<i>11</i>&nbsp; *
+<i>12</i>&nbsp; * @author Maximilien Groh (10683107)
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;public final class Board {
+<i>16</i>&nbsp;    public static final int ROWS = 5;
+<i>17</i>&nbsp;    public static final int COLUMNS = 5;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    private final Set&lt;Worker&gt; workers;
+<i>20</i>&nbsp;    private final Set&lt;Tower&gt; towers;
+<i>21</i>&nbsp;    private final Set&lt;Cell&gt; cellsWithDomes;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * Board constructor that creates an empty board
+<i>25</i>&nbsp;     */
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;    public Board() {</b>
+<b class="fc"><i>28</i>&nbsp;        workers = Collections.unmodifiableSet(new HashSet&lt;&gt;());</b>
+<b class="fc"><i>29</i>&nbsp;        towers = Collections.unmodifiableSet(new HashSet&lt;&gt;());</b>
+<b class="fc"><i>30</i>&nbsp;        cellsWithDomes = Collections.unmodifiableSet(new HashSet&lt;&gt;());</b>
+<b class="fc"><i>31</i>&nbsp;    }</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Board constructor that makes a board with the given list of cells
+<i>35</i>&nbsp;     *
+<i>36</i>&nbsp;     * @param towers   list of towers present on the board
+<i>37</i>&nbsp;     * @param workers list of workers present on the board
+<i>38</i>&nbsp;     * @param cellsWithDomes list of domes present on the board
+<i>39</i>&nbsp;     * @throws NullPointerException if the workers list or the towers list is null
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;
+<b class="fc"><i>42</i>&nbsp;    public Board(Set&lt;Worker&gt; workers, Set&lt;Tower&gt; towers, Set&lt;Cell&gt; cellsWithDomes) throws NullPointerException{</b>
+<b class="fc"><i>43</i>&nbsp;        this.workers = Set.copyOf(Objects.requireNonNull(workers));</b>
+<b class="fc"><i>44</i>&nbsp;        this.towers = Set.copyOf(Objects.requireNonNull(towers));</b>
+<b class="fc"><i>45</i>&nbsp;        this.cellsWithDomes = Set.copyOf(Objects.requireNonNull(cellsWithDomes));</b>
+<b class="fc"><i>46</i>&nbsp;    }</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * Returns a copy of the board that contains
+<i>50</i>&nbsp;     * the given tower or the same board if the
+<i>51</i>&nbsp;     * argument is null
+<i>52</i>&nbsp;     *
+<i>53</i>&nbsp;     * @param tower the tower to place on the board
+<i>54</i>&nbsp;     * @return a new board with the given cell
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    public Board withTower(Tower tower) {
+<b class="fc"><i>58</i>&nbsp;        if (tower == null) {</b>
+<b class="fc"><i>59</i>&nbsp;            return this;</b>
+<i>60</i>&nbsp;        }
+<i>61</i>&nbsp;
+<b class="fc"><i>62</i>&nbsp;        Set&lt;Tower&gt; newBoardTowers = new HashSet&lt;&gt;(towers);</b>
+<b class="fc"><i>63</i>&nbsp;        newBoardTowers.add(tower);</b>
+<i>64</i>&nbsp;
+<b class="fc"><i>65</i>&nbsp;        return new Board(workers, newBoardTowers, cellsWithDomes);</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Returns a copy of the board that contains
+<i>70</i>&nbsp;     * the given worker or the same board if the
+<i>71</i>&nbsp;     * argument is null
+<i>72</i>&nbsp;     *
+<i>73</i>&nbsp;     * @param worker      the worker that we want add
+<i>74</i>&nbsp;     * @return a new board with the worker added
+<i>75</i>&nbsp;     */
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    public Board withWorker(Worker worker) throws IllegalArgumentException{
+<b class="fc"><i>78</i>&nbsp;        if (worker == null) {</b>
+<b class="nc"><i>79</i>&nbsp;            return this;</b>
+<i>80</i>&nbsp;        }
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;        Set&lt;Worker&gt; newBoardWorkers = new HashSet&lt;&gt;(workers);</b>
+<b class="fc"><i>83</i>&nbsp;        newBoardWorkers.add(worker);</b>
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;        return new Board(newBoardWorkers, towers, cellsWithDomes);</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * Returns a copy of the board without the
+<i>90</i>&nbsp;     * given worker or the same board if the
+<i>91</i>&nbsp;     * argument is null or if the worker wasn&#39;t
+<i>92</i>&nbsp;     * on the board
+<i>93</i>&nbsp;     *
+<i>94</i>&nbsp;     * @param worker the worker to remove
+<i>95</i>&nbsp;     * @return a new board with the worker removed
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    public Board withoutWorker(Worker worker){
+<b class="fc"><i>99</i>&nbsp;        if (worker == null){</b>
+<b class="nc"><i>100</i>&nbsp;            return this;</b>
+<i>101</i>&nbsp;        }
+<i>102</i>&nbsp;
+<b class="fc"><i>103</i>&nbsp;        Set&lt;Worker&gt; newBoardWorkers = new HashSet&lt;&gt;(workers);</b>
+<b class="fc"><i>104</i>&nbsp;        newBoardWorkers.remove(worker);</b>
+<i>105</i>&nbsp;
+<b class="fc"><i>106</i>&nbsp;        return new Board(newBoardWorkers, towers, cellsWithDomes);</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    public Board withoutWorkers(WorkerColor color){
+<b class="nc"><i>110</i>&nbsp;        if(color == null){</b>
+<b class="nc"><i>111</i>&nbsp;            return this;</b>
+<i>112</i>&nbsp;        }
+<i>113</i>&nbsp;
+<b class="nc"><i>114</i>&nbsp;        Set&lt;Worker&gt; newBoardWorkers = new HashSet&lt;&gt;(workers);</b>
+<b class="nc"><i>115</i>&nbsp;        newBoardWorkers.removeIf(w -&gt; w.getColor() == color);</b>
+<i>116</i>&nbsp;
+<b class="nc"><i>117</i>&nbsp;        return new Board(newBoardWorkers, towers, cellsWithDomes);</b>
+<i>118</i>&nbsp;    }
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    public Board withoutTower(Tower tower){
+<b class="nc"><i>122</i>&nbsp;        if (tower == null){</b>
+<b class="nc"><i>123</i>&nbsp;            return this;</b>
+<i>124</i>&nbsp;        }
+<i>125</i>&nbsp;
+<b class="nc"><i>126</i>&nbsp;        Set&lt;Tower&gt; newBoardTowers = new HashSet&lt;&gt;(towers);</b>
+<b class="nc"><i>127</i>&nbsp;        newBoardTowers.remove(tower);</b>
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;        return new Board(workers, newBoardTowers, cellsWithDomes);</b>
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * Returns a copy of the board that contains
+<i>134</i>&nbsp;     * a dome at the given position or
+<i>135</i>&nbsp;     * the same board if the argument is null
+<i>136</i>&nbsp;     *
+<i>137</i>&nbsp;     * @param cell the cell at which the dome is placed
+<i>138</i>&nbsp;     * @return a new board with the dome added
+<i>139</i>&nbsp;     */
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    public Board withDome(Cell cell) {
+<b class="nc"><i>142</i>&nbsp;        if (cell == null){</b>
+<b class="nc"><i>143</i>&nbsp;            return this;</b>
+<i>144</i>&nbsp;        }
+<i>145</i>&nbsp;
+<b class="nc"><i>146</i>&nbsp;        Set&lt;Cell&gt; newBoardDomes = new HashSet&lt;&gt;(cellsWithDomes);</b>
+<b class="nc"><i>147</i>&nbsp;        newBoardDomes.add(cell);</b>
+<i>148</i>&nbsp;
+<b class="nc"><i>149</i>&nbsp;        return new Board(workers, towers, newBoardDomes);</b>
+<i>150</i>&nbsp;    }
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    /**
+<i>153</i>&nbsp;     * Returns the neighbor of the given cell in the given direction if there is one,
+<i>154</i>&nbsp;     * the empty optional value otherwise.
+<i>155</i>&nbsp;     *
+<i>156</i>&nbsp;     * @param cell the cell of which we want to find the neighbor
+<i>157</i>&nbsp;     * @param dir  the direction where the neighbor lies
+<i>158</i>&nbsp;     * @return the neighbor of the given cell in the given direction if there is one,
+<i>159</i>&nbsp;     * the empty optional value otherwise.
+<i>160</i>&nbsp;     */
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    public Optional&lt;Cell&gt; neighborOf(Cell cell, Direction dir) {
+<b class="fc"><i>163</i>&nbsp;        int neighborX = cell.getX() + dir.x();</b>
+<b class="fc"><i>164</i>&nbsp;        int neighborY = cell.getY() + dir.y();</b>
+<b class="fc"><i>165</i>&nbsp;        if(isOutOfBounds(neighborX, neighborY)){</b>
+<b class="fc"><i>166</i>&nbsp;            return Optional.empty();</b>
+<i>167</i>&nbsp;        }else{
+<b class="fc"><i>168</i>&nbsp;           return Optional.of(new Cell(neighborX,neighborY));</b>
+<i>169</i>&nbsp;        }
+<i>170</i>&nbsp;    }
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;    /**
+<i>173</i>&nbsp;     * Returns a list of cells representing the neighbors of the given cell
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @param cell the cell of which we want to find the neighbors
+<i>176</i>&nbsp;     * @return a list of cells representing the neighbors of the given cell
+<i>177</i>&nbsp;     */
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    public Set&lt;Cell&gt; neighborsOf(Cell cell) {
+<b class="fc"><i>180</i>&nbsp;        Set&lt;Cell&gt; neighbors = new HashSet&lt;&gt;();</b>
+<i>181</i>&nbsp;
+<b class="fc"><i>182</i>&nbsp;        for (Direction dir : Direction.values()) {</b>
+<b class="fc"><i>183</i>&nbsp;            Optional&lt;Cell&gt; possibleNeighbor = neighborOf(cell, dir);</b>
+<b class="fc"><i>184</i>&nbsp;            possibleNeighbor.ifPresent(neighbors::add);</b>
+<i>185</i>&nbsp;        }
+<i>186</i>&nbsp;
+<b class="fc"><i>187</i>&nbsp;        return neighbors;</b>
+<i>188</i>&nbsp;    }
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;    /**
+<i>191</i>&nbsp;     * Determines if the given coordinates are out of bounds
+<i>192</i>&nbsp;     *
+<i>193</i>&nbsp;     * @param x horizontal coordinate of the cell
+<i>194</i>&nbsp;     * @param y vertical coordinate of the cell
+<i>195</i>&nbsp;     * @return &lt;b&gt;true&lt;/b&gt; if they are out of bounds , &lt;b&gt;false&lt;/b&gt; otherwise
+<i>196</i>&nbsp;     */
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;    private boolean isOutOfBounds(int x, int y) {
+<b class="fc"><i>199</i>&nbsp;        return x &lt; 0 || y &lt; 0 || x &gt;= COLUMNS || y &gt;= ROWS;</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    /**
+<i>203</i>&nbsp;     * Returns a map linking the workers (values) to the cells they occupy (keys).
+<i>204</i>&nbsp;     *
+<i>205</i>&nbsp;     * @return a map linking workers and the cells they occupy
+<i>206</i>&nbsp;     */
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    public Map&lt;Cell, Worker&gt; getWorkersPositions() {
+<b class="fc"><i>209</i>&nbsp;        Map&lt;Cell, Worker&gt; workerCells = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>210</i>&nbsp;        for (Worker w : workers) {</b>
+<b class="fc"><i>211</i>&nbsp;            workerCells.put(w.getPosition(), w);</b>
+<b class="fc"><i>212</i>&nbsp;        }</b>
+<b class="fc"><i>213</i>&nbsp;        return workerCells;</b>
+<i>214</i>&nbsp;    }
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    /**
+<i>217</i>&nbsp;     * Returns a map linking the towers (values) to the cells they occupy (keys).
+<i>218</i>&nbsp;     *
+<i>219</i>&nbsp;     * @return a map linking towers and the cells they occupy
+<i>220</i>&nbsp;     */
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    public Map&lt;Cell, Tower&gt; getTowersPositions() {
+<b class="fc"><i>223</i>&nbsp;        Map&lt;Cell, Tower&gt; towerCells = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>224</i>&nbsp;        for (Tower t : towers) {</b>
+<b class="fc"><i>225</i>&nbsp;            towerCells.put(t.getPosition(), t);</b>
+<b class="fc"><i>226</i>&nbsp;        }</b>
+<b class="fc"><i>227</i>&nbsp;        return towerCells;</b>
+<i>228</i>&nbsp;    }
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;    /**
+<i>231</i>&nbsp;     * Determines if the given cell contains a dome
+<i>232</i>&nbsp;     *
+<i>233</i>&nbsp;     * @param cell the cell that we want to check
+<i>234</i>&nbsp;     * @return &lt;b&gt;true&lt;/b&gt; if the cell contains a dome , &lt;b&gt;false&lt;/b&gt; otherwise
+<i>235</i>&nbsp;     */
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;    public boolean hasDomeAt(Cell cell){
+<b class="fc"><i>238</i>&nbsp;        return cellsWithDomes.contains(cell);</b>
+<i>239</i>&nbsp;    }
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /**
+<i>242</i>&nbsp;     * Determines if the given cell contains a worker
+<i>243</i>&nbsp;     *
+<i>244</i>&nbsp;     * @param cell the cell that we want to check
+<i>245</i>&nbsp;     * @return &lt;b&gt;true&lt;/b&gt; if the cell contains a worker , &lt;b&gt;false&lt;/b&gt; otherwise
+<i>246</i>&nbsp;     */
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;    public boolean hasWorkerAt(Cell cell){
+<b class="fc"><i>249</i>&nbsp;        return getWorkersPositions().containsKey(cell);</b>
+<i>250</i>&nbsp;    }
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;    public Worker workerAt(Cell cell){
+<b class="nc"><i>253</i>&nbsp;        if(!hasWorkerAt(cell)){</b>
+<b class="nc"><i>254</i>&nbsp;            throw new NullPointerException(&quot;The selected cell doesn&#39;t contain a worker.&quot;);</b>
+<i>255</i>&nbsp;        }
+<i>256</i>&nbsp;
+<b class="nc"><i>257</i>&nbsp;        return getWorkersPositions().get(cell);</b>
+<i>258</i>&nbsp;    }
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    /**
+<i>261</i>&nbsp;     * Returns the height of the given cell
+<i>262</i>&nbsp;     *
+<i>263</i>&nbsp;     * @param cell the cell
+<i>264</i>&nbsp;     * @return the height
+<i>265</i>&nbsp;     */
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;    public int heightOf(Cell cell){
+<b class="fc"><i>268</i>&nbsp;        return !getTowersPositions().containsKey(cell) ? 0 : getTowersPositions().get(cell).getHeight();</b>
+<i>269</i>&nbsp;    }
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    @Override
+<i>272</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>273</i>&nbsp;        if (this == obj) {</b>
+<b class="fc"><i>274</i>&nbsp;            return true;</b>
+<i>275</i>&nbsp;        }
+<b class="fc"><i>276</i>&nbsp;        if (obj == null || getClass() != obj.getClass()) {</b>
+<b class="nc"><i>277</i>&nbsp;            return false;</b>
+<i>278</i>&nbsp;        }
+<b class="fc"><i>279</i>&nbsp;        Board other = (Board) obj;</b>
+<b class="fc"><i>280</i>&nbsp;        return workers.equals(other.workers) &amp;&amp;</b>
+<b class="fc"><i>281</i>&nbsp;                towers.equals(other.towers) &amp;&amp;</b>
+<b class="fc"><i>282</i>&nbsp;                cellsWithDomes.equals(other.cellsWithDomes);</b>
+<i>283</i>&nbsp;    }
+<i>284</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-21 17:11</div>
+</div>
+</body>
+</html>
