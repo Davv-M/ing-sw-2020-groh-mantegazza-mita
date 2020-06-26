@@ -10,12 +10,17 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
+/**
+ * This class contains the methods needed to generate waiting panels for various situation
+ * @author Davide Mantegazza (10568661), Matteo Mita
+ */
 public class WaitingPanel {
     private JPanel waitingPanel;
     private JPanel imagePanel;
     private JPanel hourglassPanel;
     private JLabel waitLabel;
     private JLabel hourglassLabel;
+
 
     public JPanel createWaitingPanel(String imageURL){
         waitingPanel = new JPanel();
@@ -43,6 +48,7 @@ public class WaitingPanel {
         }
         waitImageScaled =waitImage.getScaledInstance(500,-1,Image.SCALE_SMOOTH);
         waitLabel = new JLabel(new ImageIcon(waitImageScaled));
+        waitLabel.setBackground(Color.WHITE);
         imagePanel.add(waitLabel);
         return imagePanel;
     }

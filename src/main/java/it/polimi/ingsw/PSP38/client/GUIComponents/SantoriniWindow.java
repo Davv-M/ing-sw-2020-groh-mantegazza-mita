@@ -7,6 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 
+/**
+ * Class that contains methods used to generate the graphic interface window of Santorini
+ * @author Davide Mantegazza (10568661)
+ */
 public class SantoriniWindow extends Observable /*implements ActionListener*/ {
     public static final int WIDTH = 550;
     public static final int HEIGHT = 650;
@@ -18,7 +22,11 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
     private CardChoicePanel cardChoicePanel;
     private WaitingPanel waitingPanel;
 
-
+    /**
+     * This method is used to generate the game window of Santorini
+     * @param gmg is the instance of class GameModeGUI that creates the window
+     * @return the main frame for the game
+     */
     public JFrame createSantoriniWindow(GameModeGUI gmg){
         gameModeGUI=gmg;
         mainSetupFrame.setSize(WIDTH, HEIGHT);
@@ -28,6 +36,10 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
         return mainSetupFrame;
     }
 
+    /**
+     * This method is used to create the JPanel that holds all of the panels of the window (the setup panel, the card selection panel and the game panel)
+     * @return the card holder panel
+     */
     public JPanel createCardHolder(){
         cardHolder = new JPanel();
         cardHolder.setLayout(new CardLayout());
@@ -50,5 +62,9 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
 
     public StartPanel getStartPanel() {
         return startPanel;
+    }
+
+    public CardChoicePanel getCardChoicePanel() {
+        return cardChoicePanel;
     }
 }

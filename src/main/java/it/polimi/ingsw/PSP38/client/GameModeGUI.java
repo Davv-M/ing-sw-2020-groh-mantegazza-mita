@@ -8,6 +8,7 @@ import it.polimi.ingsw.PSP38.common.Message;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Scanner;
 
 
 public class GameModeGUI implements GameMode {
@@ -18,6 +19,9 @@ public class GameModeGUI implements GameMode {
     private JFrame frame;
     private String customStringRead;
     private SantoriniWindow santoriniWindow;
+    private String availableDivinities;
+    private Scanner divinitiesScanner;
+    private JPanel cardButtons;
 
 
     public GameModeGUI() throws InvocationTargetException, InterruptedException {
@@ -36,7 +40,7 @@ public class GameModeGUI implements GameMode {
         Object[] options = {"2", "3"};
         int n = JOptionPane.showOptionDialog(santoriniWindow.getStartPanel().getStartPanel(),
                 "You are the first player to join this game. Please insert the number of players",
-                null,
+                "Choose number of players",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -160,12 +164,21 @@ public class GameModeGUI implements GameMode {
     }
 
     private void displayAvailableDivinities() {
-        System.out.println(customStringRead);
+        availableDivinities=customStringRead;
+        if(cardButtons!=null){
+            BorderLayout borderLayout = (BorderLayout)santoriniWindow.getCardChoicePanel().getMainCardPanel().getLayout();
+            santoriniWindow.getCardChoicePanel().getMainCardPanel().remove(borderLayout.getLayoutComponent(BorderLayout.CENTER));
+        }
+        cardButtons = santoriniWindow.getCardChoicePanel().createCardButtonsPanel();
+        santoriniWindow.getCardChoicePanel().getMainCardPanel().add(cardButtons, BorderLayout.CENTER);
     }
 
     private void displayDivinityMessage() {
+        /*divinitiesScanner = new Scanner(customStringRead);
+        santoriniWindow.getCardHolder().add(santoriniWindow.getCardChoicePanel().createMainCardPanel(this), "cardChoice");*/
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
+        getSantoriniWindow().getMainSetupFrame().setSize(1300,400);
     }
 
     private void unableToFinishTurn() {
@@ -201,6 +214,10 @@ public class GameModeGUI implements GameMode {
         } else if (n == JOptionPane.NO_OPTION) {
             setStringRead("no");
         }
+    }
+
+    private void serverUnreacheable(){
+        JOptionPane.showMessageDialog(frame, "Server currently unreacheable, please try later", "Connection error", JOptionPane.ERROR_MESSAGE);
     }
 
 
@@ -318,6 +335,9 @@ public class GameModeGUI implements GameMode {
             case SERVER_LOST:
                 serverLost();
                 break;
+            case SERVER_UNREACHEABLE:
+                serverUnreacheable();
+                break;
             default:
                 System.out.println("Message not recognized\n");
                 System.out.println(m);
@@ -370,6 +390,13 @@ public class GameModeGUI implements GameMode {
         return santoriniWindow;
     }
 
+    public String getAvailableDivinities() {
+        return availableDivinities;
+    }
+
+    public Scanner getDivinitiesScanner() {
+        return divinitiesScanner;
+    }
 
     //in teoria non dovrebbero mai essere chiamati con GUI
 
