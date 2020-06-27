@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP38.client.GUIComponents;
+/*package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
 
@@ -49,4 +49,4 @@ public class SetNumOfPlayersComponent extends JComponent implements ActionListen
         }
 
     }
-}
+}*/

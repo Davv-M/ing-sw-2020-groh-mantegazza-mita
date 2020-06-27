@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP38.client.GUIComponents;
+/*package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.Client;
 
@@ -82,4 +82,4 @@ public class SetupPanelsOLD {
     public static JTextField getAge() {
         return age;
     }
-}
+}*/

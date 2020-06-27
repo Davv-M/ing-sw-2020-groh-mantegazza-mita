@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP38.client.GUIComponents;
+/*package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.Client;
 
@@ -47,4 +47,4 @@ public class GameWindowOLD implements ActionListener {
     public JPanel getPanelHolder() {
         return panelHolder;
     }
-}
+}*/

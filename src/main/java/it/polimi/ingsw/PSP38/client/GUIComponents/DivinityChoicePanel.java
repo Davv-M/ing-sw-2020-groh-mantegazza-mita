@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
 
-public class CardChoicePanel implements ActionListener {
+public class DivinityChoicePanel implements ActionListener {
     private JPanel mainCardPanel;
     private JPanel titlePanel;
     private JPanel okButtonPanel;
@@ -16,6 +16,7 @@ public class CardChoicePanel implements ActionListener {
     private JLabel title;
     private GameModeGUI gameModeGUI;
     private Scanner divinitiesScanner;
+    private JRadioButton divinityRadioButton;
     private ButtonGroup divintiyRadioButtonGroup = new ButtonGroup();
     private JButton okButton;
 
@@ -23,7 +24,6 @@ public class CardChoicePanel implements ActionListener {
         gameModeGUI=gmg;
         mainCardPanel = new JPanel(new BorderLayout());
         mainCardPanel.add(createTitlePanel(), BorderLayout.NORTH);
-        //mainCardPanel.add(createCardButtonsPanel(), BorderLayout.CENTER);
         mainCardPanel.add(createOkButtonPanel(), BorderLayout.SOUTH);
         return mainCardPanel;
     }
@@ -57,10 +57,10 @@ public class CardChoicePanel implements ActionListener {
     public void createDivinityButton(String divinityName){
         JPanel divinityButtonPanel = new JPanel(new BorderLayout());
         JPanel divinityCheckboxPanel = new JPanel(new FlowLayout());
-        JRadioButton divinityCheckbox = new JRadioButton(divinityName);
-        divinityCheckbox.setActionCommand(divinityName);
-        divintiyRadioButtonGroup.add(divinityCheckbox);
-        divinityCheckboxPanel.add(divinityCheckbox);
+        divinityRadioButton = new JRadioButton(divinityName);
+        divinityRadioButton.setActionCommand(divinityName);
+        divintiyRadioButtonGroup.add(divinityRadioButton);
+        divinityCheckboxPanel.add(divinityRadioButton);
         divinityButtonPanel.add(divinityCheckboxPanel, BorderLayout.SOUTH);
         //inserire immagine
         cardButtonsPanel.add(divinityButtonPanel);

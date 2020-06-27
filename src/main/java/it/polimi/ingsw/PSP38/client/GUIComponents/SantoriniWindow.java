@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
-import it.polimi.ingsw.PSP38.client.Client;
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
 
 import javax.swing.*;
@@ -11,16 +10,20 @@ import java.util.Observable;
  * Class that contains methods used to generate the graphic interface window of Santorini
  * @author Davide Mantegazza (10568661)
  */
-public class SantoriniWindow extends Observable /*implements ActionListener*/ {
+public class SantoriniWindow extends Observable {
     public static final int WIDTH = 550;
     public static final int HEIGHT = 650;
     public static final String waitForPlayersImage = "santorini-hold-on.png";
+    public static final String waitForDivinitiesImage = "santorini-wait-for-divinities.png";
+    public static final String waitForNumPlayersImage = "santorini-wait-for-num-players.png";
     private JFrame mainSetupFrame = new JFrame();
     private JPanel cardHolder;
     private static GameModeGUI gameModeGUI;
     private StartPanel startPanel;
-    private CardChoicePanel cardChoicePanel;
-    private WaitingPanel waitingPanel;
+    private DivinityChoicePanel divinityChoicePanel;
+    private WaitingPanel waitForPlayersPanel;
+    private WaitingPanel waitForNumPlayersPanel;
+    private WaitingPanel waitForDivinitiesPanel;
 
     /**
      * This method is used to generate the game window of Santorini
@@ -32,6 +35,7 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
         mainSetupFrame.setSize(WIDTH, HEIGHT);
         mainSetupFrame.setTitle("Santorini");
         mainSetupFrame.add(createCardHolder());
+        mainSetupFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainSetupFrame.setVisible(true);
         return mainSetupFrame;
     }
@@ -45,10 +49,14 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
         cardHolder.setLayout(new CardLayout());
         startPanel=new StartPanel();
         cardHolder.add(startPanel.createStartPanel(gameModeGUI), "setup");
-        waitingPanel = new WaitingPanel();
-        cardHolder.add(waitingPanel.createWaitingPanel(waitForPlayersImage), "waitForPlayers");
-        cardChoicePanel=new CardChoicePanel();
-        cardHolder.add(cardChoicePanel.createMainCardPanel(gameModeGUI), "cardChoice");
+        waitForPlayersPanel = new WaitingPanel(waitForPlayersImage);
+        cardHolder.add(waitForPlayersPanel.createWaitingPanel(), "waitForPlayers");
+        waitForNumPlayersPanel = new WaitingPanel(waitForNumPlayersImage);
+        cardHolder.add(waitForNumPlayersPanel.createWaitingPanel(), "waitForNumPlayers");
+        divinityChoicePanel =new DivinityChoicePanel();
+        cardHolder.add(divinityChoicePanel.createMainCardPanel(gameModeGUI), "cardChoice");
+        waitForDivinitiesPanel = new WaitingPanel(waitForDivinitiesImage);
+        cardHolder.add(waitForDivinitiesPanel.createWaitingPanel(), "waitForDivinities");
         return cardHolder;
     }
 
@@ -64,7 +72,7 @@ public class SantoriniWindow extends Observable /*implements ActionListener*/ {
         return startPanel;
     }
 
-    public CardChoicePanel getCardChoicePanel() {
-        return cardChoicePanel;
+    public DivinityChoicePanel getDivinityChoicePanel() {
+        return divinityChoicePanel;
     }
 }

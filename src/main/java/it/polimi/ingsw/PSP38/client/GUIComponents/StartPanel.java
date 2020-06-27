@@ -99,7 +99,11 @@ public class StartPanel implements ActionListener {
         return buttonPanel;
     }
 
-
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==connectButton){

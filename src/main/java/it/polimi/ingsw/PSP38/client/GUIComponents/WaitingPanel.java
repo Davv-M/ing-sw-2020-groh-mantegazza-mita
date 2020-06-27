@@ -11,7 +11,8 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 /**
- * This class contains the methods needed to generate waiting panels for various situation
+ * This class contains the methods needed to generate a panel which signals the user that the client is waiting for
+ * some feedback from the server or another client
  * @author Davide Mantegazza (10568661), Matteo Mita
  */
 public class WaitingPanel {
@@ -20,20 +21,39 @@ public class WaitingPanel {
     private JPanel hourglassPanel;
     private JLabel waitLabel;
     private JLabel hourglassLabel;
+    private String imageURL;
+    private Color panelColor = new Color(0,0,0,0);
 
+    /**
+     * Constructor of <code>WaitingPanel</code> class
+     * @param imageURL is the path with the name of the image that will be shown on the panel
+     */
+    public WaitingPanel(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
-    public JPanel createWaitingPanel(String imageURL){
+    /**
+     * This method generates the waiting panel with the desired image
+     * @return the waiting panel
+     */
+    public JPanel createWaitingPanel(){
         waitingPanel = new JPanel();
         waitingPanel.setLayout(new BorderLayout());
         waitingPanel.setBackground(Color.WHITE);
-        waitingPanel.add(createWaitImagePanel(imageURL), BorderLayout.CENTER);
+        waitingPanel.add(createWaitImagePanel(), BorderLayout.CENTER);
         waitingPanel.add(createHourglassPanel(), BorderLayout.SOUTH);
         return waitingPanel;
     }
-    public JPanel createWaitImagePanel(String imageURL) {
+
+    /**
+     * This method is used to create the panel containing the specified image
+     * @return the panel with the image specified with <code>imageURL</code>
+     */
+    public JPanel createWaitImagePanel() {
         Image waitImage=null;
         Image waitImageScaled;
         imagePanel= new JPanel();
+        imagePanel.setBackground(panelColor);
         File dir = null;
         try {
             dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
@@ -57,6 +77,7 @@ public class WaitingPanel {
         Image hourglass = null;
         Image hourglassScaled;
         hourglassPanel= new JPanel();
+        hourglassPanel.setBackground(panelColor);
         File dir = null;
         try {
             dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
