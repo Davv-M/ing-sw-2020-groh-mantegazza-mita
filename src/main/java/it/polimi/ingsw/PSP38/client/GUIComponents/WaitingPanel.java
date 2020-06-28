@@ -68,7 +68,6 @@ public class WaitingPanel {
         }
         waitImageScaled =waitImage.getScaledInstance(500,-1,Image.SCALE_SMOOTH);
         waitLabel = new JLabel(new ImageIcon(waitImageScaled));
-        waitLabel.setBackground(Color.WHITE);
         imagePanel.add(waitLabel);
         return imagePanel;
     }

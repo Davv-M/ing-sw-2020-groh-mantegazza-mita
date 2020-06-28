@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
+/**
+ * This class contains all the methods needed to create the panel with the preliminary settings of the game
+ * @author Davide Mantegazza (10568661)
+ */
 public class StartPanel implements ActionListener {
     private JPanel startPanel;
     private JPanel imagePanel;
@@ -31,6 +35,11 @@ public class StartPanel implements ActionListener {
     private Color textColor  = Color.WHITE;
     private GameModeGUI gameModeGUI;
 
+    /**
+     * This method is used to create the main panel for the initial settings of the game
+     * @param gmg is the current instance of GameModeGUI
+     * @return the main panel
+     */
     public JPanel createStartPanel(GameModeGUI gmg){
         gameModeGUI=gmg;
         startPanel = new JPanel();
@@ -42,6 +51,10 @@ public class StartPanel implements ActionListener {
         return startPanel;
     }
 
+    /**
+     * This method is used to generate the panel containing the header image of the startup panel
+     * @return the panel with the title image
+     */
     public JPanel createImagePanel() {
         Image santoriniLogo = null;
         Image santoriniLogoScaled;
@@ -64,6 +77,12 @@ public class StartPanel implements ActionListener {
         imagePanel.add(logoLabel);
         return imagePanel;
     }
+
+    /**
+     * This method is used to generate the panel that contains the text fields used to input the server's IP address,
+     * the player's nickname and the player's age
+     * @return the panel containing the text fields previously mentioned
+     */
     public JPanel createControlPanel(){
         controlPanel = new JPanel();
         controlPanel.setLayout(new GridLayout(6,1));
@@ -89,6 +108,10 @@ public class StartPanel implements ActionListener {
         return controlPanel;
     }
 
+    /**
+     * This method is used to create the panel that contains the button used to submit the inputted data and connect to the server
+     * @return the panel with the button used to submit the data and connect to the server
+     */
     public JPanel createButtonPanel(){
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());

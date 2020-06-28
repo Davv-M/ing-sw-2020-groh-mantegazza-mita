@@ -167,19 +167,20 @@ public class GameModeGUI implements GameMode {
     private void displayAvailableDivinities() {
         availableDivinities=customStringRead;
         if(cardButtons!=null){
-            BorderLayout borderLayout = (BorderLayout)santoriniWindow.getDivinityChoicePanel().getMainCardPanel().getLayout();
-            santoriniWindow.getDivinityChoicePanel().getMainCardPanel().remove(borderLayout.getLayoutComponent(BorderLayout.CENTER));
+            BorderLayout borderLayout = (BorderLayout)santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().getLayout();
+            santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().remove(borderLayout.getLayoutComponent(BorderLayout.CENTER));
         }
-        cardButtons = santoriniWindow.getDivinityChoicePanel().createCardButtonsPanel();
-        santoriniWindow.getDivinityChoicePanel().getMainCardPanel().add(cardButtons, BorderLayout.CENTER);
+        cardButtons = santoriniWindow.getDivinityChoicePanel().createDivinitiesButtonsPanel();
+        santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().add(cardButtons, BorderLayout.CENTER);
+        santoriniWindow.getMainFrame().revalidate();
     }
 
     private void displayDivinityMessage() {
         /*divinitiesScanner = new Scanner(customStringRead);
-        santoriniWindow.getCardHolder().add(santoriniWindow.getDivinityChoicePanel().createMainCardPanel(this), "cardChoice");*/
+        santoriniWindow.getCardHolder().add(santoriniWindow.getDivinityChoicePanel().createMainDivinityPanel(this), "cardChoice");*/
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
-        getSantoriniWindow().getMainSetupFrame().setSize(1500,400);
+        getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     private void unableToFinishTurn() {
@@ -201,7 +202,7 @@ public class GameModeGUI implements GameMode {
 
     private void askSpecialAction() {
         Object[] options = {"yes", "no"};
-        int n = JOptionPane.showOptionDialog(santoriniWindow.getMainSetupFrame(),
+        int n = JOptionPane.showOptionDialog(santoriniWindow.getMainFrame(),
                 "Do you want to use your special ability",
                 null,
                 JOptionPane.YES_NO_OPTION,
