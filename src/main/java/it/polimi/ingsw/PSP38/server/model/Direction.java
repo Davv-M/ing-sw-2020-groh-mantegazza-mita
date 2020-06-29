@@ -76,6 +76,14 @@ public enum Direction {
         }
     }
 
+    /**
+     * Reverses the direction.
+     *
+     * @return The opposite direction.
+     * @throws IllegalArgumentException
+     *             if the direction is unknown.
+     */
+
     public Direction opposite() {
         switch (this) {
             case N:

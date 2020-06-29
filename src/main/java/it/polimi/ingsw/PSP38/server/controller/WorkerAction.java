@@ -2,6 +2,13 @@ package it.polimi.ingsw.PSP38.server.controller;
 
 import it.polimi.ingsw.PSP38.common.Message;
 
+/**
+ * Enum representing the actions a worker can take on his turn,
+ * depending on the divinity card
+ *
+ * @author Maximilien Groh (10683107)
+ */
+
 public enum WorkerAction {
     MOVE,
     BUILD,

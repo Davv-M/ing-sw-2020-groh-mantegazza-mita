@@ -13,8 +13,8 @@ public final class Cell {
     private final int y;
 
     /**
-     * @param x           x coordinate of the cell
-     * @param y           y coordinate of the cell
+     * @param x x coordinate of the cell
+     * @param y y coordinate of the cell
      * @throws IllegalArgumentException if the coordinates are out of bounds
      */
 
@@ -53,8 +53,14 @@ public final class Cell {
         return getY() * Board.COLUMNS + getX();
     }
 
-    public boolean isOnPerimeter(){
-        return x == Board.COLUMNS - 1 || y == Board.ROWS - 1;
+    /**
+     * Determines if the given cell is on the perimeter of the board
+     *
+     * @return <b>true</b> if the cell is on the perimeter, <b>false</b> otherwise
+     */
+
+    public boolean isOnPerimeter() {
+        return x == 0 || x == Board.COLUMNS - 1 || y == 0 || y == Board.ROWS - 1;
     }
 
     @Override

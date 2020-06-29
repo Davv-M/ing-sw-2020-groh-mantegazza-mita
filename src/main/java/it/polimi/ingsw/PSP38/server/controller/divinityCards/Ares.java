@@ -11,6 +11,12 @@ import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 
 import java.util.List;
 
+/**
+ * Concrete implementation of Ares' power, extends <code>DivinityCard</code> abstract class.
+ *
+ * @author Maximilien Groh (10683107)
+ */
+
 public class Ares extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.OPTIONAL_ACTION, WorkerAction.BUILD);
 

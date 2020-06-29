@@ -5,9 +5,9 @@ import it.polimi.ingsw.PSP38.common.WorkerColor;
 import java.util.*;
 
 /**
- * This class contains the methods needed to manage the execution of a game
+ * Class representing the Game
  *
- * @author Davide Mantegazza (10568661)
+ * @author Maximilien Groh (10683107)
  */
 
 public class Game {
@@ -21,67 +21,129 @@ public class Game {
     private Board currentBoard = new Board();
     private final List<WorkerColor> availableColors = new LinkedList<>(Arrays.asList(WorkerColor.values()));
 
-    public void addPlayer(String nickname, int age){
+    /**
+     * Adds a player to the game with the given nickname
+     * and age, and assigns a color at random, chosen from
+     * the ones available
+     *
+     * @param nickname the nickname of the player
+     * @param age      the age of the player
+     */
+
+    public void addPlayer(String nickname, int age) {
         Player player = new Player(nickname, age, availableColors.remove(0));
         players.add(player);
         players.sort(Comparator.comparingInt(Player::getAge));
     }
 
-    public void removePlayer(Player player){
+    /**
+     * Removes a player from the game
+     *
+     * @param player the player to remove
+     */
+
+    public void removePlayer(Player player) {
         players.remove(player);
     }
 
     /**
-     * @return the currentBoard of the game
+     * @return the board of the game
      */
+
     public Board getCurrentBoard() {
         return currentBoard;
     }
 
-    public Player getCurrentPlayerTurn(){
+    /**
+     * @return the player who is playing the current turn
+     */
+
+    public Player getCurrentPlayerTurn() {
         return players.get(0);
     }
 
-    public List<Player> getOpponents(){
+    /**
+     * @return the list of players who are not playing the current turn
+     */
+
+    public List<Player> getOpponents() {
         List<Player> opponents = new LinkedList<>(players);
         opponents.remove(getCurrentPlayerTurn());
         return opponents;
     }
 
+    /**
+     * Sets the total number of players playing the game
+     *
+     * @param totNumPlayers the total number of players
+     */
+
     public void setTotNumPlayers(int totNumPlayers) {
         this.totNumPlayers = totNumPlayers;
     }
 
-    public int getTotNumPlayers(){
+    /**
+     * @return the total number of players
+     */
+
+    public int getTotNumPlayers() {
         return totNumPlayers;
     }
 
-    public int getCurrNumPlayers(){
+    /**
+     * @return the number of players currently playing the game
+     */
+
+    public int getCurrNumPlayers() {
         return players.size();
     }
 
     /**
-     * @param board update the currentBoard of the game
+     * @param board updates the board of the game
      */
 
     public void setCurrentBoard(Board board) {
         this.currentBoard = board;
     }
 
+    /**
+     * Returns the player with the given nickname
+     *
+     * @param nickname the nickname of the player
+     * @return the player associated with the nickname
+     */
+
     public Player nicknameToPlayer(String nickname) {
         Optional<Player> player = players.stream().filter(p -> p.getNickname().equals(nickname)).findFirst();
         return player.orElse(null);
     }
 
-    public void setWinner(Player player){
+    /**
+     * Sets the winner of the game
+     *
+     * @param player the winner
+     */
+
+    public void setWinner(Player player) {
         winner = player;
     }
 
-    public Player getWinner(){
+    /**
+     * Returns the winner of the game and null if
+     * the game doesn't have a winner
+     *
+     * @return the winner of the game
+     */
+
+    public Player getWinner() {
         return winner;
     }
 
-    public void updateTurn(){
+    /**
+     * updates the player who has to play
+     */
+
+    public void updateTurn() {
         players.add(players.remove(0));
     }
 }

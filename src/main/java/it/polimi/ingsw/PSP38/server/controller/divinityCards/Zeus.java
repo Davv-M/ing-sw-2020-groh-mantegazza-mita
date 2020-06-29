@@ -6,6 +6,12 @@ import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
+/**
+ * Concrete implementation of Zeus' power, extends <code>StrategyDivinityCard</code> interface.
+ *
+ * @author Maximilien Groh (10683107)
+ */
+
 public class Zeus extends DivinityCard {
     @Override
     public void checkBuild(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {

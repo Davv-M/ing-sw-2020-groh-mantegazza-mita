@@ -12,8 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Concrete implementation of Artemis' power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Artemis' power, extends <code>DivinityCard</code> abstract class.
+ *
+ * @author Maximilien Groh (10683107)
  */
+
 public class Artemis extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.OPTIONAL_ACTION, WorkerAction.BUILD);
     private Cell previousPosition = null;
@@ -43,9 +46,5 @@ public class Artemis extends DivinityCard implements OptionalAction {
     @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
-    }
-
-    public Cell getPreviousPosition() {
-        return previousPosition;
     }
 }

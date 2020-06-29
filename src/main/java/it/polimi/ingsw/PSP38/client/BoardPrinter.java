@@ -5,6 +5,12 @@ import it.polimi.ingsw.PSP38.common.WorkerColor;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Class used to print the board on the console when playing the game
+ * in "CLI" mode.
+ *
+ * @author Maximilien Groh (10683107)
+ */
 public class BoardPrinter {
     private static int boardRows;
     private static int boardColumns;

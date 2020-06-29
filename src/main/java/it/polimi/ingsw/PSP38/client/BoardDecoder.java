@@ -6,6 +6,8 @@ import it.polimi.ingsw.PSP38.common.WorkerColor;
 /**
  * This class includes methods used to decode the status of the cells of the board. For details regarding the encoding
  * of the board's status, refer to the documentation of <code>BoardEncoder</code> class
+ *
+ * @author Maximilien Groh (10683107)
  */
 public class BoardDecoder {
 

@@ -7,19 +7,13 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 
 /**
- * Concrete implementation of Apollo' power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Apollo' power, extends <code>DivinityCard</code> abstract class.
  *
  * @author Matteo Mita (10487862)
  */
 
 public class Apollo extends DivinityCard {
 
-    /**
-     * Returns a list of cells where the given worker can move
-     *
-     * @param worker       the worker that has to be moved
-     * @param currentBoard the current board of the game
-     */
     @Override
     public void checkMove(Worker worker, Cell destinationCell, Board currentBoard) {
         checkNeighbor(worker, destinationCell, currentBoard);
@@ -28,17 +22,9 @@ public class Apollo extends DivinityCard {
         checkWorkerSameColor(worker, destinationCell, currentBoard);
     }
 
-
-    /**
-     * Moves the given worker on the given cell and returns the updated board
-     *
-     * @param worker          the worker that has to be moved
-     * @param destinationCell the cell where the worker has to be moved
-     * @param currentBoard    the current board of the game
-     * @return the updated board
-     */
     @Override
     public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+        checkMove(worker, destinationCell, currentBoard);
         Cell oldCell = worker.getPosition();
 
         Board boardUpdated = currentBoard.withoutWorker(worker);

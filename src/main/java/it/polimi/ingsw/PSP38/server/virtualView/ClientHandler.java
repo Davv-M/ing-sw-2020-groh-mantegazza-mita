@@ -12,6 +12,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.function.Function;
 
+/**
+ * @author Maximilien Groh (10683107)
+ * @author Matteo Mita (10487862)
+ */
 public class ClientHandler implements Observer, Runnable {
     private String nickname = "anonymous";
     private int clientNum;

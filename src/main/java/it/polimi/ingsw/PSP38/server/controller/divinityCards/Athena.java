@@ -6,6 +6,12 @@ import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
+/**
+ * Concrete implementation of Athena's power, extends <code>DivinityCard</code> abstract class.
+ *
+ * @author Maximilien Groh (10683107)
+ */
+
 public class Athena extends DivinityCard {
     private boolean hasMovedUp = false;
 

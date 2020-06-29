@@ -2,6 +2,9 @@ package it.polimi.ingsw.PSP38.server.virtualView;
 
 import java.io.IOException;
 
+/**
+ * @author Matteo Mita (10487862)
+ */
 public class ClientConnectionHandler implements Runnable{
     private final ClientHandler client;
 

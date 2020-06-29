@@ -31,18 +31,18 @@ public final class Board {
     }
 
     /**
-     * Board constructor that makes a board with the given list of cells
+     * Board constructor that creates a board with the given workers, towers and domes.
      *
-     * @param towers   list of towers present on the board
-     * @param workers list of workers present on the board
-     * @param cellsWithDomes list of domes present on the board
-     * @throws NullPointerException if the workers list or the towers list is null
+     * @param towers         set of towers present on the board
+     * @param workers        set of workers present on the board
+     * @param cellsWithDomes set of domes present on the board
+     * @throws NullPointerException if one of the arguments is null
      */
 
-    public Board(Set<Worker> workers, Set<Tower> towers, Set<Cell> cellsWithDomes) throws NullPointerException{
-        this.workers = Set.copyOf(Objects.requireNonNull(workers));
-        this.towers = Set.copyOf(Objects.requireNonNull(towers));
-        this.cellsWithDomes = Set.copyOf(Objects.requireNonNull(cellsWithDomes));
+    public Board(Set<Worker> workers, Set<Tower> towers, Set<Cell> cellsWithDomes) throws NullPointerException {
+        this.workers = Set.copyOf(workers);
+        this.towers = Set.copyOf(towers);
+        this.cellsWithDomes = Set.copyOf(cellsWithDomes);
     }
 
     /**
@@ -70,11 +70,11 @@ public final class Board {
      * the given worker or the same board if the
      * argument is null
      *
-     * @param worker      the worker that we want add
+     * @param worker the worker to add
      * @return a new board with the worker added
      */
 
-    public Board withWorker(Worker worker) throws IllegalArgumentException{
+    public Board withWorker(Worker worker) throws IllegalArgumentException {
         if (worker == null) {
             return this;
         }
@@ -95,8 +95,8 @@ public final class Board {
      * @return a new board with the worker removed
      */
 
-    public Board withoutWorker(Worker worker){
-        if (worker == null){
+    public Board withoutWorker(Worker worker) {
+        if (worker == null) {
             return this;
         }
 
@@ -106,8 +106,18 @@ public final class Board {
         return new Board(newBoardWorkers, towers, cellsWithDomes);
     }
 
-    public Board withoutWorkers(WorkerColor color){
-        if(color == null){
+    /**
+     * Returns a copy of the board without the
+     * workers of the specified color. If the
+     * color is null or if there are no workers
+     * of that color, the same board is returned.
+     *
+     * @param color the color of the workers to be removed
+     * @return a new board with the workers removed
+     */
+
+    public Board withoutWorkers(WorkerColor color) {
+        if (color == null) {
             return this;
         }
 
@@ -117,9 +127,19 @@ public final class Board {
         return new Board(newBoardWorkers, towers, cellsWithDomes);
     }
 
+    /**
+     * Returns a copy of the board without the
+     * given tower or the same board if the
+     * argument is null or if the tower wasn't
+     * on the board
+     *
+     * @param tower the tower to remove
+     * @return a new board with the tower removed
+     */
 
-    public Board withoutTower(Tower tower){
-        if (tower == null){
+
+    public Board withoutTower(Tower tower) {
+        if (tower == null) {
             return this;
         }
 
@@ -139,7 +159,7 @@ public final class Board {
      */
 
     public Board withDome(Cell cell) {
-        if (cell == null){
+        if (cell == null) {
             return this;
         }
 
@@ -162,10 +182,10 @@ public final class Board {
     public Optional<Cell> neighborOf(Cell cell, Direction dir) {
         int neighborX = cell.getX() + dir.x();
         int neighborY = cell.getY() + dir.y();
-        if(isOutOfBounds(neighborX, neighborY)){
+        if (isOutOfBounds(neighborX, neighborY)) {
             return Optional.empty();
-        }else{
-           return Optional.of(new Cell(neighborX,neighborY));
+        } else {
+            return Optional.of(new Cell(neighborX, neighborY));
         }
     }
 
@@ -234,7 +254,7 @@ public final class Board {
      * @return <b>true</b> if the cell contains a dome , <b>false</b> otherwise
      */
 
-    public boolean hasDomeAt(Cell cell){
+    public boolean hasDomeAt(Cell cell) {
         return cellsWithDomes.contains(cell);
     }
 
@@ -245,12 +265,20 @@ public final class Board {
      * @return <b>true</b> if the cell contains a worker , <b>false</b> otherwise
      */
 
-    public boolean hasWorkerAt(Cell cell){
+    public boolean hasWorkerAt(Cell cell) {
         return getWorkersPositions().containsKey(cell);
     }
 
-    public Worker workerAt(Cell cell){
-        if(!hasWorkerAt(cell)){
+    /**
+     * Returns the worker placed at the specified cell.
+     *
+     * @param cell the cell where the worker is standing
+     * @return the worker placed on the given cell
+     * @throws NullPointerException if the cell doesn't contain a worker
+     */
+
+    public Worker workerAt(Cell cell) throws NullPointerException {
+        if (!hasWorkerAt(cell)) {
             throw new NullPointerException("The selected cell doesn't contain a worker.");
         }
 
@@ -264,7 +292,7 @@ public final class Board {
      * @return the height
      */
 
-    public int heightOf(Cell cell){
+    public int heightOf(Cell cell) {
         return !getTowersPositions().containsKey(cell) ? 0 : getTowersPositions().get(cell).getHeight();
     }
 

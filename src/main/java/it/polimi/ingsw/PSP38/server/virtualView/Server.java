@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * Executable class for the server side of Santorini
+ *
+ * @author Matteo Mita (10487862)
  */
 
 public class Server {
@@ -20,13 +22,13 @@ public class Server {
     /**
      * Main method of the server side of Santorini that supervises the creation of a thread for each client connected to
      * the server
-     *
      */
+
     public static void main(String[] args) {
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(SERVER_SOCKET_PORT);
-            System.out.println("Server online on port "+SERVER_SOCKET_PORT);
+            System.out.println("Server online on port " + SERVER_SOCKET_PORT);
             do {
                 Socket clientSocket = serverSocket.accept();
                 clientSocket.setSoTimeout(6000);
@@ -46,8 +48,9 @@ public class Server {
      * This method wakes up all the clients put into the <code>listForSpuriousWakeUp</code> linked list through the mehod
      * <code>setPaused</code> of <code>ClientHandler</code>
      */
-    public static void wakeUpAll(){
-        for(ClientHandler client : listOfClients){
+
+    public static void wakeUpAll() {
+        for (ClientHandler client : listOfClients) {
             client.setPaused(false);
         }
     }
@@ -57,23 +60,27 @@ public class Server {
      *
      * @return the parameter <code>contPlayer</code> increased by one
      */
-    public static synchronized int incrementContPlayer(){
+
+    public static synchronized int incrementContPlayer() {
         return ++contPlayer;
     }
 
-    public static synchronized void reduceContPlayer(){ --contPlayer; }
+    public static synchronized void reduceContPlayer() {
+        --contPlayer;
+    }
 
-    public static void notifyClientLost(){
-        for(ClientHandler ch: listOfClients){
+    public static void notifyClientLost() {
+        for (ClientHandler ch : listOfClients) {
             try {
                 ch.notifyEndGame(Protocol.CLIENT_LOST);
-            } catch (IOException ignore) {}
+            } catch (IOException ignore) {
+            }
         }
     }
 
-    public static void reduceClientsNum(int clientLostNum){
-        for(ClientHandler ch: listOfClients){
-            if(ch.getClientNum()>=clientLostNum){
+    public static void reduceClientsNum(int clientLostNum) {
+        for (ClientHandler ch : listOfClients) {
+            if (ch.getClientNum() >= clientLostNum) {
                 ch.reduceClientNum();
             }
         }

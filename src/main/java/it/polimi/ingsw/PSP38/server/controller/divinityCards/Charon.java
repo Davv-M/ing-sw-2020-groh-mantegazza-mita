@@ -14,6 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Concrete implementation of Charon's power, extends <code>StrategyDivinityCard</code> interface.
+ *
+ * @author Maximilien Groh (10683107)
+ */
+
 public class Charon extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.OPTIONAL_ACTION, WorkerAction.MOVE, WorkerAction.BUILD);
 

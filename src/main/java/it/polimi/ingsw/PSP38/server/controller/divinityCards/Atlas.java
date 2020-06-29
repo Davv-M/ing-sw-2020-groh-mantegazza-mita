@@ -9,6 +9,12 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 
 import java.util.List;
 
+/**
+ * Concrete implementation of Atlas' power, extends <code>StrategyDivinityCard</code> interface.
+ *
+ * @author Maximilien Groh (10683107)
+ */
+
 public class Atlas extends DivinityCard implements OptionalAbility {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE,
             WorkerAction.OPTIONAL_ABILITY);

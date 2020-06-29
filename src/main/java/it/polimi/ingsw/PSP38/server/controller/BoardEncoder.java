@@ -8,9 +8,22 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BoardEncoder {
-    public static List<Byte> bytesForBoard(Board board){
+/**
+ * Class used to encode the board information to be sent from server to client.
+ *
+ * @author Maximilien Groh (10683107)
+ */
 
+public class BoardEncoder {
+
+    /**
+     * Encodes the board into a list of bytes.
+     *
+     * @param board the board to encode
+     * @return the encoded board
+     */
+
+    public static List<Byte> bytesForBoard(Board board){
         List<Byte> bytesForBoard = new LinkedList<>();
         bytesForBoard.add((byte)Board.ROWS);
         bytesForBoard.add((byte)Board.COLUMNS);

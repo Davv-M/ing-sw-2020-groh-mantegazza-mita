@@ -11,6 +11,12 @@ import it.polimi.ingsw.PSP38.server.virtualView.Server;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ *
+ * @author Maximilien Groh (10683107)
+ * @author Matteo Mita (10487862)
+ */
+
 public class Controller extends Observable {
     private final List<String> illegalNicknames = new LinkedList<>();
     private final List<DivinityCard.Name> availableDivinityCards = new LinkedList<>(Arrays.asList(DivinityCard.Name.values()));

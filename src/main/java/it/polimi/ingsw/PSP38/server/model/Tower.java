@@ -51,7 +51,7 @@ public class Tower {
 
     @Override
     public int hashCode() {
-        return position.rowMajorIndex();
+        return position.rowMajorIndex() + height * Board.COLUMNS * Board.ROWS;
     }
 
     @Override

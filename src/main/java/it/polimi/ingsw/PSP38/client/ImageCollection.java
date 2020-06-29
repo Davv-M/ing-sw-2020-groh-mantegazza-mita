@@ -45,8 +45,8 @@ public final class ImageCollection {
                     // ignore the file
                 }
             }
-        } catch (URISyntaxException e) {
-            // do nothing
+        } catch (URISyntaxException ignored) {
+
         }
         dirImages = Map.copyOf(images);
     }

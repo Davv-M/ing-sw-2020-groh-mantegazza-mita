@@ -124,7 +124,6 @@ public class ServerHandler extends Observable implements Observer, Runnable{
      */
     private static void setMessage() throws IOException,ClassNotFoundException {
         message = (Message) input.readObject();
-
     }
 
     /**

@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.SocketTimeoutException;
 
+/**
+ * @author Matteo Mita (10487862)
+ */
+
 public class DataReceiver implements Runnable{
     private final ClientHandler client;
     private final ObjectInputStream input;

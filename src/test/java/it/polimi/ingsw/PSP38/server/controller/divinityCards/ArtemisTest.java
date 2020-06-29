@@ -5,9 +5,6 @@ import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 import it.polimi.ingsw.PSP38.common.WorkerColor;
-import it.polimi.ingsw.PSP38.server.controller.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.*;
@@ -51,24 +48,6 @@ public class ArtemisTest {
         a.move(w1, cellt1, testBoard);
     }
 
-    @Test
-    public void checkCorrectValueOfPreviousPosition() {
-        Cell cellw1 = new Cell(2, 2);
-        Worker w1 = new Worker(WorkerColor.WHITE, cellw1);
-        Cell cellw2 = new Cell(1, 2);
-        Worker w2 = new Worker(WorkerColor.WHITE, cellw2);
-        Cell cellt1 = new Cell(2, 3);
-        Tower t1 = new Tower(cellt1, 2);
-        Cell cellf1 = new Cell(2, 1);
-        workers.add(w1);
-        workers.add(w2);
-        towers.add(t1);
-        Board testBoard = new Board(workers, towers, domes);
-        Artemis a = new Artemis();
-        a.move(w1, cellf1, testBoard);
-        assertEquals(2, a.getPreviousPosition().getX());
-        assertEquals(2, a.getPreviousPosition().getY());
-    }
 
     @Test
     public void checkCorrectWorkerPositionAfterMove() {
@@ -95,7 +74,6 @@ public class ArtemisTest {
     public void moveInPreviouslyOccupiedCell(){
         Board testBoard;
         Board updatedBoard;
-        Board updatedBoard2;
         Cell cellw1 = new Cell(2, 2);
         Worker w1 = new Worker(WorkerColor.WHITE, cellw1);
         Cell cellw2 = new Cell(1, 2);
@@ -109,7 +87,7 @@ public class ArtemisTest {
         testBoard = new Board(workers, towers, domes);
         Artemis a = new Artemis();
         updatedBoard = a.move(w1, cellf1, testBoard);
-        updatedBoard2= a.optionalAction(w1, cellw1, updatedBoard);
+        a.optionalAction(w1, cellw1, updatedBoard);
     }
 
     @Test

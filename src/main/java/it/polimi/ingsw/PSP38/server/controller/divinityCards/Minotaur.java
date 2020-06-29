@@ -10,6 +10,12 @@ import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 
 import java.util.Optional;
 
+/**
+ * Concrete implementation of Minotaur's power, extends <code>StrategyDivinityCard</code> interface.
+ *
+ * @author Maximilien Groh (10683107)
+ */
+
 public class Minotaur extends DivinityCard {
 
     @Override

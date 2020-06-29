@@ -11,6 +11,12 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Concrete implementation of Hephaestus' power, extends <code>StrategyDivinityCard</code> interface.
+ *
+ * @author Maximilien Groh (10683107)
+ */
+
 public class Hephaestus extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.OPTIONAL_ACTION);
     private Cell previousBuild = null;

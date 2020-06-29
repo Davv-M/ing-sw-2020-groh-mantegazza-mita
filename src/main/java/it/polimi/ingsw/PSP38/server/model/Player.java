@@ -2,8 +2,10 @@ package it.polimi.ingsw.PSP38.server.model;
 
 import it.polimi.ingsw.PSP38.common.WorkerColor;
 
+import static java.util.Objects.requireNonNull;
+
 /**
- * This class implements the players currently in the game
+ * Immutable class representing the players
  *
  * @author Davide Mantegazza (10568661)
  */
@@ -16,7 +18,7 @@ public class Player {
     private final WorkerColor color;
 
     /**
-     * Construct a player with the given parameters
+     * Constructs a player with the given parameters
      *
      * @param nickname the player's nickname
      * @param age      the player's age
@@ -25,7 +27,7 @@ public class Player {
     public Player(String nickname, int age, WorkerColor color) {
         this.nickname = nickname;
         this.age = age;
-        this.color = color;
+        this.color = requireNonNull(color);
     }
 
     /**
@@ -52,6 +54,19 @@ public class Player {
 
     public String toString() {
         return "Nickname : " + getNickname() + ", age : " + getAge() + ", worker color : " + getColor();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Player other = (Player) obj;
+
+        return nickname.equals(other.nickname) && age == other.age && color == other.color;
     }
 }
 

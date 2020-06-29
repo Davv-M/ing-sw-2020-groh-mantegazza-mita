@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Abstract class representing a divinity card of the game Santorini.
  *
- * @author Maximilien Groh (10683107), Davide Mantegazza (10568661), Matteo Mita (10487862)
+ * @author Maximilien Groh (10683107)
  */
 
 public abstract class DivinityCard {
@@ -37,9 +37,19 @@ public abstract class DivinityCard {
         ZEUS
     }
 
+    /**
+     * constructs the divinity with the specified move sequence
+     * @param moveSequence the list of actions the worker associated with the divinity
+     *                     can take during his turn
+     */
+
     public DivinityCard(List<WorkerAction> moveSequence){
         this.moveSequence = List.copyOf(moveSequence);
     }
+
+    /**
+     * constructs the divinity with the standard move sequence
+     */
 
     public DivinityCard() {
         this(Arrays.asList(WorkerAction.MOVE, WorkerAction.BUILD));
@@ -102,21 +112,62 @@ public abstract class DivinityCard {
                         .withTower(new Tower(destinationCell, currentHeight + 1));
     }
 
+    /**
+     * Checks if the opponents action doesn't break the divinity card
+     * rules, and throws an exception if it does
+     *
+     * @param action the action the opponent wants to take
+     * @param worker the worker that wants to take action
+     * @param destinationCell the cell where the action is taken
+     * @param currentBoard the current board of the game
+     * @throws IllegalArgumentException if the action taken is illegal by the divinity card rules
+     */
+
     public void checkOpponentMove(WorkerAction action, Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
 
     }
+
+    /**
+     * Determines the type of action (build or move)
+     * based on the divinity card and returns it
+     *
+     * @param action the action taken
+     * @return the type of action based on the divinity card
+     */
 
     public WorkerAction typeOfAction(WorkerAction action){
         return action;
     }
 
+    /**
+     * @return the sequence of moves the divinity can take
+     */
+
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
     }
 
+    /**
+     * Determines whether the worker associated with the divinity card is
+     * winning or not, based on his previous position and his current position
+     *
+     * @param board the current board of the game
+     * @param previousPosition previous position of the worker
+     * @param currentPosition current position of the worker
+     * @return <b>true</b> if he is the winner of the game , <b>false</b> otherwise
+     */
+
     public boolean isWinner(Board board, Cell previousPosition, Cell currentPosition) {
         return board.heightOf(previousPosition) == Tower.MAX_HEIGHT - 1 && board.heightOf(currentPosition) == Tower.MAX_HEIGHT;
     }
+
+    /**
+     * Determines if the opponent can win based on his current position
+     *
+     * @param currentPosition current position of the worker that just moved
+     * @return <b>true</b> if this divinity card doesn't allow the opponent to win,
+     *          <b>false</b> otherwise
+     */
 
     public boolean blockOpponentWinningCondition(Cell currentPosition){
         return false;

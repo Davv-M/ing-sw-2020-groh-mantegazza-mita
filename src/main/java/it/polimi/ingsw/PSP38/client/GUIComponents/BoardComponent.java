@@ -7,6 +7,12 @@ import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Component that is used to display the board when
+ * playing the game in "GUI" mode.
+ *
+ * @author Maximilien Groh (10683107)
+ */
 public class BoardComponent extends JComponent {
     private static final int PREFERRED_WIDTH = 615;
     private static final int PREFERRED_HEIGHT = 615;
@@ -24,7 +30,7 @@ public class BoardComponent extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g0) {
-        if(encodedBoard != null){
+        if (encodedBoard != null) {
             Graphics2D g = (Graphics2D) g0;
             drawEmptyBoard(g);
             Iterator<Byte> encodedCellIterator = encodedBoard.iterator();
@@ -32,10 +38,10 @@ public class BoardComponent extends JComponent {
             int rows = encodedCellIterator.next();
             int columns = encodedCellIterator.next();
 
-            for(int row = 0; row < rows; ++row){
-                for(int col = 0; col < columns; ++col){
+            for (int row = 0; row < rows; ++row) {
+                for (int col = 0; col < columns; ++col) {
                     byte encodedCell = encodedCellIterator.next();
-                    if(encodedCell != 0){
+                    if (encodedCell != 0) {
                         Image cellImage = CELL_IMAGES.image(encodedCell);
                         int x = CELL_OFFSET_X + col * cellImage.getWidth(null);
                         int y = CELL_OFFSET_Y + row * cellImage.getHeight(null);
@@ -48,15 +54,22 @@ public class BoardComponent extends JComponent {
         }
     }
 
-    public void setEncodedBoard(List<Byte> encodedBoard){
+    /**
+     * Updates the board and repaints the component
+     *
+     * @param encodedBoard the encoded board to display
+     */
+    public void setEncodedBoard(List<Byte> encodedBoard) {
         this.encodedBoard = encodedBoard;
         this.repaint();
     }
 
-    public void drawEmptyBoard(Graphics2D g){
+    /**
+     * Draws the empty board
+     *
+     * @param g the graphics
+     */
+    public void drawEmptyBoard(Graphics2D g) {
         g.drawImage(CELL_IMAGES.image((byte) 0), 0, 0, null);
     }
-
-
-
 }

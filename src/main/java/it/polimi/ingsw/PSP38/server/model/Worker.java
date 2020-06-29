@@ -15,7 +15,7 @@ public final class Worker {
     private final Cell position;
 
     /**
-     * Construct a worker with the given parameters
+     * Constructs a worker with the given parameters
      *
      * @param color    the color of the worker
      * @param position the cell below the worker
@@ -54,7 +54,7 @@ public final class Worker {
 
     @Override
     public int hashCode() {
-        return position.rowMajorIndex();
+        return position.rowMajorIndex() + color.ordinal() * Board.COLUMNS * Board.ROWS;
     }
 
     @Override
