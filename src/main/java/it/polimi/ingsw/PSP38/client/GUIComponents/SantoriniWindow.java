@@ -16,7 +16,7 @@ public class SantoriniWindow extends Observable {
     public static final String waitForPlayersImage = "santorini-hold-on.png";
     public static final String waitForDivinitiesImage = "santorini-wait-for-divinities.png";
     public static final String waitForNumPlayersImage = "santorini-wait-for-num-players.png";
-    private JFrame mainSetupFrame = new JFrame();
+    private JFrame mainFrame = new JFrame();
     private JPanel cardHolder;
     private static GameModeGUI gameModeGUI;
     private StartPanel startPanel;
@@ -32,12 +32,12 @@ public class SantoriniWindow extends Observable {
      */
     public JFrame createSantoriniWindow(GameModeGUI gmg){
         gameModeGUI=gmg;
-        mainSetupFrame.setSize(WIDTH, HEIGHT);
-        mainSetupFrame.setTitle("Santorini");
-        mainSetupFrame.add(createCardHolder());
-        mainSetupFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        mainSetupFrame.setVisible(true);
-        return mainSetupFrame;
+        mainFrame.setSize(WIDTH, HEIGHT);
+        mainFrame.setTitle("Santorini");
+        mainFrame.add(createCardHolder());
+        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
+        return mainFrame;
     }
 
     /**
@@ -54,14 +54,14 @@ public class SantoriniWindow extends Observable {
         waitForNumPlayersPanel = new WaitingPanel(waitForNumPlayersImage);
         cardHolder.add(waitForNumPlayersPanel.createWaitingPanel(), "waitForNumPlayers");
         divinityChoicePanel =new DivinityChoicePanel();
-        cardHolder.add(divinityChoicePanel.createMainCardPanel(gameModeGUI), "cardChoice");
+        cardHolder.add(divinityChoicePanel.createMainDivinityPanel(gameModeGUI), "cardChoice");
         waitForDivinitiesPanel = new WaitingPanel(waitForDivinitiesImage);
         cardHolder.add(waitForDivinitiesPanel.createWaitingPanel(), "waitForDivinities");
         return cardHolder;
     }
 
-    public JFrame getMainSetupFrame() {
-        return mainSetupFrame;
+    public JFrame getMainFrame() {
+        return mainFrame;
     }
 
     public JPanel getCardHolder() {

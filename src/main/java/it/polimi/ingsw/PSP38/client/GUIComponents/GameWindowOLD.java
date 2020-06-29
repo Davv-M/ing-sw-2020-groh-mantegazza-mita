@@ -29,7 +29,7 @@ public class GameWindowOLD implements ActionListener {
         return panelHolder;
     }
 
-    public JFrame getMainSetupFrame() {
+    public JFrame getMainFrame() {
         return mainSetupFrame;
     }
 
