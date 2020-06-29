@@ -22,6 +22,8 @@ public class GameModeGUI implements GameMode {
     private JPanel cardButtons;
     private static String columnSelected;
     private static String rowSelected;
+    private String myDivinity;
+    private volatile boolean isCoordinateReady = false;
 
 
     public GameModeGUI() throws InvocationTargetException, InterruptedException {
@@ -92,9 +94,7 @@ public class GameModeGUI implements GameMode {
     }
 
 
-    public void chooseNickname() {
-        setStringRead(nickname);
-    }
+    public void chooseNickname() { setStringRead(nickname);  }
 
     public void illegalNickname() {
         String newNickname;
@@ -114,32 +114,41 @@ public class GameModeGUI implements GameMode {
     }
 
     public void notYourTurn() {
-        System.out.println("It's " + customStringRead + "'s turn, please wait");
+        santoriniWindow.getDivinityChoicePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
+        santoriniWindow.getGamePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
+        santoriniWindow.getGamePanel().setUnmodifiablePanel();
+        santoriniWindow.getDivinityChoicePanel().setUnmodifiablePanel();
     }
 
     public void placeYourWorkers() {
-        System.out.println("Please place all of your workers on the board");
+        santoriniWindow.getGamePanel().setModifiablePanel();
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "game");
+        santoriniWindow.getGamePanel().setMessage("Please place all of your workers on the board");
     }
 
 
     public void placeAWorker() {
-        System.out.println("Place your worker number " + customStringRead);
-        santoriniWindow.getGamePanel().getCellLabel().setText("Place your worker number " + customStringRead);
+        santoriniWindow.getGamePanel().setMessage("Place your worker number " + customStringRead);
+        santoriniWindow.getGamePanel().getCellLabel().setText("insert cell's coordinates:");
         santoriniWindow.getGamePanel().getSubmit().setText("Select");
         santoriniWindow.getMainFrame().repaint();
     }
 
     public void setCellColumnCoordinate() {
-        System.out.println("Please insert the cell's x coordinate");
-        System.out.println(columnSelected);
+        while (!isCoordinateReady) {
+            Thread.onSpinWait();
+        }
         setStringRead(columnSelected);
+
     }
 
     public void setCellRowCoordinate() {
-        System.out.println("Please insert the cell's y coordinate");
+        while (!isCoordinateReady) {
+            Thread.onSpinWait();
+        }
         setStringRead(rowSelected);
+        isCoordinateReady = false;
     }
 
     public void youWin() {
@@ -160,8 +169,9 @@ public class GameModeGUI implements GameMode {
 
 
     public void selectWorker() {
-        System.out.println("Player, please select the worker you want to move");//inserire nickname giocatore
-        santoriniWindow.getGamePanel().getCellLabel().setText("Please select the worker you want to move");
+        santoriniWindow.getGamePanel().setModifiablePanel();
+        santoriniWindow.getGamePanel().setMessage("Please select the worker you want to move:");
+        santoriniWindow.getGamePanel().getCellLabel().setText("Please select cell that contains worker you want to move");
         santoriniWindow.getGamePanel().getSubmit().setText("Select");
         santoriniWindow.getMainFrame().repaint();
     }
@@ -175,6 +185,7 @@ public class GameModeGUI implements GameMode {
 
     private void workerNotYours() {
         System.out.println("This worker doesn't belong to you");
+        santoriniWindow.getGamePanel().setMessage("This worker doesn't belong to you");
     }
 
     private void displayAvailableDivinities() {
@@ -194,6 +205,7 @@ public class GameModeGUI implements GameMode {
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
         getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
+        santoriniWindow.getDivinityChoicePanel().setModifiablePanel();
     }
 
     private void unableToFinishTurn() {
@@ -201,14 +213,14 @@ public class GameModeGUI implements GameMode {
     }
 
     private void workerMove() {
-        System.out.println("Select the cell where you want to move");
+        santoriniWindow.getGamePanel().setMessage("It's time to Move your worker!");
         santoriniWindow.getGamePanel().getCellLabel().setText("Select the cell where you want to move");
         santoriniWindow.getGamePanel().getSubmit().setText("Move");
         santoriniWindow.getMainFrame().repaint();
     }
 
     private void workerBuild() {
-        System.out.println("Select the cell where you want to build");
+        santoriniWindow.getGamePanel().setMessage("It's time to Build!");
         santoriniWindow.getGamePanel().getCellLabel().setText("Select the cell where you want to build");
         santoriniWindow.getGamePanel().getSubmit().setText("Build");
         santoriniWindow.getMainFrame().repaint();
@@ -411,19 +423,23 @@ public class GameModeGUI implements GameMode {
         return santoriniWindow;
     }
 
+    public void setCoordinateReady(boolean coordinateReady) {
+        isCoordinateReady = coordinateReady;
+    }
+
     public String getAvailableDivinities() {
         return availableDivinities;
     }
 
     public static void setColumnSelected(String columnSelectedRead) {
         columnSelected = columnSelectedRead;
-        System.out.println("sCS"+columnSelected);
     }
 
     public static void setRowSelected(String rowSelectedRead) {
         rowSelected = rowSelectedRead;
-        System.out.println("sRS"+rowSelected);
     }
+
+
 
     //in teoria non dovrebbero mai essere chiamati con GUI
 
@@ -450,5 +466,14 @@ public class GameModeGUI implements GameMode {
 
     public void illegalArgument() {
         System.out.println("Illegal argument exception: " + customStringRead);
+    }
+
+    public void setMyDivinity(String divinity) {
+        myDivinity = divinity;
+        santoriniWindow.getGamePanel().paintDivinityChosen();
+    }
+
+    public String getMyDivinity() {
+        return myDivinity;
     }
 }

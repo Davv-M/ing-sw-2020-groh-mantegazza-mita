@@ -78,10 +78,8 @@ public class Client extends Observable implements Observer {
     /**
      * notify observers that is available a new data input from the client
      */
-    private static void notifyReadSomething(){
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ignore) {}
+    private static void notifyReadSomething()throws InterruptedException{
+        Thread.sleep(500);
         Protocol protocolRead = ServerHandler.getProtocol();
         if (protocolRead == Protocol.ASK_INT || protocolRead == Protocol.ASK_STRING) {
             nextInputObserver.update();

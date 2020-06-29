@@ -30,6 +30,7 @@ public class DivinityChoicePanel implements ActionListener {
     private ButtonGroup divintiyRadioButtonGroup = new ButtonGroup();
     private JButton okButton;
     private JLabel divinityImageLabel;
+    private Color panelColor = new Color(0,0,0,0);
     /*private Color panelColor = new Color(0,0,0,0);
     private Color bkgColor = new Color(25, 109,165);
     private Color bkgTextColor = new Color(62,159,225);
@@ -58,8 +59,14 @@ public class DivinityChoicePanel implements ActionListener {
         /*titlePanel.setBackground(panelColor);
         titlePanel.setForeground(textColor);*/
         title = new JLabel("Please select one of the following cards");
+        title.setFont(new Font("font message", Font.BOLD, 30));
         titlePanel.add(title);
         return titlePanel;
+    }
+
+    public void setMessage(String message){
+        title.setText(message);
+        title.repaint();
     }
 
     /**
@@ -142,6 +149,14 @@ public class DivinityChoicePanel implements ActionListener {
         return mainDivinityPanel;
     }
 
+    public void setModifiablePanel(){
+        okButton.setVisible(true);
+    }
+
+    public void setUnmodifiablePanel(){
+        okButton.setVisible(false);
+    }
+
     /**
      * Invoked when an action occurs.
      *
@@ -152,6 +167,9 @@ public class DivinityChoicePanel implements ActionListener {
         if(e.getSource()==okButton){
             System.out.println(divintiyRadioButtonGroup.getSelection().getActionCommand());
             gameModeGUI.setStringRead(divintiyRadioButtonGroup.getSelection().getActionCommand());
+            gameModeGUI.setMyDivinity(divintiyRadioButtonGroup.getSelection().getActionCommand());
         }
     }
+
+
 }
