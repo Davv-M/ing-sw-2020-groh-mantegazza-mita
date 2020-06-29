@@ -14,6 +14,7 @@ import java.util.List;
  * @author Matteo Mita (10487862)
  */
 
+
 public class Server {
     public final static int SERVER_SOCKET_PORT = 3456;
     private static int contPlayer = 0;
@@ -23,7 +24,6 @@ public class Server {
      * Main method of the server side of Santorini that supervises the creation of a thread for each client connected to
      * the server
      */
-
     public static void main(String[] args) {
         ServerSocket serverSocket;
         try {
@@ -37,18 +37,15 @@ public class Server {
                 Thread threadClient = new Thread(clientHandler);
                 threadClient.start();
             } while (true);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
-     * This method wakes up all the clients put into the <code>listForSpuriousWakeUp</code> linked list through the mehod
+     * This method wakes up all the clients put into the <code>listOfClients</code> linked list through the mehod
      * <code>setPaused</code> of <code>ClientHandler</code>
      */
-
     public static void wakeUpAll() {
         for (ClientHandler client : listOfClients) {
             client.setPaused(false);
@@ -60,15 +57,20 @@ public class Server {
      *
      * @return the parameter <code>contPlayer</code> increased by one
      */
-
     public static synchronized int incrementContPlayer() {
         return ++contPlayer;
     }
 
+    /**
+     * Synchronized void method used to reduce the current amount of players connected
+     */
     public static synchronized void reduceContPlayer() {
         --contPlayer;
     }
 
+    /**
+     * Void method used to notify all client connected that one client lost connection
+     */
     public static void notifyClientLost() {
         for (ClientHandler ch : listOfClients) {
             try {
@@ -78,6 +80,11 @@ public class Server {
         }
     }
 
+    /**
+     * Void method used to reduce <code>ClientNum<code> for all client who have <code>ClientNum<code> higher than <code>clientLostNum</code>
+     *
+     * @param clientLostNum ClientNum of client that lost connection
+     */
     public static void reduceClientsNum(int clientLostNum) {
         for (ClientHandler ch : listOfClients) {
             if (ch.getClientNum() >= clientLostNum) {

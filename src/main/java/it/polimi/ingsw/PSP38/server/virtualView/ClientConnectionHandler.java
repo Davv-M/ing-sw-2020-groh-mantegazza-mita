@@ -2,36 +2,52 @@ package it.polimi.ingsw.PSP38.server.virtualView;
 
 import java.io.IOException;
 
+
 /**
+ * Class that handling the connection with the client
+ *
  * @author Matteo Mita (10487862)
  */
-public class ClientConnectionHandler implements Runnable{
+public class ClientConnectionHandler implements Runnable {
     private final ClientHandler client;
 
-    public ClientConnectionHandler(ClientHandler ch){
+    /**
+     * Constructor of the class
+     *
+     * @param ch clientHandle that wants to check the connection with their client
+     */
+    public ClientConnectionHandler(ClientHandler ch) {
         client = ch;
     }
 
-    public void run(){
+    /**
+     * Send an ack to the client every 3 seconds
+     *
+     * @throws IOException if the client is unreachable
+     */
+    public void run() {
         try {
             while (true) {
                 client.ping();
                 Thread.sleep(3000);
             }
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
-        } catch (IOException e){
+        } catch (IOException e) {
             updateClientConnection();
-            System.out.println("connection lost with: "+client.getNickname());
+            System.out.println("connection lost with: " + client.getNickname());
         }
     }
 
-    public void updateClientConnection(){
-        if(client.getTotNumPlayers()==0){
+    /**
+     * Notify the Server that the connection with his client is lost
+     */
+    public void updateClientConnection() {
+        if (client.getTotNumPlayers() == 0) {
             Server.reduceClientsNum(client.getClientNum());
             Server.reduceContPlayer();
         }
-        if(client.getClientNum()<=client.getTotNumPlayers()){
+        if (client.getClientNum() <= client.getTotNumPlayers()) {
             Server.notifyClientLost();
         }
     }
