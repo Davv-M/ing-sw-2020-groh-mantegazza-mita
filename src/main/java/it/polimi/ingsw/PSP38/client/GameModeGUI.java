@@ -20,6 +20,8 @@ public class GameModeGUI implements GameMode {
     private SantoriniWindow santoriniWindow;
     private String availableDivinities;
     private JPanel cardButtons;
+    private static String columnSelected;
+    private static String rowSelected;
 
 
     public GameModeGUI() throws InvocationTargetException, InterruptedException {
@@ -117,19 +119,27 @@ public class GameModeGUI implements GameMode {
 
     public void placeYourWorkers() {
         System.out.println("Please place all of your workers on the board");
+        CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
+        cl.show(getSantoriniWindow().getCardHolder(), "game");
     }
 
 
     public void placeAWorker() {
         System.out.println("Place your worker number " + customStringRead);
+        santoriniWindow.getGamePanel().getCellLabel().setText("Place your worker number " + customStringRead);
+        santoriniWindow.getGamePanel().getSubmit().setText("Select");
+        santoriniWindow.getMainFrame().repaint();
     }
 
-    public void setCellXCoordinate() {
+    public void setCellColumnCoordinate() {
         System.out.println("Please insert the cell's x coordinate");
+        System.out.println(columnSelected);
+        setStringRead(columnSelected);
     }
 
-    public void setCellYCoordinate() {
+    public void setCellRowCoordinate() {
         System.out.println("Please insert the cell's y coordinate");
+        setStringRead(rowSelected);
     }
 
     public void youWin() {
@@ -151,6 +161,9 @@ public class GameModeGUI implements GameMode {
 
     public void selectWorker() {
         System.out.println("Player, please select the worker you want to move");//inserire nickname giocatore
+        santoriniWindow.getGamePanel().getCellLabel().setText("Please select the worker you want to move");
+        santoriniWindow.getGamePanel().getSubmit().setText("Select");
+        santoriniWindow.getMainFrame().repaint();
     }
 
 
@@ -161,7 +174,7 @@ public class GameModeGUI implements GameMode {
     }
 
     private void workerNotYours() {
-        System.out.println("Player, this worker doesn't belong to you");
+        System.out.println("This worker doesn't belong to you");
     }
 
     private void displayAvailableDivinities() {
@@ -189,10 +202,16 @@ public class GameModeGUI implements GameMode {
 
     private void workerMove() {
         System.out.println("Select the cell where you want to move");
+        santoriniWindow.getGamePanel().getCellLabel().setText("Select the cell where you want to move");
+        santoriniWindow.getGamePanel().getSubmit().setText("Move");
+        santoriniWindow.getMainFrame().repaint();
     }
 
     private void workerBuild() {
         System.out.println("Select the cell where you want to build");
+        santoriniWindow.getGamePanel().getCellLabel().setText("Select the cell where you want to build");
+        santoriniWindow.getGamePanel().getSubmit().setText("Build");
+        santoriniWindow.getMainFrame().repaint();
     }
 
     private void workerOptionalAbility() {
@@ -255,11 +274,11 @@ public class GameModeGUI implements GameMode {
             case PLACE_A_WORKER:
                 placeAWorker();
                 break;
-            case SET_CELL_X_COORD:
-                setCellXCoordinate();
+            case SET_CELL_COLUMN_COORD:
+                setCellColumnCoordinate();
                 break;
-            case SET_CELL_Y_COORD:
-                setCellYCoordinate();
+            case SET_CELL_ROW_COORD:
+                setCellRowCoordinate();
                 break;
             case YOU_WIN:
                 youWin();
@@ -373,7 +392,7 @@ public class GameModeGUI implements GameMode {
 
     @Override
     public void displayBoard() {
-
+        santoriniWindow.getGamePanel().getBoardComponent().setEncodedBoard(ServerHandler.readBoard());
     }
 
     public static void setIP(String ipAddress) {
@@ -394,6 +413,16 @@ public class GameModeGUI implements GameMode {
 
     public String getAvailableDivinities() {
         return availableDivinities;
+    }
+
+    public static void setColumnSelected(String columnSelectedRead) {
+        columnSelected = columnSelectedRead;
+        System.out.println("sCS"+columnSelected);
+    }
+
+    public static void setRowSelected(String rowSelectedRead) {
+        rowSelected = rowSelectedRead;
+        System.out.println("sRS"+rowSelected);
     }
 
     //in teoria non dovrebbero mai essere chiamati con GUI

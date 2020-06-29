@@ -322,9 +322,9 @@ public class Controller extends Observable {
         int y;
         do {
             try {
-                client.notifyMessage(Message.SET_CELL_X_COORD);
+                client.notifyMessage(Message.SET_CELL_COLUMN_COORD);
                 x = client.askInt(this::checkXCoordinate);
-                client.notifyMessage(Message.SET_CELL_Y_COORD);
+                client.notifyMessage(Message.SET_CELL_ROW_COORD);
                 y = client.askInt(this::checkYCoordinate);
                 return new Cell(x, y);
             } catch (IllegalArgumentException e) {

@@ -6,11 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ProvaFinaleIngSw2020" />
         <module name="ing-sw-2020-groh-mantegazza-mita" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ing-sw-2020-groh-mantegazza-mita" target="13" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -49,11 +49,11 @@ public class GameModeCLI implements GameMode {
             case PLACE_A_WORKER:
                 System.out.println("Place your worker number "+customStringRead);
                 break;
-            case SET_CELL_X_COORD:
-                System.out.println("Please insert the cell's x coordinate");
+            case SET_CELL_COLUMN_COORD:
+                System.out.println("Please insert the cell's column coordinate");
                 break;
-            case SET_CELL_Y_COORD:
-                System.out.println("Please insert the cell's y coordinate");
+            case SET_CELL_ROW_COORD:
+                System.out.println("Please insert the cell's row coordinate");
                 break;
             case YOU_WIN:
                 System.out.println("You are the winner!");
