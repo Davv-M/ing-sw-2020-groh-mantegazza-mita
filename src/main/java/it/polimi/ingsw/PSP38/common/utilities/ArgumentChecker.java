@@ -43,39 +43,45 @@ public final class ArgumentChecker {
         }
     }
 
-    public static void checkNeighbor(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+    public static void checkNeighbor(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
         Set<Cell> neighborCells = currentBoard.neighborsOf(worker.getPosition());
-        if(!neighborCells.contains(destinationCell)){
+        if (!neighborCells.contains(destinationCell)) {
             throw new IllegalArgumentException("This cell is too far away.");
         }
     }
 
-    public static void checkDome(Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
-        if(currentBoard.hasDomeAt(destinationCell)){
+    public static void checkDome(Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+        if (currentBoard.hasDomeAt(destinationCell)) {
             throw new IllegalArgumentException("This cell contains a dome.");
         }
     }
 
-    public static void checkWorker(Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
-        if(currentBoard.hasWorkerAt(destinationCell)){
+    public static void checkWorker(Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+        if (currentBoard.hasWorkerAt(destinationCell)) {
             throw new IllegalArgumentException("This cell contains a worker.");
         }
     }
 
-    public static void checkHeight(Worker worker, Cell destinationCell, Board currentBoard){
-        if(currentBoard.heightOf(destinationCell) > currentBoard.heightOf(worker.getPosition()) + 1){
+    public static void checkNoWorker(Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+        if (!currentBoard.hasWorkerAt(destinationCell)) {
+            throw new IllegalArgumentException("This cell doesn't contain a worker.");
+        }
+    }
+
+    public static void checkHeight(Worker worker, Cell destinationCell, Board currentBoard) {
+        if (currentBoard.heightOf(destinationCell) > currentBoard.heightOf(worker.getPosition()) + 1) {
             throw new IllegalArgumentException("This tower is too high.");
         }
     }
 
     public static void checkWorkerSameColor(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        if(currentBoard.hasWorkerAt(destinationCell) && currentBoard.workerAt(destinationCell).getColor() == worker.getColor()){
+        if (currentBoard.hasWorkerAt(destinationCell) && currentBoard.workerAt(destinationCell).getColor() == worker.getColor()) {
             throw new IllegalArgumentException("This cell contains a worker with the same color.");
         }
     }
 
     public static void checkTower(Cell destinationCell, Board currentBoard) {
-        if(currentBoard.heightOf(destinationCell) == 0){
+        if (currentBoard.heightOf(destinationCell) == 0) {
             throw new IllegalArgumentException("This cell doesn't contain a tower.");
         }
     }

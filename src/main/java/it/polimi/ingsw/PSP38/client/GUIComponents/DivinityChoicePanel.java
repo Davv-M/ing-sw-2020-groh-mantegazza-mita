@@ -167,9 +167,6 @@ public class DivinityChoicePanel implements ActionListener {
         if(e.getSource()==okButton){
             System.out.println(divintiyRadioButtonGroup.getSelection().getActionCommand());
             gameModeGUI.setStringRead(divintiyRadioButtonGroup.getSelection().getActionCommand());
-            gameModeGUI.setMyDivinity(divintiyRadioButtonGroup.getSelection().getActionCommand());
         }
     }
-
-
 }

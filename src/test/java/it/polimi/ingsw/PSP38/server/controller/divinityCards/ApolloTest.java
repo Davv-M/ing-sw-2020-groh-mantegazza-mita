@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 
 import it.polimi.ingsw.PSP38.common.WorkerColor;
 import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
+import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.HashSet;
+import java.util.List;
 
 
 public class ApolloTest {
@@ -87,6 +89,20 @@ public class ApolloTest {
 
         workers.add(worker);
         workers.add(worker2);
+        Board board = new Board(workers, towers, domes);
+        apollo.build(worker, destinationCell, board);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildOnCellNotNeighborThrowsException(){
+        HashSet<Worker> workers = new HashSet<>();
+        HashSet<Tower> towers = new HashSet<>();
+        HashSet<Cell> domes = new HashSet<>();
+        Cell workerPosition = new Cell(1, 1);
+        Cell destinationCell = new Cell(3, 2);
+        Worker worker = new Worker(WorkerColor.BLUE, workerPosition);
+
+        workers.add(worker);
         Board board = new Board(workers, towers, domes);
         apollo.build(worker, destinationCell, board);
     }
@@ -184,5 +200,10 @@ public class ApolloTest {
         Board board = new Board(workers, towers, domes);
         board = apollo.move(worker, destinationCell, board);
         assertTrue(apollo.isWinner(board, workerPosition, destinationCell));
+    }
+
+    @Test
+    public void getMoveSequence() {
+        assertEquals(List.of(WorkerAction.MOVE, WorkerAction.BUILD), apollo.getMoveSequence());
     }
 }

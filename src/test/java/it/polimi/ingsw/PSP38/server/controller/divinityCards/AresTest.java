@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 
 import it.polimi.ingsw.PSP38.common.WorkerColor;
+import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
@@ -8,6 +9,7 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 import org.junit.Test;
 
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -91,6 +93,20 @@ public class AresTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void buildOnCellNotNeighborThrowsException(){
+        HashSet<Worker> workers = new HashSet<>();
+        HashSet<Tower> towers = new HashSet<>();
+        HashSet<Cell> domes = new HashSet<>();
+        Cell workerPosition = new Cell(1, 1);
+        Cell destinationCell = new Cell(3, 2);
+        Worker worker = new Worker(WorkerColor.BLUE, workerPosition);
+
+        workers.add(worker);
+        Board board = new Board(workers, towers, domes);
+        ares.build(worker, destinationCell, board);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void moveOnSameColorWorkerThrowsException(){
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -148,11 +164,9 @@ public class AresTest {
         Cell workerPosition = new Cell(1, 1);
         Cell destinationCell = new Cell(2, 2);
         Worker worker = new Worker(WorkerColor.BLUE, workerPosition);
-        Worker worker2 = new Worker(WorkerColor.WHITE, destinationCell);
         Tower tower = new Tower(workerPosition, 3);
         Tower tower2 = new Tower(destinationCell, 3);
         workers.add(worker);
-        workers.add(worker2);
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
@@ -226,5 +240,10 @@ public class AresTest {
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
         ares.optionalAction(workerMoved, towerPosition, board);
+    }
+
+    @Test
+    public void getMoveSequence() {
+        assertEquals(List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.OPTIONAL_ACTION), ares.getMoveSequence());
     }
 }

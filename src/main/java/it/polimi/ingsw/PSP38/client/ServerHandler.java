@@ -24,6 +24,8 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     private static Message message;
     private static String customMessageString;
     private static List<Byte> board;
+    private static int numOfPlayers = 0;
+    private static Map<String, String> playersDivinities = null;
     private static final Object lock = new Object();
 
     /**
@@ -74,6 +76,18 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                         notifyClient();
                         break;
                     }
+                    case NOTIFY_NUM_PLAYERS:{
+                        protocolRead = Protocol.NOTIFY_NUM_PLAYERS;
+                        numOfPlayers = input.readInt();
+                        notifyClient();
+                        break;
+                    }
+                    case NOTIFY_PLAYERS_DIVINITIES:{
+                        protocolRead = Protocol.NOTIFY_PLAYERS_DIVINITIES;
+                        playersDivinities = (Map<String, String>) input.readObject();
+                        notifyClient();
+                        break;
+                    }
                     case ASK_STRING:{
                         protocolRead = Protocol.ASK_STRING;
                         notifyClient();
@@ -115,21 +129,21 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     /**
      * notify observers that is available a new data or request from the server
      */
-    private static void notifyClient(){
+    private void notifyClient(){
         nextRequestObserver.update();
     }
 
     /**
      * set the last message received
      */
-    private static void setMessage() throws IOException,ClassNotFoundException {
+    private void setMessage() throws IOException,ClassNotFoundException {
         message = (Message) input.readObject();
     }
 
     /**
      *
      */
-    private static void setCustomMessageString() throws IOException, ClassNotFoundException {
+    private void setCustomMessageString() throws IOException, ClassNotFoundException {
         customMessageString = (String) input.readObject();
     }
 
@@ -245,5 +259,11 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     }
 
 
+    public static int getNumOfPlayers(){
+        return numOfPlayers;
+    }
 
+    public static Map<String, String> getPlayersDivinities(){
+        return playersDivinities;
+    }
 }

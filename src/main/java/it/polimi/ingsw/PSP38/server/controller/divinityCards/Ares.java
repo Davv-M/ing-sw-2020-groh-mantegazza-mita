@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class Ares extends DivinityCard implements OptionalAction {
-    private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.OPTIONAL_ACTION, WorkerAction.BUILD);
+    private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.OPTIONAL_ACTION);
 
     @Override
     public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
@@ -38,5 +38,10 @@ public class Ares extends DivinityCard implements OptionalAction {
     @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
+    }
+
+    @Override
+    public String toString() {
+        return "Ares";
     }
 }

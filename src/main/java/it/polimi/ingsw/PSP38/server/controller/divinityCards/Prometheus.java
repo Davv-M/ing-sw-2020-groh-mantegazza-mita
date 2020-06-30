@@ -53,4 +53,9 @@ public class Prometheus extends DivinityCard implements OptionalAction {
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
     }
+
+    @Override
+    public String toString() {
+        return "Prometheus";
+    }
 }

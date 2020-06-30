@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 
+import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
@@ -12,6 +13,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 public class ArtemisTest {
+    Artemis artemis = new Artemis();
     HashSet<Worker> workers = new HashSet<>();
     HashSet<Tower> towers = new HashSet<>();
     HashSet<Cell> domes = new HashSet<>();
@@ -28,8 +30,7 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         Board testBoard = new Board(workers, towers, domes);
-        Artemis a = new Artemis();
-        a.move(w1, cellw2, testBoard);
+        artemis.move(w1, cellw2, testBoard);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -44,8 +45,7 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         Board testBoard = new Board(workers, towers, domes);
-        Artemis a = new Artemis();
-        a.move(w1, cellt1, testBoard);
+        artemis.move(w1, cellt1, testBoard);
     }
 
 
@@ -64,8 +64,7 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         testBoard = new Board(workers, towers, domes);
-        Artemis a = new Artemis();
-        updatedBoard = a.move(w1, cellf1, testBoard);
+        updatedBoard = artemis.move(w1, cellf1, testBoard);
         assertEquals(2, updatedBoard.getWorkersPositions().get(cellf1).getPosition().getX());
         assertEquals(1, updatedBoard.getWorkersPositions().get(cellf1).getPosition().getY());
     }
@@ -85,9 +84,8 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         testBoard = new Board(workers, towers, domes);
-        Artemis a = new Artemis();
-        updatedBoard = a.move(w1, cellf1, testBoard);
-        a.optionalAction(w1, cellw1, updatedBoard);
+        updatedBoard = artemis.move(w1, cellf1, testBoard);
+        artemis.optionalAction(w1, cellw1, updatedBoard);
     }
 
     @Test
@@ -107,10 +105,15 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         testBoard = new Board(workers, towers, domes);
-        Artemis a = new Artemis();
-        updatedBoard = a.move(w1, cellf1, testBoard);
-        updatedBoard2= a.optionalAction(w1, cellf2, updatedBoard);
+
+        updatedBoard = artemis.move(w1, cellf1, testBoard);
+        updatedBoard2= artemis.optionalAction(w1, cellf2, updatedBoard);
         assertEquals(1, updatedBoard2.getWorkersPositions().get(cellf2).getPosition().getX());
         assertEquals(3, updatedBoard2.getWorkersPositions().get(cellf2).getPosition().getY());
+    }
+
+    @Test
+    public void getMoveSequence() {
+        assertEquals(List.of(WorkerAction.MOVE, WorkerAction.OPTIONAL_ACTION, WorkerAction.BUILD), artemis.getMoveSequence());
     }
 }

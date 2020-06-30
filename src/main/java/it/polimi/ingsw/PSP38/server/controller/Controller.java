@@ -108,35 +108,34 @@ public class Controller extends Observable {
     }
 
     private DivinityCard stringToStrategy(String selectedCard) {
-        DivinityCard.Name selectedCardEnum = DivinityCard.Name.valueOf(selectedCard.toUpperCase());
-        switch (selectedCardEnum) {
-            case APOLLO:
+        switch (selectedCard.toUpperCase()) {
+            case "APOLLO":
                 return new Apollo();
-            case ARES:
+            case "ARES":
                 return new Ares();
-            case ARTEMIS:
+            case "ARTEMIS":
                 return new Artemis();
-            case ATHENA:
+            case "ATHENA":
                 return new Athena();
-            case ATLAS:
+            case "ATLAS":
                 return new Atlas();
-            case CHARON:
+            case "CHARON":
                 return new Charon();
-            case DEMETER:
+            case "DEMETER":
                 return new Demeter();
-            case HEPHAESTUS:
+            case "HEPHAESTUS":
                 return new Hephaestus();
-            case HERA:
+            case "HERA":
                 return new Hera();
-            case HESTIA:
+            case "HESTIA":
                 return new Hestia();
-            case MINOTAUR:
+            case "MINOTAUR":
                 return new Minotaur();
-            case PAN:
+            case "PAN":
                 return new Pan();
-            case PROMETHEUS:
+            case "PROMETHEUS":
                 return new Prometheus();
-            case ZEUS:
+            case "ZEUS":
                 return new Zeus();
             default:
                 throw new IllegalArgumentException("Illegal divinity card");
@@ -155,6 +154,7 @@ public class Controller extends Observable {
             game.addPlayer(askNickname(client), askAge(client));
             checkGameFull(client);
             askYoungestPlayerCards(client);
+            client.notifyNumPlayers(game.getTotNumPlayers());
             askDivinity(client);
             placeWorkers(client);
             do {
@@ -294,6 +294,13 @@ public class Controller extends Observable {
 
     private void placeWorkers(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
+        Map<String, String> map = new HashMap<>();
+        for(Player p : playersDivinities.keySet()){
+            map.put(p.getNickname(), playersDivinities.get(p).toString());
+        }
+        System.out.println(playersDivinities);
+        System.out.println(map);
+        client.notifyPlayersDivinities(map);
         displayAllClients();
         client.notifyMessage(Message.PLACE_YOUR_WORKERS);
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
@@ -304,7 +311,7 @@ public class Controller extends Observable {
             do {
                 Cell cell = askCell(client);
                 try {
-                    ArgumentChecker.checkWorker(cell,game.getCurrentBoard());
+                    ArgumentChecker.checkWorker(cell, game.getCurrentBoard());
                     newBoard = game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell));
                     displayAllClients();
                     break;

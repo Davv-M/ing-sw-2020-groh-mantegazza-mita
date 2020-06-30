@@ -23,4 +23,9 @@ public class Zeus extends DivinityCard {
             super.checkBuild(worker, destinationCell, currentBoard);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Zeus";
+    }
 }

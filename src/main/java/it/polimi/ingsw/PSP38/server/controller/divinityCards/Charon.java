@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Concrete implementation of Charon's power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Charon's power, extends <code>DivinityCard</code> abstract class.
  *
  * @author Maximilien Groh (10683107)
  */
@@ -26,6 +26,7 @@ public class Charon extends DivinityCard implements OptionalAction {
     @Override
     public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
         checkNeighbor(worker, destinationCell, currentBoard);
+        checkNoWorker(destinationCell, currentBoard);
         checkWorkerSameColor(worker, destinationCell, currentBoard);
         int vectorX = destinationCell.getX() - worker.getPosition().getX();
         int vectorY = destinationCell.getY() - worker.getPosition().getY();
@@ -47,5 +48,10 @@ public class Charon extends DivinityCard implements OptionalAction {
     @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
+    }
+
+    @Override
+    public String toString() {
+        return "Charon";
     }
 }

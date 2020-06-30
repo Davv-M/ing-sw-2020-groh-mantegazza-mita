@@ -35,4 +35,9 @@ public class Apollo extends DivinityCard {
         }
         return boardUpdated.withWorker(worker.withPosition(destinationCell));
     }
+
+    @Override
+    public String toString() {
+        return "Apollo";
+    }
 }

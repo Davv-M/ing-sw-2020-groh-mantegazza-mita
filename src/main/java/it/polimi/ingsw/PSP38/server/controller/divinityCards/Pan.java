@@ -16,4 +16,9 @@ public class Pan extends DivinityCard {
         return super.isWinner(board, previousPosition, currentPosition) ||
                 board.heightOf(currentPosition) <= board.heightOf(previousPosition) - 2;
     }
+
+    @Override
+    public String toString() {
+        return "Pan";
+    }
 }

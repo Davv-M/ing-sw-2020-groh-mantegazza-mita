@@ -52,17 +52,23 @@ public class Client extends Observable implements Observer {
     @Override
     public void update() {
         Protocol protocolRead = ServerHandler.getProtocol();
-        if (protocolRead == Protocol.NOTIFY_MESSAGE) {
+        if (protocolRead == Protocol.NOTIFY_PLAYERS_DIVINITIES) {
+            gameMode.setPlayersDivinities(ServerHandler.getPlayersDivinities());
+        }
+        else if (protocolRead == Protocol.NOTIFY_NUM_PLAYERS) {
+            gameMode.setNumOfPlayers(ServerHandler.getNumOfPlayers());
+        }
+        else if (protocolRead == Protocol.NOTIFY_MESSAGE) {
             gameMode.decodeMessage(ServerHandler.getMessage());
         }
-        if (protocolRead == Protocol.DISPLAY_BOARD) {
+        else if (protocolRead == Protocol.DISPLAY_BOARD) {
             gameMode.displayBoard();
         }
-        if (protocolRead == Protocol.NOTIFY_CUSTOM_STRING) {
+        else if (protocolRead == Protocol.NOTIFY_CUSTOM_STRING) {
             customString = ServerHandler.getCustomMessageString();
             gameMode.updateCustomString();
         }
-        if(protocolRead == Protocol.CANT_MOVE || protocolRead == Protocol.CLIENT_LOST || protocolRead == Protocol.TOO_LATE){
+        else if(protocolRead == Protocol.CANT_MOVE || protocolRead == Protocol.CLIENT_LOST || protocolRead == Protocol.TOO_LATE){
             endGame(protocolRead);
         }
     }

@@ -15,6 +15,8 @@ public enum Protocol {
     RETURN_INT,
     ASK_STRING,
     RETURN_STRING,
+    NOTIFY_NUM_PLAYERS,
+    NOTIFY_PLAYERS_DIVINITIES,
     DISPLAY_BOARD,
     PING,
     TOO_LATE,

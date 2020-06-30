@@ -44,4 +44,9 @@ public class Minotaur extends DivinityCard {
 
         return super.move(worker, destinationCell, currentBoard);
     }
+
+    @Override
+    public String toString() {
+        return "Minotaur";
+    }
 }

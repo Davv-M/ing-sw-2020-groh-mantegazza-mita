@@ -3,10 +3,13 @@ package it.polimi.ingsw.PSP38.client;
 import it.polimi.ingsw.PSP38.common.Message;
 
 import java.net.Socket;
+import java.util.Map;
 import java.util.Scanner;
 
 
 public class GameModeCLI implements GameMode {
+    private int numOfPlayers = 0;
+    private Map<String, String> playersDivinities = null;
     private String customStringRead;
     private final Scanner scanner = new Scanner(System.in);
     private static Socket serverSocket;
@@ -161,7 +164,20 @@ public class GameModeCLI implements GameMode {
 
     }
 
+    @Override
+    public void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
+        System.out.println("There will be " + numOfPlayers + " players in the game.");
+    }
 
+    @Override
+    public void setPlayersDivinities(Map<String, String> playersDivinities){
+        this.playersDivinities = playersDivinities;
+        System.out.println("These are the chosen divinities :");
+        for(String player : playersDivinities.keySet()){
+            System.out.println(player + " : " + playersDivinities.get(player));
+        }
+    }
 
 
     /*public void connectionHandling(){

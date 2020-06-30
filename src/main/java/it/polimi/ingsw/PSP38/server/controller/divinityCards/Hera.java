@@ -14,4 +14,9 @@ public class Hera extends DivinityCard {
     public boolean blockOpponentWinningCondition(Cell currentPosition) {
         return currentPosition.isOnPerimeter();
     }
+
+    @Override
+    public String toString() {
+        return "Hera";
+    }
 }

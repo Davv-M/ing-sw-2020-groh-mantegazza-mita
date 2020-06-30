@@ -10,7 +10,7 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 import java.util.List;
 
 /**
- * Concrete implementation of Demeter's power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Demeter's power, extends <code>DivinityCard</code> abstract class.
  *
  * @author Maximilien Groh (10683107)
  */
@@ -44,5 +44,10 @@ public class Demeter extends DivinityCard implements OptionalAction {
     @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
+    }
+
+    @Override
+    public String toString() {
+        return "Demeter";
     }
 }

@@ -8,9 +8,12 @@ import it.polimi.ingsw.PSP38.common.Message;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 
 public class GameModeGUI implements GameMode {
+    private int numOfPlayers = 0;
+    private Map<String, String> playersDivinities = null;
     volatile boolean isDataReady = false;
     private String dataReadFromClient;
     private static String nickname = "anonymous";
@@ -126,7 +129,7 @@ public class GameModeGUI implements GameMode {
 
 
     public void placeAWorker() {
-        santoriniWindow.getGamePanel().setMessage("Place yourrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr worker number " + customStringRead);
+        santoriniWindow.getGamePanel().setMessage("Place your worker number " + customStringRead);
         santoriniWindow.getMainFrame().repaint();
     }
 
@@ -394,6 +397,22 @@ public class GameModeGUI implements GameMode {
         isDataReady = true;
     }
 
+    @Override
+    public void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
+    }
+
+    @Override
+    public void setPlayersDivinities(Map<String, String> playersDivinities){
+        this.playersDivinities = playersDivinities;
+        System.out.println(playersDivinities);
+        santoriniWindow.getGamePanel().paintPlayersDivinities(playersDivinities);
+    }
+
+    public int getNumOfPlayers() {
+        return numOfPlayers;
+    }
+
 
     @Override
     public void displayBoard() {
@@ -443,7 +462,6 @@ public class GameModeGUI implements GameMode {
 
     public void divinityCardNotExists() {
         System.out.println("This divinity card doesn't exist. Please select a new one");
-
     }
 
     public void divinityCardChosen() {
@@ -454,14 +472,4 @@ public class GameModeGUI implements GameMode {
         System.out.println("Unknown worker action");
     }
 
-
-
-    public void setMyDivinity(String divinity) {
-        myDivinity = divinity;
-        santoriniWindow.getGamePanel().paintDivinityChosen();
-    }
-
-    public String getMyDivinity() {
-        return myDivinity;
-    }
 }
