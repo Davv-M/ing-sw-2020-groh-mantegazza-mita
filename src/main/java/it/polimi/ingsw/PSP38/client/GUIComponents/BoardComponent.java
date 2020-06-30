@@ -4,6 +4,8 @@ import it.polimi.ingsw.PSP38.client.ImageCollection;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,15 +15,16 @@ import java.util.List;
  *
  * @author Maximilien Groh (10683107)
  */
-public class BoardComponent extends JComponent {
+public class BoardComponent extends JComponent{
     private static final int PREFERRED_WIDTH = 615;
     private static final int PREFERRED_HEIGHT = 615;
-    private static final int CELL_OFFSET_X = 7;
-    private static final int CELL_OFFSET_Y = 7;
-
+    public static final int CELL_OFFSET_X = 8;
+    public static final int CELL_OFFSET_Y = 8;
     private static final ImageCollection CELL_IMAGES = new ImageCollection("images");
-
     private List<Byte> encodedBoard = null;
+    public static final int CELL_WIDTH = 120;
+    public static final int CELL_HEIGHT = 120;
+
 
     @Override
     public Dimension getPreferredSize() {
@@ -34,10 +37,8 @@ public class BoardComponent extends JComponent {
             Graphics2D g = (Graphics2D) g0;
             drawEmptyBoard(g);
             Iterator<Byte> encodedCellIterator = encodedBoard.iterator();
-
             int rows = encodedCellIterator.next();
             int columns = encodedCellIterator.next();
-
             for (int row = 0; row < rows; ++row) {
                 for (int col = 0; col < columns; ++col) {
                     byte encodedCell = encodedCellIterator.next();
@@ -72,4 +73,5 @@ public class BoardComponent extends JComponent {
     public void drawEmptyBoard(Graphics2D g) {
         g.drawImage(CELL_IMAGES.image((byte) 0), 0, 0, null);
     }
+
 }

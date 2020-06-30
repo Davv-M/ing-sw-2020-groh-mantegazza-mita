@@ -17,6 +17,8 @@ import java.util.Objects;
  */
 public class WaitingPanel {
     private JPanel waitingPanel;
+    private JPanel messagePanel;
+    private JLabel messageLabel;
     private JPanel imagePanel;
     private JPanel hourglassPanel;
     private JLabel waitLabel;
@@ -28,9 +30,6 @@ public class WaitingPanel {
      * Constructor of <code>WaitingPanel</code> class
      * @param imageURL is the path with the name of the image that will be shown on the panel
      */
-    public WaitingPanel(String imageURL) {
-        this.imageURL = imageURL;
-    }
 
     /**
      * This method generates the waiting panel with the desired image
@@ -40,6 +39,7 @@ public class WaitingPanel {
         waitingPanel = new JPanel();
         waitingPanel.setLayout(new BorderLayout());
         waitingPanel.setBackground(Color.WHITE);
+        waitingPanel.add(createMessagePanel(),BorderLayout.NORTH);
         waitingPanel.add(createWaitImagePanel(), BorderLayout.CENTER);
         waitingPanel.add(createHourglassPanel(), BorderLayout.SOUTH);
         return waitingPanel;
@@ -57,7 +57,7 @@ public class WaitingPanel {
         File dir = null;
         try {
             dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
-                    .getResource(imageURL)).toURI());
+                    .getResource("santorini-hold-on.png")).toURI());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -93,6 +93,20 @@ public class WaitingPanel {
         hourglassLabel = new JLabel(new ImageIcon(hourglassScaled));
         imagePanel.add(hourglassLabel);
         return hourglassPanel;
+    }
+
+    public JPanel createMessagePanel(){
+        messagePanel = new JPanel(new FlowLayout());
+        messageLabel = new JLabel("");
+        messageLabel.setFont(new Font("font message", Font.BOLD, 30));
+        messageLabel.setBackground(Color.BLUE);
+        messagePanel.add(messageLabel);
+        return messagePanel;
+    }
+
+    public void setMessage(String message){
+        messageLabel.setText(message);
+        messageLabel.repaint();
     }
 
 }

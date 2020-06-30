@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,21 +18,19 @@ import java.util.Objects;
 /**
  * This class contains the methods needed to take care of the game interface
  */
-public class GamePanel implements ActionListener {
+public class GamePanel{
     private GameModeGUI gameModeGUI;
     private JPanel mainGamePanel;
     private JPanel controlPanel;
     private JPanel divinityInfoPanel;
-    private JPanel updateDivinityInfoPanel;
     private JLabel divinityImageLabel;
     private JPanel inputPanel;
     private JPanel messagePanel;
     private JLabel messageLabel;
+    private JPanel boardPanel;
     private BoardComponent boardComponent;
-    private JButton submit;
-    private JLabel cellLabel;
-    private JTextField columnField;
-    private JTextField rowField;
+    private int CellX;
+    private int CellY;
 
 
     /**
@@ -41,13 +41,37 @@ public class GamePanel implements ActionListener {
         gameModeGUI=gmg;
         mainGamePanel = new JPanel();
         mainGamePanel.setLayout(new BorderLayout());
-        boardComponent = new BoardComponent();
-
-        //mainGamePanel.add(createMessagePanel(), BorderLayout.NORTH);
-        mainGamePanel.add(boardComponent, BorderLayout.WEST);
-        mainGamePanel.add(createControlPanel(), BorderLayout.CENTER);
+        mainGamePanel.add(createMessagePanel(), BorderLayout.NORTH);
+        mainGamePanel.add(createBoardPanel(), BorderLayout.WEST);
+        mainGamePanel.add(createControlPanel(), BorderLayout.EAST);
         return mainGamePanel;
     }
+
+    public JPanel createBoardPanel(){
+        boardPanel = new JPanel();
+        boardComponent = new BoardComponent();
+        boardComponent.setPreferredSize(boardComponent.getPreferredSize());
+        boardComponent.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                System.out.println("X:"+e.getX());
+                System.out.println("Y:"+e.getY());
+                CellX = (e.getX()-2*BoardComponent.CELL_OFFSET_X)/(BoardComponent.CELL_WIDTH);
+                CellY = (e.getY()-2*BoardComponent.CELL_OFFSET_Y)/(BoardComponent.CELL_HEIGHT);
+                System.out.println(CellX);
+                System.out.println(CellY);
+                gameModeGUI.setColumnSelected(Integer.toString(CellX));
+                gameModeGUI.setRowSelected(Integer.toString(CellY));
+                gameModeGUI.setCoordinateReady(true);
+
+
+            }
+        });
+        boardPanel.add(boardComponent);
+        return boardPanel;
+    }
+
 
 
     public JPanel createMessagePanel(){
@@ -64,32 +88,9 @@ public class GamePanel implements ActionListener {
     }
 
     public JPanel createControlPanel(){
-        controlPanel = new JPanel(new GridLayout(3,1));
-        controlPanel.add(createMessagePanel());
+        controlPanel = new JPanel(new FlowLayout());
         controlPanel.add(createDivinityInfoPanel());
-        controlPanel.add(createInputPanel());
         return controlPanel;
-    }
-
-    public JPanel createInputPanel(){
-        inputPanel = new JPanel(new GridLayout(6,1));
-        cellLabel = new JLabel("");
-        inputPanel.add(cellLabel);
-        JLabel columnLabel = new JLabel("Column:");
-        inputPanel.add(columnLabel);
-        columnField = new JTextField();
-        inputPanel.add(columnField);
-        JLabel rowLabel = new JLabel("Row:");
-        inputPanel.add(rowLabel);
-        rowField = new JTextField();
-        inputPanel.add(rowField);
-
-        JPanel submitPanel = new JPanel(new FlowLayout());
-        submit = new JButton("");
-        submit.addActionListener(this);
-        submitPanel.add(submit);
-        inputPanel.add(submitPanel);
-        return inputPanel;
     }
 
     public JPanel createDivinityInfoPanel(){
@@ -121,62 +122,8 @@ public class GamePanel implements ActionListener {
         mainGamePanel.repaint();
     }
 
-    /*public JPanel createBuildControlPanel(){
-        buildControlPanel = new JPanel(new GridLayout(3,1));
-        JPanel buildTitle = new JPanel(new FlowLayout());
-        JLabel buildLabel = new JLabel("Build");
-        buildTitle.add(buildLabel);
-        buildControlPanel.add(buildTitle);
-        JPanel buildCoordsPanel = new JPanel(new FlowLayout());
-        JTextField buildColumn = new JTextField("Column");
-        buildCoordsPanel.add(buildColumn);
-        JTextField buildRow = new JTextField("Row");
-        buildCoordsPanel.add(buildRow);
-        buildControlPanel.add(buildCoordsPanel);
-        JPanel submitBuildingPanel = new JPanel(new FlowLayout());
-        submitBuilding = new JButton("Move");
-        submitBuildingPanel.add(submitBuilding);
-        buildControlPanel.add(submitBuildingPanel);
-        return buildControlPanel;
-    }*/
-
     public BoardComponent getBoardComponent() {
         return boardComponent;
     }
 
-    public JLabel getCellLabel() {
-        return cellLabel;
-    }
-
-    public JButton getSubmit() {
-        return submit;
-    }
-
-    public void setModifiablePanel(){
-        inputPanel.setVisible(true);
-    }
-
-    public void setUnmodifiablePanel(){
-        inputPanel.setVisible(false);
-    }
-
-    /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource()==submit){
-            if (columnField.getText().isEmpty() || rowField.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null,"tutti i campi sono obbligatori","Login error ",JOptionPane.WARNING_MESSAGE);
-            }else {
-                gameModeGUI.setColumnSelected(columnField.getText());
-                gameModeGUI.setRowSelected(rowField.getText());
-                columnField.setText("");
-                rowField.setText("");
-                gameModeGUI.setCoordinateReady(true);
-            }
-        }
-    }
 }

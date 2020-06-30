@@ -304,10 +304,12 @@ public class Controller extends Observable {
             do {
                 Cell cell = askCell(client);
                 try {
+                    ArgumentChecker.checkWorker(cell,game.getCurrentBoard());
                     newBoard = game.getCurrentBoard().withWorker(new Worker(clientPlayer.getColor(), cell));
                     displayAllClients();
                     break;
                 } catch (IllegalArgumentException e) {
+                    client.notifyMessageString(e.getMessage());
                     client.notifyMessage(Message.ILLEGAL_ARGUMENT);
                 }
             } while (true);

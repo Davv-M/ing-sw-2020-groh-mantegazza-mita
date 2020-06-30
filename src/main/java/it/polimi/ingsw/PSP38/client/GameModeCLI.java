@@ -34,7 +34,7 @@ public class GameModeCLI implements GameMode {
                 System.out.println("Choose your nickname");
                 break;
             case SET_AGE:
-                System.out.println("How old are you? (integer between 8 and 99)");
+                System.out.println("How old are you?");
                 break;
             case WAIT_FOR_DIVINITIES:
                 System.out.println("Please wait for "+customStringRead+
@@ -61,10 +61,10 @@ public class GameModeCLI implements GameMode {
             case YOU_LOSE:
                 System.out.println("You lose! The winner is "+customStringRead);
             case SELECT_WORKER:
-                System.out.println("Player, please select the worker you want to move");//inserire nickname giocatore
+                System.out.println("Please select the worker you want to move");
                 break;
             case WORKER_NOT_YOURS:
-                System.out.println("Player, this worker doesn't belong to you");
+                System.out.println("This worker doesn't belong to you");
                 break;
             case ASK_SPECIAL_ACTION:
                 System.out.println("Do you want to use your special ability?");

@@ -57,24 +57,22 @@ public class GameModeGUI implements GameMode {
     }
 
     public void illegalString() {
-        System.out.println("String not recognized exception: " + customStringRead);
         String newString;
-        newString = JOptionPane.showInputDialog(null, customStringRead, "String not recognized exception: ", JOptionPane.QUESTION_MESSAGE);
+        newString = JOptionPane.showInputDialog(null, customStringRead, "Error:", JOptionPane.QUESTION_MESSAGE);
         setStringRead(newString);
     }
 
     public void illegalInt() {
-        System.out.println("Integer not recognized exception: " + customStringRead);
         String newStringInt;
-        newStringInt = JOptionPane.showInputDialog(null, customStringRead, "Integer not recognized exception: ", JOptionPane.QUESTION_MESSAGE);
+        newStringInt = JOptionPane.showInputDialog(null, customStringRead, "Error:", JOptionPane.QUESTION_MESSAGE);
         setStringRead(newStringInt);
     }
 
 
     public void waitForNumPlayer() {
-        System.out.println("Please wait for the first player to select the number of players.");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
-        cl.show(getSantoriniWindow().getCardHolder(), "waitForNumPlayers");
+        cl.show(getSantoriniWindow().getCardHolder(), "waiting");
+        santoriniWindow.getWaitingPanel().setMessage("Please wait for the first player to select the number of players.");
     }
 
     public void gameFull() {
@@ -82,15 +80,15 @@ public class GameModeGUI implements GameMode {
     }
 
     public void clientLost() {
-        JOptionPane.showMessageDialog(frame, "your challenger lost connection, please restart app", "Challenger lost", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "Your challenger lost connection, please restart app", "Challenger lost", JOptionPane.WARNING_MESSAGE);
     }
 
     public void cantMove() {
-        JOptionPane.showMessageDialog(frame, "you can't move, You Lose!", "End Game", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "You can't move, You Lose!", "End Game", JOptionPane.WARNING_MESSAGE);
     }
 
     public void serverLost() {
-        JOptionPane.showMessageDialog(frame, "connection lost with server, please restart app ", "Server Lost", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "Connection lost with server, please restart app ", "Server Lost", JOptionPane.WARNING_MESSAGE);
     }
 
 
@@ -110,18 +108,17 @@ public class GameModeGUI implements GameMode {
     public void waitForDivinities() {
         System.out.println("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
-        cl.show(getSantoriniWindow().getCardHolder(), "waitForDivinities");
+        cl.show(getSantoriniWindow().getCardHolder(), "waiting");
+        santoriniWindow.getWaitingPanel().setMessage("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
     }
 
     public void notYourTurn() {
         santoriniWindow.getDivinityChoicePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
         santoriniWindow.getGamePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
-        santoriniWindow.getGamePanel().setUnmodifiablePanel();
         santoriniWindow.getDivinityChoicePanel().setUnmodifiablePanel();
     }
 
     public void placeYourWorkers() {
-        santoriniWindow.getGamePanel().setModifiablePanel();
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "game");
         santoriniWindow.getGamePanel().setMessage("Please place all of your workers on the board");
@@ -129,9 +126,7 @@ public class GameModeGUI implements GameMode {
 
 
     public void placeAWorker() {
-        santoriniWindow.getGamePanel().setMessage("Place your worker number " + customStringRead);
-        santoriniWindow.getGamePanel().getCellLabel().setText("insert cell's coordinates:");
-        santoriniWindow.getGamePanel().getSubmit().setText("Select");
+        santoriniWindow.getGamePanel().setMessage("Place yourrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr worker number " + customStringRead);
         santoriniWindow.getMainFrame().repaint();
     }
 
@@ -164,15 +159,13 @@ public class GameModeGUI implements GameMode {
     public void waitForFullGame() {
         System.out.println("Hold on, all the players will be ready in a few seconds");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
-        cl.show(getSantoriniWindow().getCardHolder(), "waitForPlayers");
+        cl.show(getSantoriniWindow().getCardHolder(), "waiting");
+        santoriniWindow.getWaitingPanel().setMessage("Hold on, all the players will be ready in a few seconds");
     }
 
 
     public void selectWorker() {
-        santoriniWindow.getGamePanel().setModifiablePanel();
         santoriniWindow.getGamePanel().setMessage("Please select the worker you want to move:");
-        santoriniWindow.getGamePanel().getCellLabel().setText("Please select cell that contains worker you want to move");
-        santoriniWindow.getGamePanel().getSubmit().setText("Select");
         santoriniWindow.getMainFrame().repaint();
     }
 
@@ -214,15 +207,11 @@ public class GameModeGUI implements GameMode {
 
     private void workerMove() {
         santoriniWindow.getGamePanel().setMessage("It's time to Move your worker!");
-        santoriniWindow.getGamePanel().getCellLabel().setText("Select the cell where you want to move");
-        santoriniWindow.getGamePanel().getSubmit().setText("Move");
         santoriniWindow.getMainFrame().repaint();
     }
 
     private void workerBuild() {
         santoriniWindow.getGamePanel().setMessage("It's time to Build!");
-        santoriniWindow.getGamePanel().getCellLabel().setText("Select the cell where you want to build");
-        santoriniWindow.getGamePanel().getSubmit().setText("Build");
         santoriniWindow.getMainFrame().repaint();
     }
 
@@ -251,6 +240,10 @@ public class GameModeGUI implements GameMode {
 
     private void serverUnreacheable(){
         JOptionPane.showMessageDialog(frame, "Server currently unreacheable, please try later", "Connection error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void illegalArgument() {
+        JOptionPane.showMessageDialog(frame, customStringRead, "Illegal selection:", JOptionPane.WARNING_MESSAGE);
     }
 
 
@@ -440,9 +433,6 @@ public class GameModeGUI implements GameMode {
     }
 
 
-
-    //in teoria non dovrebbero mai essere chiamati con GUI
-
     public void illegalYesOrNo() {
         System.out.println("Please answer with either \"yes\" or \"no\"");
     }
@@ -464,9 +454,7 @@ public class GameModeGUI implements GameMode {
         System.out.println("Unknown worker action");
     }
 
-    public void illegalArgument() {
-        System.out.println("Illegal argument exception: " + customStringRead);
-    }
+
 
     public void setMyDivinity(String divinity) {
         myDivinity = divinity;

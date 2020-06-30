@@ -21,9 +21,7 @@ public class SantoriniWindow extends Observable {
     private static GameModeGUI gameModeGUI;
     private StartPanel startPanel;
     private DivinityChoicePanel divinityChoicePanel;
-    private WaitingPanel waitForPlayersPanel;
-    private WaitingPanel waitForNumPlayersPanel;
-    private WaitingPanel waitForDivinitiesPanel;
+    private WaitingPanel waitingPanel;
     private GamePanel gamePanel;
 
     /**
@@ -50,14 +48,10 @@ public class SantoriniWindow extends Observable {
         cardHolder.setLayout(new CardLayout());
         startPanel=new StartPanel();
         cardHolder.add(startPanel.createStartPanel(gameModeGUI), "setup");
-        waitForPlayersPanel = new WaitingPanel(waitForPlayersImage);
-        cardHolder.add(waitForPlayersPanel.createWaitingPanel(), "waitForPlayers");
-        waitForNumPlayersPanel = new WaitingPanel(waitForNumPlayersImage);
-        cardHolder.add(waitForNumPlayersPanel.createWaitingPanel(), "waitForNumPlayers");
+        waitingPanel = new WaitingPanel();
+        cardHolder.add(waitingPanel.createWaitingPanel(), "waiting");
         divinityChoicePanel =new DivinityChoicePanel();
         cardHolder.add(divinityChoicePanel.createMainDivinityPanel(gameModeGUI), "cardChoice");
-        waitForDivinitiesPanel = new WaitingPanel(waitForDivinitiesImage);
-        cardHolder.add(waitForDivinitiesPanel.createWaitingPanel(), "waitForDivinities");
         gamePanel = new GamePanel();
         cardHolder.add(gamePanel.createMainGamePanel(gameModeGUI), "game");
         return cardHolder;
@@ -82,4 +76,6 @@ public class SantoriniWindow extends Observable {
     public GamePanel getGamePanel() {
         return gamePanel;
     }
+
+    public WaitingPanel getWaitingPanel(){return waitingPanel;}
 }
