@@ -13,9 +13,6 @@ import java.util.Observable;
 public class SantoriniWindow extends Observable {
     public static final int WIDTH = 550;
     public static final int HEIGHT = 650;
-    public static final String waitForPlayersImage = "santorini-hold-on.png";
-    public static final String waitForDivinitiesImage = "santorini-wait-for-divinities.png";
-    public static final String waitForNumPlayersImage = "santorini-wait-for-num-players.png";
     private JFrame mainFrame = new JFrame();
     private JPanel cardHolder;
     private static GameModeGUI gameModeGUI;

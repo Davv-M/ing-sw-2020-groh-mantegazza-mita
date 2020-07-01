@@ -73,9 +73,11 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitForNumPlayer() {
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Please wait for the first player to select the number of players.");
+
     }
 
     public void gameFull() {
@@ -109,28 +111,36 @@ public class GameModeGUI implements GameMode {
     }
 
     public void waitForDivinities() {
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         System.out.println("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
+
     }
 
     public void notYourTurn() {
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         santoriniWindow.getDivinityChoicePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
         santoriniWindow.getGamePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
         santoriniWindow.getDivinityChoicePanel().setUnmodifiablePanel();
+
     }
 
     public void placeYourWorkers() {
+        frame.setCursor(Cursor.getDefaultCursor());
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "game");
         santoriniWindow.getGamePanel().setMessage("Please place all of your workers on the board");
+
     }
 
 
     public void placeAWorker() {
+        frame.setCursor(Cursor.getDefaultCursor());
         santoriniWindow.getGamePanel().setMessage("Place your worker number " + customStringRead);
         santoriniWindow.getMainFrame().repaint();
+
     }
 
     public void setCellColumnCoordinate() {
@@ -160,6 +170,7 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitForFullGame() {
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         System.out.println("Hold on, all the players will be ready in a few seconds");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
@@ -168,13 +179,14 @@ public class GameModeGUI implements GameMode {
 
 
     public void selectWorker() {
+        frame.setCursor(Cursor.getDefaultCursor());
         santoriniWindow.getGamePanel().setMessage("Please select the worker you want to move:");
         santoriniWindow.getMainFrame().repaint();
     }
 
 
     public void waitYourTurn() {
-        System.out.println("please wait");
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         JOptionPane.showMessageDialog(frame, "please wait");
 
     }
@@ -196,11 +208,12 @@ public class GameModeGUI implements GameMode {
     }
 
     private void displayDivinityMessage() {
+        frame.setCursor(Cursor.getDefaultCursor());
         /*divinitiesScanner = new Scanner(customStringRead);
         santoriniWindow.getCardHolder().add(santoriniWindow.getDivinityChoicePanel().createMainDivinityPanel(this), "cardChoice");*/
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
-        getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
         santoriniWindow.getDivinityChoicePanel().setModifiablePanel();
     }
 
@@ -209,6 +222,7 @@ public class GameModeGUI implements GameMode {
     }
 
     private void workerMove() {
+        frame.setCursor(Cursor.getDefaultCursor());
         santoriniWindow.getGamePanel().setMessage("It's time to Move your worker!");
         santoriniWindow.getMainFrame().repaint();
     }
@@ -246,7 +260,7 @@ public class GameModeGUI implements GameMode {
     }
 
     public void illegalArgument() {
-        JOptionPane.showMessageDialog(frame, customStringRead, "Illegal selection:", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, "you are selected an illegal cell", "Illegal selection:", JOptionPane.WARNING_MESSAGE);
     }
 
 

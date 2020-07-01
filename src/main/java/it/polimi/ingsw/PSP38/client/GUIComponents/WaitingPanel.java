@@ -8,12 +8,13 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Objects;
 
 /**
  * This class contains the methods needed to generate a panel which signals the user that the client is waiting for
  * some feedback from the server or another client
- * @author Davide Mantegazza (10568661), Matteo Mita
+ * @author Davide Mantegazza (10568661), Matteo Mita (10487862)
  */
 public class WaitingPanel {
     private JPanel waitingPanel;
@@ -23,8 +24,6 @@ public class WaitingPanel {
     private JPanel hourglassPanel;
     private JLabel waitLabel;
     private JLabel hourglassLabel;
-    private String imageURL;
-    private Color panelColor = new Color(0,0,0,0);
 
     /**
      * Constructor of <code>WaitingPanel</code> class
@@ -53,11 +52,11 @@ public class WaitingPanel {
         Image waitImage=null;
         Image waitImageScaled;
         imagePanel= new JPanel();
-        imagePanel.setBackground(panelColor);
+        imagePanel.setBackground(SantoriniColor.bkgColor);
         File dir = null;
         try {
             dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
-                    .getResource("santorini-hold-on.png")).toURI());
+                    .getResource("santorini-wait.png")).toURI());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -66,7 +65,7 @@ public class WaitingPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        waitImageScaled =waitImage.getScaledInstance(500,-1,Image.SCALE_SMOOTH);
+        waitImageScaled =waitImage.getScaledInstance(600,-1,Image.SCALE_SMOOTH);
         waitLabel = new JLabel(new ImageIcon(waitImageScaled));
         imagePanel.add(waitLabel);
         return imagePanel;
@@ -76,7 +75,7 @@ public class WaitingPanel {
         Image hourglass = null;
         Image hourglassScaled;
         hourglassPanel= new JPanel();
-        hourglassPanel.setBackground(panelColor);
+        hourglassPanel.setBackground(SantoriniColor.bkgColor);
         File dir = null;
         try {
             dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
@@ -89,17 +88,20 @@ public class WaitingPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        hourglassScaled=hourglass.getScaledInstance(100,-1,Image.SCALE_DEFAULT);
+        hourglassScaled=hourglass.getScaledInstance(50,-1,Image.SCALE_DEFAULT);
         hourglassLabel = new JLabel(new ImageIcon(hourglassScaled));
         imagePanel.add(hourglassLabel);
         return hourglassPanel;
+
+
     }
 
     public JPanel createMessagePanel(){
         messagePanel = new JPanel(new FlowLayout());
+        messagePanel.setBackground(Color.WHITE);
         messageLabel = new JLabel("");
         messageLabel.setFont(new Font("font message", Font.BOLD, 30));
-        messageLabel.setBackground(Color.BLUE);
+        messageLabel.setForeground(SantoriniColor.messageColor);
         messagePanel.add(messageLabel);
         return messagePanel;
     }

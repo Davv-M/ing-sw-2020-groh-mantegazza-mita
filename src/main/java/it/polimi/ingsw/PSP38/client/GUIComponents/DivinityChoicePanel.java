@@ -60,6 +60,8 @@ public class DivinityChoicePanel implements ActionListener {
         titlePanel.setForeground(textColor);*/
         title = new JLabel("Please select one of the following cards");
         title.setFont(new Font("font message", Font.BOLD, 30));
+        titlePanel.setBackground(SantoriniColor.bkgColor);
+        title.setForeground(SantoriniColor.messageColor);
         titlePanel.add(title);
         return titlePanel;
     }
@@ -75,7 +77,7 @@ public class DivinityChoicePanel implements ActionListener {
      */
     public JPanel createDivinitiesButtonsPanel(){
         cardButtonsPanel = new JPanel(new GridLayout(2,7));
-        //cardButtonsPanel.setBackground(panelColor);
+        cardButtonsPanel.setBackground(SantoriniColor.bkgColor);
         divinitiesScanner = new Scanner(gameModeGUI.getAvailableDivinities());
         while (divinitiesScanner.hasNextLine()){
             //salvare nome divinità e creare pulsante apposito
@@ -91,10 +93,13 @@ public class DivinityChoicePanel implements ActionListener {
      */
     public void createDivinityButton(String divinityName){
         JPanel divinityButtonPanel = new JPanel(new BorderLayout());
+        divinityButtonPanel.setBackground(SantoriniColor.bkgColor);
         //divinityButtonPanel.setBackground(panelColor);
         JPanel divinityCheckboxPanel = new JPanel(new FlowLayout());
+        divinityCheckboxPanel.setBackground(SantoriniColor.bkgColor);
         //divinityCheckboxPanel.setBackground(panelColor);
         divinityRadioButton = new JRadioButton(divinityName);
+        divinityRadioButton.setBackground(SantoriniColor.bkgColor);
         divinityRadioButton.setActionCommand(divinityName);
         //divinityRadioButton.setBackground(panelColor);
         //divinityRadioButton.setForeground(textColor);
@@ -113,6 +118,7 @@ public class DivinityChoicePanel implements ActionListener {
         Image divinityImage =null;
         Image divinityImageScaled;
         JPanel divinityImagePanel = new JPanel();
+        divinityImagePanel.setBackground(SantoriniColor.bkgColor);
         //divinityImagePanel.setBackground(panelColor);
         File dir = null;
         try {
@@ -138,6 +144,7 @@ public class DivinityChoicePanel implements ActionListener {
      */
     public JPanel createOkButtonPanel(){
         okButtonPanel = new JPanel(new FlowLayout());
+        okButtonPanel.setBackground(SantoriniColor.bkgColor);
         //okButtonPanel.setBackground(panelColor);
         okButton = new JButton("OK");
         okButton.addActionListener(this);

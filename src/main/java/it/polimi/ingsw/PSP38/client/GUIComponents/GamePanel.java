@@ -43,6 +43,7 @@ public class GamePanel {
         gameModeGUI = gmg;
         mainGamePanel = new JPanel();
         mainGamePanel.setLayout(new BorderLayout());
+        mainGamePanel.setBackground(SantoriniColor.bkgColor);
         mainGamePanel.add(createMessagePanel(), BorderLayout.NORTH);
         mainGamePanel.add(createBoardPanel(), BorderLayout.WEST);
         mainGamePanel.add(createControlPanel(), BorderLayout.EAST);
@@ -52,6 +53,7 @@ public class GamePanel {
     public JPanel createBoardPanel() {
         boardPanel = new JPanel();
         boardComponent = new BoardComponent();
+        boardPanel.setBackground(SantoriniColor.bkgColor);
         boardComponent.setPreferredSize(boardComponent.getPreferredSize());
         boardComponent.addMouseListener(new MouseAdapter() {
             @Override
@@ -63,11 +65,9 @@ public class GamePanel {
                 CellY = (e.getY() - 2 * BoardComponent.CELL_OFFSET_Y) / (BoardComponent.CELL_HEIGHT);
                 System.out.println(CellX);
                 System.out.println(CellY);
-                gameModeGUI.setColumnSelected(Integer.toString(CellX));
-                gameModeGUI.setRowSelected(Integer.toString(CellY));
+                GameModeGUI.setColumnSelected(Integer.toString(CellX));
+                GameModeGUI.setRowSelected(Integer.toString(CellY));
                 gameModeGUI.setCoordinateReady(true);
-
-
             }
         });
         boardPanel.add(boardComponent);
@@ -79,6 +79,8 @@ public class GamePanel {
         messagePanel = new JPanel(new FlowLayout());
         messageLabel = new JLabel("");
         messageLabel.setFont(new Font("font message", Font.BOLD, 30));
+        messageLabel.setForeground(SantoriniColor.messageColor);
+        messagePanel.setBackground(SantoriniColor.bkgColor);
         messagePanel.add(messageLabel);
         return messagePanel;
     }
@@ -96,6 +98,7 @@ public class GamePanel {
 
     public JPanel createDivinityInfoPanel() {
         divinityInfoPanel = new JPanel(new GridLayout(gameModeGUI.getNumOfPlayers(), 1));
+        divinityInfoPanel.setBackground(SantoriniColor.bkgColor);
         return divinityInfoPanel;
     }
 
