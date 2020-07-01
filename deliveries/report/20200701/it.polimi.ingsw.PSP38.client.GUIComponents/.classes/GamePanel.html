@@ -1,0 +1,242 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GamePanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client.GUIComponents</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GamePanel (it.polimi.ingsw.PSP38.client.GUIComponents)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GamePanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 49)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GamePanel$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 61)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client.GUIComponents;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.client.GameModeGUI;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP38.client.ImageCollection;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import javax.imageio.ImageIO;
+<i>7</i>&nbsp;import javax.swing.*;
+<i>8</i>&nbsp;import java.awt.*;
+<i>9</i>&nbsp;import java.awt.event.ActionEvent;
+<i>10</i>&nbsp;import java.awt.event.ActionListener;
+<i>11</i>&nbsp;import java.awt.event.MouseAdapter;
+<i>12</i>&nbsp;import java.awt.event.MouseEvent;
+<i>13</i>&nbsp;import java.io.File;
+<i>14</i>&nbsp;import java.io.IOException;
+<i>15</i>&nbsp;import java.net.URISyntaxException;
+<i>16</i>&nbsp;import java.util.Iterator;
+<i>17</i>&nbsp;import java.util.Map;
+<i>18</i>&nbsp;import java.util.Objects;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * This class contains the methods needed to take care of the game interface
+<i>22</i>&nbsp; */
+<b class="nc"><i>23</i>&nbsp;public class GamePanel {</b>
+<i>24</i>&nbsp;    private GameModeGUI gameModeGUI;
+<i>25</i>&nbsp;    private JPanel mainGamePanel;
+<i>26</i>&nbsp;    private JPanel controlPanel;
+<i>27</i>&nbsp;    private JPanel divinityInfoPanel;
+<i>28</i>&nbsp;    private JLabel divinityImageLabel;
+<i>29</i>&nbsp;    private JPanel messagePanel;
+<i>30</i>&nbsp;    private JLabel messageLabel;
+<i>31</i>&nbsp;    private JPanel boardPanel;
+<i>32</i>&nbsp;    private BoardComponent boardComponent;
+<i>33</i>&nbsp;    private int CellX;
+<i>34</i>&nbsp;    private int CellY;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * This method is used to generate the main game panel
+<i>39</i>&nbsp;     *
+<i>40</i>&nbsp;     * @return the main game panel
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    public JPanel createMainGamePanel(GameModeGUI gmg) {
+<b class="nc"><i>43</i>&nbsp;        gameModeGUI = gmg;</b>
+<b class="nc"><i>44</i>&nbsp;        mainGamePanel = new JPanel();</b>
+<b class="nc"><i>45</i>&nbsp;        mainGamePanel.setLayout(new BorderLayout());</b>
+<b class="nc"><i>46</i>&nbsp;        mainGamePanel.add(createMessagePanel(), BorderLayout.NORTH);</b>
+<b class="nc"><i>47</i>&nbsp;        mainGamePanel.add(createBoardPanel(), BorderLayout.WEST);</b>
+<b class="nc"><i>48</i>&nbsp;        mainGamePanel.add(createControlPanel(), BorderLayout.EAST);</b>
+<b class="nc"><i>49</i>&nbsp;        return mainGamePanel;</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    public JPanel createBoardPanel() {
+<b class="nc"><i>53</i>&nbsp;        boardPanel = new JPanel();</b>
+<b class="nc"><i>54</i>&nbsp;        boardComponent = new BoardComponent();</b>
+<b class="nc"><i>55</i>&nbsp;        boardComponent.setPreferredSize(boardComponent.getPreferredSize());</b>
+<b class="nc"><i>56</i>&nbsp;        boardComponent.addMouseListener(new MouseAdapter() {</b>
+<i>57</i>&nbsp;            @Override
+<i>58</i>&nbsp;            public void mouseClicked(MouseEvent e) {
+<b class="nc"><i>59</i>&nbsp;                super.mouseClicked(e);</b>
+<b class="nc"><i>60</i>&nbsp;                System.out.println(&quot;X:&quot; + e.getX());</b>
+<b class="nc"><i>61</i>&nbsp;                System.out.println(&quot;Y:&quot; + e.getY());</b>
+<b class="nc"><i>62</i>&nbsp;                CellX = (e.getX() - 2 * BoardComponent.CELL_OFFSET_X) / (BoardComponent.CELL_WIDTH);</b>
+<b class="nc"><i>63</i>&nbsp;                CellY = (e.getY() - 2 * BoardComponent.CELL_OFFSET_Y) / (BoardComponent.CELL_HEIGHT);</b>
+<b class="nc"><i>64</i>&nbsp;                System.out.println(CellX);</b>
+<b class="nc"><i>65</i>&nbsp;                System.out.println(CellY);</b>
+<b class="nc"><i>66</i>&nbsp;                gameModeGUI.setColumnSelected(Integer.toString(CellX));</b>
+<b class="nc"><i>67</i>&nbsp;                gameModeGUI.setRowSelected(Integer.toString(CellY));</b>
+<b class="nc"><i>68</i>&nbsp;                gameModeGUI.setCoordinateReady(true);</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;            }</b>
+<i>72</i>&nbsp;        });
+<b class="nc"><i>73</i>&nbsp;        boardPanel.add(boardComponent);</b>
+<b class="nc"><i>74</i>&nbsp;        return boardPanel;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    public JPanel createMessagePanel() {
+<b class="nc"><i>79</i>&nbsp;        messagePanel = new JPanel(new FlowLayout());</b>
+<b class="nc"><i>80</i>&nbsp;        messageLabel = new JLabel(&quot;&quot;);</b>
+<b class="nc"><i>81</i>&nbsp;        messageLabel.setFont(new Font(&quot;font message&quot;, Font.BOLD, 30));</b>
+<b class="nc"><i>82</i>&nbsp;        messagePanel.add(messageLabel);</b>
+<b class="nc"><i>83</i>&nbsp;        return messagePanel;</b>
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    public void setMessage(String message) {
+<b class="nc"><i>87</i>&nbsp;        messageLabel.setText(message);</b>
+<b class="nc"><i>88</i>&nbsp;        messageLabel.repaint();</b>
+<b class="nc"><i>89</i>&nbsp;    }</b>
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    public JPanel createControlPanel() {
+<b class="nc"><i>92</i>&nbsp;        controlPanel = new JPanel(new FlowLayout());</b>
+<b class="nc"><i>93</i>&nbsp;        controlPanel.add(createDivinityInfoPanel());</b>
+<b class="nc"><i>94</i>&nbsp;        return controlPanel;</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    public JPanel createDivinityInfoPanel() {
+<b class="nc"><i>98</i>&nbsp;        divinityInfoPanel = new JPanel(new GridLayout(gameModeGUI.getNumOfPlayers(), 1));</b>
+<b class="nc"><i>99</i>&nbsp;        return divinityInfoPanel;</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    public void paintPlayersDivinities(Map&lt;String, String&gt; playersDivinities) {
+<b class="nc"><i>103</i>&nbsp;        divinityInfoPanel.removeAll();</b>
+<b class="nc"><i>104</i>&nbsp;        Iterator&lt;String&gt; playerIterator = playersDivinities.keySet().iterator();</b>
+<b class="nc"><i>105</i>&nbsp;        for(int i = 0; i &lt; gameModeGUI.getNumOfPlayers(); i++){</b>
+<b class="nc"><i>106</i>&nbsp;            Image divinityImage = null;</b>
+<i>107</i>&nbsp;            Image divinityImageScaled;
+<b class="nc"><i>108</i>&nbsp;            File dir = null;</b>
+<i>109</i>&nbsp;            try {
+<b class="nc"><i>110</i>&nbsp;                dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()</b>
+<b class="nc"><i>111</i>&nbsp;                        .getResource(&quot;divinityImages/&quot; + playersDivinities.get(playerIterator.next()).toLowerCase() + &quot;.png&quot;)).toURI());</b>
+<b class="nc"><i>112</i>&nbsp;            } catch (URISyntaxException e) {</b>
+<b class="nc"><i>113</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>114</i>&nbsp;            }</b>
+<i>115</i>&nbsp;            try {
+<b class="nc"><i>116</i>&nbsp;                divinityImage = ImageIO.read(dir);</b>
+<b class="nc"><i>117</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>118</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>119</i>&nbsp;            }</b>
+<b class="nc"><i>120</i>&nbsp;            divinityImageScaled = divinityImage.getScaledInstance(200, -1, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>121</i>&nbsp;            divinityImageLabel = new JLabel(new ImageIcon(divinityImageScaled));</b>
+<b class="nc"><i>122</i>&nbsp;            divinityInfoPanel.add(divinityImageLabel);</b>
+<b class="nc"><i>123</i>&nbsp;            divinityImageLabel.repaint();</b>
+<b class="nc"><i>124</i>&nbsp;            divinityImageLabel.repaint();</b>
+<b class="nc"><i>125</i>&nbsp;            mainGamePanel.repaint();</b>
+<i>126</i>&nbsp;        }
+<b class="nc"><i>127</i>&nbsp;    }</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    public BoardComponent getBoardComponent() {
+<b class="nc"><i>130</i>&nbsp;        return boardComponent;</b>
+<i>131</i>&nbsp;    }
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 11:15</div>
+</div>
+</body>
+</html>

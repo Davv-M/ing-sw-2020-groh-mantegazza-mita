@@ -1,0 +1,584 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameModeGUI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameModeGUI (it.polimi.ingsw.PSP38.client)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameModeGUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 57)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 242)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameModeGUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 58)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 243)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;//import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP38.common.Message;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import javax.swing.*;
+<i>9</i>&nbsp;import java.awt.*;
+<i>10</i>&nbsp;import java.lang.reflect.InvocationTargetException;
+<i>11</i>&nbsp;import java.util.Map;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;public class GameModeGUI implements GameMode {
+<b class="nc"><i>15</i>&nbsp;    private int numOfPlayers = 0;</b>
+<b class="nc"><i>16</i>&nbsp;    private Map&lt;String, String&gt; playersDivinities = null;</b>
+<b class="nc"><i>17</i>&nbsp;    volatile boolean isDataReady = false;</b>
+<i>18</i>&nbsp;    private String dataReadFromClient;
+<b class="nc"><i>19</i>&nbsp;    private static String nickname = &quot;anonymous&quot;;</b>
+<i>20</i>&nbsp;    private static String age;
+<i>21</i>&nbsp;    private JFrame frame;
+<i>22</i>&nbsp;    private String customStringRead;
+<i>23</i>&nbsp;    private SantoriniWindow santoriniWindow;
+<i>24</i>&nbsp;    private String availableDivinities;
+<i>25</i>&nbsp;    private JPanel cardButtons;
+<i>26</i>&nbsp;    private static String columnSelected;
+<i>27</i>&nbsp;    private static String rowSelected;
+<i>28</i>&nbsp;    private String myDivinity;
+<b class="nc"><i>29</i>&nbsp;    private volatile boolean isCoordinateReady = false;</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;
+<b class="nc"><i>32</i>&nbsp;    public GameModeGUI() throws InvocationTargetException, InterruptedException {</b>
+<b class="nc"><i>33</i>&nbsp;        SwingUtilities.invokeAndWait(() -&gt; {</b>
+<b class="nc"><i>34</i>&nbsp;            santoriniWindow = new SantoriniWindow();</b>
+<b class="nc"><i>35</i>&nbsp;            frame = santoriniWindow.createSantoriniWindow(this);</b>
+<b class="nc"><i>36</i>&nbsp;        });</b>
+<b class="nc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    public JFrame getFrame() {
+<b class="nc"><i>40</i>&nbsp;        return frame;</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    public void insertNumPlayer() {
+<b class="nc"><i>45</i>&nbsp;        Object[] options = {&quot;2&quot;, &quot;3&quot;};</b>
+<b class="nc"><i>46</i>&nbsp;        int n = JOptionPane.showOptionDialog(santoriniWindow.getStartPanel().getStartPanel(),</b>
+<i>47</i>&nbsp;                &quot;You are the first player to join this game. Please insert the number of players&quot;,
+<i>48</i>&nbsp;                &quot;Choose number of players&quot;,
+<i>49</i>&nbsp;                JOptionPane.YES_NO_OPTION,
+<i>50</i>&nbsp;                JOptionPane.QUESTION_MESSAGE,
+<i>51</i>&nbsp;                null,
+<i>52</i>&nbsp;                options,
+<i>53</i>&nbsp;                null);
+<b class="nc"><i>54</i>&nbsp;        if (n == JOptionPane.YES_OPTION) {</b>
+<b class="nc"><i>55</i>&nbsp;            setStringRead(&quot;2&quot;);</b>
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;        } else if (n == JOptionPane.NO_OPTION) {</b>
+<b class="nc"><i>58</i>&nbsp;            setStringRead(&quot;3&quot;);</b>
+<i>59</i>&nbsp;        }
+<b class="nc"><i>60</i>&nbsp;    }</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    public void illegalString() {
+<i>63</i>&nbsp;        String newString;
+<b class="nc"><i>64</i>&nbsp;        newString = JOptionPane.showInputDialog(null, customStringRead, &quot;Error:&quot;, JOptionPane.QUESTION_MESSAGE);</b>
+<b class="nc"><i>65</i>&nbsp;        setStringRead(newString);</b>
+<b class="nc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    public void illegalInt() {
+<i>69</i>&nbsp;        String newStringInt;
+<b class="nc"><i>70</i>&nbsp;        newStringInt = JOptionPane.showInputDialog(null, customStringRead, &quot;Error:&quot;, JOptionPane.QUESTION_MESSAGE);</b>
+<b class="nc"><i>71</i>&nbsp;        setStringRead(newStringInt);</b>
+<b class="nc"><i>72</i>&nbsp;    }</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    public void waitForNumPlayer() {
+<b class="nc"><i>76</i>&nbsp;        CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());</b>
+<b class="nc"><i>77</i>&nbsp;        cl.show(getSantoriniWindow().getCardHolder(), &quot;waiting&quot;);</b>
+<b class="nc"><i>78</i>&nbsp;        santoriniWindow.getWaitingPanel().setMessage(&quot;Please wait for the first player to select the number of players.&quot;);</b>
+<b class="nc"><i>79</i>&nbsp;    }</b>
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    public void gameFull() {
+<b class="nc"><i>82</i>&nbsp;        JOptionPane.showMessageDialog(frame, &quot;The game is currently full, please try later.&quot;, &quot;Game full &quot;, JOptionPane.WARNING_MESSAGE);</b>
+<b class="nc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    public void clientLost() {
+<b class="nc"><i>86</i>&nbsp;        JOptionPane.showMessageDialog(frame, &quot;Your challenger lost connection, please restart app&quot;, &quot;Challenger lost&quot;, JOptionPane.WARNING_MESSAGE);</b>
+<b class="nc"><i>87</i>&nbsp;    }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    public void cantMove() {
+<b class="nc"><i>90</i>&nbsp;        JOptionPane.showMessageDialog(frame, &quot;You can&#39;t move, You Lose!&quot;, &quot;End Game&quot;, JOptionPane.WARNING_MESSAGE);</b>
+<b class="nc"><i>91</i>&nbsp;    }</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    public void serverLost() {
+<b class="nc"><i>94</i>&nbsp;        JOptionPane.showMessageDialog(frame, &quot;Connection lost with server, please restart app &quot;, &quot;Server Lost&quot;, JOptionPane.WARNING_MESSAGE);</b>
+<b class="nc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;    public void chooseNickname() { setStringRead(nickname);  }</b>
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    public void illegalNickname() {
+<i>101</i>&nbsp;        String newNickname;
+<b class="nc"><i>102</i>&nbsp;        newNickname = JOptionPane.showInputDialog(&quot;This nickname is unavailable, please choose another one:&quot;);</b>
+<b class="nc"><i>103</i>&nbsp;        nickname = newNickname;</b>
+<b class="nc"><i>104</i>&nbsp;        setStringRead(newNickname);</b>
+<b class="nc"><i>105</i>&nbsp;    }</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    public void setAge() {
+<b class="nc"><i>108</i>&nbsp;        setStringRead(age);</b>
+<b class="nc"><i>109</i>&nbsp;    }</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    public void waitForDivinities() {
+<b class="nc"><i>112</i>&nbsp;        System.out.println(&quot;Please wait for &quot; + customStringRead + &quot; to choose the divinity cards that will be used in this game&quot;);</b>
+<b class="nc"><i>113</i>&nbsp;        CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());</b>
+<b class="nc"><i>114</i>&nbsp;        cl.show(getSantoriniWindow().getCardHolder(), &quot;waiting&quot;);</b>
+<b class="nc"><i>115</i>&nbsp;        santoriniWindow.getWaitingPanel().setMessage(&quot;Please wait for &quot; + customStringRead + &quot; to choose the divinity cards that will be used in this game&quot;);</b>
+<b class="nc"><i>116</i>&nbsp;    }</b>
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    public void notYourTurn() {
+<b class="nc"><i>119</i>&nbsp;        santoriniWindow.getDivinityChoicePanel().setMessage(&quot;It&#39;s &quot; + customStringRead + &quot;&#39;s turn, please wait&quot;);</b>
+<b class="nc"><i>120</i>&nbsp;        santoriniWindow.getGamePanel().setMessage(&quot;It&#39;s &quot; + customStringRead + &quot;&#39;s turn, please wait&quot;);</b>
+<b class="nc"><i>121</i>&nbsp;        santoriniWindow.getDivinityChoicePanel().setUnmodifiablePanel();</b>
+<b class="nc"><i>122</i>&nbsp;    }</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    public void placeYourWorkers() {
+<b class="nc"><i>125</i>&nbsp;        CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());</b>
+<b class="nc"><i>126</i>&nbsp;        cl.show(getSantoriniWindow().getCardHolder(), &quot;game&quot;);</b>
+<b class="nc"><i>127</i>&nbsp;        santoriniWindow.getGamePanel().setMessage(&quot;Please place all of your workers on the board&quot;);</b>
+<b class="nc"><i>128</i>&nbsp;    }</b>
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    public void placeAWorker() {
+<b class="nc"><i>132</i>&nbsp;        santoriniWindow.getGamePanel().setMessage(&quot;Place your worker number &quot; + customStringRead);</b>
+<b class="nc"><i>133</i>&nbsp;        santoriniWindow.getMainFrame().repaint();</b>
+<b class="nc"><i>134</i>&nbsp;    }</b>
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    public void setCellColumnCoordinate() {
+<b class="nc"><i>137</i>&nbsp;        while (!isCoordinateReady) {</b>
+<b class="nc"><i>138</i>&nbsp;            Thread.onSpinWait();</b>
+<i>139</i>&nbsp;        }
+<b class="nc"><i>140</i>&nbsp;        setStringRead(columnSelected);</b>
+<i>141</i>&nbsp;
+<b class="nc"><i>142</i>&nbsp;    }</b>
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    public void setCellRowCoordinate() {
+<b class="nc"><i>145</i>&nbsp;        while (!isCoordinateReady) {</b>
+<b class="nc"><i>146</i>&nbsp;            Thread.onSpinWait();</b>
+<i>147</i>&nbsp;        }
+<b class="nc"><i>148</i>&nbsp;        setStringRead(rowSelected);</b>
+<b class="nc"><i>149</i>&nbsp;        isCoordinateReady = false;</b>
+<b class="nc"><i>150</i>&nbsp;    }</b>
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    public void youWin() {
+<b class="nc"><i>153</i>&nbsp;        JOptionPane.showMessageDialog(frame, &quot;You are the winner!&quot;, &quot;You Win&quot;, JOptionPane.INFORMATION_MESSAGE);</b>
+<b class="nc"><i>154</i>&nbsp;    }</b>
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    public void youLose() {
+<b class="nc"><i>157</i>&nbsp;        JOptionPane.showMessageDialog(frame, &quot;You lose! The winner is &quot; + customStringRead, &quot;You Lose&quot;, JOptionPane.INFORMATION_MESSAGE);</b>
+<i>158</i>&nbsp;
+<b class="nc"><i>159</i>&nbsp;    }</b>
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    public void waitForFullGame() {
+<b class="nc"><i>163</i>&nbsp;        System.out.println(&quot;Hold on, all the players will be ready in a few seconds&quot;);</b>
+<b class="nc"><i>164</i>&nbsp;        CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());</b>
+<b class="nc"><i>165</i>&nbsp;        cl.show(getSantoriniWindow().getCardHolder(), &quot;waiting&quot;);</b>
+<b class="nc"><i>166</i>&nbsp;        santoriniWindow.getWaitingPanel().setMessage(&quot;Hold on, all the players will be ready in a few seconds&quot;);</b>
+<b class="nc"><i>167</i>&nbsp;    }</b>
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    public void selectWorker() {
+<b class="nc"><i>171</i>&nbsp;        santoriniWindow.getGamePanel().setMessage(&quot;Please select the worker you want to move:&quot;);</b>
+<b class="nc"><i>172</i>&nbsp;        santoriniWindow.getMainFrame().repaint();</b>
+<b class="nc"><i>173</i>&nbsp;    }</b>
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    public void waitYourTurn() {
+<b class="nc"><i>177</i>&nbsp;        System.out.println(&quot;please wait&quot;);</b>
+<b class="nc"><i>178</i>&nbsp;        JOptionPane.showMessageDialog(frame, &quot;please wait&quot;);</b>
+<i>179</i>&nbsp;
+<b class="nc"><i>180</i>&nbsp;    }</b>
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    private void workerNotYours() {
+<b class="nc"><i>183</i>&nbsp;        System.out.println(&quot;This worker doesn&#39;t belong to you&quot;);</b>
+<b class="nc"><i>184</i>&nbsp;        santoriniWindow.getGamePanel().setMessage(&quot;This worker doesn&#39;t belong to you&quot;);</b>
+<b class="nc"><i>185</i>&nbsp;    }</b>
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    private void displayAvailableDivinities() {
+<b class="nc"><i>188</i>&nbsp;        availableDivinities=customStringRead;</b>
+<b class="nc"><i>189</i>&nbsp;        if(cardButtons!=null){</b>
+<b class="nc"><i>190</i>&nbsp;            BorderLayout borderLayout = (BorderLayout)santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().getLayout();</b>
+<b class="nc"><i>191</i>&nbsp;            santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().remove(borderLayout.getLayoutComponent(BorderLayout.CENTER));</b>
+<i>192</i>&nbsp;        }
+<b class="nc"><i>193</i>&nbsp;        cardButtons = santoriniWindow.getDivinityChoicePanel().createDivinitiesButtonsPanel();</b>
+<b class="nc"><i>194</i>&nbsp;        santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().add(cardButtons, BorderLayout.CENTER);</b>
+<b class="nc"><i>195</i>&nbsp;        santoriniWindow.getMainFrame().revalidate();</b>
+<b class="nc"><i>196</i>&nbsp;    }</b>
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;    private void displayDivinityMessage() {
+<i>199</i>&nbsp;        /*divinitiesScanner = new Scanner(customStringRead);
+<i>200</i>&nbsp;        santoriniWindow.getCardHolder().add(santoriniWindow.getDivinityChoicePanel().createMainDivinityPanel(this), &quot;cardChoice&quot;);*/
+<b class="nc"><i>201</i>&nbsp;        CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());</b>
+<b class="nc"><i>202</i>&nbsp;        cl.show(getSantoriniWindow().getCardHolder(), &quot;cardChoice&quot;);</b>
+<b class="nc"><i>203</i>&nbsp;        getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);</b>
+<b class="nc"><i>204</i>&nbsp;        santoriniWindow.getDivinityChoicePanel().setModifiablePanel();</b>
+<b class="nc"><i>205</i>&nbsp;    }</b>
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    private void unableToFinishTurn() {
+<b class="nc"><i>208</i>&nbsp;        System.out.println(&quot;You can&#39;t finish your turn. You lose.&quot;);</b>
+<b class="nc"><i>209</i>&nbsp;    }</b>
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    private void workerMove() {
+<b class="nc"><i>212</i>&nbsp;        santoriniWindow.getGamePanel().setMessage(&quot;It&#39;s time to Move your worker!&quot;);</b>
+<b class="nc"><i>213</i>&nbsp;        santoriniWindow.getMainFrame().repaint();</b>
+<b class="nc"><i>214</i>&nbsp;    }</b>
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    private void workerBuild() {
+<b class="nc"><i>217</i>&nbsp;        santoriniWindow.getGamePanel().setMessage(&quot;It&#39;s time to Build!&quot;);</b>
+<b class="nc"><i>218</i>&nbsp;        santoriniWindow.getMainFrame().repaint();</b>
+<b class="nc"><i>219</i>&nbsp;    }</b>
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    private void workerOptionalAbility() {
+<b class="nc"><i>222</i>&nbsp;        System.out.println(&quot;Select the cell where you want to DAFARE&quot;);</b>
+<b class="nc"><i>223</i>&nbsp;    }</b>
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;    private void askSpecialAction() {
+<b class="nc"><i>227</i>&nbsp;        Object[] options = {&quot;yes&quot;, &quot;no&quot;};</b>
+<b class="nc"><i>228</i>&nbsp;        int n = JOptionPane.showOptionDialog(santoriniWindow.getMainFrame(),</b>
+<i>229</i>&nbsp;                &quot;Do you want to use your special ability&quot;,
+<i>230</i>&nbsp;                null,
+<i>231</i>&nbsp;                JOptionPane.YES_NO_OPTION,
+<i>232</i>&nbsp;                JOptionPane.QUESTION_MESSAGE,
+<i>233</i>&nbsp;                null,
+<i>234</i>&nbsp;                options,
+<i>235</i>&nbsp;                null);
+<b class="nc"><i>236</i>&nbsp;        if (n == JOptionPane.YES_OPTION) {</b>
+<b class="nc"><i>237</i>&nbsp;            setStringRead(&quot;yes&quot;);</b>
+<i>238</i>&nbsp;
+<b class="nc"><i>239</i>&nbsp;        } else if (n == JOptionPane.NO_OPTION) {</b>
+<b class="nc"><i>240</i>&nbsp;            setStringRead(&quot;no&quot;);</b>
+<i>241</i>&nbsp;        }
+<b class="nc"><i>242</i>&nbsp;    }</b>
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    private void serverUnreacheable(){
+<b class="nc"><i>245</i>&nbsp;        JOptionPane.showMessageDialog(frame, &quot;Server currently unreacheable, please try later&quot;, &quot;Connection error&quot;, JOptionPane.ERROR_MESSAGE);</b>
+<b class="nc"><i>246</i>&nbsp;    }</b>
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;    public void illegalArgument() {
+<b class="nc"><i>249</i>&nbsp;        JOptionPane.showMessageDialog(frame, customStringRead, &quot;Illegal selection:&quot;, JOptionPane.WARNING_MESSAGE);</b>
+<b class="nc"><i>250</i>&nbsp;    }</b>
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;    @Override
+<i>254</i>&nbsp;    public void decodeMessage(Message m) {
+<b class="nc"><i>255</i>&nbsp;        switch (m) {</b>
+<i>256</i>&nbsp;            case WELCOME:
+<b class="nc"><i>257</i>&nbsp;                break;</b>
+<i>258</i>&nbsp;            case INSERT_NUM_PLAYERS:
+<b class="nc"><i>259</i>&nbsp;                insertNumPlayer();</b>
+<b class="nc"><i>260</i>&nbsp;                break;</b>
+<i>261</i>&nbsp;            case WAIT_FOR_NUM_PLAYERS:
+<b class="nc"><i>262</i>&nbsp;                waitForNumPlayer();</b>
+<b class="nc"><i>263</i>&nbsp;                break;</b>
+<i>264</i>&nbsp;            case GAME_FULL:
+<b class="nc"><i>265</i>&nbsp;                gameFull();</b>
+<b class="nc"><i>266</i>&nbsp;                break;</b>
+<i>267</i>&nbsp;            case CHOOSE_NICKNAME:
+<b class="nc"><i>268</i>&nbsp;                chooseNickname();</b>
+<b class="nc"><i>269</i>&nbsp;                break;</b>
+<i>270</i>&nbsp;            case SET_AGE:
+<b class="nc"><i>271</i>&nbsp;                setAge();</b>
+<b class="nc"><i>272</i>&nbsp;                break;</b>
+<i>273</i>&nbsp;            case WAIT_FOR_DIVINITIES:
+<b class="nc"><i>274</i>&nbsp;                waitForDivinities();</b>
+<b class="nc"><i>275</i>&nbsp;                break;</b>
+<i>276</i>&nbsp;            case NOT_YOUR_TURN:
+<b class="nc"><i>277</i>&nbsp;                notYourTurn();</b>
+<b class="nc"><i>278</i>&nbsp;                break;</b>
+<i>279</i>&nbsp;            case PLACE_YOUR_WORKERS:
+<b class="nc"><i>280</i>&nbsp;                placeYourWorkers();</b>
+<b class="nc"><i>281</i>&nbsp;                break;</b>
+<i>282</i>&nbsp;            case PLACE_A_WORKER:
+<b class="nc"><i>283</i>&nbsp;                placeAWorker();</b>
+<b class="nc"><i>284</i>&nbsp;                break;</b>
+<i>285</i>&nbsp;            case SET_CELL_COLUMN_COORD:
+<b class="nc"><i>286</i>&nbsp;                setCellColumnCoordinate();</b>
+<b class="nc"><i>287</i>&nbsp;                break;</b>
+<i>288</i>&nbsp;            case SET_CELL_ROW_COORD:
+<b class="nc"><i>289</i>&nbsp;                setCellRowCoordinate();</b>
+<b class="nc"><i>290</i>&nbsp;                break;</b>
+<i>291</i>&nbsp;            case YOU_WIN:
+<b class="nc"><i>292</i>&nbsp;                youWin();</b>
+<b class="nc"><i>293</i>&nbsp;                break;</b>
+<i>294</i>&nbsp;            case YOU_LOSE:
+<b class="nc"><i>295</i>&nbsp;                youLose();</b>
+<i>296</i>&nbsp;            case SELECT_WORKER:
+<b class="nc"><i>297</i>&nbsp;                selectWorker();</b>
+<b class="nc"><i>298</i>&nbsp;                break;</b>
+<i>299</i>&nbsp;            case WORKER_NOT_YOURS:
+<b class="nc"><i>300</i>&nbsp;                workerNotYours();</b>
+<b class="nc"><i>301</i>&nbsp;                break;</b>
+<i>302</i>&nbsp;            case ASK_SPECIAL_ACTION:
+<b class="nc"><i>303</i>&nbsp;                askSpecialAction();</b>
+<b class="nc"><i>304</i>&nbsp;                break;</b>
+<i>305</i>&nbsp;            case ILLEGAL_NICKNAME:
+<b class="nc"><i>306</i>&nbsp;                illegalNickname();</b>
+<b class="nc"><i>307</i>&nbsp;                break;</b>
+<i>308</i>&nbsp;            case WAIT_FOR_FULL_GAME:
+<b class="nc"><i>309</i>&nbsp;                waitForFullGame();</b>
+<b class="nc"><i>310</i>&nbsp;                break;</b>
+<i>311</i>&nbsp;            case DIVINITY_CARD_NOT_EXISTS:
+<b class="nc"><i>312</i>&nbsp;                divinityCardNotExists();</b>
+<b class="nc"><i>313</i>&nbsp;                break;</b>
+<i>314</i>&nbsp;            case DIVINITY_CARD_CHOSEN:
+<b class="nc"><i>315</i>&nbsp;                divinityCardChosen();</b>
+<b class="nc"><i>316</i>&nbsp;                break;</b>
+<i>317</i>&nbsp;            case ILLEGAL_YES_OR_NO:
+<b class="nc"><i>318</i>&nbsp;                illegalYesOrNo();</b>
+<b class="nc"><i>319</i>&nbsp;                break;</b>
+<i>320</i>&nbsp;            case ILLEGAL_DIVINITY:
+<b class="nc"><i>321</i>&nbsp;                illegalDivinity();</b>
+<b class="nc"><i>322</i>&nbsp;                break;</b>
+<i>323</i>&nbsp;            case DISPLAY_DIVINITY_MESSAGE:
+<b class="nc"><i>324</i>&nbsp;                displayDivinityMessage();</b>
+<b class="nc"><i>325</i>&nbsp;                break;</b>
+<i>326</i>&nbsp;            case DISPLAY_AVAILABLE_DIVINITIES:
+<b class="nc"><i>327</i>&nbsp;                displayAvailableDivinities();</b>
+<b class="nc"><i>328</i>&nbsp;                break;</b>
+<i>329</i>&nbsp;            case ILLEGAL_INT:
+<b class="nc"><i>330</i>&nbsp;                illegalInt();</b>
+<b class="nc"><i>331</i>&nbsp;                break;</b>
+<i>332</i>&nbsp;            case ILLEGAL_STRING:
+<b class="nc"><i>333</i>&nbsp;                illegalString();</b>
+<b class="nc"><i>334</i>&nbsp;                break;</b>
+<i>335</i>&nbsp;            case UNABLE_TO_FINISH_TURN:
+<b class="nc"><i>336</i>&nbsp;                unableToFinishTurn();</b>
+<b class="nc"><i>337</i>&nbsp;                break;</b>
+<i>338</i>&nbsp;            case ILLEGAL_ARGUMENT:
+<b class="nc"><i>339</i>&nbsp;                illegalArgument();</b>
+<b class="nc"><i>340</i>&nbsp;                break;</b>
+<i>341</i>&nbsp;            case WORKER_MOVE:
+<b class="nc"><i>342</i>&nbsp;                workerMove();</b>
+<b class="nc"><i>343</i>&nbsp;                break;</b>
+<i>344</i>&nbsp;            case WORKER_BUILD:
+<b class="nc"><i>345</i>&nbsp;                workerBuild();</b>
+<b class="nc"><i>346</i>&nbsp;                break;</b>
+<i>347</i>&nbsp;            case WORKER_OPTIONAL_ABILITY:
+<b class="nc"><i>348</i>&nbsp;                workerOptionalAbility();</b>
+<b class="nc"><i>349</i>&nbsp;                break;</b>
+<i>350</i>&nbsp;            case ILLEGAL_ACTION:
+<b class="nc"><i>351</i>&nbsp;                illegalAction();</b>
+<b class="nc"><i>352</i>&nbsp;                break;</b>
+<i>353</i>&nbsp;            case WAIT:
+<b class="nc"><i>354</i>&nbsp;                waitYourTurn();</b>
+<b class="nc"><i>355</i>&nbsp;                break;</b>
+<i>356</i>&nbsp;            case CONNECTED_TO_SERVER:
+<b class="nc"><i>357</i>&nbsp;                break;</b>
+<i>358</i>&nbsp;            case CLIENT_LOST:
+<b class="nc"><i>359</i>&nbsp;                clientLost();</b>
+<b class="nc"><i>360</i>&nbsp;                break;</b>
+<i>361</i>&nbsp;            case CANT_MOVE:
+<b class="nc"><i>362</i>&nbsp;                cantMove();</b>
+<b class="nc"><i>363</i>&nbsp;                break;</b>
+<i>364</i>&nbsp;            case SERVER_LOST:
+<b class="nc"><i>365</i>&nbsp;                serverLost();</b>
+<b class="nc"><i>366</i>&nbsp;                break;</b>
+<i>367</i>&nbsp;            case SERVER_UNREACHEABLE:
+<b class="nc"><i>368</i>&nbsp;                serverUnreacheable();</b>
+<b class="nc"><i>369</i>&nbsp;                break;</b>
+<i>370</i>&nbsp;            default:
+<b class="nc"><i>371</i>&nbsp;                System.out.println(&quot;Message not recognized\n&quot;);</b>
+<b class="nc"><i>372</i>&nbsp;                System.out.println(m);</b>
+<i>373</i>&nbsp;                break;
+<i>374</i>&nbsp;        }
+<b class="nc"><i>375</i>&nbsp;    }</b>
+<i>376</i>&nbsp;
+<i>377</i>&nbsp;
+<i>378</i>&nbsp;    @Override
+<i>379</i>&nbsp;    public void updateCustomString() {
+<b class="nc"><i>380</i>&nbsp;        customStringRead = Client.getCustomString();</b>
+<i>381</i>&nbsp;
+<b class="nc"><i>382</i>&nbsp;    }</b>
+<i>383</i>&nbsp;
+<i>384</i>&nbsp;    @Override
+<i>385</i>&nbsp;    public String nextInput() {
+<b class="nc"><i>386</i>&nbsp;        while (!isDataReady) {</b>
+<b class="nc"><i>387</i>&nbsp;            Thread.onSpinWait();</b>
+<i>388</i>&nbsp;        }
+<b class="nc"><i>389</i>&nbsp;        isDataReady = false;</b>
+<b class="nc"><i>390</i>&nbsp;        return dataReadFromClient;</b>
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    }
+<i>393</i>&nbsp;
+<i>394</i>&nbsp;    @Override
+<i>395</i>&nbsp;    public void setStringRead(String dataRead) {
+<b class="nc"><i>396</i>&nbsp;        dataReadFromClient = dataRead;</b>
+<b class="nc"><i>397</i>&nbsp;        isDataReady = true;</b>
+<b class="nc"><i>398</i>&nbsp;    }</b>
+<i>399</i>&nbsp;
+<i>400</i>&nbsp;    @Override
+<i>401</i>&nbsp;    public void setNumOfPlayers(int numOfPlayers) {
+<b class="nc"><i>402</i>&nbsp;        this.numOfPlayers = numOfPlayers;</b>
+<b class="nc"><i>403</i>&nbsp;    }</b>
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;    @Override
+<i>406</i>&nbsp;    public void setPlayersDivinities(Map&lt;String, String&gt; playersDivinities){
+<b class="nc"><i>407</i>&nbsp;        this.playersDivinities = playersDivinities;</b>
+<b class="nc"><i>408</i>&nbsp;        System.out.println(playersDivinities);</b>
+<b class="nc"><i>409</i>&nbsp;        santoriniWindow.getGamePanel().paintPlayersDivinities(playersDivinities);</b>
+<b class="nc"><i>410</i>&nbsp;    }</b>
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;    public int getNumOfPlayers() {
+<b class="nc"><i>413</i>&nbsp;        return numOfPlayers;</b>
+<i>414</i>&nbsp;    }
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;    @Override
+<i>418</i>&nbsp;    public void displayBoard() {
+<b class="nc"><i>419</i>&nbsp;        santoriniWindow.getGamePanel().getBoardComponent().setEncodedBoard(ServerHandler.readBoard());</b>
+<b class="nc"><i>420</i>&nbsp;    }</b>
+<i>421</i>&nbsp;
+<i>422</i>&nbsp;    public static void setIP(String ipAddress) {
+<b class="nc"><i>423</i>&nbsp;        Client.connectionHandling(ipAddress, Client.getServerSocketPort());</b>
+<b class="nc"><i>424</i>&nbsp;    }</b>
+<i>425</i>&nbsp;
+<i>426</i>&nbsp;    public static void setNickname(String nicknameRead) {
+<b class="nc"><i>427</i>&nbsp;        nickname = nicknameRead;</b>
+<b class="nc"><i>428</i>&nbsp;    }</b>
+<i>429</i>&nbsp;
+<i>430</i>&nbsp;    public static void setAge(String ageRead) {
+<b class="nc"><i>431</i>&nbsp;        age = ageRead;</b>
+<b class="nc"><i>432</i>&nbsp;    }</b>
+<i>433</i>&nbsp;
+<i>434</i>&nbsp;    public SantoriniWindow getSantoriniWindow() {
+<b class="nc"><i>435</i>&nbsp;        return santoriniWindow;</b>
+<i>436</i>&nbsp;    }
+<i>437</i>&nbsp;
+<i>438</i>&nbsp;    public void setCoordinateReady(boolean coordinateReady) {
+<b class="nc"><i>439</i>&nbsp;        isCoordinateReady = coordinateReady;</b>
+<b class="nc"><i>440</i>&nbsp;    }</b>
+<i>441</i>&nbsp;
+<i>442</i>&nbsp;    public String getAvailableDivinities() {
+<b class="nc"><i>443</i>&nbsp;        return availableDivinities;</b>
+<i>444</i>&nbsp;    }
+<i>445</i>&nbsp;
+<i>446</i>&nbsp;    public static void setColumnSelected(String columnSelectedRead) {
+<b class="nc"><i>447</i>&nbsp;        columnSelected = columnSelectedRead;</b>
+<b class="nc"><i>448</i>&nbsp;    }</b>
+<i>449</i>&nbsp;
+<i>450</i>&nbsp;    public static void setRowSelected(String rowSelectedRead) {
+<b class="nc"><i>451</i>&nbsp;        rowSelected = rowSelectedRead;</b>
+<b class="nc"><i>452</i>&nbsp;    }</b>
+<i>453</i>&nbsp;
+<i>454</i>&nbsp;
+<i>455</i>&nbsp;    public void illegalYesOrNo() {
+<b class="nc"><i>456</i>&nbsp;        System.out.println(&quot;Please answer with either \&quot;yes\&quot; or \&quot;no\&quot;&quot;);</b>
+<b class="nc"><i>457</i>&nbsp;    }</b>
+<i>458</i>&nbsp;
+<i>459</i>&nbsp;    public void illegalDivinity() {
+<b class="nc"><i>460</i>&nbsp;        System.out.println(&quot;Illegal divinity card&quot;);</b>
+<b class="nc"><i>461</i>&nbsp;    }</b>
+<i>462</i>&nbsp;
+<i>463</i>&nbsp;    public void divinityCardNotExists() {
+<b class="nc"><i>464</i>&nbsp;        System.out.println(&quot;This divinity card doesn&#39;t exist. Please select a new one&quot;);</b>
+<b class="nc"><i>465</i>&nbsp;    }</b>
+<i>466</i>&nbsp;
+<i>467</i>&nbsp;    public void divinityCardChosen() {
+<b class="nc"><i>468</i>&nbsp;        System.out.println(&quot;This divinity card has already been chosen. Please select a new one&quot;);</b>
+<b class="nc"><i>469</i>&nbsp;    }</b>
+<i>470</i>&nbsp;
+<i>471</i>&nbsp;    private void illegalAction() {
+<b class="nc"><i>472</i>&nbsp;        System.out.println(&quot;Unknown worker action&quot;);</b>
+<b class="nc"><i>473</i>&nbsp;    }</b>
+<i>474</i>&nbsp;
+<i>475</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 11:15</div>
+</div>
+</body>
+</html>

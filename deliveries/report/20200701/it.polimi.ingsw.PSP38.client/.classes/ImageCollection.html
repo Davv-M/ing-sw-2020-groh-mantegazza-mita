@@ -1,0 +1,152 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ImageCollection</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ImageCollection (it.polimi.ingsw.PSP38.client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ImageCollection</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.awt.Image;
+<i>4</i>&nbsp;import java.io.File;
+<i>5</i>&nbsp;import java.io.IOException;
+<i>6</i>&nbsp;import java.net.URISyntaxException;
+<i>7</i>&nbsp;import java.util.*;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import javax.imageio.ImageIO;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Immutable class that represents a collection of images.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * @author Maximilien Groh (10683107)
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;public final class ImageCollection {
+<i>18</i>&nbsp;    public final Map&lt;Byte, Image&gt; dirImages;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /**
+<i>21</i>&nbsp;     * Uses the given string to locate a directory and constructs an image
+<i>22</i>&nbsp;     * collection with the images that are found in it. The images are
+<i>23</i>&nbsp;     * associated with the 2-digit number found at the beginning of their name.
+<i>24</i>&nbsp;     * If files fail to be read, they are simply ignored.
+<i>25</i>&nbsp;     *
+<i>26</i>&nbsp;     * @param dirName The name of the directory.
+<i>27</i>&nbsp;     */
+<i>28</i>&nbsp;
+<b class="nc"><i>29</i>&nbsp;    public ImageCollection(String dirName) {</b>
+<b class="nc"><i>30</i>&nbsp;        Map&lt;Byte, Image&gt; images = new HashMap&lt;&gt;();</b>
+<i>31</i>&nbsp;        try {
+<b class="nc"><i>32</i>&nbsp;            File dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()</b>
+<b class="nc"><i>33</i>&nbsp;                    .getResource(dirName)).toURI());</b>
+<b class="nc"><i>34</i>&nbsp;            List&lt;File&gt; dirFiles = new LinkedList&lt;&gt;(</b>
+<b class="nc"><i>35</i>&nbsp;                    Arrays.asList(Objects.requireNonNull(dir.listFiles())));</b>
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;            for (File file : dirFiles) {</b>
+<b class="nc"><i>38</i>&nbsp;                String fileName = file.getName();</b>
+<i>39</i>&nbsp;                try {
+<b class="nc"><i>40</i>&nbsp;                    byte imageNumber = (byte) Integer</b>
+<b class="nc"><i>41</i>&nbsp;                            .parseInt(fileName.substring(0, 2));</b>
+<b class="nc"><i>42</i>&nbsp;                    images.put(imageNumber, ImageIO.read(file));</b>
+<b class="nc"><i>43</i>&nbsp;                } catch (IOException | NumberFormatException</b>
+<i>44</i>&nbsp;                        | IndexOutOfBoundsException e) {
+<i>45</i>&nbsp;                    // ignore the file
+<b class="nc"><i>46</i>&nbsp;                }</b>
+<b class="nc"><i>47</i>&nbsp;            }</b>
+<b class="nc"><i>48</i>&nbsp;        } catch (URISyntaxException ignored) {</b>
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;        }</b>
+<b class="nc"><i>51</i>&nbsp;        dirImages = Map.copyOf(images);</b>
+<b class="nc"><i>52</i>&nbsp;    }</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * Returns the image associated with the given number.
+<i>56</i>&nbsp;     *
+<i>57</i>&nbsp;     * @param imageNumber The image number.
+<i>58</i>&nbsp;     * @return the image associated with the given number.
+<i>59</i>&nbsp;     * @throws NoSuchElementException if the given number does not correspond to an image.
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    public Image image(byte imageNumber) throws NoSuchElementException {
+<b class="nc"><i>63</i>&nbsp;        if (!dirImages.containsKey(imageNumber)) {</b>
+<b class="nc"><i>64</i>&nbsp;            throw new NoSuchElementException(</b>
+<i>65</i>&nbsp;                    &quot;The given number does not correspond to an image of the collection.&quot;);
+<i>66</i>&nbsp;        }
+<b class="nc"><i>67</i>&nbsp;        return dirImages.get(imageNumber);</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 11:15</div>
+</div>
+</body>
+</html>

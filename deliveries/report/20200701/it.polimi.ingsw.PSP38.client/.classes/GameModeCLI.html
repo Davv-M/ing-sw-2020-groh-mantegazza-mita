@@ -1,0 +1,308 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameModeCLI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameModeCLI (it.polimi.ingsw.PSP38.client)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameModeCLI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 99)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameModeCLI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 100)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.common.Message;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.net.Socket;
+<i>6</i>&nbsp;import java.util.Map;
+<i>7</i>&nbsp;import java.util.Scanner;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;
+<b class="nc"><i>10</i>&nbsp;public class GameModeCLI implements GameMode {</b>
+<b class="nc"><i>11</i>&nbsp;    private int numOfPlayers = 0;</b>
+<b class="nc"><i>12</i>&nbsp;    private Map&lt;String, String&gt; playersDivinities = null;</b>
+<i>13</i>&nbsp;    private String customStringRead;
+<b class="nc"><i>14</i>&nbsp;    private final Scanner scanner = new Scanner(System.in);</b>
+<i>15</i>&nbsp;    private static Socket serverSocket;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /*public GameModeCLI(){
+<i>18</i>&nbsp;       connectionHandling();
+<i>19</i>&nbsp;    }*/
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    @Override
+<i>22</i>&nbsp;    public void decodeMessage(Message m){
+<b class="nc"><i>23</i>&nbsp;        switch (m){</b>
+<i>24</i>&nbsp;            case WELCOME:
+<b class="nc"><i>25</i>&nbsp;                System.out.println(&quot;Welcome to Santorini\n&quot;);</b>
+<b class="nc"><i>26</i>&nbsp;                break;</b>
+<i>27</i>&nbsp;            case INSERT_NUM_PLAYERS:
+<b class="nc"><i>28</i>&nbsp;                System.out.println(&quot;You are the first player to join this game. Please insert the number of players (between 2 and 3)&quot;);</b>
+<b class="nc"><i>29</i>&nbsp;                break;</b>
+<i>30</i>&nbsp;            case WAIT_FOR_NUM_PLAYERS:
+<b class="nc"><i>31</i>&nbsp;                System.out.println(&quot;Please wait for the first player to select the number of players.&quot;);</b>
+<b class="nc"><i>32</i>&nbsp;                break;</b>
+<i>33</i>&nbsp;            case GAME_FULL:
+<b class="nc"><i>34</i>&nbsp;                System.out.println(&quot;The game is currently full, please try later. If you want to see the match stay connected&quot;);</b>
+<b class="nc"><i>35</i>&nbsp;                break;</b>
+<i>36</i>&nbsp;            case CHOOSE_NICKNAME:
+<b class="nc"><i>37</i>&nbsp;                System.out.println(&quot;Choose your nickname&quot;);</b>
+<b class="nc"><i>38</i>&nbsp;                break;</b>
+<i>39</i>&nbsp;            case SET_AGE:
+<b class="nc"><i>40</i>&nbsp;                System.out.println(&quot;How old are you?&quot;);</b>
+<b class="nc"><i>41</i>&nbsp;                break;</b>
+<i>42</i>&nbsp;            case WAIT_FOR_DIVINITIES:
+<b class="nc"><i>43</i>&nbsp;                System.out.println(&quot;Please wait for &quot;+customStringRead+</b>
+<i>44</i>&nbsp;                        &quot; to choose the divinity cards that will be used in this game&quot;);
+<b class="nc"><i>45</i>&nbsp;                break;</b>
+<i>46</i>&nbsp;            case NOT_YOUR_TURN:
+<b class="nc"><i>47</i>&nbsp;                System.out.println(&quot;It&#39;s &quot;+customStringRead+&quot;&#39;s turn, please wait&quot;);</b>
+<b class="nc"><i>48</i>&nbsp;                break;</b>
+<i>49</i>&nbsp;            case PLACE_YOUR_WORKERS:
+<b class="nc"><i>50</i>&nbsp;                System.out.println(&quot;Please place all of your workers on the board&quot;);</b>
+<b class="nc"><i>51</i>&nbsp;                break;</b>
+<i>52</i>&nbsp;            case PLACE_A_WORKER:
+<b class="nc"><i>53</i>&nbsp;                System.out.println(&quot;Place your worker number &quot;+customStringRead);</b>
+<b class="nc"><i>54</i>&nbsp;                break;</b>
+<i>55</i>&nbsp;            case SET_CELL_COLUMN_COORD:
+<b class="nc"><i>56</i>&nbsp;                System.out.println(&quot;Please insert the cell&#39;s column coordinate&quot;);</b>
+<b class="nc"><i>57</i>&nbsp;                break;</b>
+<i>58</i>&nbsp;            case SET_CELL_ROW_COORD:
+<b class="nc"><i>59</i>&nbsp;                System.out.println(&quot;Please insert the cell&#39;s row coordinate&quot;);</b>
+<b class="nc"><i>60</i>&nbsp;                break;</b>
+<i>61</i>&nbsp;            case YOU_WIN:
+<b class="nc"><i>62</i>&nbsp;                System.out.println(&quot;You are the winner!&quot;);</b>
+<b class="nc"><i>63</i>&nbsp;                break;</b>
+<i>64</i>&nbsp;            case YOU_LOSE:
+<b class="nc"><i>65</i>&nbsp;                System.out.println(&quot;You lose! The winner is &quot;+customStringRead);</b>
+<i>66</i>&nbsp;            case SELECT_WORKER:
+<b class="nc"><i>67</i>&nbsp;                System.out.println(&quot;Please select the worker you want to move&quot;);</b>
+<b class="nc"><i>68</i>&nbsp;                break;</b>
+<i>69</i>&nbsp;            case WORKER_NOT_YOURS:
+<b class="nc"><i>70</i>&nbsp;                System.out.println(&quot;This worker doesn&#39;t belong to you&quot;);</b>
+<b class="nc"><i>71</i>&nbsp;                break;</b>
+<i>72</i>&nbsp;            case ASK_SPECIAL_ACTION:
+<b class="nc"><i>73</i>&nbsp;                System.out.println(&quot;Do you want to use your special ability?&quot;);</b>
+<b class="nc"><i>74</i>&nbsp;                break;</b>
+<i>75</i>&nbsp;            case ILLEGAL_NICKNAME:
+<b class="nc"><i>76</i>&nbsp;                System.out.println(&quot;This nickname is unavailable, please choose another one&quot;);</b>
+<b class="nc"><i>77</i>&nbsp;                break;</b>
+<i>78</i>&nbsp;            case WAIT_FOR_FULL_GAME:
+<b class="nc"><i>79</i>&nbsp;                System.out.println(&quot;Hold on, all the players will be ready in a few seconds&quot;);</b>
+<b class="nc"><i>80</i>&nbsp;                break;</b>
+<i>81</i>&nbsp;            case DIVINITY_CARD_NOT_EXISTS:
+<b class="nc"><i>82</i>&nbsp;                System.out.println(&quot;This divinity card doesn&#39;t exist. Please select a new one&quot;);</b>
+<b class="nc"><i>83</i>&nbsp;                break;</b>
+<i>84</i>&nbsp;            case DIVINITY_CARD_CHOSEN:
+<b class="nc"><i>85</i>&nbsp;                System.out.println(&quot;This divinity card has already been chosen. Please select a new one&quot;);</b>
+<b class="nc"><i>86</i>&nbsp;                break;</b>
+<i>87</i>&nbsp;            case ILLEGAL_YES_OR_NO:
+<b class="nc"><i>88</i>&nbsp;                System.out.println(&quot;Please answer with either \&quot;yes\&quot; or \&quot;no\&quot;&quot;);</b>
+<b class="nc"><i>89</i>&nbsp;                break;</b>
+<i>90</i>&nbsp;            case ILLEGAL_DIVINITY:
+<b class="nc"><i>91</i>&nbsp;                System.out.println(&quot;Illegal divinity card&quot;);</b>
+<b class="nc"><i>92</i>&nbsp;                break;</b>
+<i>93</i>&nbsp;            case DISPLAY_DIVINITY_MESSAGE:
+<b class="nc"><i>94</i>&nbsp;                System.out.println(customStringRead+&quot;, please select a divinity card from this list :\n&quot;);</b>
+<b class="nc"><i>95</i>&nbsp;                break;</b>
+<i>96</i>&nbsp;            case DISPLAY_AVAILABLE_DIVINITIES:
+<b class="nc"><i>97</i>&nbsp;                System.out.println(customStringRead);</b>
+<b class="nc"><i>98</i>&nbsp;                break;</b>
+<i>99</i>&nbsp;            case ILLEGAL_INT:
+<b class="nc"><i>100</i>&nbsp;                System.out.println(&quot;Integer not recognized exception: &quot;+customStringRead);</b>
+<b class="nc"><i>101</i>&nbsp;                break;</b>
+<i>102</i>&nbsp;            case ILLEGAL_STRING:
+<b class="nc"><i>103</i>&nbsp;                System.out.println(&quot;String not recognized exception: &quot;+customStringRead);</b>
+<b class="nc"><i>104</i>&nbsp;                break;</b>
+<i>105</i>&nbsp;            case UNABLE_TO_FINISH_TURN:
+<b class="nc"><i>106</i>&nbsp;                System.out.println(&quot;You can&#39;t finish your turn. You lose.&quot;);</b>
+<b class="nc"><i>107</i>&nbsp;                break;</b>
+<i>108</i>&nbsp;            case ILLEGAL_ARGUMENT:
+<b class="nc"><i>109</i>&nbsp;                System.out.println(&quot;Illegal argument exception: &quot;+customStringRead);</b>
+<b class="nc"><i>110</i>&nbsp;                break;</b>
+<i>111</i>&nbsp;            case WORKER_MOVE:
+<b class="nc"><i>112</i>&nbsp;                System.out.println(&quot;Select the cell where you want to move&quot;);</b>
+<b class="nc"><i>113</i>&nbsp;                break;</b>
+<i>114</i>&nbsp;            case WORKER_BUILD:
+<b class="nc"><i>115</i>&nbsp;                System.out.println(&quot;Select the cell where you want to build&quot;);</b>
+<b class="nc"><i>116</i>&nbsp;                break;</b>
+<i>117</i>&nbsp;            case WORKER_OPTIONAL_ABILITY:
+<b class="nc"><i>118</i>&nbsp;                System.out.println(&quot;Select the cell where you want to DAFARE&quot;);</b>
+<b class="nc"><i>119</i>&nbsp;                break;</b>
+<i>120</i>&nbsp;            case ILLEGAL_ACTION:
+<b class="nc"><i>121</i>&nbsp;                System.out.println(&quot;Unknown worker action&quot;);</b>
+<b class="nc"><i>122</i>&nbsp;                break;</b>
+<i>123</i>&nbsp;            case WAIT:
+<b class="nc"><i>124</i>&nbsp;                System.out.println(&quot;Please wait&quot;);</b>
+<b class="nc"><i>125</i>&nbsp;                break;</b>
+<i>126</i>&nbsp;            case SERVER_UNREACHEABLE:
+<b class="nc"><i>127</i>&nbsp;                System.out.println(&quot;Server unreachable&quot;);</b>
+<b class="nc"><i>128</i>&nbsp;                break;</b>
+<i>129</i>&nbsp;            case CONNECTED_TO_SERVER:
+<b class="nc"><i>130</i>&nbsp;                System.out.println(&quot;Connected&quot;);</b>
+<b class="nc"><i>131</i>&nbsp;                break;</b>
+<i>132</i>&nbsp;            case CLIENT_LOST:
+<b class="nc"><i>133</i>&nbsp;                System.out.println(&quot;your challenger lost connection, please restart app&quot;);</b>
+<b class="nc"><i>134</i>&nbsp;                break;</b>
+<i>135</i>&nbsp;            case CANT_MOVE:
+<b class="nc"><i>136</i>&nbsp;                System.out.println(&quot;you can&#39;t move, You Lose!&quot;);</b>
+<b class="nc"><i>137</i>&nbsp;                break;</b>
+<i>138</i>&nbsp;            case SERVER_LOST:
+<b class="nc"><i>139</i>&nbsp;                System.out.println(&quot;connection lost with server, please restart app &quot;);</b>
+<b class="nc"><i>140</i>&nbsp;                break;</b>
+<i>141</i>&nbsp;            default:
+<b class="nc"><i>142</i>&nbsp;                System.out.println(&quot;Message not recognized&quot;);</b>
+<i>143</i>&nbsp;                break;
+<i>144</i>&nbsp;        }
+<b class="nc"><i>145</i>&nbsp;    }</b>
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    @Override
+<i>148</i>&nbsp;    public void updateCustomString() {
+<b class="nc"><i>149</i>&nbsp;        customStringRead=Client.getCustomString();</b>
+<b class="nc"><i>150</i>&nbsp;    }</b>
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    @Override
+<i>153</i>&nbsp;    public String nextInput() {
+<b class="nc"><i>154</i>&nbsp;        return scanner.nextLine();</b>
+<i>155</i>&nbsp;    }
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    @Override
+<i>158</i>&nbsp;    public void displayBoard() {
+<b class="nc"><i>159</i>&nbsp;        BoardPrinter.printBoard(ServerHandler.readBoard());</b>
+<b class="nc"><i>160</i>&nbsp;    }</b>
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    @Override
+<i>163</i>&nbsp;    public void setStringRead(String dataRead) {
+<i>164</i>&nbsp;
+<b class="nc"><i>165</i>&nbsp;    }</b>
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;    @Override
+<i>168</i>&nbsp;    public void setNumOfPlayers(int numOfPlayers) {
+<b class="nc"><i>169</i>&nbsp;        this.numOfPlayers = numOfPlayers;</b>
+<b class="nc"><i>170</i>&nbsp;        System.out.println(&quot;There will be &quot; + numOfPlayers + &quot; players in the game.&quot;);</b>
+<b class="nc"><i>171</i>&nbsp;    }</b>
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    @Override
+<i>174</i>&nbsp;    public void setPlayersDivinities(Map&lt;String, String&gt; playersDivinities){
+<b class="nc"><i>175</i>&nbsp;        this.playersDivinities = playersDivinities;</b>
+<b class="nc"><i>176</i>&nbsp;        System.out.println(&quot;These are the chosen divinities :&quot;);</b>
+<b class="nc"><i>177</i>&nbsp;        for(String player : playersDivinities.keySet()){</b>
+<b class="nc"><i>178</i>&nbsp;            System.out.println(player + &quot; : &quot; + playersDivinities.get(player));</b>
+<b class="nc"><i>179</i>&nbsp;        }</b>
+<b class="nc"><i>180</i>&nbsp;    }</b>
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;
+<i>183</i>&nbsp;    /*public void connectionHandling(){
+<i>184</i>&nbsp;        try {
+<i>185</i>&nbsp;            System.out.println(&quot;insert Server IP address:&quot;);
+<i>186</i>&nbsp;            String ipAddress= scanner.nextLine();
+<i>187</i>&nbsp;            InetAddress address = InetAddress.getByName(ipAddress);
+<i>188</i>&nbsp;            serverSocket = new Socket(address, SERVER_SOCKET_PORT);
+<i>189</i>&nbsp;            ServerHandler serverHandler = new ServerHandler(serverSocket);
+<i>190</i>&nbsp;            Client.setObserver(serverHandler);
+<i>191</i>&nbsp;            Thread thread = new Thread(serverHandler);
+<i>192</i>&nbsp;            thread.start();
+<i>193</i>&nbsp;        } catch (IOException e) {
+<i>194</i>&nbsp;            System.out.println(&quot;server unreachable&quot;);
+<i>195</i>&nbsp;            return;
+<i>196</i>&nbsp;        }
+<i>197</i>&nbsp;        System.out.println(&quot;Connected&quot;);
+<i>198</i>&nbsp;    }*/
+<i>199</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 11:15</div>
+</div>
+</body>
+</html>

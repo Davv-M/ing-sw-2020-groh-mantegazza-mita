@@ -1,0 +1,126 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Apollo</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.server.controller.divinityCards</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Apollo (it.polimi.ingsw.PSP38.server.controller.divinityCards)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Apollo</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93,3%
+  </span>
+  <span class="absValue">
+    (14/ 15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.server.controller.divinityCards;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Board;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Cell;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Worker;
+<i>7</i>&nbsp;import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * Concrete implementation of Apollo&#39; power, extends &lt;code&gt;DivinityCard&lt;/code&gt; abstract class.
+<i>11</i>&nbsp; *
+<i>12</i>&nbsp; * @author Matteo Mita (10487862)
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;
+<b class="fc"><i>15</i>&nbsp;public class Apollo extends DivinityCard {</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    @Override
+<i>18</i>&nbsp;    public void checkMove(Worker worker, Cell destinationCell, Board currentBoard) {
+<b class="fc"><i>19</i>&nbsp;        checkNeighbor(worker, destinationCell, currentBoard);</b>
+<b class="fc"><i>20</i>&nbsp;        checkDome(destinationCell, currentBoard);</b>
+<b class="fc"><i>21</i>&nbsp;        checkHeight(worker, destinationCell, currentBoard);</b>
+<b class="fc"><i>22</i>&nbsp;        checkWorkerSameColor(worker, destinationCell, currentBoard);</b>
+<b class="fc"><i>23</i>&nbsp;    }</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    @Override
+<i>26</i>&nbsp;    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+<b class="fc"><i>27</i>&nbsp;        checkMove(worker, destinationCell, currentBoard);</b>
+<b class="fc"><i>28</i>&nbsp;        Cell oldCell = worker.getPosition();</b>
+<i>29</i>&nbsp;
+<b class="fc"><i>30</i>&nbsp;        Board boardUpdated = currentBoard.withoutWorker(worker);</b>
+<b class="fc"><i>31</i>&nbsp;        if (currentBoard.hasWorkerAt(destinationCell)) {</b>
+<b class="fc"><i>32</i>&nbsp;            Worker opponent = currentBoard.getWorkersPositions().get(destinationCell);</b>
+<b class="fc"><i>33</i>&nbsp;            boardUpdated = boardUpdated.withoutWorker(opponent).</b>
+<b class="fc"><i>34</i>&nbsp;                    withWorker(opponent.withPosition(oldCell));</b>
+<i>35</i>&nbsp;        }
+<b class="fc"><i>36</i>&nbsp;        return boardUpdated.withWorker(worker.withPosition(destinationCell));</b>
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    @Override
+<i>40</i>&nbsp;    public String toString() {
+<b class="nc"><i>41</i>&nbsp;        return &quot;Apollo&quot;;</b>
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 11:15</div>
+</div>
+</body>
+</html>

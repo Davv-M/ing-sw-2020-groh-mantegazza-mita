@@ -1,0 +1,314 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BoardPrinter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BoardPrinter (it.polimi.ingsw.PSP38.client)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BoardPrinter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 110)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BoardPrinter$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 111)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.common.WorkerColor;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.Iterator;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * Class used to print the board on the console when playing the game
+<i>10</i>&nbsp; * in &quot;CLI&quot; mode.
+<i>11</i>&nbsp; *
+<i>12</i>&nbsp; * @author Maximilien Groh (10683107)
+<i>13</i>&nbsp; */
+<b class="nc"><i>14</i>&nbsp;public class BoardPrinter {</b>
+<i>15</i>&nbsp;    private static int boardRows;
+<i>16</i>&nbsp;    private static int boardColumns;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    public static final String ANSI_RESET = &quot;\u001B[0m&quot;;
+<i>19</i>&nbsp;    public static final String ANSI_GREEN_BACKGROUND = &quot;\u001B[42m&quot;;
+<i>20</i>&nbsp;    public static final String ANSI_BLUE_BACKGROUND = &quot;\u001B[44m&quot;;
+<i>21</i>&nbsp;    public static final String ANSI_RED_BACKGROUND = &quot;\u001B[41m&quot;;
+<i>22</i>&nbsp;    public static final String ANSI_YELLOW_BACKGROUND = &quot;\u001B[43m&quot;;
+<i>23</i>&nbsp;    public static final String ANSI_PURPLE_BACKGROUND = &quot;\u001B[45m&quot;;
+<i>24</i>&nbsp;    public static final String ANSI_WHITE_BACKGROUND = &quot;\u001B[47m&quot;;
+<i>25</i>&nbsp;    public static final String UNICODE_PERSON = &quot;\ud80c\udc4c&quot;;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    public static void printBoard(List&lt;Byte&gt; encodedBoard) {
+<b class="nc"><i>28</i>&nbsp;        boardRows = encodedBoard.remove(0);</b>
+<b class="nc"><i>29</i>&nbsp;        boardColumns = encodedBoard.remove(0);</b>
+<b class="nc"><i>30</i>&nbsp;        printRowsSeparators();</b>
+<b class="nc"><i>31</i>&nbsp;        for (int row = 0; row &lt; boardRows; ++row) {</b>
+<b class="nc"><i>32</i>&nbsp;            System.out.print(&quot;|&quot;);</b>
+<b class="nc"><i>33</i>&nbsp;            for (int col = 0; col &lt; boardColumns; ++col) {</b>
+<b class="nc"><i>34</i>&nbsp;                printFree();</b>
+<b class="nc"><i>35</i>&nbsp;                System.out.print(&quot;|&quot;);</b>
+<i>36</i>&nbsp;            }
+<b class="nc"><i>37</i>&nbsp;            System.out.println();</b>
+<b class="nc"><i>38</i>&nbsp;            printRowTopLayer(encodedBoard, row);</b>
+<b class="nc"><i>39</i>&nbsp;            printRowUpperMidLayer(encodedBoard, row);</b>
+<b class="nc"><i>40</i>&nbsp;            printRowLowerMidLayer(encodedBoard, row);</b>
+<b class="nc"><i>41</i>&nbsp;            printRowBottomLayer(encodedBoard, row);</b>
+<b class="nc"><i>42</i>&nbsp;            printRowsSeparators();</b>
+<i>43</i>&nbsp;        }
+<b class="nc"><i>44</i>&nbsp;    }</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    private static void printRowsSeparators() {
+<b class="nc"><i>47</i>&nbsp;        for (int i = 0; i &lt; boardColumns; ++i) {</b>
+<b class="nc"><i>48</i>&nbsp;            System.out.print(&quot; -- -- -- --&quot;);</b>
+<i>49</i>&nbsp;        }
+<b class="nc"><i>50</i>&nbsp;        System.out.println();</b>
+<b class="nc"><i>51</i>&nbsp;    }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    private static void printRowTopLayer(List&lt;Byte&gt; encodedBoard, int row) {
+<b class="nc"><i>55</i>&nbsp;        System.out.print(&quot;|&quot;);</b>
+<b class="nc"><i>56</i>&nbsp;        for (int col = 0; col &lt; boardColumns; ++col) {</b>
+<b class="nc"><i>57</i>&nbsp;            byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));</b>
+<b class="nc"><i>58</i>&nbsp;            if (BoardDecoder.towerHeight(encodedCell) == 3) {</b>
+<b class="nc"><i>59</i>&nbsp;                if (BoardDecoder.hasDome(encodedCell)) {</b>
+<b class="nc"><i>60</i>&nbsp;                    printDome();</b>
+<b class="nc"><i>61</i>&nbsp;                } else if (BoardDecoder.hasWorker(encodedCell)) {</b>
+<b class="nc"><i>62</i>&nbsp;                    printWorker(BoardDecoder.workerColor(encodedCell));</b>
+<i>63</i>&nbsp;                } else {
+<b class="nc"><i>64</i>&nbsp;                    printFree();</b>
+<i>65</i>&nbsp;                }
+<i>66</i>&nbsp;            } else {
+<b class="nc"><i>67</i>&nbsp;                printFree();</b>
+<i>68</i>&nbsp;            }
+<b class="nc"><i>69</i>&nbsp;            System.out.print(&quot;|&quot;);</b>
+<i>70</i>&nbsp;        }
+<b class="nc"><i>71</i>&nbsp;        System.out.println();</b>
+<b class="nc"><i>72</i>&nbsp;    }</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    private static void printRowUpperMidLayer(List&lt;Byte&gt; encodedBoard, int row) {
+<b class="nc"><i>75</i>&nbsp;        System.out.print(&quot;|&quot;);</b>
+<b class="nc"><i>76</i>&nbsp;        for (int col = 0; col &lt; boardColumns; ++col) {</b>
+<b class="nc"><i>77</i>&nbsp;            byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));</b>
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;            switch (BoardDecoder.towerHeight(encodedCell)) {</b>
+<i>80</i>&nbsp;                case 3:
+<b class="nc"><i>81</i>&nbsp;                    printTowerTop();</b>
+<b class="nc"><i>82</i>&nbsp;                    break;</b>
+<i>83</i>&nbsp;                case 2:
+<b class="nc"><i>84</i>&nbsp;                    if (BoardDecoder.hasDome(encodedCell)) {</b>
+<b class="nc"><i>85</i>&nbsp;                        printDome();</b>
+<b class="nc"><i>86</i>&nbsp;                    } else if (BoardDecoder.hasWorker(encodedCell)) {</b>
+<b class="nc"><i>87</i>&nbsp;                        printWorker(BoardDecoder.workerColor(encodedCell));</b>
+<i>88</i>&nbsp;                    } else {
+<b class="nc"><i>89</i>&nbsp;                        printFree();</b>
+<i>90</i>&nbsp;                    }
+<b class="nc"><i>91</i>&nbsp;                    break;</b>
+<i>92</i>&nbsp;                default:
+<b class="nc"><i>93</i>&nbsp;                    printFree();</b>
+<i>94</i>&nbsp;            }
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;            System.out.print(&quot;|&quot;);</b>
+<i>97</i>&nbsp;        }
+<b class="nc"><i>98</i>&nbsp;        System.out.println();</b>
+<b class="nc"><i>99</i>&nbsp;    }</b>
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    private static void printRowLowerMidLayer(List&lt;Byte&gt; encodedBoard, int row) {
+<b class="nc"><i>102</i>&nbsp;        System.out.print(&quot;|&quot;);</b>
+<b class="nc"><i>103</i>&nbsp;        for (int col = 0; col &lt; boardColumns; ++col) {</b>
+<b class="nc"><i>104</i>&nbsp;            byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;            switch (BoardDecoder.towerHeight(encodedCell)) {</b>
+<i>107</i>&nbsp;                case 3:
+<i>108</i>&nbsp;                case 2:
+<b class="nc"><i>109</i>&nbsp;                    printTowerMiddle();</b>
+<b class="nc"><i>110</i>&nbsp;                    break;</b>
+<i>111</i>&nbsp;                case 1:
+<b class="nc"><i>112</i>&nbsp;                    if (BoardDecoder.hasDome(encodedCell)) {</b>
+<b class="nc"><i>113</i>&nbsp;                        printDome();</b>
+<b class="nc"><i>114</i>&nbsp;                    } else if (BoardDecoder.hasWorker(encodedCell)) {</b>
+<b class="nc"><i>115</i>&nbsp;                        printWorker(BoardDecoder.workerColor(encodedCell));</b>
+<i>116</i>&nbsp;                    } else {
+<b class="nc"><i>117</i>&nbsp;                        printFree();</b>
+<i>118</i>&nbsp;                    }
+<b class="nc"><i>119</i>&nbsp;                    break;</b>
+<i>120</i>&nbsp;                default:
+<b class="nc"><i>121</i>&nbsp;                    printFree();</b>
+<i>122</i>&nbsp;            }
+<b class="nc"><i>123</i>&nbsp;            System.out.print(&quot;|&quot;);</b>
+<i>124</i>&nbsp;        }
+<b class="nc"><i>125</i>&nbsp;        System.out.println();</b>
+<b class="nc"><i>126</i>&nbsp;    }</b>
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    private static void printRowBottomLayer(List&lt;Byte&gt; encodedBoard, int row) {
+<b class="nc"><i>129</i>&nbsp;        System.out.print(&quot;|&quot;);</b>
+<b class="nc"><i>130</i>&nbsp;        for (int col = 0; col &lt; boardColumns; ++col) {</b>
+<b class="nc"><i>131</i>&nbsp;            byte encodedCell = encodedBoard.get(rowMajorIndex(col, row));</b>
+<i>132</i>&nbsp;
+<b class="nc"><i>133</i>&nbsp;            switch (BoardDecoder.towerHeight(encodedCell)) {</b>
+<i>134</i>&nbsp;                case 3:
+<i>135</i>&nbsp;                case 2:
+<i>136</i>&nbsp;                case 1:
+<b class="nc"><i>137</i>&nbsp;                    printTowerBottom();</b>
+<b class="nc"><i>138</i>&nbsp;                    break;</b>
+<i>139</i>&nbsp;                case 0:
+<b class="nc"><i>140</i>&nbsp;                    if (BoardDecoder.hasDome(encodedCell)) {</b>
+<b class="nc"><i>141</i>&nbsp;                        printDome();</b>
+<b class="nc"><i>142</i>&nbsp;                    } else if (BoardDecoder.hasWorker(encodedCell)) {</b>
+<b class="nc"><i>143</i>&nbsp;                        printWorker(BoardDecoder.workerColor(encodedCell));</b>
+<i>144</i>&nbsp;                    } else {
+<b class="nc"><i>145</i>&nbsp;                        printFree();</b>
+<i>146</i>&nbsp;                    }
+<i>147</i>&nbsp;            }
+<b class="nc"><i>148</i>&nbsp;            System.out.print(&quot;|&quot;);</b>
+<i>149</i>&nbsp;        }
+<b class="nc"><i>150</i>&nbsp;        System.out.println();</b>
+<b class="nc"><i>151</i>&nbsp;    }</b>
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    private static void printDome() {
+<b class="nc"><i>154</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;   &quot; + ANSI_RESET);</b>
+<b class="nc"><i>155</i>&nbsp;        System.out.print(ANSI_BLUE_BACKGROUND + &quot;OOOOO&quot; + ANSI_RESET);</b>
+<b class="nc"><i>156</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;   &quot; + ANSI_RESET);</b>
+<b class="nc"><i>157</i>&nbsp;    }</b>
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    private static void printWorker(WorkerColor color) {
+<i>160</i>&nbsp;        String workerColor;
+<b class="nc"><i>161</i>&nbsp;        switch(color){</b>
+<i>162</i>&nbsp;            case BLACK:
+<b class="nc"><i>163</i>&nbsp;                workerColor = ANSI_RED_BACKGROUND;</b>
+<b class="nc"><i>164</i>&nbsp;                break;</b>
+<i>165</i>&nbsp;            case WHITE:
+<b class="nc"><i>166</i>&nbsp;                workerColor = ANSI_PURPLE_BACKGROUND;</b>
+<b class="nc"><i>167</i>&nbsp;                break;</b>
+<i>168</i>&nbsp;            case BLUE:
+<b class="nc"><i>169</i>&nbsp;                workerColor = ANSI_YELLOW_BACKGROUND;</b>
+<b class="nc"><i>170</i>&nbsp;                break;</b>
+<i>171</i>&nbsp;            default:
+<b class="nc"><i>172</i>&nbsp;                workerColor = ANSI_GREEN_BACKGROUND;</b>
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;        }
+<b class="nc"><i>175</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;     &quot; + ANSI_RESET);</b>
+<b class="nc"><i>176</i>&nbsp;        System.out.print(workerColor + UNICODE_PERSON + ANSI_RESET);</b>
+<b class="nc"><i>177</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;     &quot; + ANSI_RESET);</b>
+<b class="nc"><i>178</i>&nbsp;    }</b>
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;    private static void printTowerTop() {
+<b class="nc"><i>181</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;  &quot; + ANSI_RESET);</b>
+<b class="nc"><i>182</i>&nbsp;        System.out.print(ANSI_WHITE_BACKGROUND + &quot;XXXXXXX&quot; + ANSI_RESET);</b>
+<b class="nc"><i>183</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;  &quot; + ANSI_RESET);</b>
+<b class="nc"><i>184</i>&nbsp;    }</b>
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    private static void printTowerMiddle() {
+<b class="nc"><i>187</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;  &quot; + ANSI_RESET);</b>
+<b class="nc"><i>188</i>&nbsp;        System.out.print(ANSI_WHITE_BACKGROUND + &quot;XXXXXXX&quot; + ANSI_RESET);</b>
+<b class="nc"><i>189</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;  &quot; + ANSI_RESET);</b>
+<b class="nc"><i>190</i>&nbsp;    }</b>
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    private static void printTowerBottom() {
+<b class="nc"><i>193</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;  &quot; + ANSI_RESET);</b>
+<b class="nc"><i>194</i>&nbsp;        System.out.print(ANSI_WHITE_BACKGROUND + &quot;XXXXXXX&quot; + ANSI_RESET);</b>
+<b class="nc"><i>195</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;  &quot; + ANSI_RESET);</b>
+<b class="nc"><i>196</i>&nbsp;    }</b>
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;    private static void printFree() {
+<b class="nc"><i>199</i>&nbsp;        System.out.print(ANSI_GREEN_BACKGROUND + &quot;           &quot; + ANSI_RESET);</b>
+<b class="nc"><i>200</i>&nbsp;    }</b>
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    private static int rowMajorIndex(int x, int y) {
+<b class="nc"><i>203</i>&nbsp;        return (y * 5) + x;</b>
+<i>204</i>&nbsp;    }
+<i>205</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 11:15</div>
+</div>
+</body>
+</html>
