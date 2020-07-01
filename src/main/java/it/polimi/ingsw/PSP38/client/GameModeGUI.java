@@ -209,8 +209,7 @@ public class GameModeGUI implements GameMode {
 
     private void displayDivinityMessage() {
         frame.setCursor(Cursor.getDefaultCursor());
-        /*divinitiesScanner = new Scanner(customStringRead);
-        santoriniWindow.getCardHolder().add(santoriniWindow.getDivinityChoicePanel().createMainDivinityPanel(this), "cardChoice");*/
+        santoriniWindow.getDivinityChoicePanel().setMessage(customStringRead + ", please select a divinity card from this list");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
         //getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -260,7 +259,7 @@ public class GameModeGUI implements GameMode {
     }
 
     public void illegalArgument() {
-        JOptionPane.showMessageDialog(frame, "you are selected an illegal cell", "Illegal selection:", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(frame, customStringRead, "Illegal selection:", JOptionPane.WARNING_MESSAGE);
     }
 
 

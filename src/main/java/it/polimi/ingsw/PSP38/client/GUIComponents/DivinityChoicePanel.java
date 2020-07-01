@@ -58,7 +58,7 @@ public class DivinityChoicePanel implements ActionListener {
         titlePanel = new JPanel();
         /*titlePanel.setBackground(panelColor);
         titlePanel.setForeground(textColor);*/
-        title = new JLabel("Please select one of the following cards");
+        title = new JLabel("");
         title.setFont(new Font("font message", Font.BOLD, 30));
         titlePanel.setBackground(SantoriniColor.bkgColor);
         title.setForeground(SantoriniColor.messageColor);

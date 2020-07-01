@@ -97,7 +97,7 @@ public class GamePanel {
     }
 
     public JPanel createDivinityInfoPanel() {
-        divinityInfoPanel = new JPanel(new GridLayout(gameModeGUI.getNumOfPlayers(), 1));
+        divinityInfoPanel = new JPanel(new GridLayout(1, gameModeGUI.getNumOfPlayers()));
         divinityInfoPanel.setBackground(SantoriniColor.bkgColor);
         return divinityInfoPanel;
     }

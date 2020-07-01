@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
 
-    @org.junit.Test
+    @Test
     public void constantsAreCorrect() {
         assertEquals(3, Game.MAX_NUMBER_OF_PLAYERS);
         assertEquals(2, Game.MIN_NUMBER_OF_PLAYERS);

@@ -368,6 +368,7 @@ public class Controller extends Observable {
                 cellUnderWorker = askCell(client);
                 workerSelected = game.getCurrentBoard().workerAt(cellUnderWorker);
             } catch (NullPointerException e) {
+                client.notifyMessageString(e.getMessage());
                 client.notifyMessage(Message.ILLEGAL_ARGUMENT);
                 continue;
             }
