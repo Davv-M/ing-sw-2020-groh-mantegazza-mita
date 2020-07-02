@@ -34,10 +34,6 @@ public class Controller extends Observable {
         return ArgumentChecker.requireBetween(Game.MIN_NUMBER_OF_PLAYERS, Game.MAX_NUMBER_OF_PLAYERS, numOfPlayers);
     }
 
-    private int checkAge(int age) throws IllegalArgumentException {
-        return ArgumentChecker.requireBetween(Player.MIN_AGE, Player.MAX_AGE, age);
-    }
-
     private synchronized void checkGameFull(ClientHandler client) throws IOException {
         if (game.getTotNumPlayers() > game.getCurrNumPlayers()) {
             client.notifyMessage(Message.WAIT_FOR_FULL_GAME);
@@ -60,22 +56,6 @@ public class Controller extends Observable {
         }
 
         return card;
-    }
-
-    private int checkXCoordinate(int x) throws IllegalArgumentException {
-        return ArgumentChecker.requireBetween(0, Board.COLUMNS - 1, x);
-    }
-
-    private int checkYCoordinate(int y) throws IllegalArgumentException {
-        return ArgumentChecker.requireBetween(0, Board.ROWS - 1, y);
-    }
-
-    private synchronized String checkYesOrNo(String answer) throws IllegalArgumentException {
-        if (answer.equalsIgnoreCase("yes") || answer.equalsIgnoreCase("no")) {
-            return answer;
-        } else {
-            throw new IllegalArgumentException("Please answer with either \"yes\" or \"no\".");
-        }
     }
 
     private synchronized void pauseClient(ClientHandler client) {
@@ -240,7 +220,7 @@ public class Controller extends Observable {
 
     private int askAge(ClientHandler client) throws IOException {
         client.notifyMessage(Message.SET_AGE);
-        return client.askInt(this::checkAge);
+        return client.askInt(ArgumentChecker::checkAge);
     }
 
     private void askYoungestPlayerCards(ClientHandler client) throws IOException {
@@ -332,9 +312,9 @@ public class Controller extends Observable {
         do {
             try {
                 client.notifyMessage(Message.SET_CELL_COLUMN_COORD);
-                x = client.askInt(this::checkXCoordinate);
+                x = client.askInt(ArgumentChecker::checkXCoordinate);
                 client.notifyMessage(Message.SET_CELL_ROW_COORD);
-                y = client.askInt(this::checkYCoordinate);
+                y = client.askInt(ArgumentChecker::checkYCoordinate);
                 return new Cell(x, y);
             } catch (IllegalArgumentException e) {
                 client.notifyMessageString(e.getMessage());
@@ -387,7 +367,7 @@ public class Controller extends Observable {
         boolean useAbility = true;
         if (action.isOptional()) {
             client.notifyMessage(Message.ASK_SPECIAL_ACTION);
-            String answer = client.askString(this::checkYesOrNo);
+            String answer = client.askString(ArgumentChecker::checkYesOrNo);
             if (answer.equalsIgnoreCase("no")) {
                 if (action == WorkerAction.OPTIONAL_ACTION) {
                     return workerPosition;

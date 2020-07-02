@@ -88,4 +88,10 @@ public class CellTest {
             }
         }
     }
+
+    @Test
+    public void toStringCorrect(){
+        Cell cell = new Cell(1, 2);
+        assertEquals("position : (1,2)", cell.toString());
+    }
 }

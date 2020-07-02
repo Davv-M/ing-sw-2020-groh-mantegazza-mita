@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP38.server.model;
 
-import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.requireBetween;
+import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 
 /**
  * Immutable class that represents a board's cell.
@@ -19,8 +19,8 @@ public final class Cell {
      */
 
     public Cell(int x, int y) throws IllegalArgumentException {
-        this.x = requireBetween(0, Board.COLUMNS - 1, x);
-        this.y = requireBetween(0, Board.ROWS - 1, y);
+        this.x = checkXCoordinate(x);
+        this.y = checkYCoordinate(y);
     }
 
     /**

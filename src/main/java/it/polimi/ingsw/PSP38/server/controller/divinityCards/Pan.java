@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 
 /**
- * Concrete implementation of Pan's power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Pan's power, extends <code>DivinityCard</code> abstract class.
  *
  * @author Maximilien Groh (10683107)
  */

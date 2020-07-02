@@ -15,8 +15,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class AthenaTest {
-    Athena athena = new Athena();
+public class PrometheusTest {
+    Prometheus prometheus = new Prometheus();
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -35,7 +35,7 @@ public class AthenaTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class AthenaTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class AthenaTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AthenaTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        prometheus.build(worker, destinationCell, board);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        prometheus.build(worker, destinationCell, board);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class AthenaTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        prometheus.build(worker, destinationCell, board);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -181,8 +181,8 @@ public class AthenaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
-        assertTrue(athena.isWinner(board, workerPosition, destinationCell));
+        board = prometheus.move(worker, destinationCell, board);
+        assertTrue(prometheus.isWinner(board, workerPosition, destinationCell));
     }
 
     @Test
@@ -199,42 +199,75 @@ public class AthenaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
-        assertFalse(athena.isWinner(board, workerPosition, destinationCell));
+        board = prometheus.move(worker, destinationCell, board);
+        assertFalse(prometheus.isWinner(board, workerPosition, destinationCell));
     }
 
     @Test
-    public void moveUpBlocksOpponentMoveUp() throws IllegalArgumentException {
+    public void getMoveSequence() {
+        assertEquals(List.of(WorkerAction.OPTIONAL_ACTION, WorkerAction.MOVE, WorkerAction.BUILD), prometheus.getMoveSequence());
+    }
+
+    @Test
+    public void typeOfAction() {
+        assertEquals(WorkerAction.MOVE, prometheus.typeOfAction(WorkerAction.MOVE));
+        assertEquals(WorkerAction.BUILD, prometheus.typeOfAction(WorkerAction.BUILD));
+        assertEquals(WorkerAction.BUILD, prometheus.typeOfAction(WorkerAction.OPTIONAL_ACTION));
+    }
+
+    @Test
+    public void moveThrowsExceptionIfMoveUpAfterBuild() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("You can't move on that cell: Athena has moved up during her last turn.");
+        expectedException.expectMessage("You can't jump on that tower because you've built on your first move.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
         Cell workerPosition = new Cell(1, 1);
-        Cell worker2Position = new Cell(1, 0);
-        Cell destinationCell = new Cell(2, 2);
-        Tower tower = new Tower(destinationCell, 1);
-        Tower tower2 = new Tower(new Cell(0, 0), 1);
+        Cell destinationCell = new Cell(1, 2);
         Worker worker = new Worker(WorkerColor.BLUE, workerPosition);
-        Worker worker2 = new Worker(WorkerColor.WHITE, worker2Position);
 
         workers.add(worker);
-        workers.add(worker2);
-        towers.add(tower);
-        towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
-        athena.checkOpponentMove(WorkerAction.MOVE, worker2, new Cell(0, 0), board);
+        board = prometheus.optionalAction(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board);
     }
 
     @Test
-    public void getMoveSequence() {
-        assertEquals(List.of(WorkerAction.MOVE, WorkerAction.BUILD), athena.getMoveSequence());
+    public void optionalActionCorrectlyBuildsTower(){
+        HashSet<Worker> workers = new HashSet<>();
+        HashSet<Tower> towers = new HashSet<>();
+        HashSet<Cell> domes = new HashSet<>();
+        Cell workerPosition = new Cell(1, 1);
+        Cell destinationCell = new Cell(1, 2);
+        Worker worker = new Worker(WorkerColor.BLUE, workerPosition);
+
+        workers.add(worker);
+        Board board = new Board(workers, towers, domes);
+        board = prometheus.optionalAction(worker, destinationCell, board);
+        assertEquals(1, board.heightOf(destinationCell));
+    }
+
+    @Test
+    public void optionalActionCorrectlyBuildsDome(){
+        HashSet<Worker> workers = new HashSet<>();
+        HashSet<Tower> towers = new HashSet<>();
+        HashSet<Cell> domes = new HashSet<>();
+        Cell workerPosition = new Cell(1, 1);
+        Cell destinationCell = new Cell(1, 2);
+        Tower tower = new Tower(destinationCell, 3);
+        Worker worker = new Worker(WorkerColor.BLUE, workerPosition);
+
+        workers.add(worker);
+        towers.add(tower);
+        Board board = new Board(workers, towers, domes);
+        board = prometheus.optionalAction(worker, destinationCell, board);
+        assertEquals(3, board.heightOf(destinationCell));
+        assertTrue(board.hasDomeAt(destinationCell));
     }
 
     @Test
     public void toStringCorrect(){
-        assertEquals("Athena", athena.toString());
+        assertEquals("Prometheus", prometheus.toString());
     }
 }

@@ -1,13 +1,15 @@
 package it.polimi.ingsw.PSP38.server.controller.divinityCards;
 
 import it.polimi.ingsw.PSP38.common.WorkerColor;
-import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
 import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import static org.junit.Assert.*;
 
 import java.util.HashSet;
@@ -15,10 +17,16 @@ import java.util.List;
 
 
 public class ApolloTest {
-    DivinityCard apollo = new Apollo();
+    Apollo apollo = new Apollo();
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnCellNotNeighborThrowsException(){
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Test
+    public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell is too far away.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -31,8 +39,11 @@ public class ApolloTest {
         apollo.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnDomeThrowsException(){
+    @Test
+    public void moveOnDomeThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a dome.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -46,8 +57,11 @@ public class ApolloTest {
         apollo.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnTowerTooHighThrowsException(){
+    @Test
+    public void moveOnTowerTooHighThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This tower is too high.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -62,8 +76,11 @@ public class ApolloTest {
         apollo.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnDomeThrowsException(){
+    @Test
+    public void buildOnDomeThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a dome.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -77,8 +94,11 @@ public class ApolloTest {
         apollo.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnWorkerThrowsException(){
+    @Test
+    public void buildOnWorkerThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -93,8 +113,11 @@ public class ApolloTest {
         apollo.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnCellNotNeighborThrowsException(){
+    @Test
+    public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell is too far away.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -107,8 +130,11 @@ public class ApolloTest {
         apollo.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnSameColorWorkerThrowsException(){
+    @Test
+    public void moveOnSameColorWorkerThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker with the same color.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -205,5 +231,10 @@ public class ApolloTest {
     @Test
     public void getMoveSequence() {
         assertEquals(List.of(WorkerAction.MOVE, WorkerAction.BUILD), apollo.getMoveSequence());
+    }
+
+    @Test
+    public void toStringCorrect(){
+        assertEquals("Apollo", apollo.toString());
     }
 }

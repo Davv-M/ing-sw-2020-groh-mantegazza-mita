@@ -6,7 +6,9 @@ import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +18,14 @@ import static org.junit.Assert.*;
 public class AresTest {
     Ares ares = new Ares();
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnCellNotNeighborThrowsException(){
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Test
+    public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell is too far away.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -30,8 +38,11 @@ public class AresTest {
         ares.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnDomeThrowsException(){
+    @Test
+    public void moveOnDomeThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a dome.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -45,8 +56,11 @@ public class AresTest {
         ares.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnTowerTooHighThrowsException(){
+    @Test
+    public void moveOnTowerTooHighThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This tower is too high.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -61,8 +75,11 @@ public class AresTest {
         ares.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnDomeThrowsException(){
+    @Test
+    public void buildOnDomeThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a dome.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -76,8 +93,11 @@ public class AresTest {
         ares.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnWorkerThrowsException(){
+    @Test
+    public void buildOnWorkerThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -92,8 +112,11 @@ public class AresTest {
         ares.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnCellNotNeighborThrowsException(){
+    @Test
+    public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell is too far away.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -106,8 +129,11 @@ public class AresTest {
         ares.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnSameColorWorkerThrowsException(){
+    @Test
+    public void moveOnSameColorWorkerThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -122,8 +148,11 @@ public class AresTest {
         ares.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnDifferentColorWorkerThrowsException(){
+    @Test
+    public void moveOnDifferentColorWorkerThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -191,8 +220,11 @@ public class AresTest {
         assertEquals(2, board.heightOf(towerPosition));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionWhenCellHasDome(){
+    @Test
+    public void optionalActionThrowsExceptionWhenCellHasDome() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a dome.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -208,8 +240,11 @@ public class AresTest {
         ares.optionalAction(workerMoved, towerPosition, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionWhenCellHasWorker(){
+    @Test
+    public void optionalActionThrowsExceptionWhenCellHasWorker() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -226,8 +261,11 @@ public class AresTest {
         ares.optionalAction(workerMoved, towerPosition, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionWhenCellNotNeighbor(){
+    @Test
+    public void optionalActionThrowsExceptionWhenCellNotNeighbor() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell is too far away.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -245,5 +283,10 @@ public class AresTest {
     @Test
     public void getMoveSequence() {
         assertEquals(List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.OPTIONAL_ACTION), ares.getMoveSequence());
+    }
+
+    @Test
+    public void toStringCorrect(){
+        assertEquals("Ares", ares.toString());
     }
 }

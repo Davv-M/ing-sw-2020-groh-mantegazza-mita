@@ -10,7 +10,7 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
 import java.util.List;
 
 /**
- * Concrete implementation of Hestia's power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Hestia's power, extends <code>DivinityCard</code> abstract class.
  *
  * @author Maximilien Groh (10683107)
  */
@@ -30,6 +30,11 @@ public class Hestia extends DivinityCard implements OptionalAction {
     @Override
     public List<WorkerAction> getMoveSequence() {
         return moveSequence;
+    }
+
+    @Override
+    public WorkerAction typeOfAction(WorkerAction action) {
+        return action == WorkerAction.OPTIONAL_ACTION ? WorkerAction.BUILD : super.typeOfAction(action);
     }
 
     @Override

@@ -11,7 +11,7 @@ import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 import java.util.Optional;
 
 /**
- * Concrete implementation of Minotaur's power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Minotaur's power, extends <code>DivinityCard</code> abstract class.
  *
  * @author Maximilien Groh (10683107)
  */
@@ -24,23 +24,30 @@ public class Minotaur extends DivinityCard {
         checkDome(destinationCell, currentBoard);
         checkHeight(worker, destinationCell, currentBoard);
         checkWorkerSameColor(worker, destinationCell, currentBoard);
+        if (currentBoard.hasWorkerAt(destinationCell)) {
+            int vectorX = destinationCell.getX() - worker.getPosition().getX();
+            int vectorY = destinationCell.getY() - worker.getPosition().getY();
 
-        int vectorX = destinationCell.getX() - worker.getPosition().getX();
-        int vectorY = destinationCell.getY() - worker.getPosition().getY();
+            Direction dir = Direction.coordinatesToDirection(vectorX, vectorY);
+            Optional<Cell> possibleNeighbor = currentBoard.neighborOf(destinationCell, dir);
 
-        Direction dir = Direction.coordinatesToDirection(vectorX, vectorY);
-        Optional<Cell> possibleNeighbor = currentBoard.neighborOf(destinationCell, dir);
-        if (possibleNeighbor.isPresent()
-                && !currentBoard.hasDomeAt(possibleNeighbor.get())
-                && !currentBoard.hasWorkerAt(possibleNeighbor.get())) {
+            if(possibleNeighbor.isPresent()){
+                if(currentBoard.hasDomeAt(possibleNeighbor.get())){
+                    throw new IllegalArgumentException("You can't push your opponent's worker because there is a dome behind it.");
+                } else if(currentBoard.hasWorkerAt(possibleNeighbor.get())){
+                    throw new IllegalArgumentException("You can't push your opponent's worker because there is another worker behind it.");
+                }
 
-            Worker opponent = currentBoard.getWorkersPositions().get(destinationCell);
-            Board updatedBoard = currentBoard.withoutWorker(opponent).withWorker(opponent.withPosition(possibleNeighbor.get()));
-            updatedBoard = updatedBoard.withoutWorker(worker).withWorker(worker.withPosition(destinationCell));
+                Worker opponent = currentBoard.workerAt(destinationCell);
+                Board updatedBoard = currentBoard.withoutWorker(opponent).withWorker(opponent.withPosition(possibleNeighbor.get()));
+                updatedBoard = updatedBoard.withoutWorker(worker).withWorker(worker.withPosition(destinationCell));
 
-            return updatedBoard;
+                return updatedBoard;
+            } else {
+                throw new IllegalArgumentException("You can't push your opponent outside of the board.");
+            }
+
         }
-
 
         return super.move(worker, destinationCell, currentBoard);
     }

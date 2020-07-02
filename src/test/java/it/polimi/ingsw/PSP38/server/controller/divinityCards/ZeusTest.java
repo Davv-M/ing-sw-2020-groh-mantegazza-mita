@@ -15,8 +15,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class AthenaTest {
-    Athena athena = new Athena();
+public class ZeusTest {
+    Zeus zeus = new Zeus();
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -35,7 +35,7 @@ public class AthenaTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class AthenaTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class AthenaTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AthenaTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        zeus.build(worker, destinationCell, board);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        zeus.build(worker, destinationCell, board);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class AthenaTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        zeus.build(worker, destinationCell, board);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board);
     }
 
     @Test
@@ -181,8 +181,8 @@ public class AthenaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
-        assertTrue(athena.isWinner(board, workerPosition, destinationCell));
+        board = zeus.move(worker, destinationCell, board);
+        assertTrue(zeus.isWinner(board, workerPosition, destinationCell));
     }
 
     @Test
@@ -199,42 +199,45 @@ public class AthenaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
-        assertFalse(athena.isWinner(board, workerPosition, destinationCell));
+        board = zeus.move(worker, destinationCell, board);
+        assertFalse(zeus.isWinner(board, workerPosition, destinationCell));
     }
 
     @Test
-    public void moveUpBlocksOpponentMoveUp() throws IllegalArgumentException {
+    public void buildOnWorkerCellCorrect(){
+        HashSet<Worker> workers = new HashSet<>();
+        HashSet<Tower> towers = new HashSet<>();
+        HashSet<Cell> domes = new HashSet<>();
+        Cell workerPosition = new Cell(1, 1);
+        Worker worker = new Worker(WorkerColor.BLUE, workerPosition);
+
+        workers.add(worker);
+        Board board = new Board(workers, towers, domes);
+        board = zeus.build(worker, workerPosition, board);
+
+        assertEquals(1, board.heightOf(workerPosition));
+    }
+
+    @Test
+    public void buildDomeOnWorkerCellThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("You can't move on that cell: Athena has moved up during her last turn.");
+        expectedException.expectMessage("You can't build a dome on this cell");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
         Cell workerPosition = new Cell(1, 1);
-        Cell worker2Position = new Cell(1, 0);
-        Cell destinationCell = new Cell(2, 2);
-        Tower tower = new Tower(destinationCell, 1);
-        Tower tower2 = new Tower(new Cell(0, 0), 1);
         Worker worker = new Worker(WorkerColor.BLUE, workerPosition);
-        Worker worker2 = new Worker(WorkerColor.WHITE, worker2Position);
+        Tower tower = new Tower(workerPosition, Tower.MAX_HEIGHT);
 
         workers.add(worker);
-        workers.add(worker2);
         towers.add(tower);
-        towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
-        athena.checkOpponentMove(WorkerAction.MOVE, worker2, new Cell(0, 0), board);
-    }
-
-    @Test
-    public void getMoveSequence() {
-        assertEquals(List.of(WorkerAction.MOVE, WorkerAction.BUILD), athena.getMoveSequence());
+        zeus.build(worker, workerPosition, board);
     }
 
     @Test
     public void toStringCorrect(){
-        assertEquals("Athena", athena.toString());
+        assertEquals("Zeus", zeus.toString());
     }
 }

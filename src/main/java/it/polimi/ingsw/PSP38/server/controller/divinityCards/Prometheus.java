@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Concrete implementation of Prometheus' power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Prometheus' power, extends <code>DivinityCard</code> abstract class.
  *
  * @author Maximilien Groh (10683107)
  */

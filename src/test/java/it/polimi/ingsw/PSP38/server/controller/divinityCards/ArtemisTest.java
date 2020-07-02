@@ -116,4 +116,9 @@ public class ArtemisTest {
     public void getMoveSequence() {
         assertEquals(List.of(WorkerAction.MOVE, WorkerAction.OPTIONAL_ACTION, WorkerAction.BUILD), artemis.getMoveSequence());
     }
+
+    @Test
+    public void toStringCorrect(){
+        assertEquals("Artemis", artemis.toString());
+    }
 }

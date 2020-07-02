@@ -46,7 +46,7 @@ public class BoardDecoder {
      * @return the color of the encoded worker
      * @throws IllegalArgumentException if the code doesn't correspond to one of the defined colors
      */
-    public static WorkerColor workerColor(byte b) {
+    public static WorkerColor workerColor(byte b) throws IllegalArgumentException{
         if (isAndEqual(b, BytesForBoard.WORKER_WHITE)) {
             return WorkerColor.WHITE;
         } else if (isAndEqual(b, BytesForBoard.WORKER_BLACK)) {
@@ -75,12 +75,6 @@ public class BoardDecoder {
         }
     }
 
-    /**
-     * Auxiliary method used to check if two byte values are identical
-     * @param byteToCheck represents the first parameter to be checked
-     * @param flag represents the second parameter to be checked
-     * @return the result of the boolean operation <code>(byteToCheck & flag) == flag</code>
-     */
     private static boolean isAndEqual(byte byteToCheck, byte flag){
         return (byteToCheck & flag) == flag;
     }

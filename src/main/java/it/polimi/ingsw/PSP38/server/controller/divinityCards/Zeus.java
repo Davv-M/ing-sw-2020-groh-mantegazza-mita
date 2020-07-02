@@ -7,7 +7,7 @@ import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
 
 /**
- * Concrete implementation of Zeus' power, extends <code>StrategyDivinityCard</code> interface.
+ * Concrete implementation of Zeus' power, extends <code>DivinityCard</code> abstract class.
  *
  * @author Maximilien Groh (10683107)
  */

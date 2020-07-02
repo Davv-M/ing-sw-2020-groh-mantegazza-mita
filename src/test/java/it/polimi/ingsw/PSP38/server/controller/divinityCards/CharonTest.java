@@ -6,7 +6,9 @@ import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +18,14 @@ import static org.junit.Assert.*;
 public class CharonTest {
     Charon charon = new Charon();
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnCellNotNeighborThrowsException(){
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Test
+    public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell is too far away.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -30,8 +38,11 @@ public class CharonTest {
         charon.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnDomeThrowsException(){
+    @Test
+    public void moveOnDomeThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a dome.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -45,8 +56,11 @@ public class CharonTest {
         charon.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnTowerTooHighThrowsException(){
+    @Test
+    public void moveOnTowerTooHighThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This tower is too high.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -61,8 +75,11 @@ public class CharonTest {
         charon.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnDomeThrowsException(){
+    @Test
+    public void buildOnDomeThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a dome.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -76,8 +93,11 @@ public class CharonTest {
         charon.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnWorkerThrowsException(){
+    @Test
+    public void buildOnWorkerThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -92,8 +112,11 @@ public class CharonTest {
         charon.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void buildOnCellNotNeighborThrowsException(){
+    @Test
+    public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell is too far away.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -106,8 +129,11 @@ public class CharonTest {
         charon.build(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnSameColorWorkerThrowsException(){
+    @Test
+    public void moveOnSameColorWorkerThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -122,8 +148,11 @@ public class CharonTest {
         charon.move(worker, destinationCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void moveOnDifferentColorWorkerThrowsException(){
+    @Test
+    public void moveOnDifferentColorWorkerThrowsException() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -179,8 +208,11 @@ public class CharonTest {
         assertEquals(List.of(WorkerAction.OPTIONAL_ACTION, WorkerAction.MOVE, WorkerAction.BUILD), charon.getMoveSequence());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionSelectedCellNotNeighbor(){
+    @Test
+    public void optionalActionThrowsExceptionSelectedCellNotNeighbor() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell is too far away.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -191,8 +223,11 @@ public class CharonTest {
         charon.optionalAction(worker, selectedCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionSelectedCellHasDome(){
+    @Test
+    public void optionalActionThrowsExceptionSelectedCellHasDome() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell doesn't contain a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -204,8 +239,11 @@ public class CharonTest {
         charon.optionalAction(worker, selectedCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionSelectedCellHasWorkerSameColor(){
+    @Test
+    public void optionalActionThrowsExceptionSelectedCellHasWorkerSameColor() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell contains a worker with the same color.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -218,8 +256,11 @@ public class CharonTest {
         charon.optionalAction(worker, selectedCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionSelectedCellHasNoWorker(){
+    @Test
+    public void optionalActionThrowsExceptionSelectedCellHasNoWorker() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("This cell doesn't contain a worker.");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -230,8 +271,11 @@ public class CharonTest {
         charon.optionalAction(worker, selectedCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionOppositeCellOutOfBounds(){
+    @Test
+    public void optionalActionThrowsExceptionOppositeCellOutOfBounds() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("the selected worker can't be moved");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -244,8 +288,11 @@ public class CharonTest {
         charon.optionalAction(worker, selectedCell, board);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void optionalActionThrowsExceptionOppositeCellHasDome(){
+    @Test
+    public void optionalActionThrowsExceptionOppositeCellHasDome() throws IllegalArgumentException{
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("the selected worker can't be moved");
+
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
         HashSet<Cell> domes = new HashSet<>();
@@ -273,5 +320,10 @@ public class CharonTest {
         workers.add(otherOpponent);
         Board board = new Board(workers, towers, domes);
         charon.optionalAction(worker, selectedCell, board);
+    }
+
+    @Test
+    public void toStringCorrect(){
+        assertEquals("Charon", charon.toString());
     }
 }

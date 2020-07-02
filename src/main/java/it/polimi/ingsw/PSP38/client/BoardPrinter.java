@@ -200,6 +200,6 @@ public class BoardPrinter {
     }
 
     private static int rowMajorIndex(int x, int y) {
-        return (y * 5) + x;
+        return (y * boardColumns) + x;
     }
 }

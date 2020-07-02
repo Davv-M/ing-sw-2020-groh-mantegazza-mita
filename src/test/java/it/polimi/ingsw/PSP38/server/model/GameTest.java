@@ -1,16 +1,15 @@
 package it.polimi.ingsw.PSP38.server.model;
 
 import it.polimi.ingsw.PSP38.common.WorkerColor;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
-class GameTest {
+public class GameTest {
 
     @Test
     public void constantsAreCorrect() {
@@ -20,7 +19,7 @@ class GameTest {
     }
 
     @Test
-    void addPlayer() {
+    public void addPlayer() {
         Game game = new Game();
         game.addPlayer("max", 27);
         assertEquals(1, game.getCurrNumPlayers());
@@ -29,7 +28,7 @@ class GameTest {
     }
 
     @Test
-    void removePlayer() {
+    public void removePlayer() {
         Game game = new Game();
         game.addPlayer("max", 27);
         game.removePlayer(new Player("max", 27, WorkerColor.values()[0]));
@@ -38,7 +37,7 @@ class GameTest {
     }
 
     @Test
-    void getCurrentBoard() {
+    public void getCurrentBoard() {
         Cell position1 = new Cell(0, Board.ROWS - 1);
         Cell position2 = new Cell(0, 1);
         Cell position3 = new Cell(0, 2);
@@ -68,7 +67,7 @@ class GameTest {
     }
 
     @Test
-    void getCurrentPlayerTurn() {
+    public void getCurrentPlayerTurn() {
         Game game = new Game();
         game.addPlayer("matteo", 29);
         game.addPlayer("max", 27);
@@ -77,7 +76,7 @@ class GameTest {
     }
 
     @Test
-    void getOpponents() {
+    public void getOpponents() {
         Game game = new Game();
         game.addPlayer("matteo", 29);
         game.addPlayer("max", 27);
@@ -86,14 +85,14 @@ class GameTest {
     }
 
     @Test
-    void setTotNumPlayers() {
+    public void setTotNumPlayers() {
         Game game = new Game();
         game.setTotNumPlayers(3);
         assertEquals(3, game.getTotNumPlayers());
     }
 
     @Test
-    void getCurrNumPlayers() {
+    public void getCurrNumPlayers() {
         Game game = new Game();
         assertEquals(0, game.getCurrNumPlayers());
         game.addPlayer("matteo", 29);
@@ -105,7 +104,7 @@ class GameTest {
     }
 
     @Test
-    void nicknameToPlayer() {
+    public void nicknameToPlayer() {
         Game game = new Game();
         game.addPlayer("matteo", 29);
         game.addPlayer("max", 27);
@@ -116,7 +115,7 @@ class GameTest {
     }
 
     @Test
-    void setWinner() {
+    public void setWinner() {
         Game game = new Game();
         Player max = new Player("max", 27, WorkerColor.WHITE);
         game.setWinner(max);
