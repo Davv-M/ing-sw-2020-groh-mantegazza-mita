@@ -1,0 +1,222 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: StartPanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client.GUIComponents</a> ]
+</div>
+
+<h1>Coverage Summary for Class: StartPanel (it.polimi.ingsw.PSP38.client.GUIComponents)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StartPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 61)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client.GUIComponents;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.client.GameModeGUI;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import javax.imageio.ImageIO;
+<i>6</i>&nbsp;import javax.swing.*;
+<i>7</i>&nbsp;import java.awt.*;
+<i>8</i>&nbsp;import java.awt.event.ActionEvent;
+<i>9</i>&nbsp;import java.awt.event.ActionListener;
+<i>10</i>&nbsp;import java.io.File;
+<i>11</i>&nbsp;import java.io.IOException;
+<i>12</i>&nbsp;import java.net.URISyntaxException;
+<i>13</i>&nbsp;import java.util.Objects;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * This class contains all the methods needed to create the panel with the preliminary settings of the game
+<i>17</i>&nbsp; *
+<i>18</i>&nbsp; * @author Davide Mantegazza (10568661)
+<i>19</i>&nbsp; */
+<b class="nc"><i>20</i>&nbsp;public class StartPanel implements ActionListener {</b>
+<i>21</i>&nbsp;    private JPanel startPanel;
+<i>22</i>&nbsp;    private JTextField ipAddress;
+<i>23</i>&nbsp;    private JTextField nickname;
+<i>24</i>&nbsp;    private JTextField age;
+<i>25</i>&nbsp;    private JButton connectButton;
+<b class="nc"><i>26</i>&nbsp;    private final Color panelColor = new Color(0, 0, 0, 0);</b>
+<b class="nc"><i>27</i>&nbsp;    private final Color bkgColor = new Color(25, 109, 165);</b>
+<b class="nc"><i>28</i>&nbsp;    private final Color bkgTextColor = new Color(62, 159, 225);</b>
+<b class="nc"><i>29</i>&nbsp;    private final Color textColor = Color.WHITE;</b>
+<i>30</i>&nbsp;    private GameModeGUI gameModeGUI;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * This method is used to create the main panel for the initial settings of the game
+<i>34</i>&nbsp;     *
+<i>35</i>&nbsp;     * @param gmg is the current instance of GameModeGUI
+<i>36</i>&nbsp;     * @return the main panel
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public JPanel createStartPanel(GameModeGUI gmg) {
+<b class="nc"><i>39</i>&nbsp;        gameModeGUI = gmg;</b>
+<b class="nc"><i>40</i>&nbsp;        startPanel = new JPanel();</b>
+<b class="nc"><i>41</i>&nbsp;        startPanel.setLayout(new GridLayout(3, 1));</b>
+<b class="nc"><i>42</i>&nbsp;        startPanel.setBackground(bkgColor);</b>
+<b class="nc"><i>43</i>&nbsp;        startPanel.add(createImagePanel());</b>
+<b class="nc"><i>44</i>&nbsp;        startPanel.add(createControlPanel());</b>
+<b class="nc"><i>45</i>&nbsp;        startPanel.add(createButtonPanel());</b>
+<b class="nc"><i>46</i>&nbsp;        return startPanel;</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * This method is used to generate the panel containing the header image of the startup panel
+<i>51</i>&nbsp;     *
+<i>52</i>&nbsp;     * @return the panel with the title image
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public JPanel createImagePanel() {
+<b class="nc"><i>55</i>&nbsp;        Image santoriniLogo = null;</b>
+<i>56</i>&nbsp;        Image santoriniLogoScaled;
+<b class="nc"><i>57</i>&nbsp;        JPanel imagePanel = new JPanel();</b>
+<b class="nc"><i>58</i>&nbsp;        imagePanel.setBackground(panelColor);</b>
+<i>59</i>&nbsp;        try {
+<b class="nc"><i>60</i>&nbsp;            santoriniLogo = ImageIO.read(getClass().getResource(&quot;/santorini-logo.png&quot;));</b>
+<b class="nc"><i>61</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>62</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>63</i>&nbsp;        }</b>
+<b class="nc"><i>64</i>&nbsp;        santoriniLogoScaled = santoriniLogo.getScaledInstance(450, -1, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>65</i>&nbsp;        JLabel logoLabel = new JLabel(new ImageIcon(santoriniLogoScaled));</b>
+<b class="nc"><i>66</i>&nbsp;        imagePanel.add(logoLabel);</b>
+<b class="nc"><i>67</i>&nbsp;        return imagePanel;</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /**
+<i>71</i>&nbsp;     * This method is used to generate the panel that contains the text fields used to input the server&#39;s IP address,
+<i>72</i>&nbsp;     * the player&#39;s nickname and the player&#39;s age
+<i>73</i>&nbsp;     *
+<i>74</i>&nbsp;     * @return the panel containing the text fields previously mentioned
+<i>75</i>&nbsp;     */
+<i>76</i>&nbsp;    public JPanel createControlPanel() {
+<b class="nc"><i>77</i>&nbsp;        JPanel controlPanel = new JPanel();</b>
+<b class="nc"><i>78</i>&nbsp;        controlPanel.setLayout(new GridLayout(6, 1));</b>
+<b class="nc"><i>79</i>&nbsp;        controlPanel.setBackground(panelColor);</b>
+<b class="nc"><i>80</i>&nbsp;        JLabel ipLabel = new JLabel(&quot;IP address&quot;);</b>
+<b class="nc"><i>81</i>&nbsp;        ipLabel.setForeground(textColor);</b>
+<b class="nc"><i>82</i>&nbsp;        controlPanel.add(ipLabel);</b>
+<b class="nc"><i>83</i>&nbsp;        ipAddress = new JTextField();</b>
+<b class="nc"><i>84</i>&nbsp;        ipAddress.setBackground(bkgTextColor);</b>
+<b class="nc"><i>85</i>&nbsp;        controlPanel.add(ipAddress);</b>
+<b class="nc"><i>86</i>&nbsp;        JLabel nicknameLabel = new JLabel(&quot;Nickname&quot;);</b>
+<b class="nc"><i>87</i>&nbsp;        nicknameLabel.setForeground(textColor);</b>
+<b class="nc"><i>88</i>&nbsp;        controlPanel.add(nicknameLabel);</b>
+<b class="nc"><i>89</i>&nbsp;        nickname = new JTextField();</b>
+<b class="nc"><i>90</i>&nbsp;        nickname.setBackground(bkgTextColor);</b>
+<b class="nc"><i>91</i>&nbsp;        controlPanel.add(nickname);</b>
+<b class="nc"><i>92</i>&nbsp;        JLabel ageLabel = new JLabel(&quot;Age&quot;);</b>
+<b class="nc"><i>93</i>&nbsp;        ageLabel.setForeground(textColor);</b>
+<b class="nc"><i>94</i>&nbsp;        controlPanel.add(ageLabel);</b>
+<b class="nc"><i>95</i>&nbsp;        age = new JTextField();</b>
+<b class="nc"><i>96</i>&nbsp;        age.setBackground(bkgTextColor);</b>
+<b class="nc"><i>97</i>&nbsp;        controlPanel.add(age);</b>
+<b class="nc"><i>98</i>&nbsp;        return controlPanel;</b>
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * This method is used to create the panel that contains the button used to submit the inputted data and connect to the server
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @return the panel with the button used to submit the data and connect to the server
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    public JPanel createButtonPanel() {
+<b class="nc"><i>107</i>&nbsp;        JPanel buttonPanel = new JPanel();</b>
+<b class="nc"><i>108</i>&nbsp;        buttonPanel.setLayout(new FlowLayout());</b>
+<b class="nc"><i>109</i>&nbsp;        buttonPanel.setBackground(panelColor);</b>
+<b class="nc"><i>110</i>&nbsp;        connectButton = new JButton(&quot;Connect to server&quot;);</b>
+<b class="nc"><i>111</i>&nbsp;        connectButton.addActionListener(this);</b>
+<b class="nc"><i>112</i>&nbsp;        buttonPanel.add(connectButton);</b>
+<b class="nc"><i>113</i>&nbsp;        return buttonPanel;</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Invoked when an action occurs.
+<i>118</i>&nbsp;     *
+<i>119</i>&nbsp;     * @param e the event to be processed
+<i>120</i>&nbsp;     */
+<i>121</i>&nbsp;    @Override
+<i>122</i>&nbsp;    public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>123</i>&nbsp;        if (e.getSource() == connectButton) {</b>
+<b class="nc"><i>124</i>&nbsp;            if (nickname.getText().isEmpty() || ipAddress.getText().isEmpty() || age.getText().isEmpty()) {</b>
+<b class="nc"><i>125</i>&nbsp;                JOptionPane.showMessageDialog(null, &quot;Fill all text fields&quot;, &quot;Login error &quot;, JOptionPane.WARNING_MESSAGE);</b>
+<i>126</i>&nbsp;            } else {
+<b class="nc"><i>127</i>&nbsp;                gameModeGUI.setIP(ipAddress.getText());</b>
+<b class="nc"><i>128</i>&nbsp;                gameModeGUI.setNickname(nickname.getText());</b>
+<b class="nc"><i>129</i>&nbsp;                gameModeGUI.setAge(age.getText());</b>
+<i>130</i>&nbsp;                /*CardLayout cl = (CardLayout)(gameModeGUI.getSantoriniWindow().getCardHolder().getLayout());
+<i>131</i>&nbsp;                cl.show(gameModeGUI.getSantoriniWindow().getCardHolder(), &quot;cardChoice&quot;);*/
+<i>132</i>&nbsp;            }
+<i>133</i>&nbsp;        }
+<b class="nc"><i>134</i>&nbsp;    }</b>
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    public JPanel getStartPanel() {
+<b class="nc"><i>137</i>&nbsp;        return startPanel;</b>
+<i>138</i>&nbsp;    }
+<i>139</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 12:23</div>
+</div>
+</body>
+</html>

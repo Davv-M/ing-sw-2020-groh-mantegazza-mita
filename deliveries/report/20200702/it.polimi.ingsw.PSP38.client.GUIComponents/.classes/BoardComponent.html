@@ -1,0 +1,158 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BoardComponent</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.client.GUIComponents</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BoardComponent (it.polimi.ingsw.PSP38.client.GUIComponents)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BoardComponent</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.client.GUIComponents;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.client.BoardImageCollection;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import javax.swing.*;
+<i>6</i>&nbsp;import java.awt.*;
+<i>7</i>&nbsp;import java.util.Iterator;
+<i>8</i>&nbsp;import java.util.List;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * Component that is used to display the board when
+<i>12</i>&nbsp; * playing the game in &quot;GUI&quot; mode.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * @author Maximilien Groh (10683107)
+<i>15</i>&nbsp; */
+<b class="nc"><i>16</i>&nbsp;public class BoardComponent extends JComponent{</b>
+<i>17</i>&nbsp;    private static final int PREFERRED_WIDTH = 615;
+<i>18</i>&nbsp;    private static final int PREFERRED_HEIGHT = 615;
+<i>19</i>&nbsp;    public static final int CELL_OFFSET_X = 8;
+<i>20</i>&nbsp;    public static final int CELL_OFFSET_Y = 8;
+<b class="nc"><i>21</i>&nbsp;    private static final BoardImageCollection CELL_IMAGES = new BoardImageCollection();</b>
+<b class="nc"><i>22</i>&nbsp;    private List&lt;Byte&gt; encodedBoard = null;</b>
+<i>23</i>&nbsp;    public static final int CELL_WIDTH = 120;
+<i>24</i>&nbsp;    public static final int CELL_HEIGHT = 120;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    @Override
+<i>28</i>&nbsp;    public Dimension getPreferredSize() {
+<b class="nc"><i>29</i>&nbsp;        return new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT);</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @Override
+<i>33</i>&nbsp;    protected void paintComponent(Graphics g0) {
+<b class="nc"><i>34</i>&nbsp;        if (encodedBoard != null) {</b>
+<b class="nc"><i>35</i>&nbsp;            Graphics2D g = (Graphics2D) g0;</b>
+<b class="nc"><i>36</i>&nbsp;            drawEmptyBoard(g);</b>
+<b class="nc"><i>37</i>&nbsp;            Iterator&lt;Byte&gt; encodedCellIterator = encodedBoard.iterator();</b>
+<b class="nc"><i>38</i>&nbsp;            int rows = encodedCellIterator.next();</b>
+<b class="nc"><i>39</i>&nbsp;            int columns = encodedCellIterator.next();</b>
+<b class="nc"><i>40</i>&nbsp;            for (int row = 0; row &lt; rows; ++row) {</b>
+<b class="nc"><i>41</i>&nbsp;                for (int col = 0; col &lt; columns; ++col) {</b>
+<b class="nc"><i>42</i>&nbsp;                    byte encodedCell = encodedCellIterator.next();</b>
+<b class="nc"><i>43</i>&nbsp;                    if (encodedCell != 0) {</b>
+<b class="nc"><i>44</i>&nbsp;                        Image cellImage = CELL_IMAGES.image(encodedCell);</b>
+<b class="nc"><i>45</i>&nbsp;                        int x = CELL_OFFSET_X + col * cellImage.getWidth(null);</b>
+<b class="nc"><i>46</i>&nbsp;                        int y = CELL_OFFSET_Y + row * cellImage.getHeight(null);</b>
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;                        g.drawImage(cellImage, x, y, null);</b>
+<i>49</i>&nbsp;                    }
+<i>50</i>&nbsp;                }
+<i>51</i>&nbsp;            }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;        }
+<b class="nc"><i>54</i>&nbsp;    }</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * Updates the board and repaints the component
+<i>58</i>&nbsp;     *
+<i>59</i>&nbsp;     * @param encodedBoard the encoded board to display
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    public void setEncodedBoard(List&lt;Byte&gt; encodedBoard) {
+<b class="nc"><i>62</i>&nbsp;        this.encodedBoard = encodedBoard;</b>
+<b class="nc"><i>63</i>&nbsp;        this.repaint();</b>
+<b class="nc"><i>64</i>&nbsp;    }</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     * Draws the empty board
+<i>68</i>&nbsp;     *
+<i>69</i>&nbsp;     * @param g the graphics
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    public void drawEmptyBoard(Graphics2D g) {
+<b class="nc"><i>72</i>&nbsp;        g.drawImage(CELL_IMAGES.image((byte) 0), 0, 0, null);</b>
+<b class="nc"><i>73</i>&nbsp;    }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 12:23</div>
+</div>
+</body>
+</html>
