@@ -1,0 +1,300 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ArgumentChecker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.common.utilities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ArgumentChecker (it.polimi.ingsw.PSP38.common.utilities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ArgumentChecker</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76,9%
+  </span>
+  <span class="absValue">
+    (10/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78,8%
+  </span>
+  <span class="absValue">
+    (26/ 33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.common.utilities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Board;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Cell;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Player;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Worker;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.util.Set;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * Non instantiable class that provides methods used to control whether
+<i>12</i>&nbsp; * arguments are valid or not.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * @author Maximilien Groh (10683107)
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;public final class ArgumentChecker {
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    /**
+<i>20</i>&nbsp;     * Empty constructor that causes the class to be non instantiable.
+<i>21</i>&nbsp;     */
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;    private ArgumentChecker() {</b>
+<i>24</i>&nbsp;
+<b class="nc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /**
+<i>28</i>&nbsp;     * Verifies that a given value is inside a certain range. If it is not the case,
+<i>29</i>&nbsp;     * it throws an IllegalArgumentException.
+<i>30</i>&nbsp;     *
+<i>31</i>&nbsp;     * @param lowerBound Lower bound of the range
+<i>32</i>&nbsp;     * @param upperBound Upper bound of the range
+<i>33</i>&nbsp;     * @param value      Integer that must be checked
+<i>34</i>&nbsp;     * @return the given value
+<i>35</i>&nbsp;     * @throws IllegalArgumentException if {@code (value &lt; lowerBound || value &gt;= upperBound)}
+<i>36</i>&nbsp;     */
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    public static int requireBetween(int lowerBound, int upperBound, int value)
+<i>39</i>&nbsp;            throws IllegalArgumentException {
+<b class="fc"><i>40</i>&nbsp;        if (value &lt; lowerBound || value &gt; upperBound) {</b>
+<b class="fc"><i>41</i>&nbsp;            throw new IllegalArgumentException(&quot;Please enter an integer between &quot; + lowerBound + &quot; and &quot; + upperBound);</b>
+<i>42</i>&nbsp;        } else {
+<b class="fc"><i>43</i>&nbsp;            return value;</b>
+<i>44</i>&nbsp;        }
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * Verifies that the given x coordinate is not out of bounds.
+<i>49</i>&nbsp;     * If it is not the case, it throws an IllegalArgumentException.
+<i>50</i>&nbsp;     *
+<i>51</i>&nbsp;     * @param x the x coordinate
+<i>52</i>&nbsp;     * @return the given value
+<i>53</i>&nbsp;     * @throws IllegalArgumentException if the value is outside of the board&#39;s boundaries
+<i>54</i>&nbsp;     */
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    public static int checkXCoordinate(int x) throws IllegalArgumentException {
+<b class="fc"><i>57</i>&nbsp;        return requireBetween(0, Board.COLUMNS - 1, x);</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * Verifies that the given y coordinate is not out of bounds.
+<i>62</i>&nbsp;     * If it is not the case, it throws an IllegalArgumentException.
+<i>63</i>&nbsp;     *
+<i>64</i>&nbsp;     * @param y the y coordinate
+<i>65</i>&nbsp;     * @return the given value
+<i>66</i>&nbsp;     * @throws IllegalArgumentException if the value is outside of the board&#39;s boundaries
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    public static int checkYCoordinate(int y) throws IllegalArgumentException {
+<b class="fc"><i>70</i>&nbsp;        return requireBetween(0, Board.ROWS - 1, y);</b>
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /**
+<i>74</i>&nbsp;     * Verifies that the value is between {@code Player.MIN_AGE} and {@code Player.MAX_AGE}.
+<i>75</i>&nbsp;     * If it is not the case, it throws an IllegalArgumentException.
+<i>76</i>&nbsp;     *
+<i>77</i>&nbsp;     * @param age the value to check
+<i>78</i>&nbsp;     * @return the given value
+<i>79</i>&nbsp;     * @throws IllegalArgumentException if the value is outside of the given boundaries
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    public static int checkAge(int age) throws IllegalArgumentException {
+<b class="nc"><i>83</i>&nbsp;        return ArgumentChecker.requireBetween(Player.MIN_AGE, Player.MAX_AGE, age);</b>
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Verifies that the given string is equal to &quot;yes&quot; or &quot;no&quot;.
+<i>88</i>&nbsp;     * If it is not the case, it throws an IllegalArgumentException.
+<i>89</i>&nbsp;     *
+<i>90</i>&nbsp;     * @param answer the string to check
+<i>91</i>&nbsp;     * @return the given string
+<i>92</i>&nbsp;     * @throws IllegalArgumentException if the value is not equal to &quot;yes&quot; or &quot;no&quot;
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    public static String checkYesOrNo(String answer) throws IllegalArgumentException {
+<b class="nc"><i>96</i>&nbsp;        if (answer.equalsIgnoreCase(&quot;yes&quot;) || answer.equalsIgnoreCase(&quot;no&quot;)) {</b>
+<b class="nc"><i>97</i>&nbsp;            return answer;</b>
+<i>98</i>&nbsp;        } else {
+<b class="nc"><i>99</i>&nbsp;            throw new IllegalArgumentException(&quot;Please answer with either \&quot;yes\&quot; or \&quot;no\&quot;.&quot;);</b>
+<i>100</i>&nbsp;        }
+<i>101</i>&nbsp;    }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * Verifies that the worker&#39;s position is adjacent to the given cell.
+<i>105</i>&nbsp;     * If it is not the case, it throws an IllegalArgumentException.
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @param worker          the worker
+<i>108</i>&nbsp;     * @param destinationCell the cell to check
+<i>109</i>&nbsp;     * @param currentBoard    the board containing the cells
+<i>110</i>&nbsp;     * @throws IllegalArgumentException if the given cell isn&#39;t adjacent to the cell on which
+<i>111</i>&nbsp;     *                                  the worker is standing
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    public static void checkNeighbor(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>115</i>&nbsp;        Set&lt;Cell&gt; neighborCells = currentBoard.neighborsOf(worker.getPosition());</b>
+<b class="fc"><i>116</i>&nbsp;        if (!neighborCells.contains(destinationCell)) {</b>
+<b class="fc"><i>117</i>&nbsp;            throw new IllegalArgumentException(&quot;This cell is too far away.&quot;);</b>
+<i>118</i>&nbsp;        }
+<b class="fc"><i>119</i>&nbsp;    }</b>
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Verifies that the board doesn&#39;t contain a dome on the given cell.
+<i>123</i>&nbsp;     * If it does, it throws an IllegalArgumentException.
+<i>124</i>&nbsp;     *
+<i>125</i>&nbsp;     * @param destinationCell the cell to check
+<i>126</i>&nbsp;     * @param currentBoard    the board containing the cells
+<i>127</i>&nbsp;     * @throws IllegalArgumentException if the board contains a dome on the given cell
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    public static void checkDome(Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>131</i>&nbsp;        if (currentBoard.hasDomeAt(destinationCell)) {</b>
+<b class="fc"><i>132</i>&nbsp;            throw new IllegalArgumentException(&quot;This cell contains a dome.&quot;);</b>
+<i>133</i>&nbsp;        }
+<b class="fc"><i>134</i>&nbsp;    }</b>
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    /**
+<i>137</i>&nbsp;     * Verifies that the board doesn&#39;t contain a worker on the given cell.
+<i>138</i>&nbsp;     * If it does, it throws an IllegalArgumentException.
+<i>139</i>&nbsp;     *
+<i>140</i>&nbsp;     * @param destinationCell the cell to check
+<i>141</i>&nbsp;     * @param currentBoard    the board containing the cells
+<i>142</i>&nbsp;     * @throws IllegalArgumentException if the board contains a worker on the given cell
+<i>143</i>&nbsp;     */
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    public static void checkWorker(Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>146</i>&nbsp;        if (currentBoard.hasWorkerAt(destinationCell)) {</b>
+<b class="fc"><i>147</i>&nbsp;            throw new IllegalArgumentException(&quot;This cell contains a worker.&quot;);</b>
+<i>148</i>&nbsp;        }
+<b class="fc"><i>149</i>&nbsp;    }</b>
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    /**
+<i>152</i>&nbsp;     * Verifies that the board contains a worker on the given cell.
+<i>153</i>&nbsp;     * If it doesn&#39;t, it throws an IllegalArgumentException.
+<i>154</i>&nbsp;     *
+<i>155</i>&nbsp;     * @param destinationCell the cell to check
+<i>156</i>&nbsp;     * @param currentBoard    the board containing the cells
+<i>157</i>&nbsp;     * @throws IllegalArgumentException if the board doesn&#39;t contain a worker on the given cell
+<i>158</i>&nbsp;     */
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    public static void checkNoWorker(Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>161</i>&nbsp;        if (!currentBoard.hasWorkerAt(destinationCell)) {</b>
+<b class="fc"><i>162</i>&nbsp;            throw new IllegalArgumentException(&quot;This cell doesn&#39;t contain a worker.&quot;);</b>
+<i>163</i>&nbsp;        }
+<b class="fc"><i>164</i>&nbsp;    }</b>
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;    /**
+<i>167</i>&nbsp;     * Verifies that the height difference between the given cell and
+<i>168</i>&nbsp;     * the cell on which the worker is standing is not greater than 1.
+<i>169</i>&nbsp;     * If it is, it throws an IllegalArgumentException.
+<i>170</i>&nbsp;     *
+<i>171</i>&nbsp;     * @param worker          the worker
+<i>172</i>&nbsp;     * @param destinationCell the cell to check
+<i>173</i>&nbsp;     * @param currentBoard    the board containing the cells
+<i>174</i>&nbsp;     * @throws IllegalArgumentException if the height difference between the given cell and
+<i>175</i>&nbsp;     *                                  the cell on which the worker is standing is greater than 1.
+<i>176</i>&nbsp;     */
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;    public static void checkHeight(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>179</i>&nbsp;        if (currentBoard.heightOf(destinationCell) &gt; currentBoard.heightOf(worker.getPosition()) + 1) {</b>
+<b class="fc"><i>180</i>&nbsp;            throw new IllegalArgumentException(&quot;This tower is too high.&quot;);</b>
+<i>181</i>&nbsp;        }
+<b class="fc"><i>182</i>&nbsp;    }</b>
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /**
+<i>185</i>&nbsp;     * Verifies that the board doesn&#39;t contain a worker of the same color
+<i>186</i>&nbsp;     * of the given worker on the cell given as parameter.
+<i>187</i>&nbsp;     * If it does, it throws an IllegalArgumentException.
+<i>188</i>&nbsp;     *
+<i>189</i>&nbsp;     * @param worker          the worker
+<i>190</i>&nbsp;     * @param destinationCell the cell to check
+<i>191</i>&nbsp;     * @param currentBoard    the board containing the cells
+<i>192</i>&nbsp;     * @throws IllegalArgumentException if the given cell contains a worker of the same color
+<i>193</i>&nbsp;     *                                  as the one given as parameter.
+<i>194</i>&nbsp;     */
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    public static void checkWorkerSameColor(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>197</i>&nbsp;        if (currentBoard.hasWorkerAt(destinationCell) &amp;&amp; currentBoard.workerAt(destinationCell).getColor() == worker.getColor()) {</b>
+<b class="fc"><i>198</i>&nbsp;            throw new IllegalArgumentException(&quot;This cell contains a worker with the same color.&quot;);</b>
+<i>199</i>&nbsp;        }
+<b class="fc"><i>200</i>&nbsp;    }</b>
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    /**
+<i>203</i>&nbsp;     * Verifies that the board contains a tower on the given cell.
+<i>204</i>&nbsp;     * If it doesn&#39;t, it throws an IllegalArgumentException.
+<i>205</i>&nbsp;     *
+<i>206</i>&nbsp;     * @param destinationCell the cell to check
+<i>207</i>&nbsp;     * @param currentBoard    the board containing the cells
+<i>208</i>&nbsp;     * @throws IllegalArgumentException if the board doesn&#39;t contain a tower on
+<i>209</i>&nbsp;     *                                  the given cell.
+<i>210</i>&nbsp;     */
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    public static void checkTower(Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>213</i>&nbsp;        if (currentBoard.heightOf(destinationCell) == 0) {</b>
+<b class="nc"><i>214</i>&nbsp;            throw new IllegalArgumentException(&quot;This cell doesn&#39;t contain a tower.&quot;);</b>
+<i>215</i>&nbsp;        }
+<b class="fc"><i>216</i>&nbsp;    }</b>
+<i>217</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 12:23</div>
+</div>
+</body>
+</html>

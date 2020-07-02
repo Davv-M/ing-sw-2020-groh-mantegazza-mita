@@ -1,0 +1,119 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Athena</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP38.server.controller.divinityCards</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Athena (it.polimi.ingsw.PSP38.server.controller.divinityCards)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Athena</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88,9%
+  </span>
+  <span class="absValue">
+    (8/ 9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP38.server.controller.divinityCards;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP38.server.controller.WorkerAction;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Board;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Cell;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP38.server.model.Worker;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * Concrete implementation of Athena&#39;s power, extends &lt;code&gt;DivinityCard&lt;/code&gt; abstract class.
+<i>11</i>&nbsp; *
+<i>12</i>&nbsp; * @author Maximilien Groh (10683107)
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;
+<b class="fc"><i>15</i>&nbsp;public class Athena extends DivinityCard {</b>
+<b class="fc"><i>16</i>&nbsp;    private boolean hasMovedUp = false;</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    @Override
+<i>19</i>&nbsp;    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>20</i>&nbsp;        Board updatedBoard = super.move(worker, destinationCell, currentBoard);</b>
+<b class="fc"><i>21</i>&nbsp;        hasMovedUp = updatedBoard.heightOf(destinationCell) &gt; currentBoard.heightOf(worker.getPosition());</b>
+<b class="fc"><i>22</i>&nbsp;        return updatedBoard;</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    @Override
+<i>26</i>&nbsp;    public void checkOpponentMove(WorkerAction action, Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+<b class="fc"><i>27</i>&nbsp;        if(action == WorkerAction.MOVE &amp;&amp; hasMovedUp &amp;&amp; currentBoard.heightOf(worker.getPosition()) &lt; currentBoard.heightOf(destinationCell)){</b>
+<b class="fc"><i>28</i>&nbsp;            throw new IllegalArgumentException(&quot;You can&#39;t move on that cell: Athena has moved up during her last turn.&quot;);</b>
+<i>29</i>&nbsp;        }
+<b class="nc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @Override
+<i>33</i>&nbsp;    public String toString() {
+<b class="fc"><i>34</i>&nbsp;        return &quot;Athena&quot;;</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 12:23</div>
+</div>
+</body>
+</html>

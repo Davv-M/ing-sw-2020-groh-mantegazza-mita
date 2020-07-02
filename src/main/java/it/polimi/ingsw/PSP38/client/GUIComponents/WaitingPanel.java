@@ -32,10 +32,9 @@ public class WaitingPanel {
         waitingPanel = new JPanel();
         waitingPanel.setLayout(new BorderLayout());
         waitingPanel.setBackground(Color.WHITE);
-        waitingPanel.add(new LogoPanel().createImagePanel(),BorderLayout.NORTH);
+        waitingPanel.add(createMessagePanel(),BorderLayout.NORTH);
         waitingPanel.add(createWaitImagePanel(), BorderLayout.CENTER);
-        waitingPanel.add(createMessagePanel(),BorderLayout.SOUTH);
-        //waitingPanel.add(createHourglassPanel(), BorderLayout.SOUTH);
+        waitingPanel.add(createHourglassPanel(), BorderLayout.SOUTH);
         return waitingPanel;
     }
 
