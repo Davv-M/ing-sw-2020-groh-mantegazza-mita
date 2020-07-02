@@ -16,7 +16,7 @@ import java.util.List;
 
 
 public class Server {
-    public final static int SERVER_SOCKET_PORT = 3456;
+    public final static int SERVER_SOCKET_PORT = 3457;
     private static int contPlayer = 0;
     private static final List<ClientHandler> listOfClients = new LinkedList<>();
 
@@ -38,7 +38,7 @@ public class Server {
                 threadClient.start();
             } while (true);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -75,8 +75,11 @@ public class Server {
         for (ClientHandler ch : listOfClients) {
             try {
                 ch.notifyEndGame(Protocol.CLIENT_LOST);
-            } catch (IOException ignore) {
-            }
+            } catch (IOException ignore) {}
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ignore) {}
+            System.exit(1);
         }
     }
 

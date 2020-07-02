@@ -2,11 +2,13 @@
 
 ## Componenti del gruppo
 * Maximilien Groh
-* Davide Mantegazza
+* Davide Mantegazza (10568661)
 * Matteo Mita
 
 ## Funzionalità implementate
 - CLI
 - Socket
 - GUI
-- Divinità avanzate (Zeus, Charon, Hera, Hestia, Ares)
+- Divinità avanzate (Ares, Charon, Hera, Hestia, Zeus)
+
+##Istruzioni per l'avvio

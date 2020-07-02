@@ -126,7 +126,7 @@ public class DivinityChoicePanel implements ActionListener {
         JPanel divinityImagePanel = new JPanel();
         divinityImagePanel.setBackground(SantoriniColor.white);
         try {
-            divinityImage = ImageIO.read(getClass().getResource("/divinityImages/" + divinityName.toLowerCase() + ".png"));
+            divinityImage = ImageIO.read(getClass().getResourceAsStream("/divinities/" + divinityName.toLowerCase() + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
