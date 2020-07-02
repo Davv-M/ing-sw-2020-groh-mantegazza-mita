@@ -35,7 +35,7 @@ public class AresTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        ares.move(worker, destinationCell, board);
+        ares.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class AresTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        ares.move(worker, destinationCell, board);
+        ares.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class AresTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        ares.move(worker, destinationCell, board);
+        ares.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AresTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        ares.build(worker, destinationCell, board);
+        ares.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class AresTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        ares.build(worker, destinationCell, board);
+        ares.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class AresTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        ares.build(worker, destinationCell, board);
+        ares.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class AresTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        ares.move(worker, destinationCell, board);
+        ares.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class AresTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        ares.move(worker, destinationCell, board);
+        ares.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class AresTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = ares.move(worker, destinationCell, board);
+        board = ares.move(worker, destinationCell, board, false);
         assertTrue(ares.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class AresTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = ares.move(worker, destinationCell, board);
+        board = ares.move(worker, destinationCell, board, false);
         assertFalse(ares.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -216,7 +216,7 @@ public class AresTest {
         workers.add(worker2);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        board = ares.optionalAction(workerMoved, towerPosition, board);
+        board = ares.optionalAction(workerMoved, towerPosition, board, false);
         assertEquals(2, board.heightOf(towerPosition));
     }
 
@@ -237,7 +237,7 @@ public class AresTest {
         towers.add(tower);
         domes.add(towerPosition);
         Board board = new Board(workers, towers, domes);
-        ares.optionalAction(workerMoved, towerPosition, board);
+        ares.optionalAction(workerMoved, towerPosition, board, false);
     }
 
     @Test
@@ -258,7 +258,7 @@ public class AresTest {
         workers.add(worker3);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        ares.optionalAction(workerMoved, towerPosition, board);
+        ares.optionalAction(workerMoved, towerPosition, board, false);
     }
 
     @Test
@@ -277,7 +277,7 @@ public class AresTest {
         workers.add(worker2);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        ares.optionalAction(workerMoved, towerPosition, board);
+        ares.optionalAction(workerMoved, towerPosition, board, false);
     }
 
     @Test

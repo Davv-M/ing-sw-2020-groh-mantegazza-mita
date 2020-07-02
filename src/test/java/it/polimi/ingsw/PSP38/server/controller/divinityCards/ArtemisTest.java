@@ -30,7 +30,7 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         Board testBoard = new Board(workers, towers, domes);
-        artemis.move(w1, cellw2, testBoard);
+        artemis.move(w1, cellw2, testBoard, false);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -45,7 +45,7 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         Board testBoard = new Board(workers, towers, domes);
-        artemis.move(w1, cellt1, testBoard);
+        artemis.move(w1, cellt1, testBoard, false);
     }
 
 
@@ -64,7 +64,7 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         testBoard = new Board(workers, towers, domes);
-        updatedBoard = artemis.move(w1, cellf1, testBoard);
+        updatedBoard = artemis.move(w1, cellf1, testBoard, false);
         assertEquals(2, updatedBoard.getWorkersPositions().get(cellf1).getPosition().getX());
         assertEquals(1, updatedBoard.getWorkersPositions().get(cellf1).getPosition().getY());
     }
@@ -84,8 +84,8 @@ public class ArtemisTest {
         workers.add(w2);
         towers.add(t1);
         testBoard = new Board(workers, towers, domes);
-        updatedBoard = artemis.move(w1, cellf1, testBoard);
-        artemis.optionalAction(w1, cellw1, updatedBoard);
+        updatedBoard = artemis.move(w1, cellf1, testBoard, false);
+        artemis.optionalAction(w1, cellw1, updatedBoard, false);
     }
 
     @Test
@@ -106,8 +106,8 @@ public class ArtemisTest {
         towers.add(t1);
         testBoard = new Board(workers, towers, domes);
 
-        updatedBoard = artemis.move(w1, cellf1, testBoard);
-        updatedBoard2= artemis.optionalAction(w1, cellf2, updatedBoard);
+        updatedBoard = artemis.move(w1, cellf1, testBoard, false);
+        updatedBoard2= artemis.optionalAction(w1, cellf2, updatedBoard, false);
         assertEquals(1, updatedBoard2.getWorkersPositions().get(cellf2).getPosition().getX());
         assertEquals(3, updatedBoard2.getWorkersPositions().get(cellf2).getPosition().getY());
     }

@@ -90,16 +90,16 @@ public class GameModeCLI implements GameMode {
                 System.out.println(customStringRead);
                 break;
             case ILLEGAL_INT:
-                System.out.println("Integer not recognized exception: " + customStringRead);
+                System.out.println("Integer not recognized: " + customStringRead);
                 break;
             case ILLEGAL_STRING:
-                System.out.println("String not recognized exception: " + customStringRead);
+                System.out.println("String not recognized: " + customStringRead);
                 break;
             case UNABLE_TO_FINISH_TURN:
                 System.out.println("You can't finish your turn. You lose.");
                 break;
             case ILLEGAL_ARGUMENT:
-                System.out.println("Illegal argument exception: " + customStringRead);
+                System.out.println("Illegal argument: " + customStringRead);
                 break;
             case WORKER_MOVE:
                 System.out.println("Select the cell where you want to move");

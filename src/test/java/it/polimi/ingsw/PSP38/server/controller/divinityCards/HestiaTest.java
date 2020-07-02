@@ -35,7 +35,7 @@ public class HestiaTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        hestia.move(worker, destinationCell, board);
+        hestia.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class HestiaTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        hestia.move(worker, destinationCell, board);
+        hestia.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class HestiaTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        hestia.move(worker, destinationCell, board);
+        hestia.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class HestiaTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        hestia.build(worker, destinationCell, board);
+        hestia.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class HestiaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hestia.build(worker, destinationCell, board);
+        hestia.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class HestiaTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        hestia.build(worker, destinationCell, board);
+        hestia.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class HestiaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hestia.move(worker, destinationCell, board);
+        hestia.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class HestiaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hestia.move(worker, destinationCell, board);
+        hestia.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class HestiaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = hestia.move(worker, destinationCell, board);
+        board = hestia.move(worker, destinationCell, board, false);
         assertTrue(hestia.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class HestiaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = hestia.move(worker, destinationCell, board);
+        board = hestia.move(worker, destinationCell, board, false);
         assertFalse(hestia.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -231,9 +231,9 @@ public class HestiaTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        board = hestia.build(worker, destinationCell, board);
+        board = hestia.build(worker, destinationCell, board, false);
         destinationCell = new Cell(0, 0);
-        hestia.optionalAction(worker, destinationCell, board);
+        hestia.optionalAction(worker, destinationCell, board, false);
     }
 
     @Test
@@ -249,8 +249,8 @@ public class HestiaTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        board = hestia.build(worker, destinationCell, board);
-        hestia.optionalAction(worker, destinationCell, board);
+        board = hestia.build(worker, destinationCell, board, false);
+        hestia.optionalAction(worker, destinationCell, board, false);
     }
 
     @Test

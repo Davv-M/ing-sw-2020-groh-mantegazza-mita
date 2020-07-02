@@ -24,7 +24,7 @@ public class Apollo extends DivinityCard {
     }
 
     @Override
-    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
         checkMove(worker, destinationCell, currentBoard);
         Cell oldCell = worker.getPosition();
 

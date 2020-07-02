@@ -35,7 +35,7 @@ public class PrometheusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        prometheus.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class PrometheusTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        prometheus.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class PrometheusTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        prometheus.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class PrometheusTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        prometheus.build(worker, destinationCell, board);
+        prometheus.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class PrometheusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        prometheus.build(worker, destinationCell, board);
+        prometheus.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class PrometheusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        prometheus.build(worker, destinationCell, board);
+        prometheus.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class PrometheusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        prometheus.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class PrometheusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        prometheus.move(worker, destinationCell, board);
+        prometheus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class PrometheusTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = prometheus.move(worker, destinationCell, board);
+        board = prometheus.move(worker, destinationCell, board, false);
         assertTrue(prometheus.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class PrometheusTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = prometheus.move(worker, destinationCell, board);
+        board = prometheus.move(worker, destinationCell, board, false);
         assertFalse(prometheus.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -229,8 +229,8 @@ public class PrometheusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        board = prometheus.optionalAction(worker, destinationCell, board);
-        prometheus.move(worker, destinationCell, board);
+        board = prometheus.optionalAction(worker, destinationCell, board, false);
+        prometheus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -244,7 +244,7 @@ public class PrometheusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        board = prometheus.optionalAction(worker, destinationCell, board);
+        board = prometheus.optionalAction(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
     }
 
@@ -261,7 +261,7 @@ public class PrometheusTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        board = prometheus.optionalAction(worker, destinationCell, board);
+        board = prometheus.optionalAction(worker, destinationCell, board, false);
         assertEquals(3, board.heightOf(destinationCell));
         assertTrue(board.hasDomeAt(destinationCell));
     }

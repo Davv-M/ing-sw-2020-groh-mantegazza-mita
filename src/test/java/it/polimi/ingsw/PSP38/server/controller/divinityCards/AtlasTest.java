@@ -35,7 +35,7 @@ public class AtlasTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        atlas.move(worker, destinationCell, board);
+        atlas.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class AtlasTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        atlas.move(worker, destinationCell, board);
+        atlas.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class AtlasTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        atlas.move(worker, destinationCell, board);
+        atlas.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AtlasTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        atlas.build(worker, destinationCell, board);
+        atlas.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class AtlasTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        atlas.build(worker, destinationCell, board);
+        atlas.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class AtlasTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        atlas.build(worker, destinationCell, board);
+        atlas.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class AtlasTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        atlas.move(worker, destinationCell, board);
+        atlas.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class AtlasTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        atlas.move(worker, destinationCell, board);
+        atlas.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class AtlasTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = atlas.move(worker, destinationCell, board);
+        board = atlas.move(worker, destinationCell, board, false);
         assertTrue(atlas.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class AtlasTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = atlas.move(worker, destinationCell, board);
+        board = atlas.move(worker, destinationCell, board, false);
         assertFalse(atlas.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -226,7 +226,7 @@ public class AtlasTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        board = atlas.optionalAbility(true, worker, destinationCell, board);
+        board = atlas.optionalAbility(true, worker, destinationCell, board, false);
         assertTrue(board.hasDomeAt(destinationCell));
         assertEquals(0, board.heightOf(destinationCell));
     }
@@ -244,7 +244,7 @@ public class AtlasTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        board = atlas.optionalAbility(true, worker, destinationCell, board);
+        board = atlas.optionalAbility(true, worker, destinationCell, board, false);
         assertTrue(board.hasDomeAt(destinationCell));
         assertEquals(1, board.heightOf(destinationCell));
     }
@@ -262,7 +262,7 @@ public class AtlasTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        board = atlas.optionalAbility(true, worker, destinationCell, board);
+        board = atlas.optionalAbility(true, worker, destinationCell, board, false);
         assertTrue(board.hasDomeAt(destinationCell));
         assertEquals(2, board.heightOf(destinationCell));
     }

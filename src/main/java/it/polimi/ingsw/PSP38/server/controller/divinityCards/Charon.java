@@ -24,7 +24,7 @@ public class Charon extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = Arrays.asList(WorkerAction.OPTIONAL_ACTION, WorkerAction.MOVE, WorkerAction.BUILD);
 
     @Override
-    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) {
         checkNeighbor(worker, destinationCell, currentBoard);
         checkNoWorker(destinationCell, currentBoard);
         checkWorkerSameColor(worker, destinationCell, currentBoard);

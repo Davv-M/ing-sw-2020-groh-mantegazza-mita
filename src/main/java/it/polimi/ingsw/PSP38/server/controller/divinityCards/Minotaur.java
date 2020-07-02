@@ -19,7 +19,7 @@ import java.util.Optional;
 public class Minotaur extends DivinityCard {
 
     @Override
-    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
         checkNeighbor(worker, destinationCell, currentBoard);
         checkDome(destinationCell, currentBoard);
         checkHeight(worker, destinationCell, currentBoard);
@@ -49,7 +49,7 @@ public class Minotaur extends DivinityCard {
 
         }
 
-        return super.move(worker, destinationCell, currentBoard);
+        return super.move(worker, destinationCell, currentBoard, isSimulation);
     }
 
     @Override

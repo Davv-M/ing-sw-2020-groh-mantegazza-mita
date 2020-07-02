@@ -166,7 +166,6 @@ public class Controller extends Observable {
                 Cell previousPosition = selectedWorker.getPosition();
                 selectedWorker = selectedWorker.withPosition(askWorkerAction(client, selectedWorker, clientDivinity, action));
 
-
                 if (clientDivinity.isWinner(game.getCurrentBoard(), previousPosition, selectedWorker.getPosition())) {
                     boolean cantWin = false;
                     for (Player p : game.getOpponents()) {
@@ -193,7 +192,7 @@ public class Controller extends Observable {
     private void firstPlayerSetNumOfPlayers(ClientHandler client) throws IOException {
         if (client.getClientNum() == 1) {
             client.notifyMessage(Message.INSERT_NUM_PLAYERS);
-            game.setTotNumPlayers(client.askInt(this::checkNumOfPlayers));
+            game.setTotNumPlayers(client.askInt(this::checkNumOfPlayers, Message.ILLEGAL_INT));
             wakeUpAll();
         } else if (game.getTotNumPlayers() == 0) {
             client.notifyMessage(Message.WAIT_FOR_NUM_PLAYERS);
@@ -212,7 +211,7 @@ public class Controller extends Observable {
 
     private String askNickname(ClientHandler client) throws IOException {
         client.notifyMessage(Message.CHOOSE_NICKNAME);
-        String nickname = client.askString(this::checkNickname);
+        String nickname = client.askString(this::checkNickname, Message.ILLEGAL_NICKNAME);
         illegalNicknames.add(nickname);
         client.setNickname(nickname);
 
@@ -221,7 +220,7 @@ public class Controller extends Observable {
 
     private int askAge(ClientHandler client) throws IOException {
         client.notifyMessage(Message.SET_AGE);
-        return client.askInt(ArgumentChecker::checkAge);
+        return client.askInt(ArgumentChecker::checkAge, Message.ILLEGAL_INT);
     }
 
     private void askYoungestPlayerCards(ClientHandler client) throws IOException {
@@ -229,7 +228,7 @@ public class Controller extends Observable {
             List<DivinityCard.Name> selectedDivinityCards = new LinkedList<>();
             for (int i = 0; i < game.getTotNumPlayers(); ++i) {
                 displayAvailableDivinities(client);
-                String card = client.askString(this::checkDivinityCard);
+                String card = client.askString(this::checkDivinityCard, Message.ILLEGAL_DIVINITY);
                 DivinityCard.Name cardEnum = DivinityCard.Name.valueOf(card.toUpperCase());
                 selectedDivinityCards.add(cardEnum);
                 availableDivinityCards.remove(cardEnum);
@@ -247,7 +246,7 @@ public class Controller extends Observable {
     private void askDivinity(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
         displayAvailableDivinities(client);
-        String card = client.askString(this::checkDivinityCard);
+        String card = client.askString(this::checkDivinityCard, Message.ILLEGAL_DIVINITY);
         DivinityCard.Name cardEnum = DivinityCard.Name.valueOf(card.toUpperCase());
         playersDivinities.put(game.getCurrentPlayerTurn(), stringToStrategy(card));
         availableDivinityCards.remove(cardEnum);
@@ -313,9 +312,9 @@ public class Controller extends Observable {
         do {
             try {
                 client.notifyMessage(Message.SET_CELL_COLUMN_COORD);
-                x = client.askInt(ArgumentChecker::checkXCoordinate);
+                x = client.askInt(ArgumentChecker::checkXCoordinate, Message.ILLEGAL_INT);
                 client.notifyMessage(Message.SET_CELL_ROW_COORD);
-                y = client.askInt(ArgumentChecker::checkYCoordinate);
+                y = client.askInt(ArgumentChecker::checkYCoordinate, Message.ILLEGAL_INT);
                 return new Cell(x, y);
             } catch (IllegalArgumentException e) {
                 client.notifyMessageString(e.getMessage());
@@ -368,7 +367,7 @@ public class Controller extends Observable {
         boolean useAbility = true;
         if (action.isOptional()) {
             client.notifyMessage(Message.ASK_SPECIAL_ACTION);
-            String answer = client.askString(ArgumentChecker::checkYesOrNo);
+            String answer = client.askString(ArgumentChecker::checkYesOrNo, Message.ILLEGAL_YES_OR_NO);
             if (answer.equalsIgnoreCase("no")) {
                 if (action == WorkerAction.OPTIONAL_ACTION) {
                     return workerPosition;
@@ -385,7 +384,7 @@ public class Controller extends Observable {
                 for (Player p : game.getOpponents()) {
                     playersDivinities.get(p).checkOpponentMove(clientDivinty.typeOfAction(action), selectedWorker, destinationCell, currentBoard);
                 }
-                currentBoard = takeAction(selectedWorker, destinationCell, currentBoard, clientDivinty, action, useAbility);
+                currentBoard = takeAction(selectedWorker, destinationCell, currentBoard, clientDivinty, action, useAbility, false);
                 game.setCurrentBoard(currentBoard);
                 displayAllClients();
                 return currentBoard.hasWorkerAt(destinationCell) ? destinationCell : workerPosition;
@@ -402,7 +401,7 @@ public class Controller extends Observable {
                 Cell cell = new Cell(col, row);
                 Board board = game.getCurrentBoard();
                 try {
-                    takeAction(selectedWorker, cell, board, clientDivinty, action, true);
+                    takeAction(selectedWorker, cell, board, clientDivinty, action, true, true);
                     return true;
                 } catch (IllegalArgumentException ignored) {
 
@@ -412,16 +411,16 @@ public class Controller extends Observable {
         return false;
     }
 
-    private Board takeAction(Worker selectedWorker, Cell cell, Board board, DivinityCard clientDivinty, WorkerAction action, boolean useAbility) throws IllegalArgumentException {
+    private Board takeAction(Worker selectedWorker, Cell cell, Board board, DivinityCard clientDivinty, WorkerAction action, boolean useAbility, boolean isSimulation) throws IllegalArgumentException {
         switch (action) {
             case MOVE:
-                return clientDivinty.move(selectedWorker, cell, board);
+                return clientDivinty.move(selectedWorker, cell, board, isSimulation);
             case BUILD:
-                return clientDivinty.build(selectedWorker, cell, board);
+                return clientDivinty.build(selectedWorker, cell, board, isSimulation);
             case OPTIONAL_ACTION:
-                return ((OptionalAction) clientDivinty).optionalAction(selectedWorker, cell, board);
+                return ((OptionalAction) clientDivinty).optionalAction(selectedWorker, cell, board, isSimulation);
             case OPTIONAL_ABILITY:
-                return ((OptionalAbility) clientDivinty).optionalAbility(useAbility, selectedWorker, cell, board);
+                return ((OptionalAbility) clientDivinty).optionalAbility(useAbility, selectedWorker, cell, board, isSimulation);
             default:
                 throw new IllegalArgumentException("WorkerAction " + action + " unknown.");
         }

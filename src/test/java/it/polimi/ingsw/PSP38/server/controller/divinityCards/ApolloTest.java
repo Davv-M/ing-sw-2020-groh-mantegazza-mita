@@ -36,7 +36,7 @@ public class ApolloTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        apollo.move(worker, destinationCell, board);
+        apollo.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class ApolloTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        apollo.move(worker, destinationCell, board);
+        apollo.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ApolloTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        apollo.move(worker, destinationCell, board);
+        apollo.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class ApolloTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        apollo.build(worker, destinationCell, board);
+        apollo.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class ApolloTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        apollo.build(worker, destinationCell, board);
+        apollo.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class ApolloTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        apollo.build(worker, destinationCell, board);
+        apollo.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class ApolloTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        apollo.move(worker, destinationCell, board);
+        apollo.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class ApolloTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        board = apollo.move(worker, destinationCell, board);
+        board = apollo.move(worker, destinationCell, board, false);
         workers.clear();
         workers.add(new Worker(WorkerColor.WHITE, workerPosition));
         workers.add(new Worker(WorkerColor.BLUE, destinationCell));
@@ -184,7 +184,7 @@ public class ApolloTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = apollo.move(worker, destinationCell, board);
+        board = apollo.move(worker, destinationCell, board, false);
         assertTrue(apollo.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -204,7 +204,7 @@ public class ApolloTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = apollo.move(worker, destinationCell, board);
+        board = apollo.move(worker, destinationCell, board, false);
         assertFalse(apollo.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -224,7 +224,7 @@ public class ApolloTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = apollo.move(worker, destinationCell, board);
+        board = apollo.move(worker, destinationCell, board, false);
         assertTrue(apollo.isWinner(board, workerPosition, destinationCell));
     }
 

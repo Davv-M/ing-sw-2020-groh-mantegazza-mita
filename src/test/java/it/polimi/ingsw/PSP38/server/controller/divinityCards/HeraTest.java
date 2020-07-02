@@ -33,7 +33,7 @@ public class HeraTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        hera.move(worker, destinationCell, board);
+        hera.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class HeraTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        hera.move(worker, destinationCell, board);
+        hera.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class HeraTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        hera.move(worker, destinationCell, board);
+        hera.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class HeraTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        hera.build(worker, destinationCell, board);
+        hera.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class HeraTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hera.build(worker, destinationCell, board);
+        hera.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -124,7 +124,7 @@ public class HeraTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        hera.build(worker, destinationCell, board);
+        hera.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class HeraTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hera.move(worker, destinationCell, board);
+        hera.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class HeraTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hera.move(worker, destinationCell, board);
+        hera.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -179,7 +179,7 @@ public class HeraTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = hera.move(worker, destinationCell, board);
+        board = hera.move(worker, destinationCell, board, false);
         assertTrue(hera.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -197,7 +197,7 @@ public class HeraTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = hera.move(worker, destinationCell, board);
+        board = hera.move(worker, destinationCell, board, false);
         assertFalse(hera.isWinner(board, workerPosition, destinationCell));
     }
 

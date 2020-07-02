@@ -80,7 +80,7 @@ public abstract class DivinityCard {
      * @return the updated board
      */
 
-    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
         checkMove(worker, destinationCell, currentBoard);
         return currentBoard.withoutWorker(worker).withWorker(worker.withPosition(destinationCell));
     }
@@ -104,7 +104,7 @@ public abstract class DivinityCard {
      * @param currentBoard    the current board of the game
      * @return the updated board with the updated cell's tower's height
      */
-    public Board build(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+    public Board build(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
         checkBuild(worker, destinationCell, currentBoard);
 
         int currentHeight = currentBoard.heightOf(destinationCell);

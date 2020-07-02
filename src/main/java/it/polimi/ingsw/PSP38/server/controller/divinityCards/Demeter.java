@@ -20,20 +20,20 @@ public class Demeter extends DivinityCard implements OptionalAction {
     private Cell previousBuild = null;
 
     @Override
-    public Board build(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        Board updatedBoard = super.build(worker, destinationCell, currentBoard);
-        previousBuild = destinationCell;
+    public Board build(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
+        Board updatedBoard = super.build(worker, destinationCell, currentBoard, isSimulation);
+        previousBuild = isSimulation ? previousBuild : destinationCell;
 
         return updatedBoard;
     }
 
     @Override
-    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) {
         if (destinationCell.equals(previousBuild)) {
             throw new IllegalArgumentException("You can't build twice on the same cell");
         }
 
-        return super.build(worker, destinationCell, currentBoard);
+        return super.build(worker, destinationCell, currentBoard, isSimulation);
     }
 
     @Override

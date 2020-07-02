@@ -201,7 +201,6 @@ public class GameModeGUI implements GameMode {
 
     public void waitForFullGame() {
         notMyTurn();
-        System.out.println("Hold on, all the players will be ready in a few seconds");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Hold on, all the players will be ready in a few seconds");
@@ -350,18 +349,6 @@ public class GameModeGUI implements GameMode {
             case WAIT_FOR_FULL_GAME:
                 waitForFullGame();
                 break;
-            case DIVINITY_CARD_NOT_EXISTS:
-                divinityCardNotExists();
-                break;
-            case DIVINITY_CARD_CHOSEN:
-                divinityCardChosen();
-                break;
-            case ILLEGAL_YES_OR_NO:
-                illegalYesOrNo();
-                break;
-            case ILLEGAL_DIVINITY:
-                illegalDivinity();
-                break;
             case DISPLAY_DIVINITY_MESSAGE:
                 displayDivinityMessage();
                 break;
@@ -388,9 +375,6 @@ public class GameModeGUI implements GameMode {
                 break;
             case WORKER_OPTIONAL_ABILITY:
                 workerOptionalAbility();
-                break;
-            case ILLEGAL_ACTION:
-                illegalAction();
                 break;
             case WAIT:
                 waitYourTurn();
@@ -493,26 +477,6 @@ public class GameModeGUI implements GameMode {
         rowSelected = rowSelectedRead;
     }
 
-
-    public void illegalYesOrNo() {
-        System.out.println("Please answer with either \"yes\" or \"no\"");
-    }
-
-    public void illegalDivinity() {
-        System.out.println("Illegal divinity card");
-    }
-
-    public void divinityCardNotExists() {
-        System.out.println("This divinity card doesn't exist. Please select a new one");
-    }
-
-    public void divinityCardChosen() {
-        System.out.println("This divinity card has already been chosen. Please select a new one");
-    }
-
-    private void illegalAction() {
-        System.out.println("Unknown worker action");
-    }
 
     private void myTurn() {
         santoriniWindow.getWaitingPanel().setVisibleHourglass(false);

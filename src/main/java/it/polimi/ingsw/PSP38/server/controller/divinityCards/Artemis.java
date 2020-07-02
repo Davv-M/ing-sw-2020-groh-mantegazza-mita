@@ -22,20 +22,20 @@ public class Artemis extends DivinityCard implements OptionalAction {
     private Cell previousPosition = null;
 
     @Override
-    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        Board updatedBoard = super.move(worker, destinationCell, currentBoard);
-        previousPosition = worker.getPosition();
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
+        Board updatedBoard = super.move(worker, destinationCell, currentBoard, isSimulation);
+        previousPosition = isSimulation ? previousPosition : worker.getPosition();
 
         return updatedBoard;
     }
 
     @Override
-    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) {
         if (destinationCell.equals(previousPosition)) {
             throw new IllegalArgumentException("You can't move back to your previous position");
         }
 
-        return super.move(worker, destinationCell, currentBoard);
+        return super.move(worker, destinationCell, currentBoard, isSimulation);
     }
 
     @Override

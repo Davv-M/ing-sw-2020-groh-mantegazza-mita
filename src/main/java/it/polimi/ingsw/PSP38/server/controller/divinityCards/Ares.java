@@ -22,7 +22,7 @@ public class Ares extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.OPTIONAL_ACTION);
 
     @Override
-    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
         Worker otherWorker = currentBoard.getWorkersPositions().values().stream().filter(w -> w.getColor() == worker.getColor() &&
                 !w.getPosition().equals(worker.getPosition())).findFirst().get();
         checkNeighbor(otherWorker, destinationCell, currentBoard);
