@@ -50,8 +50,10 @@ public class DivinityChoicePanel implements ActionListener {
         titlePanel.setBackground(SantoriniColor.white);
         title.setForeground(SantoriniColor.blue);
         titlePanel.add(title);
+        titlePanel.add(new HourglassPanel().createHourglassPanel());
         return titlePanel;
     }
+
 
     public void setMessage(String message) {
         title.setText(message);

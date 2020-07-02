@@ -15,9 +15,9 @@ public class WaitingPanel {
     private JPanel messagePanel;
     private JLabel messageLabel;
     private JPanel imagePanel;
-    private JPanel hourglassPanel;
     private JLabel waitLabel;
-    private JLabel hourglassLabel;
+    private JPanel southPanel;
+    private JPanel hourglassPanel;
 
     /**
      * Constructor of <code>WaitingPanel</code> class
@@ -34,8 +34,7 @@ public class WaitingPanel {
         waitingPanel.setBackground(Color.WHITE);
         waitingPanel.add(new LogoPanel().createImagePanel(), BorderLayout.NORTH);
         waitingPanel.add(createWaitImagePanel(), BorderLayout.CENTER);
-        //waitingPanel.add(createHourglassPanel(), BorderLayout.SOUTH);
-        waitingPanel.add(createMessagePanel(),BorderLayout.SOUTH);
+        waitingPanel.add(createSouthPanel(),BorderLayout.SOUTH);
         return waitingPanel;
     }
 
@@ -59,23 +58,14 @@ public class WaitingPanel {
         return imagePanel;
     }
 
-    public JPanel createHourglassPanel(){
-        Image hourglass = null;
-        Image hourglassScaled;
-        hourglassPanel= new JPanel();
-        hourglassPanel.setBackground(SantoriniColor.white);
-        try {
-            hourglass = ImageIO.read(getClass().getResource("/hourglass.gif"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        hourglassScaled=hourglass.getScaledInstance(50,-1,Image.SCALE_DEFAULT);
-        hourglassLabel = new JLabel(new ImageIcon(hourglassScaled));
-        imagePanel.add(hourglassLabel);
-        return hourglassPanel;
-
-
+    public JPanel createSouthPanel(){
+        southPanel = new JPanel(new BorderLayout());
+        hourglassPanel = new HourglassPanel().createHourglassPanel();
+        southPanel.add(hourglassPanel, BorderLayout.NORTH);
+        southPanel.add(createMessagePanel(),BorderLayout.CENTER);
+        return southPanel;
     }
+
 
     public JPanel createMessagePanel(){
         messagePanel = new JPanel(new FlowLayout());
@@ -90,6 +80,12 @@ public class WaitingPanel {
     public void setMessage(String message){
         messageLabel.setText(message);
         messageLabel.repaint();
+    }
+
+
+    public void setVisibleHourglass(boolean visible){
+        hourglassPanel.setVisible(visible);
+        hourglassPanel.repaint();
     }
 
 }

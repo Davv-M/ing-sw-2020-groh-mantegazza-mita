@@ -21,6 +21,7 @@ public class GamePanel {
     private JPanel divinityInfoPanel;
     private JLabel messageLabel;
     private BoardComponent boardComponent;
+    private JPanel hourglassPanel;
     private int CellX;
     private int CellY;
 
@@ -74,12 +75,14 @@ public class GamePanel {
 
 
     public JPanel createMessagePanel() {
+        hourglassPanel = new HourglassPanel().createHourglassPanel();
         JPanel messagePanel = new JPanel(new FlowLayout());
         messageLabel = new JLabel("");
         messageLabel.setFont(new Font("font message", Font.BOLD, 30));
         messageLabel.setForeground(SantoriniColor.blue);
         messagePanel.setBackground(SantoriniColor.white);
         messagePanel.add(messageLabel);
+        messagePanel.add(hourglassPanel);
         return messagePanel;
     }
 
@@ -87,6 +90,14 @@ public class GamePanel {
         messageLabel.setText(message);
         messageLabel.repaint();
     }
+
+
+
+    public void setVisibleHourglass(boolean visible){
+        hourglassPanel.setVisible(visible);
+        hourglassPanel.repaint();
+    }
+
 
     public JPanel createControlPanel() {
         JPanel controlPanel = new JPanel(new FlowLayout());
