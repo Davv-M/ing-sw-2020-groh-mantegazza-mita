@@ -70,7 +70,6 @@ public class DivinityChoicePanel implements ActionListener {
         cardButtonsPanel.setBackground(SantoriniColor.white);
         Scanner divinitiesScanner = new Scanner(gameModeGUI.getAvailableDivinities());
         while (divinitiesScanner.hasNextLine()) {
-            //salvare nome divinità e creare pulsante apposito
             createDivinityButton(divinitiesScanner.nextLine());
         }
         mainDivinityPanel.add(cardButtonsPanel, BorderLayout.CENTER);
@@ -113,8 +112,9 @@ public class DivinityChoicePanel implements ActionListener {
         divinityImagePanel.setBackground(SantoriniColor.white);
         //divinityImagePanel.setBackground(panelColor);
 
+        System.out.println(divinityName.toLowerCase());
         try {
-            divinityImage = ImageIO.read(getClass().getResource("/divinityImages/" + divinityName.toLowerCase() + ".png"));
+            divinityImage = ImageIO.read(getClass().getResourceAsStream("/divinities/" + divinityName.toLowerCase() + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

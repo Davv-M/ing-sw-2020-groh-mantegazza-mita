@@ -122,7 +122,7 @@ public class GamePanel {
             Image divinityImageScaled;
             String nickname = playerIterator.next();
             try {
-                divinityImage = ImageIO.read(getClass().getResource("/divinityImages/" + playersDivinities.get(nickname)
+                divinityImage = ImageIO.read(getClass().getResource("/divinities/" + playersDivinities.get(nickname)
                         .toLowerCase() + ".png"));
             } catch (IOException e) {
                 e.printStackTrace();

@@ -18,7 +18,7 @@ import java.util.Scanner;
  * and notify the class Client for all user inputs
  */
 public class Client extends Observable implements Observer {
-    private final static int SERVER_SOCKET_PORT = 3456;
+    private final static int SERVER_SOCKET_PORT = 3457;
     private static String dataInput;
     private static ServerHandler nextInputObserver;
     private static GameMode gameMode;
