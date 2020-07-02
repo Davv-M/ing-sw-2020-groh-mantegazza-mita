@@ -2,10 +2,12 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
 import it.polimi.ingsw.PSP38.common.Message;
+import it.polimi.ingsw.PSP38.server.controller.divinityCards.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -15,6 +17,7 @@ public class GameModeGUI implements GameMode {
     private String dataReadFromClient;
     private static String nickname = "anonymous";
     private static String age;
+    private Map<String, String> playersDivinities = new HashMap<>();
     private JFrame frame;
     private String customStringRead;
     private SantoriniWindow santoriniWindow;
@@ -252,7 +255,25 @@ public class GameModeGUI implements GameMode {
     }
 
     private void workerOptionalAbility() {
-        santoriniWindow.getGamePanel().setMessage("Select the cell where you want to DAFARE");
+        switch (playersDivinities.get(nickname).toUpperCase()) {
+           case "ARES":
+               santoriniWindow.getGamePanel().setMessage("Select the cell where you want to remove a tower block.");
+               break;
+            case "ARTEMIS":
+                santoriniWindow.getGamePanel().setMessage("Select the cell where you want to move.");
+                break;
+            case "ATLAS":
+            case "DEMETER":
+            case "HEPHAESTUS":
+            case "HESTIA":
+            case "PROMETHEUS":
+                santoriniWindow.getGamePanel().setMessage("Select the cell where you want to build.");
+                break;
+            case "CHARON":
+                santoriniWindow.getGamePanel().setMessage("Select the worker you want to push on the other side.");
+                break;
+            default:
+        }
     }
 
 
@@ -395,8 +416,6 @@ public class GameModeGUI implements GameMode {
                 serverUnreacheable();
                 break;
             default:
-                System.out.println("Message not recognized\n");
-                System.out.println(m);
                 break;
         }
     }
@@ -431,7 +450,7 @@ public class GameModeGUI implements GameMode {
 
     @Override
     public void setPlayersDivinities(Map<String, String> playersDivinities) {
-        System.out.println(playersDivinities);
+        this.playersDivinities = playersDivinities;
         santoriniWindow.getGamePanel().paintPlayersDivinities(playersDivinities);
     }
 
