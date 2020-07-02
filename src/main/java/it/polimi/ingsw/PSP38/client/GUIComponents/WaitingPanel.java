@@ -59,21 +59,14 @@ public class WaitingPanel {
     }
 
     public JPanel createHourglassPanel(){
-        Image hourglass = null;
-        Image hourglassScaled;
+        ImageIcon hourglass = null;
         hourglassPanel= new JPanel();
         hourglassPanel.setBackground(SantoriniColor.bkgColor);
-        try {
-            hourglass = ImageIO.read(getClass().getResource("/hourglass.gif"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        hourglassScaled=hourglass.getScaledInstance(50,-1,Image.SCALE_DEFAULT);
-        hourglassLabel = new JLabel(new ImageIcon(hourglassScaled));
+        hourglass = new ImageIcon(getClass().getResource("/hourglass.gif"));
+        hourglass = new ImageIcon(hourglass.getImage().getScaledInstance(50,-1,Image.SCALE_DEFAULT));
+        hourglassLabel = new JLabel(hourglass);
         imagePanel.add(hourglassLabel);
         return hourglassPanel;
-
-
     }
 
     public JPanel createMessagePanel(){
