@@ -211,7 +211,7 @@ public class GameModeGUI implements GameMode {
         santoriniWindow.getDivinityChoicePanel().setMessage(customStringRead + ", please select a divinity card from this list");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
-        //getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
+        getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
         santoriniWindow.getDivinityChoicePanel().setModifiablePanel();
     }
 

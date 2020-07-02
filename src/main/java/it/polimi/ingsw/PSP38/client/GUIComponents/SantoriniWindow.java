@@ -4,6 +4,8 @@ import it.polimi.ingsw.PSP38.client.GameModeGUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Observable;
 
 /**
@@ -31,7 +33,24 @@ public class SantoriniWindow extends Observable {
         mainFrame.setSize(WIDTH, HEIGHT);
         mainFrame.setTitle("Santorini");
         mainFrame.add(createCardHolder());
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        mainFrame.addWindowListener(new WindowAdapter() {
+            /**
+             * Invoked when a window is in the process of being closed.
+             * The close operation can be overridden at this point.
+             *
+             * @param e
+             */
+            @Override
+            public void windowClosing(WindowEvent e) {
+                String[] options = {"Yes", "No"};
+                int optionChosen = JOptionPane.showOptionDialog(mainFrame, "Quit Santorini?", "Closing",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                if (optionChosen == JOptionPane.YES_OPTION){
+                    System.exit(0);
+                }
+            }
+        });
         mainFrame.setVisible(true);
         return mainFrame;
     }
