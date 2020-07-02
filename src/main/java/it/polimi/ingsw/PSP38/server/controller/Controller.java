@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * This class contains all the methods that define the game logic of Santorini
  * @author Maximilien Groh (10683107)
  * @author Matteo Mita (10487862)
  */
@@ -22,6 +23,12 @@ public class Controller extends Observable {
     private final Game game = new Game();
     private final Map<Player, DivinityCard> playersDivinities = new HashMap<>();
 
+    /**
+     * This method is used to check if the nickname chosen by a player is available or not
+     * @param nickname is the nickname taken by a player
+     * @return the chosen nickname
+     * @throws IllegalArgumentException if someone else has picked the same nickname
+     */
     private synchronized String checkNickname(String nickname) throws IllegalArgumentException {
         if (illegalNicknames.contains(nickname)) {
             throw new IllegalArgumentException("This nickname is unavailable. Please choose a new one.");
@@ -29,10 +36,21 @@ public class Controller extends Observable {
         return nickname;
     }
 
+    /**
+     * This method is used to check that the inputted number of players is correct (only while playing with CLI)
+     * @param numOfPlayers is the number of players that will take part to a game of Santorini
+     * @return the chosen number of players
+     * @throws IllegalArgumentException if the number of playes is not between 2 and 3
+     */
     private int checkNumOfPlayers(int numOfPlayers) throws IllegalArgumentException {
         return ArgumentChecker.requireBetween(Game.MIN_NUMBER_OF_PLAYERS, Game.MAX_NUMBER_OF_PLAYERS, numOfPlayers);
     }
 
+    /**
+     * This method is used to see if the game is full or not
+     * @param client is the <code>ClientHandler</code> that is checking for an available place
+     * @throws IOException if the game is full
+     */
     private synchronized void checkGameFull(ClientHandler client) throws IOException {
         if (game.getTotNumPlayers() > game.getCurrNumPlayers()) {
             client.notifyMessage(Message.WAIT_FOR_FULL_GAME);
@@ -42,6 +60,12 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * This method is used to check if the card chosen by the player is valid (only while playing with CLI)
+     * @param card is the card chosen by the player
+     * @return the chosen card, if this is valid
+     * @throws IllegalArgumentException if the card has already been chosen by another player, or it doesn't exists
+     */
     private synchronized String checkDivinityCard(String card) throws IllegalArgumentException {
         DivinityCard.Name selectedCardEnum;
         try {
@@ -57,6 +81,10 @@ public class Controller extends Observable {
         return card;
     }
 
+    /**
+     *This method is used to pause a client thread
+     * @param client is the client that's going to be stopped
+     */
     private synchronized void pauseClient(ClientHandler client) {
         try {
             client.setPaused(true);
@@ -68,11 +96,18 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * This method wakes up all the threads in wait
+     */
     private synchronized void wakeUpAll() {
         Server.wakeUpAll();
         notifyAll();
     }
 
+    /**
+     * This method is called to update the position of players on the board, or to delete them from it if they have lost
+     * @param hasCurrentPlayerLost is a flag that states if a player has lost or not
+     */
     private synchronized void updateTurn(boolean hasCurrentPlayerLost) {
         if (hasCurrentPlayerLost) {
             game.setCurrentBoard(game.getCurrentBoard().withoutWorkers(game.getCurrentPlayerTurn().getColor()));
@@ -86,6 +121,11 @@ public class Controller extends Observable {
         wakeUpAll();
     }
 
+    /**
+     * This method is used to create a new instance of the class corresponding to the chosen card
+     * @param selectedCard is the card chosen by the player
+     * @return a new instance of the class corresponding to the chosen card
+     */
     private DivinityCard stringToStrategy(String selectedCard) {
         switch (selectedCard.toUpperCase()) {
             case "APOLLO":
@@ -121,10 +161,19 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * Getter method for the encoded game board
+     * @return the current encoded game board
+     */
     public List<Byte> getEncodedBoard() {
         return BoardEncoder.bytesForBoard(game.getCurrentBoard());
     }
 
+    /**
+     * This method takes care of all of the preliminary operations in a game of Santorini
+     * @param client is the client thread that is starting the game
+     * @throws IOException
+     */
     public void start(ClientHandler client) throws IOException {
         welcomeMessage(client);
         firstPlayerSetNumOfPlayers(client);
@@ -144,6 +193,11 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * This method handles the execution of a game of Santorini
+     * @param client is the client thread currently playing the game
+     * @throws IOException
+     */
     private void playGame(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
         boolean hasCurrentPlayerLost = false;
@@ -181,14 +235,28 @@ public class Controller extends Observable {
         updateTurn(hasCurrentPlayerLost);
     }
 
+    /**
+     * Getter method for the current number of players of the current game
+     * @return the current number of players in the game
+     */
     public int getTotNumPlayers() {
         return game.getTotNumPlayers();
     }
 
+    /**
+     * This method sends to the client that has requested it a welcome message (only if playing from CLI)
+     * @param client is the current client thread
+     * @throws IOException
+     */
     private void welcomeMessage(ClientHandler client) throws IOException {
         client.notifyMessage(Message.WELCOME);
     }
 
+    /**
+     * This method is used to ask the client to insert the current number of players, if he's the first client to connect to the server
+     * @param client
+     * @throws IOException
+     */
     private void firstPlayerSetNumOfPlayers(ClientHandler client) throws IOException {
         if (client.getClientNum() == 1) {
             client.notifyMessage(Message.INSERT_NUM_PLAYERS);
@@ -200,6 +268,11 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * This method is used to notify the client that the game is full, and therefore it has to wait
+     * @param client
+     * @throws IOException
+     */
     private void notifyExtraClient(ClientHandler client) throws IOException {
         if (client.getClientNum() > game.getTotNumPlayers()) {
             client.notifyEndGame(Protocol.TOO_LATE);
@@ -209,6 +282,12 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * This method requests the client to provide a nickname
+     * @param client
+     * @return the nickname chosen
+     * @throws IOException
+     */
     private String askNickname(ClientHandler client) throws IOException {
         client.notifyMessage(Message.CHOOSE_NICKNAME);
         String nickname = client.askString(this::checkNickname, Message.ILLEGAL_NICKNAME);
@@ -218,11 +297,22 @@ public class Controller extends Observable {
         return nickname;
     }
 
+    /**
+     * This method requests the client to provide the player's age
+     * @param client
+     * @return the player's age
+     * @throws IOException
+     */
     private int askAge(ClientHandler client) throws IOException {
         client.notifyMessage(Message.SET_AGE);
         return client.askInt(ArgumentChecker::checkAge, Message.ILLEGAL_INT);
     }
 
+    /**
+     * This methods asks to to youngest player to choose the cards that will be used in the game
+     * @param client
+     * @throws IOException
+     */
     private void askYoungestPlayerCards(ClientHandler client) throws IOException {
         if (game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {
             List<DivinityCard.Name> selectedDivinityCards = new LinkedList<>();
@@ -243,6 +333,11 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * This method asks the player to choose between one of the cards chosen by the youngest player
+     * @param client
+     * @throws IOException
+     */
     private void askDivinity(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
         displayAvailableDivinities(client);
@@ -253,6 +348,11 @@ public class Controller extends Observable {
         updateTurn(false);
     }
 
+    /**
+     * This method is used to notify the client that is not his turn
+     * @param client
+     * @throws IOException
+     */
     private void notifyNotYourTurn(ClientHandler client) throws IOException {
         while (!game.getCurrentPlayerTurn().getNickname().equals(client.getNickname())) {
             if (game.getWinner() == null) {
@@ -263,6 +363,11 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * This method is used to display the available divinities to the client
+     * @param client
+     * @throws IOException
+     */
     private void displayAvailableDivinities(ClientHandler client) throws IOException {
         client.notifyMessageString(client.getNickname());
         client.notifyMessage(Message.DISPLAY_DIVINITY_MESSAGE);
@@ -272,6 +377,11 @@ public class Controller extends Observable {
         client.notifyMessage(Message.DISPLAY_AVAILABLE_DIVINITIES);
     }
 
+    /**
+     * This method is used for the initial placing of the player's workers
+     * @param client
+     * @throws IOException
+     */
     private void placeWorkers(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
         Map<String, String> map = new HashMap<>();
@@ -306,6 +416,12 @@ public class Controller extends Observable {
         updateTurn(false);
     }
 
+    /**
+     * This method asks the client to specify a cell's coordinates
+     * @param client
+     * @return the chosen cell
+     * @throws IOException
+     */
     private Cell askCell(ClientHandler client) throws IOException {
         int x;
         int y;
@@ -323,12 +439,16 @@ public class Controller extends Observable {
         } while (true);
     }
 
-
     private void displayAllClients() {
         setChanged();
         notifyObservers();
     }
 
+    /**
+     * This method notifies a client that his player has won the game
+     * @param client
+     * @throws IOException
+     */
     private void notifyWinner(ClientHandler client) throws IOException {
         if (game.getWinner().getNickname().equals(client.getNickname())) {
             client.notifyMessage(Message.YOU_WIN);
@@ -338,6 +458,12 @@ public class Controller extends Observable {
         }
     }
 
+    /**
+     * This method is called when the player associated to the client has to move a worker
+     * @param client
+     * @return
+     * @throws IOException
+     */
     private Worker askWorker(ClientHandler client) throws IOException {
         client.notifyMessage(Message.SELECT_WORKER);
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
@@ -361,6 +487,16 @@ public class Controller extends Observable {
         } while (true);
     }
 
+    /**
+     * This method is called if a worker is in the condition of using a special ability, thus asking the player to
+     * choose if using or not this ability
+     * @param client the client associated to the player
+     * @param selectedWorker the intersted worker
+     * @param clientDivinty the divinity associated to the player
+     * @param action the optional action
+     * @return the cell that will be affected by doing this action
+     * @throws IOException
+     */
     private Cell askWorkerAction(ClientHandler client, Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action) throws IOException {
         Cell workerPosition = selectedWorker.getPosition();
         Board currentBoard = game.getCurrentBoard();
@@ -395,6 +531,13 @@ public class Controller extends Observable {
         } while (true);
     }
 
+    /**
+     * This method verifies if a worker is able or not to do a particular action
+     * @param selectedWorker
+     * @param clientDivinty
+     * @param action
+     * @return
+     */
     private boolean canTakeAction(Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action) {
         for (int row = 0; row < Board.ROWS; ++row) {
             for (int col = 0; col < Board.COLUMNS; ++col) {
@@ -411,6 +554,18 @@ public class Controller extends Observable {
         return false;
     }
 
+    /**
+     * This method is called when a worker executes an action
+     * @param selectedWorker the worker that's taking the action
+     * @param cell the cell in which the action will be accomplished
+     * @param board the current board
+     * @param clientDivinty the player's divinity
+     * @param action the action that will be done
+     * @param useAbility if the ability will be used
+     * @param isSimulation if the action won't be pursued for real
+     * @return the new board after doing the action
+     * @throws IllegalArgumentException
+     */
     private Board takeAction(Worker selectedWorker, Cell cell, Board board, DivinityCard clientDivinty, WorkerAction action, boolean useAbility, boolean isSimulation) throws IllegalArgumentException {
         switch (action) {
             case MOVE:
