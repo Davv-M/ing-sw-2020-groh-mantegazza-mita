@@ -29,7 +29,7 @@ public final class ImageCollection {
     public ImageCollection(String dirName) {
         Map<Byte, Image> images = new HashMap<>();
         try {
-            File dir = new File(Objects.requireNonNull(getClass().getResource(dirName)).toURI());
+            File dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader().getResource(dirName)).toURI());
             List<File> dirFiles = new LinkedList<>(
                     Arrays.asList(Objects.requireNonNull(dir.listFiles())));
 

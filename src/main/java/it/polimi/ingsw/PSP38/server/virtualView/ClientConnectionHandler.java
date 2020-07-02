@@ -45,7 +45,7 @@ public class ClientConnectionHandler implements Runnable {
     public void updateClientConnection() {
         if (client.getTotNumPlayers() == 0) {
             Server.reduceClientsNum(client.getClientNum());
-            Server.reduceContPlayer();
+            Server.decrementContPlayer();
         }
         if (client.getClientNum() <= client.getTotNumPlayers()) {
             Server.notifyClientLost();

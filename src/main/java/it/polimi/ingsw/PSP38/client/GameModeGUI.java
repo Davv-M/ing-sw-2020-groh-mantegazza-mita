@@ -1,7 +1,5 @@
 package it.polimi.ingsw.PSP38.client;
 
-//import it.polimi.ingsw.PSP38.client.GUIComponents.ConnectionComponent;
-
 import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
 import it.polimi.ingsw.PSP38.common.Message;
 
@@ -13,7 +11,6 @@ import java.util.Map;
 
 public class GameModeGUI implements GameMode {
     private int numOfPlayers = 0;
-    private Map<String, String> playersDivinities = null;
     volatile boolean isDataReady = false;
     private String dataReadFromClient;
     private static String nickname = "anonymous";
@@ -25,7 +22,6 @@ public class GameModeGUI implements GameMode {
     private JPanel cardButtons;
     private static String columnSelected;
     private static String rowSelected;
-    private String myDivinity;
     private volatile boolean isCoordinateReady = false;
 
 
@@ -45,7 +41,7 @@ public class GameModeGUI implements GameMode {
         Object[] options = {"2", "3"};
         int n = JOptionPane.showOptionDialog(santoriniWindow.getStartPanel().getStartPanel(),
                 "You are the first player to join this game. Please insert the number of players",
-                "Choose number of players",
+                "Choose the number of players",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -97,7 +93,9 @@ public class GameModeGUI implements GameMode {
     }
 
 
-    public void chooseNickname() { setStringRead(nickname);  }
+    public void chooseNickname() {
+        setStringRead(nickname);
+    }
 
     public void illegalNickname() {
         String newNickname;
@@ -191,15 +189,10 @@ public class GameModeGUI implements GameMode {
 
     }
 
-    private void workerNotYours() {
-        System.out.println("This worker doesn't belong to you");
-        santoriniWindow.getGamePanel().setMessage("This worker doesn't belong to you");
-    }
-
     private void displayAvailableDivinities() {
-        availableDivinities=customStringRead;
-        if(cardButtons!=null){
-            BorderLayout borderLayout = (BorderLayout)santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().getLayout();
+        availableDivinities = customStringRead;
+        if (cardButtons != null) {
+            BorderLayout borderLayout = (BorderLayout) santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().getLayout();
             santoriniWindow.getDivinityChoicePanel().getMainDivinityPanel().remove(borderLayout.getLayoutComponent(BorderLayout.CENTER));
         }
         cardButtons = santoriniWindow.getDivinityChoicePanel().createDivinitiesButtonsPanel();
@@ -254,7 +247,7 @@ public class GameModeGUI implements GameMode {
         }
     }
 
-    private void serverUnreacheable(){
+    private void serverUnreacheable() {
         JOptionPane.showMessageDialog(frame, "Server currently unreacheable, please try later", "Connection error", JOptionPane.ERROR_MESSAGE);
     }
 
@@ -308,9 +301,6 @@ public class GameModeGUI implements GameMode {
                 youLose();
             case SELECT_WORKER:
                 selectWorker();
-                break;
-            case WORKER_NOT_YOURS:
-                workerNotYours();
                 break;
             case ASK_SPECIAL_ACTION:
                 askSpecialAction();
@@ -367,6 +357,7 @@ public class GameModeGUI implements GameMode {
                 waitYourTurn();
                 break;
             case CONNECTED_TO_SERVER:
+                //do nothing
                 break;
             case CLIENT_LOST:
                 clientLost();
@@ -416,8 +407,7 @@ public class GameModeGUI implements GameMode {
     }
 
     @Override
-    public void setPlayersDivinities(Map<String, String> playersDivinities){
-        this.playersDivinities = playersDivinities;
+    public void setPlayersDivinities(Map<String, String> playersDivinities) {
         System.out.println(playersDivinities);
         santoriniWindow.getGamePanel().paintPlayersDivinities(playersDivinities);
     }
@@ -432,15 +422,15 @@ public class GameModeGUI implements GameMode {
         santoriniWindow.getGamePanel().getBoardComponent().setEncodedBoard(ServerHandler.readBoard());
     }
 
-    public static void setIP(String ipAddress) {
+    public void setIP(String ipAddress) {
         Client.connectionHandling(ipAddress, Client.getServerSocketPort());
     }
 
-    public static void setNickname(String nicknameRead) {
+    public void setNickname(String nicknameRead) {
         nickname = nicknameRead;
     }
 
-    public static void setAge(String ageRead) {
+    public void setAge(String ageRead) {
         age = ageRead;
     }
 

@@ -1,21 +1,15 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
-import it.polimi.ingsw.PSP38.client.ImageCollection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * This class contains the methods needed to take care of the game interface
@@ -23,12 +17,8 @@ import java.util.Objects;
 public class GamePanel {
     private GameModeGUI gameModeGUI;
     private JPanel mainGamePanel;
-    private JPanel controlPanel;
     private JPanel divinityInfoPanel;
-    private JLabel divinityImageLabel;
-    private JPanel messagePanel;
     private JLabel messageLabel;
-    private JPanel boardPanel;
     private BoardComponent boardComponent;
     private int CellX;
     private int CellY;
@@ -51,7 +41,7 @@ public class GamePanel {
     }
 
     public JPanel createBoardPanel() {
-        boardPanel = new JPanel();
+        JPanel boardPanel = new JPanel();
         boardComponent = new BoardComponent();
         boardPanel.setBackground(SantoriniColor.bkgColor);
         boardComponent.setPreferredSize(boardComponent.getPreferredSize());
@@ -76,7 +66,7 @@ public class GamePanel {
 
 
     public JPanel createMessagePanel() {
-        messagePanel = new JPanel(new FlowLayout());
+        JPanel messagePanel = new JPanel(new FlowLayout());
         messageLabel = new JLabel("");
         messageLabel.setFont(new Font("font message", Font.BOLD, 30));
         messageLabel.setForeground(SantoriniColor.messageColor);
@@ -91,7 +81,7 @@ public class GamePanel {
     }
 
     public JPanel createControlPanel() {
-        controlPanel = new JPanel(new FlowLayout());
+        JPanel controlPanel = new JPanel(new FlowLayout());
         controlPanel.add(createDivinityInfoPanel());
         return controlPanel;
     }
@@ -105,23 +95,17 @@ public class GamePanel {
     public void paintPlayersDivinities(Map<String, String> playersDivinities) {
         divinityInfoPanel.removeAll();
         Iterator<String> playerIterator = playersDivinities.keySet().iterator();
-        for(int i = 0; i < gameModeGUI.getNumOfPlayers(); i++){
+        for (int i = 0; i < gameModeGUI.getNumOfPlayers(); i++) {
             Image divinityImage = null;
             Image divinityImageScaled;
-            File dir = null;
             try {
-                dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
-                        .getResource("divinityImages/" + playersDivinities.get(playerIterator.next()).toLowerCase() + ".png")).toURI());
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-            try {
-                divinityImage = ImageIO.read(dir);
+                divinityImage = ImageIO.read(getClass().getResource("/divinityImages/" + playersDivinities.get(playerIterator.next())
+                        .toLowerCase() + ".png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
             divinityImageScaled = divinityImage.getScaledInstance(200, -1, Image.SCALE_SMOOTH);
-            divinityImageLabel = new JLabel(new ImageIcon(divinityImageScaled));
+            JLabel divinityImageLabel = new JLabel(new ImageIcon(divinityImageScaled));
             divinityInfoPanel.add(divinityImageLabel);
             divinityImageLabel.repaint();
             divinityImageLabel.repaint();

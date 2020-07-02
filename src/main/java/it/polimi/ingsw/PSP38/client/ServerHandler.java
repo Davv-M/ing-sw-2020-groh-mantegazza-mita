@@ -15,7 +15,7 @@ import java.util.*;
  * notify client when read something by an observer pattern
  */
 
-public class ServerHandler extends Observable implements Observer, Runnable{
+public class ServerHandler extends Observable implements Observer, Runnable {
 
     private static ObjectInputStream input;
     private static ObjectOutputStream output;
@@ -30,9 +30,10 @@ public class ServerHandler extends Observable implements Observer, Runnable{
 
     /**
      * Is the only class constructor
+     *
      * @param serverSocket is the socket used to communicate with server
      */
-    public ServerHandler(Socket serverSocket){
+    public ServerHandler(Socket serverSocket) {
 
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
@@ -53,61 +54,61 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     public void run() {
         try {
             while (true) {
-                switch ((Protocol) input.readObject()){
-                    case NOTIFY_MESSAGE:{
+                switch ((Protocol) input.readObject()) {
+                    case NOTIFY_MESSAGE: {
                         protocolRead = Protocol.NOTIFY_MESSAGE;
                         setMessage();
                         notifyClient();
                         break;
                     }
-                    case TOO_LATE:{
+                    case TOO_LATE: {
                         protocolRead = Protocol.TOO_LATE;
                         notifyClient();
                         break;
                     }
-                    case DISPLAY_BOARD:{
+                    case DISPLAY_BOARD: {
                         protocolRead = Protocol.DISPLAY_BOARD;
                         setBoard();
                         notifyClient();
                         break;
                     }
-                    case ASK_INT:{
+                    case ASK_INT: {
                         protocolRead = Protocol.ASK_INT;
                         notifyClient();
                         break;
                     }
-                    case NOTIFY_NUM_PLAYERS:{
+                    case NOTIFY_NUM_PLAYERS: {
                         protocolRead = Protocol.NOTIFY_NUM_PLAYERS;
                         numOfPlayers = input.readInt();
                         notifyClient();
                         break;
                     }
-                    case NOTIFY_PLAYERS_DIVINITIES:{
+                    case NOTIFY_PLAYERS_DIVINITIES: {
                         protocolRead = Protocol.NOTIFY_PLAYERS_DIVINITIES;
                         playersDivinities = (Map<String, String>) input.readObject();
                         notifyClient();
                         break;
                     }
-                    case ASK_STRING:{
+                    case ASK_STRING: {
                         protocolRead = Protocol.ASK_STRING;
                         notifyClient();
                         break;
                     }
-                    case CANT_MOVE:{
+                    case CANT_MOVE: {
                         protocolRead = Protocol.CANT_MOVE;
                         notifyClient();
                         break;
                     }
-                    case NOTIFY_CUSTOM_STRING:{
+                    case NOTIFY_CUSTOM_STRING: {
                         protocolRead = Protocol.NOTIFY_CUSTOM_STRING;
                         setCustomMessageString();
                         notifyClient();
                         break;
                     }
-                    case PING:{
+                    case PING: {
                         break;
                     }
-                    case CLIENT_LOST:{
+                    case CLIENT_LOST: {
                         protocolRead = Protocol.CLIENT_LOST;
                         notifyClient();
                         break;
@@ -117,7 +118,7 @@ public class ServerHandler extends Observable implements Observer, Runnable{
                 }
 
             }
-        }catch (IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             serverLost();
         }
 
@@ -125,18 +126,17 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     }
 
 
-
     /**
-     * notify observers that is available a new data or request from the server
+     * notify observers new data has been received from the server
      */
-    private void notifyClient(){
+    private void notifyClient() {
         nextRequestObserver.update();
     }
 
     /**
      * set the last message received
      */
-    private void setMessage() throws IOException,ClassNotFoundException {
+    private void setMessage() throws IOException, ClassNotFoundException {
         message = (Message) input.readObject();
     }
 
@@ -174,10 +174,11 @@ public class ServerHandler extends Observable implements Observer, Runnable{
 
     /**
      * Write a string to server by using Stream
+     *
      * @param writeString is the string written
      */
-    public static void writeString(String writeString)throws IOException{
-        synchronized (lock){
+    public static void writeString(String writeString) throws IOException {
+        synchronized (lock) {
             output.writeObject(Protocol.RETURN_STRING);
             output.writeObject(writeString);
         }
@@ -186,15 +187,15 @@ public class ServerHandler extends Observable implements Observer, Runnable{
 
     /**
      * Write an int to server by using Stream
+     *
      * @param writeInt is the int written
      */
-    public static void writeInt(int writeInt)throws IOException{
-        synchronized (lock){
+    public static void writeInt(int writeInt) throws IOException {
+        synchronized (lock) {
             output.writeObject(Protocol.RETURN_INT);
             output.writeInt(writeInt);
             output.flush();
         }
-
 
 
     }
@@ -203,35 +204,41 @@ public class ServerHandler extends Observable implements Observer, Runnable{
     /**
      * @return the last protocol read
      */
-    public static Protocol getProtocol(){ return protocolRead;}
+    public static Protocol getProtocol() {
+        return protocolRead;
+    }
 
     /**
      * @return the last message read
      */
-    public static Message getMessage(){ return message;}
+    public static Message getMessage() {
+        return message;
+    }
 
     /**
      * @return the last board read
      */
-    public static List<Byte> readBoard(){ return board;}
+    public static List<Byte> readBoard() {
+        return board;
+    }
 
     /**
      * If required write the new client input to the server by using </writeString()> or </writeInt()>
      */
     @Override
-    public void update(){
-        if(protocolRead == Protocol.ASK_INT){
+    public void update() {
+        if (protocolRead == Protocol.ASK_INT) {
             int number;
             try {
                 number = Integer.parseInt(Client.getStringInput());
                 ServerHandler.writeInt(number);
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.println(Client.getStringInput() + " is not a number, please enter an integer number");
             }
         }
-        if(protocolRead == Protocol.ASK_STRING){
+        if (protocolRead == Protocol.ASK_STRING) {
             try {
                 writeString(Client.getStringInput());
             } catch (IOException e) {
@@ -240,30 +247,30 @@ public class ServerHandler extends Observable implements Observer, Runnable{
         }
     }
 
-    public void ping()throws IOException{
-        synchronized (lock){
+    public void ping() throws IOException {
+        synchronized (lock) {
             output.writeObject(Protocol.PING);
         }
     }
 
 
-
-    public void serverLost(){
+    public void serverLost() {
         protocolRead = Protocol.NOTIFY_MESSAGE;
         message = Message.SERVER_LOST;
         notifyClient();
         try {
             Thread.sleep(10000);
-        } catch (InterruptedException ignore) { }
+        } catch (InterruptedException ignore) {
+        }
         System.exit(0);
     }
 
 
-    public static int getNumOfPlayers(){
+    public static int getNumOfPlayers() {
         return numOfPlayers;
     }
 
-    public static Map<String, String> getPlayersDivinities(){
+    public static Map<String, String> getPlayersDivinities() {
         return playersDivinities;
     }
 }

@@ -23,18 +23,16 @@ public class Client extends Observable implements Observer {
     private static ServerHandler nextInputObserver;
     private static GameMode gameMode;
     private static String customString;
-    private static Socket serverSocket;
     private static final Scanner ipScanner = new Scanner(System.in);
-    private static SantoriniWindow santoriniWindow;
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-        if (args.length==0) {
+        if (args.length == 0) {
             gameMode = new GameModeGUI();
         } else if (args[0].equalsIgnoreCase("cli")) {
             gameMode = new GameModeCLI();
             System.out.println("Insert server IP address:");
-            String ipAddress= ipScanner.nextLine();
-            connectionHandling(ipAddress,SERVER_SOCKET_PORT);
+            String ipAddress = ipScanner.nextLine();
+            connectionHandling(ipAddress, SERVER_SOCKET_PORT);
         } else {
             System.out.println("Parameter not recognized");
             System.exit(0);
@@ -54,21 +52,16 @@ public class Client extends Observable implements Observer {
         Protocol protocolRead = ServerHandler.getProtocol();
         if (protocolRead == Protocol.NOTIFY_PLAYERS_DIVINITIES) {
             gameMode.setPlayersDivinities(ServerHandler.getPlayersDivinities());
-        }
-        else if (protocolRead == Protocol.NOTIFY_NUM_PLAYERS) {
+        } else if (protocolRead == Protocol.NOTIFY_NUM_PLAYERS) {
             gameMode.setNumOfPlayers(ServerHandler.getNumOfPlayers());
-        }
-        else if (protocolRead == Protocol.NOTIFY_MESSAGE) {
+        } else if (protocolRead == Protocol.NOTIFY_MESSAGE) {
             gameMode.decodeMessage(ServerHandler.getMessage());
-        }
-        else if (protocolRead == Protocol.DISPLAY_BOARD) {
+        } else if (protocolRead == Protocol.DISPLAY_BOARD) {
             gameMode.displayBoard();
-        }
-        else if (protocolRead == Protocol.NOTIFY_CUSTOM_STRING) {
+        } else if (protocolRead == Protocol.NOTIFY_CUSTOM_STRING) {
             customString = ServerHandler.getCustomMessageString();
             gameMode.updateCustomString();
-        }
-        else if(protocolRead == Protocol.CANT_MOVE || protocolRead == Protocol.CLIENT_LOST || protocolRead == Protocol.TOO_LATE){
+        } else if (protocolRead == Protocol.CANT_MOVE || protocolRead == Protocol.CLIENT_LOST || protocolRead == Protocol.TOO_LATE) {
             endGame(protocolRead);
         }
     }
@@ -82,10 +75,10 @@ public class Client extends Observable implements Observer {
 
 
     /**
-     * notify observers that is available a new data input from the client
+     * notify observers that new data input from the client is available
      */
-    private static void notifyReadSomething()throws InterruptedException{
-        Thread.sleep(500);
+    private static void notifyReadSomething() throws InterruptedException {
+        Thread.sleep(100);
         Protocol protocolRead = ServerHandler.getProtocol();
         if (protocolRead == Protocol.ASK_INT || protocolRead == Protocol.ASK_STRING) {
             nextInputObserver.update();
@@ -95,30 +88,18 @@ public class Client extends Observable implements Observer {
 
     }
 
-    /*public static JFrame createUI() {
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        cc=new ConnectionComponent();
-        frame.add(cc);
-        frame.getContentPane().setPreferredSize(cc.getPreferredSize());
-        frame.pack();
-        frame.setVisible(true);
-        cc.requestFocusInWindow();
-        return frame;
-    }*/
-
     public static String getCustomString() {
         return customString;
     }
 
-    public static void setObserver(ServerHandler sh){
+    public static void setObserver(ServerHandler sh) {
         nextInputObserver = sh;
     }
 
-    public static void connectionHandling(String address, int port){
+    public static void connectionHandling(String address, int port) {
         try {
             InetAddress addr = InetAddress.getByName(address);
-            serverSocket = new Socket(addr, port);
+            Socket serverSocket = new Socket(addr, port);
             ServerHandler serverHandler = new ServerHandler(serverSocket);
             nextInputObserver = serverHandler;
             Thread thread = new Thread(serverHandler);
@@ -134,21 +115,17 @@ public class Client extends Observable implements Observer {
         return SERVER_SOCKET_PORT;
     }
 
-    public static GameMode getGameMode() {
-        return gameMode;
-    }
-
-    public void endGame(Protocol protocolExit){
-        switch (protocolExit){
-            case TOO_LATE:{
+    public void endGame(Protocol protocolExit) {
+        switch (protocolExit) {
+            case TOO_LATE: {
                 gameMode.decodeMessage(Message.GAME_FULL);
                 break;
             }
-            case CLIENT_LOST:{
+            case CLIENT_LOST: {
                 gameMode.decodeMessage(Message.CLIENT_LOST);
                 break;
             }
-            case CANT_MOVE:{
+            case CANT_MOVE: {
                 gameMode.decodeMessage(Message.CANT_MOVE);
                 break;
             }

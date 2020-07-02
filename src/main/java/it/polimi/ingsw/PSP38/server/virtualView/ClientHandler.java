@@ -57,7 +57,7 @@ public class ClientHandler implements Observer, Runnable {
     }
 
     /**
-     * Void method that sent an ack to the client
+     * Void method that sends an ack to the client
      *
      * @throws IOException if the client is unreachable
      */
@@ -70,7 +70,7 @@ public class ClientHandler implements Observer, Runnable {
     /**
      * Setter of <code>isPaused</code>
      *
-     * @param bool boolean that set the pause status of the thread
+     * @param bool boolean that sets the pause status of the thread
      */
     public void setPaused(boolean bool) {
         isPaused = bool;
@@ -124,9 +124,9 @@ public class ClientHandler implements Observer, Runnable {
     }
 
     /**
-     * Method used to ask an integer values to the client
+     * Method used to ask an integer value to the client
      *
-     * @param checkInt integer values read from the client that needs to be verified
+     * @param checkInt method that verifies the validity of the int received
      * @return the integer read
      * @throws IOException if the client is unreachable
      */
@@ -153,9 +153,9 @@ public class ClientHandler implements Observer, Runnable {
     }
 
     /**
-     * Method used to ask a String values to the client
+     * Method used to ask a String value to the client
      *
-     * @param checkString String values read from the client that needs to be verified
+     * @param checkString method that verifies the validity of the string received
      * @return the String read
      * @throws IOException if the client is unreachable
      */
@@ -256,9 +256,9 @@ public class ClientHandler implements Observer, Runnable {
     }
 
     /**
-     * Reduce the Client num values
+     * Decrements the Client num values
      */
-    public void reduceClientNum() {
+    public void decrementClientNum() {
         clientNum--;
     }
 
@@ -292,7 +292,7 @@ public class ClientHandler implements Observer, Runnable {
     }
 
     /**
-     * Void method that notify the client who lost for the <code>protocolForEnd</code> reason
+     * Void method that notifies the client who lost for the <code>protocolForEnd</code> reason
      *
      * @param protocolForEnd reason of end Game
      */

@@ -24,6 +24,13 @@ public class BoardPrinter {
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     public static final String UNICODE_PERSON = "\ud80c\udc4c";
 
+    /**
+     * Static method used to display the encoded board of the game received from the server
+     * on the console when playing the game in "CLI" mode.
+     *
+     * @param encodedBoard the encoded board to display
+     */
+
     public static void printBoard(List<Byte> encodedBoard) {
         boardRows = encodedBoard.remove(0);
         boardColumns = encodedBoard.remove(0);

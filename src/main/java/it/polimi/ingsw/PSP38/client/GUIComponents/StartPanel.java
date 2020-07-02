@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
-import it.polimi.ingsw.PSP38.client.ImageCollection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,35 +14,31 @@ import java.util.Objects;
 
 /**
  * This class contains all the methods needed to create the panel with the preliminary settings of the game
+ *
  * @author Davide Mantegazza (10568661)
  */
 public class StartPanel implements ActionListener {
     private JPanel startPanel;
-    private JPanel imagePanel;
-    private JPanel controlPanel;
-    private JPanel buttonPanel;
-    private JLabel ipLabel;
     private JTextField ipAddress;
-    private JLabel nicknameLabel;
     private JTextField nickname;
-    private JLabel ageLabel;
     private JTextField age;
     private JButton connectButton;
-    private Color panelColor = new Color(0,0,0,0);
-    private Color bkgColor = new Color(25, 109,165);
-    private Color bkgTextColor = new Color(62,159,225);
-    private Color textColor  = Color.WHITE;
+    private final Color panelColor = new Color(0, 0, 0, 0);
+    private final Color bkgColor = new Color(25, 109, 165);
+    private final Color bkgTextColor = new Color(62, 159, 225);
+    private final Color textColor = Color.WHITE;
     private GameModeGUI gameModeGUI;
 
     /**
      * This method is used to create the main panel for the initial settings of the game
+     *
      * @param gmg is the current instance of GameModeGUI
      * @return the main panel
      */
-    public JPanel createStartPanel(GameModeGUI gmg){
-        gameModeGUI=gmg;
+    public JPanel createStartPanel(GameModeGUI gmg) {
+        gameModeGUI = gmg;
         startPanel = new JPanel();
-        startPanel.setLayout(new GridLayout(3,1));
+        startPanel.setLayout(new GridLayout(3, 1));
         startPanel.setBackground(bkgColor);
         startPanel.add(createImagePanel());
         startPanel.add(createControlPanel());
@@ -53,26 +48,20 @@ public class StartPanel implements ActionListener {
 
     /**
      * This method is used to generate the panel containing the header image of the startup panel
+     *
      * @return the panel with the title image
      */
     public JPanel createImagePanel() {
         Image santoriniLogo = null;
         Image santoriniLogoScaled;
-        imagePanel = new JPanel();
+        JPanel imagePanel = new JPanel();
         imagePanel.setBackground(panelColor);
-        File dir = null;
         try {
-            dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
-                    .getResource("santorini-logo.png")).toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        try {
-            santoriniLogo= ImageIO.read(dir);
+            santoriniLogo = ImageIO.read(getClass().getResource("/santorini-logo.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        santoriniLogoScaled =santoriniLogo.getScaledInstance(450,-1,Image.SCALE_SMOOTH);
+        santoriniLogoScaled = santoriniLogo.getScaledInstance(450, -1, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(santoriniLogoScaled));
         imagePanel.add(logoLabel);
         return imagePanel;
@@ -81,25 +70,26 @@ public class StartPanel implements ActionListener {
     /**
      * This method is used to generate the panel that contains the text fields used to input the server's IP address,
      * the player's nickname and the player's age
+     *
      * @return the panel containing the text fields previously mentioned
      */
-    public JPanel createControlPanel(){
-        controlPanel = new JPanel();
-        controlPanel.setLayout(new GridLayout(6,1));
+    public JPanel createControlPanel() {
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new GridLayout(6, 1));
         controlPanel.setBackground(panelColor);
-        ipLabel = new JLabel("IP address");
+        JLabel ipLabel = new JLabel("IP address");
         ipLabel.setForeground(textColor);
         controlPanel.add(ipLabel);
         ipAddress = new JTextField();
         ipAddress.setBackground(bkgTextColor);
         controlPanel.add(ipAddress);
-        nicknameLabel = new JLabel("Nickname");
+        JLabel nicknameLabel = new JLabel("Nickname");
         nicknameLabel.setForeground(textColor);
         controlPanel.add(nicknameLabel);
         nickname = new JTextField();
         nickname.setBackground(bkgTextColor);
         controlPanel.add(nickname);
-        ageLabel = new JLabel("Age");
+        JLabel ageLabel = new JLabel("Age");
         ageLabel.setForeground(textColor);
         controlPanel.add(ageLabel);
         age = new JTextField();
@@ -110,10 +100,11 @@ public class StartPanel implements ActionListener {
 
     /**
      * This method is used to create the panel that contains the button used to submit the inputted data and connect to the server
+     *
      * @return the panel with the button used to submit the data and connect to the server
      */
-    public JPanel createButtonPanel(){
-        buttonPanel = new JPanel();
+    public JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.setBackground(panelColor);
         connectButton = new JButton("Connect to server");
@@ -129,10 +120,10 @@ public class StartPanel implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==connectButton){
-            if (nickname.getText().isEmpty() || ipAddress.getText().isEmpty() || age.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null,"tutti i campi sono obbligatori","Login error ",JOptionPane.WARNING_MESSAGE);
-            }else {
+        if (e.getSource() == connectButton) {
+            if (nickname.getText().isEmpty() || ipAddress.getText().isEmpty() || age.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Fill all text fields", "Login error ", JOptionPane.WARNING_MESSAGE);
+            } else {
                 gameModeGUI.setIP(ipAddress.getText());
                 gameModeGUI.setNickname(nickname.getText());
                 gameModeGUI.setAge(age.getText());

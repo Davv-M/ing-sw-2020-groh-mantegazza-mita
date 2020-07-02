@@ -8,24 +8,17 @@ import java.util.Scanner;
 
 
 public class GameModeCLI implements GameMode {
-    private int numOfPlayers = 0;
-    private Map<String, String> playersDivinities = null;
     private String customStringRead;
     private final Scanner scanner = new Scanner(System.in);
-    private static Socket serverSocket;
-
-    /*public GameModeCLI(){
-       connectionHandling();
-    }*/
 
     @Override
-    public void decodeMessage(Message m){
-        switch (m){
+    public void decodeMessage(Message m) {
+        switch (m) {
             case WELCOME:
                 System.out.println("Welcome to Santorini\n");
                 break;
             case INSERT_NUM_PLAYERS:
-                System.out.println("You are the first player to join this game. Please insert the number of players (between 2 and 3)");
+                System.out.println("You are the first player to join this game. Please insert the number of players");
                 break;
             case WAIT_FOR_NUM_PLAYERS:
                 System.out.println("Please wait for the first player to select the number of players.");
@@ -40,17 +33,17 @@ public class GameModeCLI implements GameMode {
                 System.out.println("How old are you?");
                 break;
             case WAIT_FOR_DIVINITIES:
-                System.out.println("Please wait for "+customStringRead+
+                System.out.println("Please wait for " + customStringRead +
                         " to choose the divinity cards that will be used in this game");
                 break;
             case NOT_YOUR_TURN:
-                System.out.println("It's "+customStringRead+"'s turn, please wait");
+                System.out.println("It's " + customStringRead + "'s turn, please wait");
                 break;
             case PLACE_YOUR_WORKERS:
                 System.out.println("Please place all of your workers on the board");
                 break;
             case PLACE_A_WORKER:
-                System.out.println("Place your worker number "+customStringRead);
+                System.out.println("Place your worker number " + customStringRead);
                 break;
             case SET_CELL_COLUMN_COORD:
                 System.out.println("Please insert the cell's column coordinate");
@@ -62,7 +55,7 @@ public class GameModeCLI implements GameMode {
                 System.out.println("You are the winner!");
                 break;
             case YOU_LOSE:
-                System.out.println("You lose! The winner is "+customStringRead);
+                System.out.println("You lose! The winner is " + customStringRead);
             case SELECT_WORKER:
                 System.out.println("Please select the worker you want to move");
                 break;
@@ -91,22 +84,22 @@ public class GameModeCLI implements GameMode {
                 System.out.println("Illegal divinity card");
                 break;
             case DISPLAY_DIVINITY_MESSAGE:
-                System.out.println(customStringRead+", please select a divinity card from this list :\n");
+                System.out.println(customStringRead + ", please select a divinity card from this list :\n");
                 break;
             case DISPLAY_AVAILABLE_DIVINITIES:
                 System.out.println(customStringRead);
                 break;
             case ILLEGAL_INT:
-                System.out.println("Integer not recognized exception: "+customStringRead);
+                System.out.println("Integer not recognized exception: " + customStringRead);
                 break;
             case ILLEGAL_STRING:
-                System.out.println("String not recognized exception: "+customStringRead);
+                System.out.println("String not recognized exception: " + customStringRead);
                 break;
             case UNABLE_TO_FINISH_TURN:
                 System.out.println("You can't finish your turn. You lose.");
                 break;
             case ILLEGAL_ARGUMENT:
-                System.out.println("Illegal argument exception: "+customStringRead);
+                System.out.println("Illegal argument exception: " + customStringRead);
                 break;
             case WORKER_MOVE:
                 System.out.println("Select the cell where you want to move");
@@ -146,7 +139,7 @@ public class GameModeCLI implements GameMode {
 
     @Override
     public void updateCustomString() {
-        customStringRead=Client.getCustomString();
+        customStringRead = Client.getCustomString();
     }
 
     @Override
@@ -166,34 +159,14 @@ public class GameModeCLI implements GameMode {
 
     @Override
     public void setNumOfPlayers(int numOfPlayers) {
-        this.numOfPlayers = numOfPlayers;
         System.out.println("There will be " + numOfPlayers + " players in the game.");
     }
 
     @Override
-    public void setPlayersDivinities(Map<String, String> playersDivinities){
-        this.playersDivinities = playersDivinities;
+    public void setPlayersDivinities(Map<String, String> playersDivinities) {
         System.out.println("These are the chosen divinities :");
-        for(String player : playersDivinities.keySet()){
+        for (String player : playersDivinities.keySet()) {
             System.out.println(player + " : " + playersDivinities.get(player));
         }
     }
-
-
-    /*public void connectionHandling(){
-        try {
-            System.out.println("insert Server IP address:");
-            String ipAddress= scanner.nextLine();
-            InetAddress address = InetAddress.getByName(ipAddress);
-            serverSocket = new Socket(address, SERVER_SOCKET_PORT);
-            ServerHandler serverHandler = new ServerHandler(serverSocket);
-            Client.setObserver(serverHandler);
-            Thread thread = new Thread(serverHandler);
-            thread.start();
-        } catch (IOException e) {
-            System.out.println("server unreachable");
-            return;
-        }
-        System.out.println("Connected");
-    }*/
 }

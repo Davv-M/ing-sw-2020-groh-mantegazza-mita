@@ -4,8 +4,6 @@ import it.polimi.ingsw.PSP38.client.ImageCollection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.List;
 
