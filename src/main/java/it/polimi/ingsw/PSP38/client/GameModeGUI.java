@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP38.client;
 
-import it.polimi.ingsw.PSP38.client.GUIComponents.HourglassPanel;
 import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
 import it.polimi.ingsw.PSP38.common.Message;
 
@@ -41,7 +40,7 @@ public class GameModeGUI implements GameMode {
 
     public void insertNumPlayer() {
         Object[] options = {"2", "3"};
-        int n = JOptionPane.showOptionDialog(santoriniWindow.getStartPanel().getStartPanel(),
+        int n = JOptionPane.showOptionDialog(frame,
                 "You are the first player to join this game. Please insert the number of players",
                 "Choose the number of players",
                 JOptionPane.YES_NO_OPTION,
@@ -71,7 +70,7 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitForNumPlayer() {
-        santoriniWindow.getWaitingPanel().setVisibleHourglass(true);
+        notMyTurn();
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Please wait for the first player to select the number of players.");
@@ -79,11 +78,33 @@ public class GameModeGUI implements GameMode {
     }
 
     public void gameFull() {
-        JOptionPane.showMessageDialog(frame, "The game is currently full, please try later.", "Game full ", JOptionPane.WARNING_MESSAGE);
+        Object[] options = {"OK"};
+        int n = JOptionPane.showOptionDialog(frame,
+                "The game is currently full, please try later",
+                "Game full",
+                JOptionPane.OK_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                null);
+        if (n == JOptionPane.OK_OPTION) {
+            System.exit(0);
+        }
     }
 
     public void clientLost() {
-        JOptionPane.showMessageDialog(frame, "Your challenger lost connection, please restart app", "Challenger lost", JOptionPane.WARNING_MESSAGE);
+        Object[] options = {"OK"};
+        int n = JOptionPane.showOptionDialog(frame,
+                "Your challenger lost connection, please restart app",
+                "Challenger lost",
+                JOptionPane.OK_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                null);
+        if (n == JOptionPane.OK_OPTION) {
+            System.exit(0);
+        }
     }
 
     public void cantMove() {
@@ -91,7 +112,18 @@ public class GameModeGUI implements GameMode {
     }
 
     public void serverLost() {
-        JOptionPane.showMessageDialog(frame, "Connection lost with server, please restart app ", "Server Lost", JOptionPane.WARNING_MESSAGE);
+        Object[] options = {"OK"};
+        int n = JOptionPane.showOptionDialog(frame,
+                "Connection lost with server, please restart app ",
+                "Server Lost",
+                JOptionPane.OK_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                null);
+        if (n == JOptionPane.OK_OPTION) {
+            System.exit(0);
+        }
     }
 
 
@@ -111,8 +143,7 @@ public class GameModeGUI implements GameMode {
     }
 
     public void waitForDivinities() {
-        santoriniWindow.getWaitingPanel().setVisibleHourglass(true);
-        System.out.println("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
+        notMyTurn();
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
@@ -120,18 +151,15 @@ public class GameModeGUI implements GameMode {
     }
 
     public void notYourTurn() {
-        santoriniWindow.getGamePanel().setVisibleHourglass(true);
-        isMyTurn = false;
+        notMyTurn();
         santoriniWindow.getDivinityChoicePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
         santoriniWindow.getGamePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
-        santoriniWindow.getDivinityChoicePanel().setUnmodifiablePanel();
 
 
     }
 
     public void placeYourWorkers() {
-        santoriniWindow.getGamePanel().setVisibleHourglass(false);
-        isMyTurn = true;
+        myTurn();
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "game");
         santoriniWindow.getGamePanel().setMessage("Please place all of your workers on the board");
@@ -140,9 +168,8 @@ public class GameModeGUI implements GameMode {
 
 
     public void placeAWorker() {
-        frame.setCursor(Cursor.getDefaultCursor());
+        getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
         santoriniWindow.getGamePanel().setMessage("Place your worker number " + customStringRead);
-        santoriniWindow.getMainFrame().repaint();
 
     }
 
@@ -173,7 +200,7 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitForFullGame() {
-        santoriniWindow.getWaitingPanel().setVisibleHourglass(true);
+        notMyTurn();
         System.out.println("Hold on, all the players will be ready in a few seconds");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
@@ -183,10 +210,8 @@ public class GameModeGUI implements GameMode {
 
 
     public void selectWorker() {
-        santoriniWindow.getGamePanel().setVisibleHourglass(false);
-        isMyTurn = true;
+        myTurn();
         santoriniWindow.getGamePanel().setMessage("Please select the worker you want to move:");
-        santoriniWindow.getMainFrame().repaint();
     }
 
 
@@ -207,12 +232,12 @@ public class GameModeGUI implements GameMode {
     }
 
     private void displayDivinityMessage() {
-        frame.setCursor(Cursor.getDefaultCursor());
+        myTurn();
         santoriniWindow.getDivinityChoicePanel().setMessage(customStringRead + ", please select a divinity card from this list");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "cardChoice");
-        //getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
-        santoriniWindow.getDivinityChoicePanel().setModifiablePanel();
+        getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
 
     private void unableToFinishTurn() {
@@ -220,14 +245,11 @@ public class GameModeGUI implements GameMode {
     }
 
     private void workerMove() {
-        frame.setCursor(Cursor.getDefaultCursor());
         santoriniWindow.getGamePanel().setMessage("It's time to Move your worker!");
-        santoriniWindow.getMainFrame().repaint();
     }
 
     private void workerBuild() {
         santoriniWindow.getGamePanel().setMessage("It's time to Build!");
-        santoriniWindow.getMainFrame().repaint();
     }
 
     private void workerOptionalAbility() {
@@ -237,7 +259,7 @@ public class GameModeGUI implements GameMode {
 
     private void askSpecialAction() {
         Object[] options = {"yes", "no"};
-        int n = JOptionPane.showOptionDialog(santoriniWindow.getMainFrame(),
+        int n = JOptionPane.showOptionDialog(frame,
                 "Do you want to use your special ability?",
                 "Special Ability",
                 JOptionPane.YES_NO_OPTION,
@@ -254,7 +276,18 @@ public class GameModeGUI implements GameMode {
     }
 
     private void serverUnreacheable() {
-        JOptionPane.showMessageDialog(frame, "Server currently unreacheable, please try later", "Connection error", JOptionPane.ERROR_MESSAGE);
+        Object[] options = {"OK"};
+        int n = JOptionPane.showOptionDialog(frame,
+                "Server currently unreacheable, please try later",
+                "Connection error",
+                JOptionPane.OK_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                null);
+        if (n == JOptionPane.OK_OPTION) {
+            System.exit(0);
+        }
     }
 
     public void illegalArgument() {
@@ -481,5 +514,23 @@ public class GameModeGUI implements GameMode {
         System.out.println("Unknown worker action");
     }
 
-    public boolean isMyTurn(){return isMyTurn;}
+    private void myTurn() {
+        santoriniWindow.getWaitingPanel().setVisibleHourglass(false);
+        santoriniWindow.getDivinityChoicePanel().setVisibleHourglass(false);
+        santoriniWindow.getGamePanel().setVisibleHourglass(false);
+        isMyTurn = true;
+    }
+
+    private void notMyTurn() {
+        santoriniWindow.getWaitingPanel().setVisibleHourglass(true);
+        santoriniWindow.getDivinityChoicePanel().setVisibleHourglass(true);
+        santoriniWindow.getGamePanel().setVisibleHourglass(true);
+        isMyTurn = false;
+    }
+
+    public boolean isMyTurn() {
+        return isMyTurn;
+    }
+
+
 }

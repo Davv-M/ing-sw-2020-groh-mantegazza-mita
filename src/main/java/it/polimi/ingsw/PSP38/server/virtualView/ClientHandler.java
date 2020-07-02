@@ -266,7 +266,7 @@ public class ClientHandler implements Observer, Runnable {
      * Void method used to notify the client the number of players
      */
     public void notifyNumPlayers(int numPlayers) throws IOException {
-        synchronized (lock){
+        synchronized (lock) {
             output.writeObject(Protocol.NOTIFY_NUM_PLAYERS);
             output.writeInt(numPlayers);
         }
@@ -276,7 +276,7 @@ public class ClientHandler implements Observer, Runnable {
      * Void method used to notify the client the number of players
      */
     public void notifyPlayersDivinities(Map<String, String> map) throws IOException {
-        synchronized (lock){
+        synchronized (lock) {
             output.writeObject(Protocol.NOTIFY_PLAYERS_DIVINITIES);
             output.writeObject(map);
         }

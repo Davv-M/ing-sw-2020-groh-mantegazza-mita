@@ -21,7 +21,7 @@ public class Atlas extends DivinityCard implements OptionalAbility {
 
     @Override
     public Board optionalAbility(boolean buildDome, Worker worker, Cell destinationCell, Board currentBoard) {
-        if(buildDome){
+        if (buildDome) {
             checkBuild(worker, destinationCell, currentBoard);
             return currentBoard.withDome(destinationCell);
         } else {

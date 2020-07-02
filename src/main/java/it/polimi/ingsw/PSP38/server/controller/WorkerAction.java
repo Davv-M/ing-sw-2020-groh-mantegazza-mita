@@ -15,8 +15,8 @@ public enum WorkerAction {
     OPTIONAL_ACTION,
     OPTIONAL_ABILITY;
 
-    public Message question(){
-        switch (this){
+    public Message question() {
+        switch (this) {
             case MOVE:
                 return Message.WORKER_MOVE;
             case BUILD:
@@ -29,7 +29,7 @@ public enum WorkerAction {
         }
     }
 
-    public boolean isOptional(){
+    public boolean isOptional() {
         return this == OPTIONAL_ACTION || this == OPTIONAL_ABILITY;
     }
 }

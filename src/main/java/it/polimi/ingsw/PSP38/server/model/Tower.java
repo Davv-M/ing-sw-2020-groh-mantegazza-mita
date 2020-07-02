@@ -20,31 +20,29 @@ public class Tower {
      * Constructs a Tower with the given position and height.
      *
      * @param position the cell where the tower stands
-     * @param height the height of the tower
-     * @throws NullPointerException if the given position is null
+     * @param height   the height of the tower
+     * @throws NullPointerException     if the given position is null
      * @throws IllegalArgumentException if the height is not between 0 and {@code MAX_HEIGHT}
      */
 
-    public Tower(Cell position, int height) throws NullPointerException, IllegalArgumentException{
+    public Tower(Cell position, int height) throws NullPointerException, IllegalArgumentException {
         this.position = Objects.requireNonNull(position);
         this.height = ArgumentChecker.requireBetween(0, MAX_HEIGHT, height);
     }
 
     /**
-     *
      * @return the tower's position
      */
 
-    public Cell getPosition(){
+    public Cell getPosition() {
         return position;
     }
 
     /**
-     *
      * @return the tower's height
      */
 
-    public int getHeight(){
+    public int getHeight() {
         return height;
     }
 

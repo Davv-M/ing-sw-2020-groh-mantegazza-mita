@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
+import it.polimi.ingsw.PSP38.common.Message;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,6 +19,7 @@ import java.util.Scanner;
 public class DivinityChoicePanel implements ActionListener {
     private JPanel mainDivinityPanel;
     private JPanel cardButtonsPanel;
+    private JPanel hourglassPanel;
     private JLabel title;
     private GameModeGUI gameModeGUI;
     private final ButtonGroup divinityRadioButtonGroup = new ButtonGroup();
@@ -33,16 +35,18 @@ public class DivinityChoicePanel implements ActionListener {
         gameModeGUI = gmg;
         mainDivinityPanel = new JPanel(new BorderLayout());
         mainDivinityPanel.setBackground(SantoriniColor.white);
-        mainDivinityPanel.add(createTitlePanel(), BorderLayout.NORTH);
+        mainDivinityPanel.add(createMessagePanel(), BorderLayout.NORTH);
         mainDivinityPanel.add(createOkButtonPanel(), BorderLayout.SOUTH);
         return mainDivinityPanel;
     }
+
+    /*  */
 
     /**
      * This method is used to create the title panel
      *
      * @return the title panel
-     */
+     *//*
     public JPanel createTitlePanel() {
         JPanel titlePanel = new JPanel();
         title = new JLabel("");
@@ -52,12 +56,27 @@ public class DivinityChoicePanel implements ActionListener {
         titlePanel.add(title);
         titlePanel.add(new HourglassPanel().createHourglassPanel());
         return titlePanel;
+    }*/
+    public JPanel createMessagePanel() {
+        hourglassPanel = new HourglassPanel().createHourglassPanel();
+        JPanel messagePanel = new JPanel(new FlowLayout());
+        title = new JLabel("");
+        title.setFont(new Font("font message", Font.BOLD, 30));
+        title.setForeground(SantoriniColor.blue);
+        messagePanel.setBackground(SantoriniColor.white);
+        messagePanel.add(title);
+        messagePanel.add(hourglassPanel);
+        return messagePanel;
     }
-
 
     public void setMessage(String message) {
         title.setText(message);
         title.repaint();
+    }
+
+    public void setVisibleHourglass(boolean visible) {
+        hourglassPanel.setVisible(visible);
+        hourglassPanel.repaint();
     }
 
     /**
@@ -70,7 +89,6 @@ public class DivinityChoicePanel implements ActionListener {
         cardButtonsPanel.setBackground(SantoriniColor.white);
         Scanner divinitiesScanner = new Scanner(gameModeGUI.getAvailableDivinities());
         while (divinitiesScanner.hasNextLine()) {
-            //salvare nome divinità e creare pulsante apposito
             createDivinityButton(divinitiesScanner.nextLine());
         }
         mainDivinityPanel.add(cardButtonsPanel, BorderLayout.CENTER);
@@ -85,15 +103,11 @@ public class DivinityChoicePanel implements ActionListener {
     public void createDivinityButton(String divinityName) {
         JPanel divinityButtonPanel = new JPanel(new BorderLayout());
         divinityButtonPanel.setBackground(SantoriniColor.white);
-        //divinityButtonPanel.setBackground(panelColor);
         JPanel divinityCheckboxPanel = new JPanel(new FlowLayout());
         divinityCheckboxPanel.setBackground(SantoriniColor.white);
-        //divinityCheckboxPanel.setBackground(panelColor);
         JRadioButton divinityRadioButton = new JRadioButton(divinityName);
         divinityRadioButton.setBackground(SantoriniColor.white);
         divinityRadioButton.setActionCommand(divinityName);
-        //divinityRadioButton.setBackground(panelColor);
-        //divinityRadioButton.setForeground(textColor);
         divinityRadioButtonGroup.add(divinityRadioButton);
         divinityCheckboxPanel.add(divinityRadioButton);
         divinityButtonPanel.add(divinityCheckboxPanel, BorderLayout.SOUTH);
@@ -111,8 +125,6 @@ public class DivinityChoicePanel implements ActionListener {
         Image divinityImageScaled;
         JPanel divinityImagePanel = new JPanel();
         divinityImagePanel.setBackground(SantoriniColor.white);
-        //divinityImagePanel.setBackground(panelColor);
-
         try {
             divinityImage = ImageIO.read(getClass().getResource("/divinityImages/" + divinityName.toLowerCase() + ".png"));
         } catch (IOException e) {
@@ -132,7 +144,6 @@ public class DivinityChoicePanel implements ActionListener {
     public JPanel createOkButtonPanel() {
         JPanel okButtonPanel = new JPanel(new FlowLayout());
         okButtonPanel.setBackground(SantoriniColor.white);
-        //okButtonPanel.setBackground(panelColor);
         okButton = new JButton("OK");
         okButton.addActionListener(this);
         okButtonPanel.add(okButton);
@@ -143,14 +154,6 @@ public class DivinityChoicePanel implements ActionListener {
         return mainDivinityPanel;
     }
 
-    public void setModifiablePanel() {
-        okButton.setVisible(true);
-    }
-
-    public void setUnmodifiablePanel() {
-        okButton.setVisible(false);
-    }
-
     /**
      * Invoked when an action occurs.
      *
@@ -159,8 +162,13 @@ public class DivinityChoicePanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == okButton) {
-            System.out.println(divinityRadioButtonGroup.getSelection().getActionCommand());
-            gameModeGUI.setStringRead(divinityRadioButtonGroup.getSelection().getActionCommand());
+            if (gameModeGUI.isMyTurn()) {
+                System.out.println(divinityRadioButtonGroup.getSelection().getActionCommand());
+                gameModeGUI.setStringRead(divinityRadioButtonGroup.getSelection().getActionCommand());
+            } else {
+                gameModeGUI.decodeMessage(Message.WAIT);
+            }
+
         }
     }
 }

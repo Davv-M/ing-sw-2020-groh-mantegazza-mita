@@ -48,7 +48,7 @@ public final class Worker {
      * @return a copy of the worker with the given position
      */
 
-    public Worker withPosition(Cell position){
+    public Worker withPosition(Cell position) {
         return position == null ? this : new Worker(color, position);
     }
 

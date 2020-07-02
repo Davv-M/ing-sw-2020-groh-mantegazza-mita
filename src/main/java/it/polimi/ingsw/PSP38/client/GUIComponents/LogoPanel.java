@@ -12,17 +12,17 @@ public class LogoPanel {
      *
      * @return the panel with the title image
      */
-    public JPanel createImagePanel() {
+    public JPanel createImagePanel(Color color) {
         Image santoriniLogo = null;
         Image santoriniLogoScaled;
         JPanel imagePanel = new JPanel();
-        imagePanel.setBackground(SantoriniColor.white);
+        imagePanel.setBackground(color);
         try {
             santoriniLogo = ImageIO.read(getClass().getResource("/santorini-logo.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        santoriniLogoScaled = santoriniLogo.getScaledInstance(450, -1, Image.SCALE_SMOOTH);
+        santoriniLogoScaled = santoriniLogo.getScaledInstance(400, -1, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(santoriniLogoScaled));
         imagePanel.add(logoLabel);
         return imagePanel;

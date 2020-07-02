@@ -165,7 +165,7 @@ public class BoardPrinter {
 
     private static void printWorker(WorkerColor color) {
         String workerColor;
-        switch(color){
+        switch (color) {
             case BLACK:
                 workerColor = ANSI_RED_BACKGROUND;
                 break;

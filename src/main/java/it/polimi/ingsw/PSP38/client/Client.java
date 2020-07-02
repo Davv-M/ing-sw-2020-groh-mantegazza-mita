@@ -136,12 +136,6 @@ public class Client extends Observable implements Observer {
             }
 
         }
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.exit(0);
     }
 
 }

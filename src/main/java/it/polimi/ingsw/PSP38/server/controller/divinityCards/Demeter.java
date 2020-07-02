@@ -29,7 +29,7 @@ public class Demeter extends DivinityCard implements OptionalAction {
 
     @Override
     public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
-        if(destinationCell.equals(previousBuild)){
+        if (destinationCell.equals(previousBuild)) {
             throw new IllegalArgumentException("You can't build twice on the same cell");
         }
 

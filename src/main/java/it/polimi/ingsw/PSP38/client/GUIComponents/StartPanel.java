@@ -23,10 +23,6 @@ public class StartPanel implements ActionListener {
     private JTextField nickname;
     private JTextField age;
     private JButton connectButton;
-    private final Color panelColor = new Color(0, 0, 0, 0);
-    private final Color bkgColor = new Color(25, 109, 165);
-    private final Color bkgTextColor = new Color(62, 159, 225);
-    private final Color textColor = Color.WHITE;
     private GameModeGUI gameModeGUI;
 
     /**
@@ -39,33 +35,13 @@ public class StartPanel implements ActionListener {
         gameModeGUI = gmg;
         startPanel = new JPanel();
         startPanel.setLayout(new GridLayout(3, 1));
-        startPanel.setBackground(bkgColor);
-        startPanel.add(createImagePanel());
+        startPanel.setBackground(SantoriniColor.blue);
+        startPanel.add(new LogoPanel().createImagePanel(SantoriniColor.blue));
         startPanel.add(createControlPanel());
         startPanel.add(createButtonPanel());
         return startPanel;
     }
 
-    /**
-     * This method is used to generate the panel containing the header image of the startup panel
-     *
-     * @return the panel with the title image
-     */
-    public JPanel createImagePanel() {
-        Image santoriniLogo = null;
-        Image santoriniLogoScaled;
-        JPanel imagePanel = new JPanel();
-        imagePanel.setBackground(panelColor);
-        try {
-            santoriniLogo = ImageIO.read(getClass().getResource("/santorini-logo.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        santoriniLogoScaled = santoriniLogo.getScaledInstance(450, -1, Image.SCALE_SMOOTH);
-        JLabel logoLabel = new JLabel(new ImageIcon(santoriniLogoScaled));
-        imagePanel.add(logoLabel);
-        return imagePanel;
-    }
 
     /**
      * This method is used to generate the panel that contains the text fields used to input the server's IP address,
@@ -76,24 +52,24 @@ public class StartPanel implements ActionListener {
     public JPanel createControlPanel() {
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new GridLayout(6, 1));
-        controlPanel.setBackground(panelColor);
+        controlPanel.setBackground(SantoriniColor.blue);
         JLabel ipLabel = new JLabel("IP address");
-        ipLabel.setForeground(textColor);
+        ipLabel.setForeground(SantoriniColor.white);
         controlPanel.add(ipLabel);
         ipAddress = new JTextField();
-        ipAddress.setBackground(bkgTextColor);
+        ipAddress.setBackground(SantoriniColor.lightBlue);
         controlPanel.add(ipAddress);
         JLabel nicknameLabel = new JLabel("Nickname");
-        nicknameLabel.setForeground(textColor);
+        nicknameLabel.setForeground(SantoriniColor.white);
         controlPanel.add(nicknameLabel);
         nickname = new JTextField();
-        nickname.setBackground(bkgTextColor);
+        nickname.setBackground(SantoriniColor.lightBlue);
         controlPanel.add(nickname);
         JLabel ageLabel = new JLabel("Age");
-        ageLabel.setForeground(textColor);
+        ageLabel.setForeground(SantoriniColor.white);
         controlPanel.add(ageLabel);
         age = new JTextField();
-        age.setBackground(bkgTextColor);
+        age.setBackground(SantoriniColor.lightBlue);
         controlPanel.add(age);
         return controlPanel;
     }
@@ -106,7 +82,7 @@ public class StartPanel implements ActionListener {
     public JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.setBackground(panelColor);
+        buttonPanel.setBackground(SantoriniColor.blue);
         connectButton = new JButton("Connect to server");
         connectButton.addActionListener(this);
         buttonPanel.add(connectButton);
@@ -127,8 +103,6 @@ public class StartPanel implements ActionListener {
                 gameModeGUI.setIP(ipAddress.getText());
                 gameModeGUI.setNickname(nickname.getText());
                 gameModeGUI.setAge(age.getText());
-                /*CardLayout cl = (CardLayout)(gameModeGUI.getSantoriniWindow().getCardHolder().getLayout());
-                cl.show(gameModeGUI.getSantoriniWindow().getCardHolder(), "cardChoice");*/
             }
         }
     }

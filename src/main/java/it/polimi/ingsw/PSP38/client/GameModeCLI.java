@@ -118,18 +118,21 @@ public class GameModeCLI implements GameMode {
                 break;
             case SERVER_UNREACHEABLE:
                 System.out.println("Server unreachable");
+                System.exit(0);
                 break;
             case CONNECTED_TO_SERVER:
                 System.out.println("Connected");
                 break;
             case CLIENT_LOST:
                 System.out.println("your challenger lost connection, please restart app");
+                System.exit(0);
                 break;
             case CANT_MOVE:
                 System.out.println("you can't move, You Lose!");
                 break;
             case SERVER_LOST:
                 System.out.println("connection lost with server, please restart app ");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Message not recognized");

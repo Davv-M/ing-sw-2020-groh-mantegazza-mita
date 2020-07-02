@@ -31,7 +31,7 @@ public class Artemis extends DivinityCard implements OptionalAction {
 
     @Override
     public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
-        if(destinationCell.equals(previousPosition)){
+        if (destinationCell.equals(previousPosition)) {
             throw new IllegalArgumentException("You can't move back to your previous position");
         }
 

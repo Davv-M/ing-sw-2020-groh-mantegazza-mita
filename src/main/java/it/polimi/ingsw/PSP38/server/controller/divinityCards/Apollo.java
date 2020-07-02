@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP38.server.controller.DivinityCard;
 import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Worker;
+
 import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 
 /**
@@ -23,7 +24,7 @@ public class Apollo extends DivinityCard {
     }
 
     @Override
-    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
         checkMove(worker, destinationCell, currentBoard);
         Cell oldCell = worker.getPosition();
 

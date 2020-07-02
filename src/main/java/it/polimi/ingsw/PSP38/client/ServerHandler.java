@@ -85,7 +85,7 @@ public class ServerHandler extends Observable implements Observer, Runnable {
                     }
                     case NOTIFY_PLAYERS_DIVINITIES: {
                         protocolRead = Protocol.NOTIFY_PLAYERS_DIVINITIES;
-                        playersDivinities = (Map<String, String>)input.readObject();
+                        playersDivinities = (Map<String, String>) input.readObject();
                         notifyClient();
                         break;
                     }
@@ -258,11 +258,6 @@ public class ServerHandler extends Observable implements Observer, Runnable {
         protocolRead = Protocol.NOTIFY_MESSAGE;
         message = Message.SERVER_LOST;
         notifyClient();
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException ignore) {
-        }
-        System.exit(0);
     }
 
 

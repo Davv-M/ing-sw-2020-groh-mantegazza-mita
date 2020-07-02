@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
+
 import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class Ares extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.OPTIONAL_ACTION);
 
     @Override
-    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
         Worker otherWorker = currentBoard.getWorkersPositions().values().stream().filter(w -> w.getColor() == worker.getColor() &&
                 !w.getPosition().equals(worker.getPosition())).findFirst().get();
         checkNeighbor(otherWorker, destinationCell, currentBoard);

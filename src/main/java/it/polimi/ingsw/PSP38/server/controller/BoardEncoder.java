@@ -23,30 +23,29 @@ public class BoardEncoder {
      * @return the encoded board
      */
 
-    public static List<Byte> bytesForBoard(Board board){
+    public static List<Byte> bytesForBoard(Board board) {
         List<Byte> bytesForBoard = new LinkedList<>();
-        bytesForBoard.add((byte)Board.ROWS);
-        bytesForBoard.add((byte)Board.COLUMNS);
-        for(int row = 0; row < Board.ROWS; ++row){
-            for(int col = 0; col < Board.COLUMNS; ++col){
+        bytesForBoard.add((byte) Board.ROWS);
+        bytesForBoard.add((byte) Board.COLUMNS);
+        for (int row = 0; row < Board.ROWS; ++row) {
+            for (int col = 0; col < Board.COLUMNS; ++col) {
                 Cell cell = new Cell(col, row);
                 byte b = byteForTower(board.heightOf(cell));
-                if(board.hasDomeAt(cell)){
-                    b+= BytesForBoard.DOME;
-                }
-                else if(board.hasWorkerAt(cell)){
+                if (board.hasDomeAt(cell)) {
+                    b += BytesForBoard.DOME;
+                } else if (board.hasWorkerAt(cell)) {
                     b += byteForWorker(board.getWorkersPositions().get(cell));
                 }
 
-            bytesForBoard.add(b);
+                bytesForBoard.add(b);
             }
         }
 
         return bytesForBoard;
     }
 
-    private static byte byteForTower(int cellHeight){
-        switch(cellHeight){
+    private static byte byteForTower(int cellHeight) {
+        switch (cellHeight) {
             case 0:
                 return 0;
             case 1:
@@ -61,7 +60,7 @@ public class BoardEncoder {
     }
 
     private static byte byteForWorker(Worker worker) {
-        switch(worker.getColor()){
+        switch (worker.getColor()) {
             case BLACK:
                 return BytesForBoard.WORKER_BLACK;
             case WHITE:

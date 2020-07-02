@@ -8,6 +8,7 @@ import java.util.Observable;
 
 /**
  * Class that contains methods used to generate the graphic interface window of Santorini
+ *
  * @author Davide Mantegazza (10568661)
  */
 public class SantoriniWindow extends Observable {
@@ -23,11 +24,12 @@ public class SantoriniWindow extends Observable {
 
     /**
      * This method is used to generate the game window of Santorini
+     *
      * @param gmg is the instance of class GameModeGUI that creates the window
      * @return the main frame for the game
      */
-    public JFrame createSantoriniWindow(GameModeGUI gmg){
-        gameModeGUI=gmg;
+    public JFrame createSantoriniWindow(GameModeGUI gmg) {
+        gameModeGUI = gmg;
         mainFrame.setSize(WIDTH, HEIGHT);
         mainFrame.setTitle("Santorini");
         mainFrame.add(createCardHolder());
@@ -38,16 +40,17 @@ public class SantoriniWindow extends Observable {
 
     /**
      * This method is used to create the JPanel that holds all of the panels of the window (the setup panel, the card selection panel and the game panel)
+     *
      * @return the card holder panel
      */
-    public JPanel createCardHolder(){
+    public JPanel createCardHolder() {
         cardHolder = new JPanel();
         cardHolder.setLayout(new CardLayout());
-        startPanel=new StartPanel();
+        startPanel = new StartPanel();
         cardHolder.add(startPanel.createStartPanel(gameModeGUI), "setup");
         waitingPanel = new WaitingPanel();
         cardHolder.add(waitingPanel.createWaitingPanel(), "waiting");
-        divinityChoicePanel =new DivinityChoicePanel();
+        divinityChoicePanel = new DivinityChoicePanel();
         cardHolder.add(divinityChoicePanel.createMainDivinityPanel(gameModeGUI), "cardChoice");
         gamePanel = new GamePanel();
         cardHolder.add(gamePanel.createMainGamePanel(gameModeGUI), "game");
@@ -74,5 +77,7 @@ public class SantoriniWindow extends Observable {
         return gamePanel;
     }
 
-    public WaitingPanel getWaitingPanel(){return waitingPanel;}
+    public WaitingPanel getWaitingPanel() {
+        return waitingPanel;
+    }
 }

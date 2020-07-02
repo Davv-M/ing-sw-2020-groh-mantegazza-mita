@@ -31,10 +31,10 @@ public class Minotaur extends DivinityCard {
             Direction dir = Direction.coordinatesToDirection(vectorX, vectorY);
             Optional<Cell> possibleNeighbor = currentBoard.neighborOf(destinationCell, dir);
 
-            if(possibleNeighbor.isPresent()){
-                if(currentBoard.hasDomeAt(possibleNeighbor.get())){
+            if (possibleNeighbor.isPresent()) {
+                if (currentBoard.hasDomeAt(possibleNeighbor.get())) {
                     throw new IllegalArgumentException("You can't push your opponent's worker because there is a dome behind it.");
-                } else if(currentBoard.hasWorkerAt(possibleNeighbor.get())){
+                } else if (currentBoard.hasWorkerAt(possibleNeighbor.get())) {
                     throw new IllegalArgumentException("You can't push your opponent's worker because there is another worker behind it.");
                 }
 

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- *
  * @author Maximilien Groh (10683107)
  * @author Matteo Mita (10487862)
  */
@@ -75,10 +74,10 @@ public class Controller extends Observable {
     }
 
     private synchronized void updateTurn(boolean hasCurrentPlayerLost) {
-        if(hasCurrentPlayerLost){
+        if (hasCurrentPlayerLost) {
             game.setCurrentBoard(game.getCurrentBoard().withoutWorkers(game.getCurrentPlayerTurn().getColor()));
             game.removePlayer(game.getCurrentPlayerTurn());
-            if(game.getCurrNumPlayers() == 1){
+            if (game.getCurrNumPlayers() == 1) {
                 game.setWinner(game.getCurrentPlayerTurn());
             }
         } else {
@@ -154,8 +153,8 @@ public class Controller extends Observable {
             Worker selectedWorker = askWorker(client);
 
             for (WorkerAction action : clientDivinity.getMoveSequence()) {
-                if(!canTakeAction(selectedWorker, clientDivinity, action)){
-                    if(action.isOptional()){
+                if (!canTakeAction(selectedWorker, clientDivinity, action)) {
+                    if (action.isOptional()) {
                         continue;
                     } else {
                         //client.notifyMessage(Message.UNABLE_TO_FINISH_TURN);
@@ -170,10 +169,10 @@ public class Controller extends Observable {
 
                 if (clientDivinity.isWinner(game.getCurrentBoard(), previousPosition, selectedWorker.getPosition())) {
                     boolean cantWin = false;
-                    for(Player p : game.getOpponents()){
+                    for (Player p : game.getOpponents()) {
                         cantWin = playersDivinities.get(p).blockOpponentWinningCondition(selectedWorker.getPosition());
                     }
-                    if(!cantWin){
+                    if (!cantWin) {
                         game.setWinner(clientPlayer);
                         break;
                     }
@@ -183,7 +182,9 @@ public class Controller extends Observable {
         updateTurn(hasCurrentPlayerLost);
     }
 
-    public int getTotNumPlayers(){return game.getTotNumPlayers();}
+    public int getTotNumPlayers() {
+        return game.getTotNumPlayers();
+    }
 
     private void welcomeMessage(ClientHandler client) throws IOException {
         client.notifyMessage(Message.WELCOME);
@@ -275,7 +276,7 @@ public class Controller extends Observable {
     private void placeWorkers(ClientHandler client) throws IOException {
         notifyNotYourTurn(client);
         Map<String, String> map = new HashMap<>();
-        for(Player p : playersDivinities.keySet()){
+        for (Player p : playersDivinities.keySet()) {
             map.put(p.getNickname(), playersDivinities.get(p).toString());
         }
         System.out.println(playersDivinities);
@@ -285,7 +286,7 @@ public class Controller extends Observable {
         client.notifyMessage(Message.PLACE_YOUR_WORKERS);
         Player clientPlayer = game.nicknameToPlayer(client.getNickname());
         for (int i = 0; i < Game.WORKERS_PER_PLAYER; ++i) {
-            client.notifyMessageString(String.valueOf(i+1));
+            client.notifyMessageString(String.valueOf(i + 1));
             client.notifyMessage(Message.PLACE_A_WORKER);
             Board newBoard;
             do {
@@ -381,7 +382,7 @@ public class Controller extends Observable {
             try {
                 client.notifyMessage(action.question());
                 Cell destinationCell = askCell(client);
-                for(Player p : game.getOpponents()){
+                for (Player p : game.getOpponents()) {
                     playersDivinities.get(p).checkOpponentMove(clientDivinty.typeOfAction(action), selectedWorker, destinationCell, currentBoard);
                 }
                 currentBoard = takeAction(selectedWorker, destinationCell, currentBoard, clientDivinty, action, useAbility);
@@ -395,15 +396,15 @@ public class Controller extends Observable {
         } while (true);
     }
 
-    private boolean canTakeAction(Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action){
-        for(int row = 0; row < Board.ROWS; ++row){
-            for(int col = 0; col < Board.COLUMNS; ++col){
+    private boolean canTakeAction(Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action) {
+        for (int row = 0; row < Board.ROWS; ++row) {
+            for (int col = 0; col < Board.COLUMNS; ++col) {
                 Cell cell = new Cell(col, row);
                 Board board = game.getCurrentBoard();
-                try{
+                try {
                     takeAction(selectedWorker, cell, board, clientDivinty, action, true);
                     return true;
-                } catch (IllegalArgumentException ignored){
+                } catch (IllegalArgumentException ignored) {
 
                 }
             }
@@ -411,7 +412,7 @@ public class Controller extends Observable {
         return false;
     }
 
-    private Board takeAction(Worker selectedWorker, Cell cell, Board board, DivinityCard clientDivinty, WorkerAction action, boolean useAbility) throws IllegalArgumentException{
+    private Board takeAction(Worker selectedWorker, Cell cell, Board board, DivinityCard clientDivinty, WorkerAction action, boolean useAbility) throws IllegalArgumentException {
         switch (action) {
             case MOVE:
                 return clientDivinty.move(selectedWorker, cell, board);

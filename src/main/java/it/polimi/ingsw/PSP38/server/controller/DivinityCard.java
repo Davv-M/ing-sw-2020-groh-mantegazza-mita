@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP38.server.model.Board;
 import it.polimi.ingsw.PSP38.server.model.Cell;
 import it.polimi.ingsw.PSP38.server.model.Tower;
 import it.polimi.ingsw.PSP38.server.model.Worker;
+
 import static it.polimi.ingsw.PSP38.common.utilities.ArgumentChecker.*;
 
 import java.util.*;
@@ -39,11 +40,12 @@ public abstract class DivinityCard {
 
     /**
      * constructs the divinity with the specified move sequence
+     *
      * @param moveSequence the list of actions the worker associated with the divinity
      *                     can take during his turn
      */
 
-    public DivinityCard(List<WorkerAction> moveSequence){
+    public DivinityCard(List<WorkerAction> moveSequence) {
         this.moveSequence = List.copyOf(moveSequence);
     }
 
@@ -62,7 +64,7 @@ public abstract class DivinityCard {
      * @param worker       the worker that has to be moved
      * @param currentBoard the current board of the game
      */
-    public void checkMove(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+    public void checkMove(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
         checkNeighbor(worker, destinationCell, currentBoard);
         checkDome(destinationCell, currentBoard);
         checkHeight(worker, destinationCell, currentBoard);
@@ -89,7 +91,7 @@ public abstract class DivinityCard {
      * @param worker       the worker that has to build
      * @param currentBoard the current board of the game
      */
-    public void checkBuild(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+    public void checkBuild(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
         checkNeighbor(worker, destinationCell, currentBoard);
         checkDome(destinationCell, currentBoard);
         checkWorker(destinationCell, currentBoard);
@@ -98,8 +100,8 @@ public abstract class DivinityCard {
     /**
      * Adds a tower level or a dome to the given cell, depending on the current tower's height and returns the updated board
      *
-     * @param destinationCell         the cell on which to build
-     * @param currentBoard the current board of the game
+     * @param destinationCell the cell on which to build
+     * @param currentBoard    the current board of the game
      * @return the updated board with the updated cell's tower's height
      */
     public Board build(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
@@ -116,14 +118,14 @@ public abstract class DivinityCard {
      * Checks if the opponents action doesn't break the divinity card
      * rules, and throws an exception if it does
      *
-     * @param action the action the opponent wants to take
-     * @param worker the worker that wants to take action
+     * @param action          the action the opponent wants to take
+     * @param worker          the worker that wants to take action
      * @param destinationCell the cell where the action is taken
-     * @param currentBoard the current board of the game
+     * @param currentBoard    the current board of the game
      * @throws IllegalArgumentException if the action taken is illegal by the divinity card rules
      */
 
-    public void checkOpponentMove(WorkerAction action, Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
+    public void checkOpponentMove(WorkerAction action, Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
 
     }
 
@@ -135,7 +137,7 @@ public abstract class DivinityCard {
      * @return the type of action based on the divinity card
      */
 
-    public WorkerAction typeOfAction(WorkerAction action){
+    public WorkerAction typeOfAction(WorkerAction action) {
         return action;
     }
 
@@ -151,9 +153,9 @@ public abstract class DivinityCard {
      * Determines whether the worker associated with the divinity card is
      * winning or not, based on his previous position and his current position
      *
-     * @param board the current board of the game
+     * @param board            the current board of the game
      * @param previousPosition previous position of the worker
-     * @param currentPosition current position of the worker
+     * @param currentPosition  current position of the worker
      * @return <b>true</b> if he is the winner of the game , <b>false</b> otherwise
      */
 
@@ -166,10 +168,10 @@ public abstract class DivinityCard {
      *
      * @param currentPosition current position of the worker that just moved
      * @return <b>true</b> if this divinity card doesn't allow the opponent to win,
-     *          <b>false</b> otherwise
+     * <b>false</b> otherwise
      */
 
-    public boolean blockOpponentWinningCondition(Cell currentPosition){
+    public boolean blockOpponentWinningCondition(Cell currentPosition) {
         return false;
     }
 

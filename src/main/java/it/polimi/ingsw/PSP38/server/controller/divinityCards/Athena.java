@@ -24,7 +24,7 @@ public class Athena extends DivinityCard {
 
     @Override
     public void checkOpponentMove(WorkerAction action, Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        if(action == WorkerAction.MOVE && hasMovedUp && currentBoard.heightOf(worker.getPosition()) < currentBoard.heightOf(destinationCell)){
+        if (action == WorkerAction.MOVE && hasMovedUp && currentBoard.heightOf(worker.getPosition()) < currentBoard.heightOf(destinationCell)) {
             throw new IllegalArgumentException("You can't move on that cell: Athena has moved up during her last turn.");
         }
     }

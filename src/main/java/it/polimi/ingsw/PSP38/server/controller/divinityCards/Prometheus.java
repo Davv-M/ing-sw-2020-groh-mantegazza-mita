@@ -31,8 +31,8 @@ public class Prometheus extends DivinityCard implements OptionalAction {
         return updatedBoard;
     }
 
-    private void checkSameHeight(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException{
-        if(hasBuiltFirstMove && currentBoard.heightOf(destinationCell) > currentBoard.heightOf(worker.getPosition())){
+    private void checkSameHeight(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+        if (hasBuiltFirstMove && currentBoard.heightOf(destinationCell) > currentBoard.heightOf(worker.getPosition())) {
             throw new IllegalArgumentException("You can't jump on that tower because you've built on your first move.");
         }
     }

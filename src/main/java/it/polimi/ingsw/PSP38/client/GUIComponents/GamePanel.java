@@ -36,7 +36,7 @@ public class GamePanel {
         mainGamePanel = new JPanel();
         mainGamePanel.setLayout(new BorderLayout());
         mainGamePanel.setBackground(SantoriniColor.white);
-        mainGamePanel.add(new LogoPanel().createImagePanel(), BorderLayout.NORTH);
+        mainGamePanel.add(new LogoPanel().createImagePanel(SantoriniColor.white), BorderLayout.NORTH);
         mainGamePanel.add(createBoardPanel(), BorderLayout.WEST);
         mainGamePanel.add(createControlPanel(), BorderLayout.CENTER);
         return mainGamePanel;
@@ -52,24 +52,20 @@ public class GamePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                System.out.println("X:" + e.getX());
-                System.out.println("Y:" + e.getY());
                 CellX = (e.getX() - 2 * BoardComponent.CELL_OFFSET_X) / (BoardComponent.CELL_WIDTH);
                 CellY = (e.getY() - 2 * BoardComponent.CELL_OFFSET_Y) / (BoardComponent.CELL_HEIGHT);
-                System.out.println(CellX);
-                System.out.println(CellY);
-                if(gameModeGUI.isMyTurn()){
+                if (gameModeGUI.isMyTurn()) {
                     gameModeGUI.setColumnSelected(Integer.toString(CellX));
                     gameModeGUI.setRowSelected(Integer.toString(CellY));
                     gameModeGUI.setCoordinateReady(true);
-                }else{
+                } else {
                     gameModeGUI.decodeMessage(Message.WAIT);
                 }
 
 
             }
         });
-        boardPanel.add(boardComponent,BorderLayout.CENTER);
+        boardPanel.add(boardComponent, BorderLayout.CENTER);
         return boardPanel;
     }
 
@@ -92,8 +88,7 @@ public class GamePanel {
     }
 
 
-
-    public void setVisibleHourglass(boolean visible){
+    public void setVisibleHourglass(boolean visible) {
         hourglassPanel.setVisible(visible);
         hourglassPanel.repaint();
     }
@@ -102,7 +97,7 @@ public class GamePanel {
     public JPanel createControlPanel() {
         JPanel controlPanel = new JPanel(new FlowLayout());
         controlPanel.setBackground(SantoriniColor.white);
-        controlPanel.add(createDivinityInfoPanel(),BorderLayout.CENTER);
+        controlPanel.add(createDivinityInfoPanel(), BorderLayout.CENTER);
         return controlPanel;
     }
 
@@ -132,8 +127,8 @@ public class GamePanel {
             JLabel divinityNicknameLabel = new JLabel(nickname.toUpperCase());
             divinityNicknameLabel.setFont(new Font("font message", Font.BOLD, 30));
             divinityNicknameLabel.setForeground(SantoriniColor.blue);
-            divinityNicknameInfoPanel.add(divinityNicknameLabel,BorderLayout.NORTH);
-            divinityNicknameInfoPanel.add(divinityImageLabel,BorderLayout.CENTER);
+            divinityNicknameInfoPanel.add(divinityNicknameLabel, BorderLayout.NORTH);
+            divinityNicknameInfoPanel.add(divinityImageLabel, BorderLayout.CENTER);
             divinityInfoPanel.add(divinityNicknameInfoPanel);
             divinityNicknameInfoPanel.repaint();
             divinityImageLabel.repaint();
