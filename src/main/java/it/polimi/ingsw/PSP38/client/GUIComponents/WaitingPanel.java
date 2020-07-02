@@ -1,15 +1,9 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
-import it.polimi.ingsw.PSP38.client.ImageCollection;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Objects;
 
 /**
  * This class contains the methods needed to generate a panel which signals the user that the client is waiting for
@@ -53,15 +47,8 @@ public class WaitingPanel {
         Image waitImageScaled;
         imagePanel= new JPanel();
         imagePanel.setBackground(SantoriniColor.bkgColor);
-        File dir = null;
         try {
-            dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
-                    .getResource("santorini-wait.png")).toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        try {
-            waitImage= ImageIO.read(dir);
+            waitImage= ImageIO.read(getClass().getResource("/santorini-wait.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,15 +63,8 @@ public class WaitingPanel {
         Image hourglassScaled;
         hourglassPanel= new JPanel();
         hourglassPanel.setBackground(SantoriniColor.bkgColor);
-        File dir = null;
         try {
-            dir = new File(Objects.requireNonNull(ImageCollection.class.getClassLoader()
-                    .getResource("hourglass.gif")).toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        try {
-            hourglass = ImageIO.read(dir);
+            hourglass = ImageIO.read(getClass().getResource("/hourglass.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }

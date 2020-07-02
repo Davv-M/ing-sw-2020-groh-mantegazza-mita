@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
-import it.polimi.ingsw.PSP38.client.ImageCollection;
+import it.polimi.ingsw.PSP38.client.BoardImageCollection;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class BoardComponent extends JComponent{
     private static final int PREFERRED_HEIGHT = 615;
     public static final int CELL_OFFSET_X = 8;
     public static final int CELL_OFFSET_Y = 8;
-    private static final ImageCollection CELL_IMAGES = new ImageCollection("images");
+    private static final BoardImageCollection CELL_IMAGES = new BoardImageCollection();
     private List<Byte> encodedBoard = null;
     public static final int CELL_WIDTH = 120;
     public static final int CELL_HEIGHT = 120;
