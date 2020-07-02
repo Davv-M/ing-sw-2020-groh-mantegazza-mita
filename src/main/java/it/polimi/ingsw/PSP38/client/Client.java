@@ -23,6 +23,7 @@ public class Client extends Observable implements Observer {
     private static ServerHandler nextInputObserver;
     private static GameMode gameMode;
     private static String customString;
+    private static Protocol protocolRead;
     private static final Scanner ipScanner = new Scanner(System.in);
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
@@ -49,7 +50,7 @@ public class Client extends Observable implements Observer {
      */
     @Override
     public void update() {
-        Protocol protocolRead = ServerHandler.getProtocol();
+        protocolRead = ServerHandler.getProtocol();
         if (protocolRead == Protocol.NOTIFY_PLAYERS_DIVINITIES) {
             gameMode.setPlayersDivinities(ServerHandler.getPlayersDivinities());
         } else if (protocolRead == Protocol.NOTIFY_NUM_PLAYERS) {
@@ -78,8 +79,8 @@ public class Client extends Observable implements Observer {
      * notify observers that new data input from the client is available
      */
     private static void notifyReadSomething() throws InterruptedException {
-        Thread.sleep(100);
-        Protocol protocolRead = ServerHandler.getProtocol();
+        waitNextProtocol();
+        protocolRead = ServerHandler.getProtocol();
         if (protocolRead == Protocol.ASK_INT || protocolRead == Protocol.ASK_STRING) {
             nextInputObserver.update();
         } else {
@@ -109,6 +110,10 @@ public class Client extends Observable implements Observer {
             return;
         }
         gameMode.decodeMessage(Message.CONNECTED_TO_SERVER);
+    }
+
+    private static void waitNextProtocol() throws InterruptedException {
+        Thread.sleep(100);
     }
 
     public static int getServerSocketPort() {

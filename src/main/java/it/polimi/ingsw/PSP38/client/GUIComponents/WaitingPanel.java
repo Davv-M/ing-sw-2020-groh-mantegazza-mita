@@ -32,9 +32,10 @@ public class WaitingPanel {
         waitingPanel = new JPanel();
         waitingPanel.setLayout(new BorderLayout());
         waitingPanel.setBackground(Color.WHITE);
-        waitingPanel.add(createMessagePanel(),BorderLayout.NORTH);
+        waitingPanel.add(new LogoPanel().createImagePanel(),BorderLayout.NORTH);
         waitingPanel.add(createWaitImagePanel(), BorderLayout.CENTER);
-        waitingPanel.add(createHourglassPanel(), BorderLayout.SOUTH);
+        waitingPanel.add(createMessagePanel(),BorderLayout.SOUTH);
+        //waitingPanel.add(createHourglassPanel(), BorderLayout.SOUTH);
         return waitingPanel;
     }
 
@@ -46,7 +47,7 @@ public class WaitingPanel {
         Image waitImage=null;
         Image waitImageScaled;
         imagePanel= new JPanel();
-        imagePanel.setBackground(SantoriniColor.bkgColor);
+        imagePanel.setBackground(SantoriniColor.white);
         try {
             waitImage= ImageIO.read(getClass().getResource("/santorini-wait.png"));
         } catch (IOException e) {
@@ -62,7 +63,7 @@ public class WaitingPanel {
         Image hourglass = null;
         Image hourglassScaled;
         hourglassPanel= new JPanel();
-        hourglassPanel.setBackground(SantoriniColor.bkgColor);
+        hourglassPanel.setBackground(SantoriniColor.white);
         try {
             hourglass = ImageIO.read(getClass().getResource("/hourglass.gif"));
         } catch (IOException e) {
@@ -81,7 +82,7 @@ public class WaitingPanel {
         messagePanel.setBackground(Color.WHITE);
         messageLabel = new JLabel("");
         messageLabel.setFont(new Font("font message", Font.BOLD, 30));
-        messageLabel.setForeground(SantoriniColor.messageColor);
+        messageLabel.setForeground(SantoriniColor.blue);
         messagePanel.add(messageLabel);
         return messagePanel;
     }

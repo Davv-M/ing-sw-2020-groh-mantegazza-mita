@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class GameModeGUI implements GameMode {
     private int numOfPlayers = 0;
-    volatile boolean isDataReady = false;
+    private volatile boolean isDataReady = false;
     private String dataReadFromClient;
     private static String nickname = "anonymous";
     private static String age;
@@ -20,6 +20,7 @@ public class GameModeGUI implements GameMode {
     private SantoriniWindow santoriniWindow;
     private String availableDivinities;
     private JPanel cardButtons;
+    private boolean isMyTurn = false;
     private static String columnSelected;
     private static String rowSelected;
     private volatile boolean isCoordinateReady = false;
@@ -119,6 +120,7 @@ public class GameModeGUI implements GameMode {
 
     public void notYourTurn() {
         frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        isMyTurn = false;
         santoriniWindow.getDivinityChoicePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
         santoriniWindow.getGamePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
         santoriniWindow.getDivinityChoicePanel().setUnmodifiablePanel();
@@ -127,6 +129,7 @@ public class GameModeGUI implements GameMode {
 
     public void placeYourWorkers() {
         frame.setCursor(Cursor.getDefaultCursor());
+        isMyTurn = true;
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "game");
         santoriniWindow.getGamePanel().setMessage("Please place all of your workers on the board");
@@ -178,6 +181,7 @@ public class GameModeGUI implements GameMode {
 
     public void selectWorker() {
         frame.setCursor(Cursor.getDefaultCursor());
+        isMyTurn = true;
         santoriniWindow.getGamePanel().setMessage("Please select the worker you want to move:");
         santoriniWindow.getMainFrame().repaint();
     }
@@ -225,15 +229,16 @@ public class GameModeGUI implements GameMode {
     }
 
     private void workerOptionalAbility() {
-        System.out.println("Select the cell where you want to DAFARE");
+        santoriniWindow.getGamePanel().setMessage("Select the cell where you want to DAFARE");
     }
 
 
     private void askSpecialAction() {
+        isMyTurn = true;
         Object[] options = {"yes", "no"};
         int n = JOptionPane.showOptionDialog(santoriniWindow.getMainFrame(),
-                "Do you want to use your special ability",
-                null,
+                "Do you want to use your special ability?",
+                "Special Ability",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -475,4 +480,5 @@ public class GameModeGUI implements GameMode {
         System.out.println("Unknown worker action");
     }
 
+    public boolean isMyTurn(){return isMyTurn;}
 }

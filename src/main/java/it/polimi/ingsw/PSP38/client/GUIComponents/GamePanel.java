@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP38.client.GUIComponents;
 
 import it.polimi.ingsw.PSP38.client.GameModeGUI;
+import it.polimi.ingsw.PSP38.common.Message;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,17 +34,18 @@ public class GamePanel {
         gameModeGUI = gmg;
         mainGamePanel = new JPanel();
         mainGamePanel.setLayout(new BorderLayout());
-        mainGamePanel.setBackground(SantoriniColor.bkgColor);
-        mainGamePanel.add(createMessagePanel(), BorderLayout.NORTH);
+        mainGamePanel.setBackground(SantoriniColor.white);
+        mainGamePanel.add(new LogoPanel().createImagePanel(), BorderLayout.NORTH);
         mainGamePanel.add(createBoardPanel(), BorderLayout.WEST);
-        mainGamePanel.add(createControlPanel(), BorderLayout.EAST);
+        mainGamePanel.add(createControlPanel(), BorderLayout.CENTER);
         return mainGamePanel;
     }
 
     public JPanel createBoardPanel() {
-        JPanel boardPanel = new JPanel();
+        JPanel boardPanel = new JPanel(new BorderLayout());
+        boardPanel.add(createMessagePanel(), BorderLayout.NORTH);
         boardComponent = new BoardComponent();
-        boardPanel.setBackground(SantoriniColor.bkgColor);
+        boardPanel.setBackground(SantoriniColor.white);
         boardComponent.setPreferredSize(boardComponent.getPreferredSize());
         boardComponent.addMouseListener(new MouseAdapter() {
             @Override
@@ -55,12 +57,18 @@ public class GamePanel {
                 CellY = (e.getY() - 2 * BoardComponent.CELL_OFFSET_Y) / (BoardComponent.CELL_HEIGHT);
                 System.out.println(CellX);
                 System.out.println(CellY);
-                GameModeGUI.setColumnSelected(Integer.toString(CellX));
-                GameModeGUI.setRowSelected(Integer.toString(CellY));
-                gameModeGUI.setCoordinateReady(true);
+                if(gameModeGUI.isMyTurn()){
+                    gameModeGUI.setColumnSelected(Integer.toString(CellX));
+                    gameModeGUI.setRowSelected(Integer.toString(CellY));
+                    gameModeGUI.setCoordinateReady(true);
+                }else{
+                    gameModeGUI.decodeMessage(Message.WAIT);
+                }
+
+
             }
         });
-        boardPanel.add(boardComponent);
+        boardPanel.add(boardComponent,BorderLayout.CENTER);
         return boardPanel;
     }
 
@@ -69,8 +77,8 @@ public class GamePanel {
         JPanel messagePanel = new JPanel(new FlowLayout());
         messageLabel = new JLabel("");
         messageLabel.setFont(new Font("font message", Font.BOLD, 30));
-        messageLabel.setForeground(SantoriniColor.messageColor);
-        messagePanel.setBackground(SantoriniColor.bkgColor);
+        messageLabel.setForeground(SantoriniColor.blue);
+        messagePanel.setBackground(SantoriniColor.white);
         messagePanel.add(messageLabel);
         return messagePanel;
     }
@@ -82,13 +90,14 @@ public class GamePanel {
 
     public JPanel createControlPanel() {
         JPanel controlPanel = new JPanel(new FlowLayout());
-        controlPanel.add(createDivinityInfoPanel());
+        controlPanel.setBackground(SantoriniColor.white);
+        controlPanel.add(createDivinityInfoPanel(),BorderLayout.CENTER);
         return controlPanel;
     }
 
     public JPanel createDivinityInfoPanel() {
         divinityInfoPanel = new JPanel(new GridLayout(1, gameModeGUI.getNumOfPlayers()));
-        divinityInfoPanel.setBackground(SantoriniColor.bkgColor);
+        divinityInfoPanel.setBackground(SantoriniColor.white);
         return divinityInfoPanel;
     }
 
@@ -96,21 +105,32 @@ public class GamePanel {
         divinityInfoPanel.removeAll();
         Iterator<String> playerIterator = playersDivinities.keySet().iterator();
         for (int i = 0; i < gameModeGUI.getNumOfPlayers(); i++) {
+            JPanel divinityNicknameInfoPanel = new JPanel(new BorderLayout());
+            divinityNicknameInfoPanel.setBackground(SantoriniColor.white);
             Image divinityImage = null;
             Image divinityImageScaled;
+            String nickname = playerIterator.next();
             try {
-                divinityImage = ImageIO.read(getClass().getResource("/divinityImages/" + playersDivinities.get(playerIterator.next())
+                divinityImage = ImageIO.read(getClass().getResource("/divinityImages/" + playersDivinities.get(nickname)
                         .toLowerCase() + ".png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
             divinityImageScaled = divinityImage.getScaledInstance(200, -1, Image.SCALE_SMOOTH);
             JLabel divinityImageLabel = new JLabel(new ImageIcon(divinityImageScaled));
-            divinityInfoPanel.add(divinityImageLabel);
+            JLabel divinityNicknameLabel = new JLabel(nickname.toUpperCase());
+            divinityNicknameLabel.setFont(new Font("font message", Font.BOLD, 30));
+            divinityNicknameLabel.setForeground(SantoriniColor.blue);
+            divinityNicknameInfoPanel.add(divinityNicknameLabel,BorderLayout.NORTH);
+            divinityNicknameInfoPanel.add(divinityImageLabel,BorderLayout.CENTER);
+            divinityInfoPanel.add(divinityNicknameInfoPanel);
+            divinityNicknameInfoPanel.repaint();
             divinityImageLabel.repaint();
             divinityImageLabel.repaint();
-            mainGamePanel.repaint();
+
         }
+        divinityInfoPanel.repaint();
+        mainGamePanel.repaint();
     }
 
     public BoardComponent getBoardComponent() {

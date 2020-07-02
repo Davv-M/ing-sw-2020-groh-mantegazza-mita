@@ -7,10 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -35,7 +32,7 @@ public class DivinityChoicePanel implements ActionListener {
     public JPanel createMainDivinityPanel(GameModeGUI gmg) {
         gameModeGUI = gmg;
         mainDivinityPanel = new JPanel(new BorderLayout());
-        //mainDivinityPanel.setBackground(bkgColor);
+        mainDivinityPanel.setBackground(SantoriniColor.white);
         mainDivinityPanel.add(createTitlePanel(), BorderLayout.NORTH);
         mainDivinityPanel.add(createOkButtonPanel(), BorderLayout.SOUTH);
         return mainDivinityPanel;
@@ -48,12 +45,10 @@ public class DivinityChoicePanel implements ActionListener {
      */
     public JPanel createTitlePanel() {
         JPanel titlePanel = new JPanel();
-        /*titlePanel.setBackground(panelColor);
-        titlePanel.setForeground(textColor);*/
         title = new JLabel("");
         title.setFont(new Font("font message", Font.BOLD, 30));
-        titlePanel.setBackground(SantoriniColor.bkgColor);
-        title.setForeground(SantoriniColor.messageColor);
+        titlePanel.setBackground(SantoriniColor.white);
+        title.setForeground(SantoriniColor.blue);
         titlePanel.add(title);
         return titlePanel;
     }
@@ -70,7 +65,7 @@ public class DivinityChoicePanel implements ActionListener {
      */
     public JPanel createDivinitiesButtonsPanel() {
         cardButtonsPanel = new JPanel(new GridLayout(2, 7));
-        cardButtonsPanel.setBackground(SantoriniColor.bkgColor);
+        cardButtonsPanel.setBackground(SantoriniColor.white);
         Scanner divinitiesScanner = new Scanner(gameModeGUI.getAvailableDivinities());
         while (divinitiesScanner.hasNextLine()) {
             //salvare nome divinità e creare pulsante apposito
@@ -87,13 +82,13 @@ public class DivinityChoicePanel implements ActionListener {
      */
     public void createDivinityButton(String divinityName) {
         JPanel divinityButtonPanel = new JPanel(new BorderLayout());
-        divinityButtonPanel.setBackground(SantoriniColor.bkgColor);
+        divinityButtonPanel.setBackground(SantoriniColor.white);
         //divinityButtonPanel.setBackground(panelColor);
         JPanel divinityCheckboxPanel = new JPanel(new FlowLayout());
-        divinityCheckboxPanel.setBackground(SantoriniColor.bkgColor);
+        divinityCheckboxPanel.setBackground(SantoriniColor.white);
         //divinityCheckboxPanel.setBackground(panelColor);
         JRadioButton divinityRadioButton = new JRadioButton(divinityName);
-        divinityRadioButton.setBackground(SantoriniColor.bkgColor);
+        divinityRadioButton.setBackground(SantoriniColor.white);
         divinityRadioButton.setActionCommand(divinityName);
         //divinityRadioButton.setBackground(panelColor);
         //divinityRadioButton.setForeground(textColor);
@@ -113,7 +108,7 @@ public class DivinityChoicePanel implements ActionListener {
         Image divinityImage = null;
         Image divinityImageScaled;
         JPanel divinityImagePanel = new JPanel();
-        divinityImagePanel.setBackground(SantoriniColor.bkgColor);
+        divinityImagePanel.setBackground(SantoriniColor.white);
         //divinityImagePanel.setBackground(panelColor);
 
         try {
@@ -134,7 +129,7 @@ public class DivinityChoicePanel implements ActionListener {
      */
     public JPanel createOkButtonPanel() {
         JPanel okButtonPanel = new JPanel(new FlowLayout());
-        okButtonPanel.setBackground(SantoriniColor.bkgColor);
+        okButtonPanel.setBackground(SantoriniColor.white);
         //okButtonPanel.setBackground(panelColor);
         okButton = new JButton("OK");
         okButton.addActionListener(this);
