@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP38.client;
 
+import it.polimi.ingsw.PSP38.client.GUIComponents.HourglassPanel;
 import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
 import it.polimi.ingsw.PSP38.common.Message;
 
@@ -70,7 +71,7 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitForNumPlayer() {
-        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        santoriniWindow.getWaitingPanel().setVisibleHourglass(true);
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Please wait for the first player to select the number of players.");
@@ -110,7 +111,7 @@ public class GameModeGUI implements GameMode {
     }
 
     public void waitForDivinities() {
-        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        santoriniWindow.getWaitingPanel().setVisibleHourglass(true);
         System.out.println("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
@@ -119,16 +120,17 @@ public class GameModeGUI implements GameMode {
     }
 
     public void notYourTurn() {
-        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        santoriniWindow.getGamePanel().setVisibleHourglass(true);
         isMyTurn = false;
         santoriniWindow.getDivinityChoicePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
         santoriniWindow.getGamePanel().setMessage("It's " + customStringRead + "'s turn, please wait");
         santoriniWindow.getDivinityChoicePanel().setUnmodifiablePanel();
 
+
     }
 
     public void placeYourWorkers() {
-        frame.setCursor(Cursor.getDefaultCursor());
+        santoriniWindow.getGamePanel().setVisibleHourglass(false);
         isMyTurn = true;
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "game");
@@ -171,16 +173,17 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitForFullGame() {
-        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        santoriniWindow.getWaitingPanel().setVisibleHourglass(true);
         System.out.println("Hold on, all the players will be ready in a few seconds");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Hold on, all the players will be ready in a few seconds");
+
     }
 
 
     public void selectWorker() {
-        frame.setCursor(Cursor.getDefaultCursor());
+        santoriniWindow.getGamePanel().setVisibleHourglass(false);
         isMyTurn = true;
         santoriniWindow.getGamePanel().setMessage("Please select the worker you want to move:");
         santoriniWindow.getMainFrame().repaint();
@@ -188,7 +191,6 @@ public class GameModeGUI implements GameMode {
 
 
     public void waitYourTurn() {
-        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         JOptionPane.showMessageDialog(frame, "please wait");
 
     }
@@ -234,7 +236,6 @@ public class GameModeGUI implements GameMode {
 
 
     private void askSpecialAction() {
-        isMyTurn = true;
         Object[] options = {"yes", "no"};
         int n = JOptionPane.showOptionDialog(santoriniWindow.getMainFrame(),
                 "Do you want to use your special ability?",
