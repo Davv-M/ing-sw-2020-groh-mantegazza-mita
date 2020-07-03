@@ -22,8 +22,6 @@ public class ClientConnectionHandler implements Runnable {
 
     /**
      * Send an ack to the client every 3 seconds
-     *
-     * @throws IOException if the client is unreachable
      */
     public void run() {
         try {

@@ -46,7 +46,7 @@ public class Client extends Observable implements Observer {
 
 
     /**
-     * When Client class receives a new protocol from the server this methods call </@printMessage()> or </displayBoard> to show the new update
+     * When Client class receives a new protocol from the server this methods call <code>printMessage</code> or <code>displayBoard</code> to show the new update
      */
     @Override
     public void update() {
@@ -64,6 +64,8 @@ public class Client extends Observable implements Observer {
             gameMode.updateCustomString();
         } else if (protocolRead == Protocol.CANT_MOVE || protocolRead == Protocol.CLIENT_LOST || protocolRead == Protocol.TOO_LATE) {
             endGame(protocolRead);
+        } else if(protocolRead == Protocol.NOTIFY_NICKNAME){
+            gameMode.setNickname(ServerHandler.getCustomMessageString());
         }
     }
 

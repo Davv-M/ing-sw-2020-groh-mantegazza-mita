@@ -31,9 +31,25 @@ public interface GameMode {
      */
     void displayBoard();
 
+    /**
+     * This method is used to save the string coming from the client
+     * @param dataRead is the string read by the client
+     */
     void setStringRead(String dataRead);
+
+    /**
+     * This method is used to comunicate the number of players
+     * @param numOfPlayers the number of players
+     */
 
     void setNumOfPlayers(int numOfPlayers);
 
     void setPlayersDivinities(Map<String, String> playersDivinities);
+
+    /**
+     * This method is used to set <code>nickname</code>
+     *
+     * @param nickname nickname
+     */
+    void setNickname(String nickname);
 }

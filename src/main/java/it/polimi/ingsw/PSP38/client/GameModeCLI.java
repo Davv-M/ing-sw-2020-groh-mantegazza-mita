@@ -115,7 +115,7 @@ public class GameModeCLI implements GameMode {
                 System.out.println("Select the cell where you want to build");
                 break;
             case WORKER_OPTIONAL_ABILITY:
-                //workerOptionalAbility();
+                workerOptionalAbility();
                 break;
             case ILLEGAL_ACTION:
                 System.out.println("Unknown worker action");
@@ -148,6 +148,7 @@ public class GameModeCLI implements GameMode {
     }
 
     private void workerOptionalAbility() {
+        System.out.println();
         switch (playersDivinities.get(nickname).toUpperCase()) {
             case "ARES":
                 System.out.println("Select the cell where you want to remove a tower block.");
@@ -196,15 +197,27 @@ public class GameModeCLI implements GameMode {
         BoardPrinter.printBoard(ServerHandler.readBoard());
     }
 
+    /**
+     * This method is used to save the string coming from the client
+     * @param dataRead is the string read by the client
+     */
     @Override
     public void setStringRead(String dataRead) {
     }
 
+    /**
+     * This method is used to comunicate the number of players
+     * @param numOfPlayers the number of players
+     */
     @Override
     public void setNumOfPlayers(int numOfPlayers) {
         System.out.println("There will be " + numOfPlayers + " players in the game.");
     }
 
+    /**
+     * This method is used to set the players nicknames associates to the chosen divinities
+     * @param playersDivinities the nicknames associates to the chosen divinities
+     */
     @Override
     public void setPlayersDivinities(Map<String, String> playersDivinities) {
         this.playersDivinities = playersDivinities;
@@ -212,5 +225,15 @@ public class GameModeCLI implements GameMode {
         for (String player : this.playersDivinities.keySet()) {
             System.out.println(player + " : " + this.playersDivinities.get(player));
         }
+    }
+
+    /**
+     * This method is used to set <code>nickname</code>
+     *
+     * @param nicknameRead nickname
+     */
+    @Override
+    public void setNickname(String nicknameRead) {
+        nickname = nicknameRead;
     }
 }

@@ -274,6 +274,16 @@ public class ClientHandler implements Observer, Runnable {
     }
 
     /**
+     * Void method used to notify the client the nickname chosen
+     */
+    public void notifyNickname() throws IOException {
+        synchronized (lock) {
+            output.writeObject(Protocol.NOTIFY_NICKNAME);
+            output.writeObject(nickname);
+        }
+    }
+
+    /**
      * Void method used to notify the client the number of players
      */
     public void notifyPlayersDivinities(Map<String, String> map) throws IOException {

@@ -28,6 +28,7 @@ public class GameModeGUI implements GameMode {
 
     /**
      * This method is used to invoke the GUI and create the main frame
+     *
      */
     public GameModeGUI() throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeAndWait(() -> {
@@ -433,8 +434,6 @@ public class GameModeGUI implements GameMode {
 
     /**
      * This method is used to update the next data that will be inputted onto the server
-     *
-     * @return the inputted string
      */
     @Override
     public String nextInput() {
@@ -509,6 +508,7 @@ public class GameModeGUI implements GameMode {
      *
      * @param nicknameRead nickname
      */
+    @Override
     public void setNickname(String nicknameRead) {
         nickname = nicknameRead;
     }
