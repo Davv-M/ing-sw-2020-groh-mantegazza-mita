@@ -536,7 +536,7 @@ public class Controller extends Observable {
      * @param selectedWorker
      * @param clientDivinty
      * @param action
-     * @return
+     * @return true if the worker can take the action
      */
     private boolean canTakeAction(Worker selectedWorker, DivinityCard clientDivinty, WorkerAction action) {
         for (int row = 0; row < Board.ROWS; ++row) {

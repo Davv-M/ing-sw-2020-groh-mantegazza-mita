@@ -11,6 +11,10 @@ public class GameModeCLI implements GameMode {
     private String customStringRead;
     private final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * This method is used to decode messages coming from the server
+     * @param m is the message coming from the server
+     */
     @Override
     public void decodeMessage(Message m) {
         switch (m) {
@@ -140,16 +144,26 @@ public class GameModeCLI implements GameMode {
         }
     }
 
+    /**
+     * This method is used to save a non - standard string coming from the server
+     */
     @Override
     public void updateCustomString() {
         customStringRead = Client.getCustomString();
     }
 
+    /**
+     * This method is used to update the next data that will be inputted onto the server
+     * @return the inputted string
+     */
     @Override
     public String nextInput() {
         return scanner.nextLine();
     }
 
+    /**
+     * This method is used to display the game board in the client
+     */
     @Override
     public void displayBoard() {
         BoardPrinter.printBoard(ServerHandler.readBoard());
