@@ -117,6 +117,7 @@ public class Controller extends Observable {
         if (hasCurrentPlayerLost) {
             game.setCurrentBoard(game.getCurrentBoard().withoutWorkers(game.getCurrentPlayerTurn().getColor()));
             game.removePlayer(game.getCurrentPlayerTurn());
+            displayAllClients();
             if (game.getCurrNumPlayers() == 1) {
                 game.setWinner(game.getCurrentPlayerTurn());
             }
