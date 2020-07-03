@@ -48,7 +48,7 @@ public class SantoriniWindow extends Observable {
                 String[] options = {"Yes", "No"};
                 int optionChosen = JOptionPane.showOptionDialog(mainFrame, "Quit Santorini?", "Closing",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-                if (optionChosen == JOptionPane.YES_OPTION){
+                if (optionChosen == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 }
             }

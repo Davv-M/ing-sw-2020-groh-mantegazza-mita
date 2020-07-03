@@ -43,7 +43,7 @@ public class ServerHandler extends Observable implements Observer, Runnable {
             Thread serverConnectionHandlerThread = new Thread(serverConnectionHandler);
             serverConnectionHandlerThread.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            serverLost();
         }
     }
 

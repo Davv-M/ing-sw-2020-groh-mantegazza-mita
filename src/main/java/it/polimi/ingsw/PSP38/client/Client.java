@@ -99,8 +99,9 @@ public class Client extends Observable implements Observer {
 
     /**
      * This method is used to take care of the connection from the client to the server
+     *
      * @param address is the server's IP address
-     * @param port is the server's port
+     * @param port    is the server's port
      */
     public static void connectionHandling(String address, int port) {
         try {
@@ -127,6 +128,7 @@ public class Client extends Observable implements Observer {
 
     /**
      * This method is used to handle situations in which a client is unable to continue the game
+     *
      * @param protocolExit is the protocol representing the situation of the interruption
      */
     public void endGame(Protocol protocolExit) {

@@ -95,11 +95,16 @@ public class StartPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == connectButton) {
             if (nickname.getText().isEmpty() || ipAddress.getText().isEmpty() || age.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Fill all text fields", "Login error ", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(gameModeGUI.getFrame(), "Fill all text fields", "Login error ", JOptionPane.WARNING_MESSAGE);
             } else {
-                gameModeGUI.setIP(ipAddress.getText());
-                gameModeGUI.setNickname(nickname.getText());
-                gameModeGUI.setAge(age.getText());
+                try{
+                    Integer.parseInt(age.getText());
+                    gameModeGUI.setIP(ipAddress.getText());
+                    gameModeGUI.setNickname(nickname.getText());
+                    gameModeGUI.setAge(age.getText());
+                }catch (NumberFormatException e1){
+                    JOptionPane.showMessageDialog(gameModeGUI.getFrame(),  "please insert an integer number for age", "Error", JOptionPane.WARNING_MESSAGE);
+                }
             }
         }
     }

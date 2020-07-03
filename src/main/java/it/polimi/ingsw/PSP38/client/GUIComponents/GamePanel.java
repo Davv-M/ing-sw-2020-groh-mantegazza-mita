@@ -61,6 +61,7 @@ public class GamePanel {
                 if (gameModeGUI.isMyTurn()) {
                     gameModeGUI.setColumnSelected(Integer.toString(CellX));
                     gameModeGUI.setRowSelected(Integer.toString(CellY));
+                    gameModeGUI.setCoordinateReady(true);
                 } else {
                     gameModeGUI.decodeMessage(Message.WAIT);
                 }

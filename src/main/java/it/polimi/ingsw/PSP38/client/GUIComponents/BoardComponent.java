@@ -41,7 +41,7 @@ public class BoardComponent extends JComponent {
                 for (int col = 0; col < columns; ++col) {
                     byte encodedCell = encodedCellIterator.next();
                     if (encodedCell != 0) {
-                        if(!boardImages.containsKey(encodedCell)){
+                        if (!boardImages.containsKey(encodedCell)) {
                             boardImages.put(encodedCell, new ImageIcon(getClass().getResource("/boardImages/" + encodedCell + ".png")));
                         }
                         Image cellImage = boardImages.get(encodedCell).getImage();

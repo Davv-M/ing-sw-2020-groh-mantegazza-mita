@@ -7,21 +7,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
-
 
 public class GameModeGUI implements GameMode {
     private int numOfPlayers = 0;
-    private final Queue<String> clientInputs = new LinkedList<>();
     private static String nickname = "anonymous";
     private static String age;
     private Map<String, String> playersDivinities = new HashMap<>();
     private JFrame frame;
     private String customStringRead;
     private SantoriniWindow santoriniWindow;
+    private volatile boolean isDataReady = false;
+    private volatile boolean isCoordinateReady = false;
     private String availableDivinities;
+    private String dataReadFromClient;
+    private static String columnSelected;
+    private static String rowSelected;
     private JPanel cardButtons;
     private boolean isMyTurn = false;
 
@@ -114,11 +115,20 @@ public class GameModeGUI implements GameMode {
             case ILLEGAL_ARGUMENT:
                 illegalArgument();
                 break;
+            case SET_CELL_COLUMN_COORD:
+                setCellColumnCoordinate();
+                break;
+            case SET_CELL_ROW_COORD:
+                setCellRowCoordinate();
+                break;
             case WORKER_MOVE:
                 workerMove();
                 break;
             case WORKER_BUILD:
                 workerBuild();
+                break;
+            case WORKER_NOT_YOURS:
+                workerNotYours();
                 break;
             case WORKER_OPTIONAL_ABILITY:
                 workerOptionalAbility();
@@ -126,20 +136,17 @@ public class GameModeGUI implements GameMode {
             case WAIT:
                 waitYourTurn();
                 break;
-            case CONNECTED_TO_SERVER:
-                //do nothing
-                break;
             case CLIENT_LOST:
-                clientLost();
+                unreachable("Your challenger lost connection, please restart app");
                 break;
             case CANT_MOVE:
                 cantMove();
                 break;
             case SERVER_LOST:
-                serverLost();
+                unreachable("Connection lost with server, please restart app");
                 break;
             case SERVER_UNREACHEABLE:
-                serverUnreacheable();
+                unreachable("Server currently unreacheable, please try later");
                 break;
             default:
                 break;
@@ -162,6 +169,10 @@ public class GameModeGUI implements GameMode {
         } else if (n == JOptionPane.NO_OPTION) {
             setStringRead("3");
         }
+        if (n == JOptionPane.CLOSED_OPTION) {
+            insertNumPlayer();
+        }
+
     }
 
     private void illegalString() {
@@ -171,13 +182,18 @@ public class GameModeGUI implements GameMode {
         JTextField text = new JTextField(10);
         panel.add(label);
         panel.add(text);
-        int selectedOption = JOptionPane.showOptionDialog(null, panel, "Error:", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
-        if(selectedOption == 0)
-        {
+        int selectedOption = JOptionPane.showOptionDialog(frame, panel, "Error:", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if (selectedOption == JOptionPane.YES_NO_OPTION) {
             setStringRead(text.getText());
+        }
+        if (selectedOption == JOptionPane.CLOSED_OPTION) {
+            illegalString();
         }
     }
 
+    private void workerNotYours() {
+        JOptionPane.showMessageDialog(frame, "This worker doesn't belong to you", "Worker:", JOptionPane.WARNING_MESSAGE);
+    }
 
 
     private void waitForNumPlayer() {
@@ -193,48 +209,19 @@ public class GameModeGUI implements GameMode {
         int n = JOptionPane.showOptionDialog(frame,
                 "The game is currently full, please try later",
                 "Game full",
-                JOptionPane.OK_OPTION,
+                JOptionPane.YES_NO_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
                 null,
                 options,
                 null);
-        if (n == JOptionPane.OK_OPTION) {
+        if (n == JOptionPane.YES_NO_OPTION || n == JOptionPane.CLOSED_OPTION) {
             System.exit(0);
         }
-    }
 
-    private void clientLost() {
-        Object[] options = {"OK"};
-        int n = JOptionPane.showOptionDialog(frame,
-                "Your challenger lost connection, please restart app",
-                "Challenger lost",
-                JOptionPane.OK_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                options,
-                null);
-        if (n == JOptionPane.OK_OPTION) {
-            System.exit(0);
-        }
     }
 
     private void cantMove() {
         JOptionPane.showMessageDialog(frame, "You can't move, You Lose!", "End Game", JOptionPane.WARNING_MESSAGE);
-    }
-
-    private void serverLost() {
-        Object[] options = {"OK"};
-        int n = JOptionPane.showOptionDialog(frame,
-                "Connection lost with server, please restart app ",
-                "Server Lost",
-                JOptionPane.OK_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                options,
-                null);
-        if (n == JOptionPane.OK_OPTION) {
-            System.exit(0);
-        }
     }
 
 
@@ -249,10 +236,12 @@ public class GameModeGUI implements GameMode {
         JTextField text = new JTextField(10);
         panel.add(label);
         panel.add(text);
-        int selectedOption = JOptionPane.showOptionDialog(null, panel, "Error:", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
-        if(selectedOption == 0)
-        {
+        int selectedOption = JOptionPane.showOptionDialog(null, panel, "Error:", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if (selectedOption == JOptionPane.YES_NO_OPTION) {
             setStringRead(text.getText());
+        }
+        if (selectedOption == JOptionPane.CLOSED_OPTION) {
+            illegalNickname();
         }
     }
 
@@ -266,6 +255,21 @@ public class GameModeGUI implements GameMode {
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
 
+    }
+
+    private void unreachable(String message) {
+        Object[] options = {"OK"};
+        int n = JOptionPane.showOptionDialog(frame,
+                message,
+                "error",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                null);
+        if (n == JOptionPane.YES_NO_OPTION || n == JOptionPane.CLOSED_OPTION) {
+            System.exit(0);
+        }
     }
 
     private void notYourTurn() {
@@ -321,6 +325,22 @@ public class GameModeGUI implements GameMode {
 
     }
 
+    public void setCellColumnCoordinate() {
+        while (!isCoordinateReady) {
+            Thread.onSpinWait();
+        }
+        setStringRead(columnSelected);
+
+    }
+
+    public void setCellRowCoordinate() {
+        while (!isCoordinateReady) {
+            Thread.onSpinWait();
+        }
+        setStringRead(rowSelected);
+        isCoordinateReady = false;
+    }
+
     private void displayAvailableDivinities() {
         availableDivinities = customStringRead;
         if (cardButtons != null) {
@@ -342,7 +362,7 @@ public class GameModeGUI implements GameMode {
     }
 
     private void unableToFinishTurn() {
-        System.out.println("You can't finish your turn. You lose.");
+        JOptionPane.showMessageDialog(frame, "You can't finish your turn. You lose.");
     }
 
     private void workerMove() {
@@ -392,20 +412,8 @@ public class GameModeGUI implements GameMode {
         } else if (n == JOptionPane.NO_OPTION) {
             setStringRead("no");
         }
-    }
-
-    private void serverUnreacheable() {
-        Object[] options = {"OK"};
-        int n = JOptionPane.showOptionDialog(frame,
-                "Server currently unreacheable, please try later",
-                "Connection error",
-                JOptionPane.OK_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                options,
-                null);
-        if (n == JOptionPane.OK_OPTION) {
-            System.exit(0);
+        if (n == JOptionPane.CLOSED_OPTION) {
+            setStringRead("no");
         }
     }
 
@@ -430,19 +438,23 @@ public class GameModeGUI implements GameMode {
      */
     @Override
     public String nextInput() {
-        while (clientInputs.isEmpty()) {
+        while (!isDataReady) {
             Thread.onSpinWait();
         }
-        return clientInputs.remove();
+        isDataReady = false;
+        return dataReadFromClient;
+
     }
 
     /**
      * This method is used to update the next data that will be inputted onto the server
      *
+     * @return the inputted string
      */
     @Override
     public void setStringRead(String dataRead) {
-        clientInputs.add(dataRead);
+        dataReadFromClient = dataRead;
+        isDataReady = true;
     }
 
     /**
@@ -511,6 +523,15 @@ public class GameModeGUI implements GameMode {
     }
 
     /**
+     * This method is used to set <code>isCoordinateReady</code> to <code>coordinateReady</code>
+     *
+     * @param coordinateReady coordinate ready
+     */
+    public void setCoordinateReady(boolean coordinateReady) {
+        isCoordinateReady = coordinateReady;
+    }
+
+    /**
      * This method is used to get <code>santoriniWindows</code>
      *
      * @return santoriniWindow
@@ -533,8 +554,8 @@ public class GameModeGUI implements GameMode {
      *
      * @param columnSelectedRead is the row selected
      */
-    public void setColumnSelected(String columnSelectedRead) {
-        clientInputs.add(columnSelectedRead);
+    public static void setColumnSelected(String columnSelectedRead) {
+        columnSelected = columnSelectedRead;
     }
 
     /**
@@ -543,8 +564,8 @@ public class GameModeGUI implements GameMode {
      * @param rowSelectedRead is the row selected
      */
 
-    public void setRowSelected(String rowSelectedRead) {
-        clientInputs.add(rowSelectedRead);
+    public static void setRowSelected(String rowSelectedRead) {
+        rowSelected = rowSelectedRead;
     }
 
 
