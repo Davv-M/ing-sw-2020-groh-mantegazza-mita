@@ -115,7 +115,7 @@ public class GameModeCLI implements GameMode {
                 System.out.println("Select the cell where you want to build");
                 break;
             case WORKER_OPTIONAL_ABILITY:
-                //workerOptionalAbility();
+                workerOptionalAbility();
                 break;
             case ILLEGAL_ACTION:
                 System.out.println("Unknown worker action");
@@ -148,6 +148,7 @@ public class GameModeCLI implements GameMode {
     }
 
     private void workerOptionalAbility() {
+        System.out.println();
         switch (playersDivinities.get(nickname).toUpperCase()) {
             case "ARES":
                 System.out.println("Select the cell where you want to remove a tower block.");
