@@ -20,12 +20,12 @@ public class Atlas extends DivinityCard implements OptionalAbility {
             WorkerAction.OPTIONAL_ABILITY);
 
     @Override
-    public Board optionalAbility(boolean buildDome, Worker worker, Cell destinationCell, Board currentBoard) {
+    public Board optionalAbility(boolean buildDome, Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) {
         if (buildDome) {
             checkBuild(worker, destinationCell, currentBoard);
             return currentBoard.withDome(destinationCell);
         } else {
-            return super.build(worker, destinationCell, currentBoard);
+            return super.build(worker, destinationCell, currentBoard, isSimulation);
         }
     }
 

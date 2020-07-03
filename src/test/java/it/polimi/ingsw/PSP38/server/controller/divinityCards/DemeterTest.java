@@ -24,7 +24,7 @@ public class DemeterTest {
     @Test
     public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -35,7 +35,7 @@ public class DemeterTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        demeter.move(worker, destinationCell, board);
+        demeter.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class DemeterTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        demeter.move(worker, destinationCell, board);
+        demeter.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class DemeterTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        demeter.move(worker, destinationCell, board);
+        demeter.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class DemeterTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        demeter.build(worker, destinationCell, board);
+        demeter.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,13 +109,13 @@ public class DemeterTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        demeter.build(worker, destinationCell, board);
+        demeter.build(worker, destinationCell, board, false);
     }
 
     @Test
     public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -126,7 +126,7 @@ public class DemeterTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        demeter.build(worker, destinationCell, board);
+        demeter.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class DemeterTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        demeter.move(worker, destinationCell, board);
+        demeter.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class DemeterTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        demeter.move(worker, destinationCell, board);
+        demeter.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class DemeterTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = demeter.move(worker, destinationCell, board);
+        board = demeter.move(worker, destinationCell, board, false);
         assertTrue(demeter.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class DemeterTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = demeter.move(worker, destinationCell, board);
+        board = demeter.move(worker, destinationCell, board, false);
         assertFalse(demeter.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -229,9 +229,9 @@ public class DemeterTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        board = demeter.build(worker, destinationCell, board);
+        board = demeter.build(worker, destinationCell, board, false);
 
-        demeter.optionalAction(worker, destinationCell, board);
+        demeter.optionalAction(worker, destinationCell, board, false);
     }
 
     @Test
@@ -245,28 +245,28 @@ public class DemeterTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        board = demeter.build(worker, destinationCell, board);
+        board = demeter.build(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
         destinationCell = new Cell(0, 0);
-        board = demeter.optionalAction(worker, destinationCell, board);
+        board = demeter.optionalAction(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
         destinationCell = new Cell(0, 1);
-        board = demeter.optionalAction(worker, destinationCell, board);
+        board = demeter.optionalAction(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
         destinationCell = new Cell(1, 0);
-        board = demeter.optionalAction(worker, destinationCell, board);
+        board = demeter.optionalAction(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
         destinationCell = new Cell(2, 0);
-        board = demeter.optionalAction(worker, destinationCell, board);
+        board = demeter.optionalAction(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
         destinationCell = new Cell(0, 2);
-        board = demeter.optionalAction(worker, destinationCell, board);
+        board = demeter.optionalAction(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
         destinationCell = new Cell(2, 1);
-        board = demeter.optionalAction(worker, destinationCell, board);
+        board = demeter.optionalAction(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
         destinationCell = new Cell(2, 2);
-        board = demeter.optionalAction(worker, destinationCell, board);
+        board = demeter.optionalAction(worker, destinationCell, board, false);
         assertEquals(1, board.heightOf(destinationCell));
     }
 

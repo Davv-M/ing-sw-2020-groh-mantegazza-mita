@@ -16,9 +16,9 @@ public class Athena extends DivinityCard {
     private boolean hasMovedUp = false;
 
     @Override
-    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
-        Board updatedBoard = super.move(worker, destinationCell, currentBoard);
-        hasMovedUp = updatedBoard.heightOf(destinationCell) > currentBoard.heightOf(worker.getPosition());
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
+        Board updatedBoard = super.move(worker, destinationCell, currentBoard, isSimulation);
+        hasMovedUp = isSimulation ? hasMovedUp : updatedBoard.heightOf(destinationCell) > currentBoard.heightOf(worker.getPosition());
         return updatedBoard;
     }
 

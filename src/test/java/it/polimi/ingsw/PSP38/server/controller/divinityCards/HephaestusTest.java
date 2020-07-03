@@ -24,7 +24,7 @@ public class HephaestusTest {
     @Test
     public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -35,7 +35,7 @@ public class HephaestusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        hephaestus.move(worker, destinationCell, board);
+        hephaestus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class HephaestusTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        hephaestus.move(worker, destinationCell, board);
+        hephaestus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class HephaestusTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        hephaestus.move(worker, destinationCell, board);
+        hephaestus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class HephaestusTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        hephaestus.build(worker, destinationCell, board);
+        hephaestus.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,13 +109,13 @@ public class HephaestusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hephaestus.build(worker, destinationCell, board);
+        hephaestus.build(worker, destinationCell, board, false);
     }
 
     @Test
     public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -126,7 +126,7 @@ public class HephaestusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        hephaestus.build(worker, destinationCell, board);
+        hephaestus.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class HephaestusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hephaestus.move(worker, destinationCell, board);
+        hephaestus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class HephaestusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        hephaestus.move(worker, destinationCell, board);
+        hephaestus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class HephaestusTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = hephaestus.move(worker, destinationCell, board);
+        board = hephaestus.move(worker, destinationCell, board, false);
         assertTrue(hephaestus.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class HephaestusTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = hephaestus.move(worker, destinationCell, board);
+        board = hephaestus.move(worker, destinationCell, board, false);
         assertFalse(hephaestus.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -229,9 +229,9 @@ public class HephaestusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        board = hephaestus.build(worker, destinationCell, board);
+        board = hephaestus.build(worker, destinationCell, board, false);
 
-        hephaestus.optionalAction(worker, new Cell(0,0), board);
+        hephaestus.optionalAction(worker, new Cell(0,0), board, false);
     }
 
     @Test
@@ -250,9 +250,9 @@ public class HephaestusTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        board = hephaestus.build(worker, destinationCell, board);
+        board = hephaestus.build(worker, destinationCell, board, false);
 
-        hephaestus.optionalAction(worker, destinationCell, board);
+        hephaestus.optionalAction(worker, destinationCell, board, false);
     }
 
     @Test
@@ -268,9 +268,9 @@ public class HephaestusTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        board = hephaestus.build(worker, destinationCell, board);
+        board = hephaestus.build(worker, destinationCell, board, false);
 
-        board = hephaestus.optionalAction(worker, destinationCell, board);
+        board = hephaestus.optionalAction(worker, destinationCell, board, false);
         assertEquals(3, board.heightOf(destinationCell));
     }
 

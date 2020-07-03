@@ -12,5 +12,5 @@ import it.polimi.ingsw.PSP38.server.model.Worker;
  */
 
 public interface OptionalAbility {
-    Board optionalAbility(boolean useAbility, Worker worker, Cell destinationCell, Board currentBoard);
+    Board optionalAbility(boolean useAbility, Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation);
 }

@@ -22,7 +22,7 @@ public class MinotaurTest {
     @Test
     public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -33,7 +33,7 @@ public class MinotaurTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        minotaur.move(worker, destinationCell, board);
+        minotaur.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class MinotaurTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        minotaur.move(worker, destinationCell, board);
+        minotaur.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class MinotaurTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        minotaur.move(worker, destinationCell, board);
+        minotaur.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class MinotaurTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        minotaur.build(worker, destinationCell, board);
+        minotaur.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -107,13 +107,13 @@ public class MinotaurTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        minotaur.build(worker, destinationCell, board);
+        minotaur.build(worker, destinationCell, board, false);
     }
 
     @Test
     public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -124,7 +124,7 @@ public class MinotaurTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        minotaur.build(worker, destinationCell, board);
+        minotaur.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class MinotaurTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        minotaur.move(worker, destinationCell, board);
+        minotaur.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -176,49 +176,49 @@ public class MinotaurTest {
         Board board = new Board(workers, towers, domes);
 
         Cell destinationCell = opponent1.getPosition();
-        Board boardTest = minotaur.move(worker, destinationCell, board);
+        Board boardTest = minotaur.move(worker, destinationCell, board, false);
         assertEquals(WorkerColor.BLUE, boardTest.workerAt(destinationCell).getColor());
         assertTrue(boardTest.hasWorkerAt(new Cell(0, 0)));
         assertEquals(WorkerColor.WHITE, boardTest.workerAt(new Cell(0, 0)).getColor());
 
         destinationCell = opponent2.getPosition();
-        boardTest = minotaur.move(worker, destinationCell, board);
+        boardTest = minotaur.move(worker, destinationCell, board, false);
         assertEquals(WorkerColor.BLUE, boardTest.workerAt(destinationCell).getColor());
         assertTrue(boardTest.hasWorkerAt(new Cell(0, 2)));
         assertEquals(WorkerColor.WHITE, boardTest.workerAt(new Cell(0, 2)).getColor());
 
         destinationCell = opponent3.getPosition();
-        boardTest = minotaur.move(worker, destinationCell, board);
+        boardTest = minotaur.move(worker, destinationCell, board, false);
         assertEquals(WorkerColor.BLUE, boardTest.workerAt(destinationCell).getColor());
         assertTrue(boardTest.hasWorkerAt(new Cell(0, 4)));
         assertEquals(WorkerColor.WHITE, boardTest.workerAt(new Cell(0, 4)).getColor());
 
         destinationCell = opponent4.getPosition();
-        boardTest = minotaur.move(worker, destinationCell, board);
+        boardTest = minotaur.move(worker, destinationCell, board, false);
         assertEquals(WorkerColor.BLUE, boardTest.workerAt(destinationCell).getColor());
         assertTrue(boardTest.hasWorkerAt(new Cell(2, 0)));
         assertEquals(WorkerColor.WHITE, boardTest.workerAt(new Cell(2, 0)).getColor());
 
         destinationCell = opponent5.getPosition();
-        boardTest = minotaur.move(worker, destinationCell, board);
+        boardTest = minotaur.move(worker, destinationCell, board, false);
         assertEquals(WorkerColor.BLUE, boardTest.workerAt(destinationCell).getColor());
         assertTrue(boardTest.hasWorkerAt(new Cell(2, 4)));
         assertEquals(WorkerColor.WHITE, boardTest.workerAt(new Cell(2, 4)).getColor());
 
         destinationCell = opponent6.getPosition();
-        boardTest = minotaur.move(worker, destinationCell, board);
+        boardTest = minotaur.move(worker, destinationCell, board, false);
         assertEquals(WorkerColor.BLUE, boardTest.workerAt(destinationCell).getColor());
         assertTrue(boardTest.hasWorkerAt(new Cell(4, 0)));
         assertEquals(WorkerColor.WHITE, boardTest.workerAt(new Cell(4, 0)).getColor());
 
         destinationCell = opponent7.getPosition();
-        boardTest = minotaur.move(worker, destinationCell, board);
+        boardTest = minotaur.move(worker, destinationCell, board, false);
         assertEquals(WorkerColor.BLUE, boardTest.workerAt(destinationCell).getColor());
         assertTrue(boardTest.hasWorkerAt(new Cell(4, 2)));
         assertEquals(WorkerColor.WHITE, boardTest.workerAt(new Cell(4, 2)).getColor());
 
         destinationCell = opponent8.getPosition();
-        boardTest = minotaur.move(worker, destinationCell, board);
+        boardTest = minotaur.move(worker, destinationCell, board, false);
         assertEquals(WorkerColor.BLUE, boardTest.workerAt(destinationCell).getColor());
         assertTrue(boardTest.hasWorkerAt(new Cell(4, 4)));
         assertEquals(WorkerColor.WHITE, boardTest.workerAt(new Cell(4, 4)).getColor());
@@ -243,7 +243,7 @@ public class MinotaurTest {
         Board board = new Board(workers, towers, domes);
 
         Cell destinationCell = opponent.getPosition();
-        minotaur.move(worker, destinationCell, board);
+        minotaur.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -265,7 +265,7 @@ public class MinotaurTest {
         Board board = new Board(workers, towers, domes);
 
         Cell destinationCell = opponent.getPosition();
-        minotaur.move(worker, destinationCell, board);
+        minotaur.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -285,7 +285,7 @@ public class MinotaurTest {
         Board board = new Board(workers, towers, domes);
 
         Cell destinationCell = opponent.getPosition();
-        minotaur.move(worker, destinationCell, board);
+        minotaur.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -302,7 +302,7 @@ public class MinotaurTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = minotaur.move(worker, destinationCell, board);
+        board = minotaur.move(worker, destinationCell, board, false);
         assertTrue(minotaur.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -320,7 +320,7 @@ public class MinotaurTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = minotaur.move(worker, destinationCell, board);
+        board = minotaur.move(worker, destinationCell, board, false);
         assertFalse(minotaur.isWinner(board, workerPosition, destinationCell));
     }
 

@@ -24,7 +24,7 @@ public class AthenaTest {
     @Test
     public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -35,7 +35,7 @@ public class AthenaTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        athena.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class AthenaTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        athena.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class AthenaTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        athena.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AthenaTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        athena.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,13 +109,13 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        athena.build(worker, destinationCell, board, false);
     }
 
     @Test
     public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -126,7 +126,7 @@ public class AthenaTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        athena.build(worker, destinationCell, board);
+        athena.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        athena.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class AthenaTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        athena.move(worker, destinationCell, board);
+        athena.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class AthenaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
+        board = athena.move(worker, destinationCell, board, false);
         assertTrue(athena.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class AthenaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
+        board = athena.move(worker, destinationCell, board, false);
         assertFalse(athena.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -224,7 +224,7 @@ public class AthenaTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = athena.move(worker, destinationCell, board);
+        board = athena.move(worker, destinationCell, board, false);
         athena.checkOpponentMove(WorkerAction.MOVE, worker2, new Cell(0, 0), board);
     }
 

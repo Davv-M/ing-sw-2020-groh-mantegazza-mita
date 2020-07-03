@@ -2,10 +2,12 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.client.GUIComponents.SantoriniWindow;
 import it.polimi.ingsw.PSP38.common.Message;
+import it.polimi.ingsw.PSP38.server.controller.divinityCards.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -15,6 +17,7 @@ public class GameModeGUI implements GameMode {
     private String dataReadFromClient;
     private static String nickname = "anonymous";
     private static String age;
+    private Map<String, String> playersDivinities = new HashMap<>();
     private JFrame frame;
     private String customStringRead;
     private SantoriniWindow santoriniWindow;
@@ -201,7 +204,6 @@ public class GameModeGUI implements GameMode {
 
     public void waitForFullGame() {
         notMyTurn();
-        System.out.println("Hold on, all the players will be ready in a few seconds");
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Hold on, all the players will be ready in a few seconds");
@@ -253,7 +255,25 @@ public class GameModeGUI implements GameMode {
     }
 
     private void workerOptionalAbility() {
-        santoriniWindow.getGamePanel().setMessage("Select the cell where you want to DAFARE");
+        switch (playersDivinities.get(nickname).toUpperCase()) {
+           case "ARES":
+               santoriniWindow.getGamePanel().setMessage("Select the cell where you want to remove a tower block.");
+               break;
+            case "ARTEMIS":
+                santoriniWindow.getGamePanel().setMessage("Select the cell where you want to move.");
+                break;
+            case "ATLAS":
+            case "DEMETER":
+            case "HEPHAESTUS":
+            case "HESTIA":
+            case "PROMETHEUS":
+                santoriniWindow.getGamePanel().setMessage("Select the cell where you want to build.");
+                break;
+            case "CHARON":
+                santoriniWindow.getGamePanel().setMessage("Select the worker you want to push on the other side.");
+                break;
+            default:
+        }
     }
 
 
@@ -294,7 +314,10 @@ public class GameModeGUI implements GameMode {
         JOptionPane.showMessageDialog(frame, customStringRead, "Illegal selection:", JOptionPane.WARNING_MESSAGE);
     }
 
-
+    /**
+     * This method is used to decode messages coming from the server
+     * @param m is the message coming from the server
+     */
     @Override
     public void decodeMessage(Message m) {
         switch (m) {
@@ -350,18 +373,6 @@ public class GameModeGUI implements GameMode {
             case WAIT_FOR_FULL_GAME:
                 waitForFullGame();
                 break;
-            case DIVINITY_CARD_NOT_EXISTS:
-                divinityCardNotExists();
-                break;
-            case DIVINITY_CARD_CHOSEN:
-                divinityCardChosen();
-                break;
-            case ILLEGAL_YES_OR_NO:
-                illegalYesOrNo();
-                break;
-            case ILLEGAL_DIVINITY:
-                illegalDivinity();
-                break;
             case DISPLAY_DIVINITY_MESSAGE:
                 displayDivinityMessage();
                 break;
@@ -389,9 +400,6 @@ public class GameModeGUI implements GameMode {
             case WORKER_OPTIONAL_ABILITY:
                 workerOptionalAbility();
                 break;
-            case ILLEGAL_ACTION:
-                illegalAction();
-                break;
             case WAIT:
                 waitYourTurn();
                 break;
@@ -411,19 +419,23 @@ public class GameModeGUI implements GameMode {
                 serverUnreacheable();
                 break;
             default:
-                System.out.println("Message not recognized\n");
-                System.out.println(m);
                 break;
         }
     }
 
-
+    /**
+     * This method is used to save a non - standard string coming from the server
+     */
     @Override
     public void updateCustomString() {
         customStringRead = Client.getCustomString();
 
     }
 
+    /**
+     * This method is used to update the next data that will be inputted onto the server
+     * @return the inputted string
+     */
     @Override
     public String nextInput() {
         while (!isDataReady) {
@@ -434,6 +446,10 @@ public class GameModeGUI implements GameMode {
 
     }
 
+    /**
+     * This method is used to update the next data that will be inputted onto the server
+     * @return the inputted string
+     */
     @Override
     public void setStringRead(String dataRead) {
         dataReadFromClient = dataRead;
@@ -447,7 +463,7 @@ public class GameModeGUI implements GameMode {
 
     @Override
     public void setPlayersDivinities(Map<String, String> playersDivinities) {
-        System.out.println(playersDivinities);
+        this.playersDivinities = playersDivinities;
         santoriniWindow.getGamePanel().paintPlayersDivinities(playersDivinities);
     }
 
@@ -455,7 +471,9 @@ public class GameModeGUI implements GameMode {
         return numOfPlayers;
     }
 
-
+    /**
+     * This method is used to display the game board in the client
+     */
     @Override
     public void displayBoard() {
         santoriniWindow.getGamePanel().getBoardComponent().setEncodedBoard(ServerHandler.readBoard());
@@ -493,26 +511,6 @@ public class GameModeGUI implements GameMode {
         rowSelected = rowSelectedRead;
     }
 
-
-    public void illegalYesOrNo() {
-        System.out.println("Please answer with either \"yes\" or \"no\"");
-    }
-
-    public void illegalDivinity() {
-        System.out.println("Illegal divinity card");
-    }
-
-    public void divinityCardNotExists() {
-        System.out.println("This divinity card doesn't exist. Please select a new one");
-    }
-
-    public void divinityCardChosen() {
-        System.out.println("This divinity card has already been chosen. Please select a new one");
-    }
-
-    private void illegalAction() {
-        System.out.println("Unknown worker action");
-    }
 
     private void myTurn() {
         santoriniWindow.getWaitingPanel().setVisibleHourglass(false);

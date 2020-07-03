@@ -19,12 +19,12 @@ public class Hestia extends DivinityCard implements OptionalAction {
     private static final List<WorkerAction> moveSequence = List.of(WorkerAction.MOVE, WorkerAction.BUILD, WorkerAction.OPTIONAL_ACTION);
 
     @Override
-    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) {
         if (destinationCell.isOnPerimeter()) {
             throw new IllegalArgumentException("You can't build on a perimeter cell");
         }
 
-        return super.build(worker, destinationCell, currentBoard);
+        return super.build(worker, destinationCell, currentBoard, isSimulation);
     }
 
     @Override

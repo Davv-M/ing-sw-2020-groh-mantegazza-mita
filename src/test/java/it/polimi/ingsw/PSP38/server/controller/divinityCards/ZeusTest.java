@@ -24,7 +24,7 @@ public class ZeusTest {
     @Test
     public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -35,7 +35,7 @@ public class ZeusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        zeus.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ZeusTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        zeus.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class ZeusTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        zeus.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ZeusTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        zeus.build(worker, destinationCell, board);
+        zeus.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,13 +109,13 @@ public class ZeusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        zeus.build(worker, destinationCell, board);
+        zeus.build(worker, destinationCell, board, false);
     }
 
     @Test
     public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -126,7 +126,7 @@ public class ZeusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        zeus.build(worker, destinationCell, board);
+        zeus.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class ZeusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        zeus.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class ZeusTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        zeus.move(worker, destinationCell, board);
+        zeus.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class ZeusTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = zeus.move(worker, destinationCell, board);
+        board = zeus.move(worker, destinationCell, board, false);
         assertTrue(zeus.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class ZeusTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = zeus.move(worker, destinationCell, board);
+        board = zeus.move(worker, destinationCell, board, false);
         assertFalse(zeus.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -213,7 +213,7 @@ public class ZeusTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        board = zeus.build(worker, workerPosition, board);
+        board = zeus.build(worker, workerPosition, board, false);
 
         assertEquals(1, board.heightOf(workerPosition));
     }
@@ -233,7 +233,7 @@ public class ZeusTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        zeus.build(worker, workerPosition, board);
+        zeus.build(worker, workerPosition, board, false);
     }
 
     @Test

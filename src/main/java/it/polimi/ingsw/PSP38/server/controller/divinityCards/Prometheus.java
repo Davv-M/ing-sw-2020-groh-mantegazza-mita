@@ -22,11 +22,11 @@ public class Prometheus extends DivinityCard implements OptionalAction {
     private boolean hasBuiltFirstMove = false;
 
     @Override
-    public Board move(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
+    public Board move(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) throws IllegalArgumentException {
         checkMove(worker, destinationCell, currentBoard);
         checkSameHeight(worker, destinationCell, currentBoard);
         Board updatedBoard = currentBoard.withoutWorker(worker).withWorker(worker.withPosition(destinationCell));
-        hasBuiltFirstMove = false;
+        hasBuiltFirstMove = isSimulation && hasBuiltFirstMove;
 
         return updatedBoard;
     }
@@ -38,9 +38,9 @@ public class Prometheus extends DivinityCard implements OptionalAction {
     }
 
     @Override
-    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard) {
-        Board updatedBoard = super.build(worker, destinationCell, currentBoard);
-        hasBuiltFirstMove = true;
+    public Board optionalAction(Worker worker, Cell destinationCell, Board currentBoard, boolean isSimulation) {
+        Board updatedBoard = super.build(worker, destinationCell, currentBoard, isSimulation);
+        hasBuiltFirstMove = !isSimulation || hasBuiltFirstMove;
         return updatedBoard;
     }
 

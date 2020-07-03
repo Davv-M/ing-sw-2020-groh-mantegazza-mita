@@ -114,7 +114,7 @@ public final class ArgumentChecker {
     public static void checkNeighbor(Worker worker, Cell destinationCell, Board currentBoard) throws IllegalArgumentException {
         Set<Cell> neighborCells = currentBoard.neighborsOf(worker.getPosition());
         if (!neighborCells.contains(destinationCell)) {
-            throw new IllegalArgumentException("This cell is too far away.");
+            throw new IllegalArgumentException("This cell is not a neighbor of the worker's cell.");
         }
     }
 

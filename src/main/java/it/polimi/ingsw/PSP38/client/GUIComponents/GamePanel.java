@@ -14,6 +14,9 @@ import java.util.Map;
 
 /**
  * This class contains the methods needed to take care of the game interface
+ * @author Maximilien Groh (10683107)
+ * @author Davide Mantegazza (10568661)
+ * @author Matteo Mita (10487862)
  */
 public class GamePanel {
     private GameModeGUI gameModeGUI;
@@ -41,6 +44,7 @@ public class GamePanel {
         mainGamePanel.add(createControlPanel(), BorderLayout.CENTER);
         return mainGamePanel;
     }
+
 
     public JPanel createBoardPanel() {
         JPanel boardPanel = new JPanel(new BorderLayout());

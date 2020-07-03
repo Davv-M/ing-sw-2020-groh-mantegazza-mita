@@ -24,7 +24,7 @@ public class CharonTest {
     @Test
     public void moveOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -35,7 +35,7 @@ public class CharonTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        charon.move(worker, destinationCell, board);
+        charon.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class CharonTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        charon.move(worker, destinationCell, board);
+        charon.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class CharonTest {
         workers.add(worker);
         towers.add(tower);
         Board board = new Board(workers, towers, domes);
-        charon.move(worker, destinationCell, board);
+        charon.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class CharonTest {
         workers.add(worker);
         domes.add(destinationCell);
         Board board = new Board(workers, towers, domes);
-        charon.build(worker, destinationCell, board);
+        charon.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -109,13 +109,13 @@ public class CharonTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        charon.build(worker, destinationCell, board);
+        charon.build(worker, destinationCell, board, false);
     }
 
     @Test
     public void buildOnCellNotNeighborThrowsException() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -126,7 +126,7 @@ public class CharonTest {
 
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        charon.build(worker, destinationCell, board);
+        charon.build(worker, destinationCell, board, false);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class CharonTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        charon.move(worker, destinationCell, board);
+        charon.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class CharonTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        charon.move(worker, destinationCell, board);
+        charon.move(worker, destinationCell, board, false);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class CharonTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = charon.move(worker, destinationCell, board);
+        board = charon.move(worker, destinationCell, board, false);
         assertTrue(charon.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -199,7 +199,7 @@ public class CharonTest {
         towers.add(tower);
         towers.add(tower2);
         Board board = new Board(workers, towers, domes);
-        board = charon.move(worker, destinationCell, board);
+        board = charon.move(worker, destinationCell, board, false);
         assertFalse(charon.isWinner(board, workerPosition, destinationCell));
     }
 
@@ -211,7 +211,7 @@ public class CharonTest {
     @Test
     public void optionalActionThrowsExceptionSelectedCellNotNeighbor() throws IllegalArgumentException{
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("This cell is too far away.");
+        expectedException.expectMessage("This cell is not a neighbor of the worker's cell.");
 
         HashSet<Worker> workers = new HashSet<>();
         HashSet<Tower> towers = new HashSet<>();
@@ -220,7 +220,7 @@ public class CharonTest {
         Worker worker = new Worker(WorkerColor.BLUE, new Cell(3, 3));
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        charon.optionalAction(worker, selectedCell, board);
+        charon.optionalAction(worker, selectedCell, board, false);
     }
 
     @Test
@@ -236,7 +236,7 @@ public class CharonTest {
         workers.add(worker);
         domes.add(selectedCell);
         Board board = new Board(workers, towers, domes);
-        charon.optionalAction(worker, selectedCell, board);
+        charon.optionalAction(worker, selectedCell, board, false);
     }
 
     @Test
@@ -253,7 +253,7 @@ public class CharonTest {
         workers.add(worker);
         workers.add(worker2);
         Board board = new Board(workers, towers, domes);
-        charon.optionalAction(worker, selectedCell, board);
+        charon.optionalAction(worker, selectedCell, board, false);
     }
 
     @Test
@@ -268,7 +268,7 @@ public class CharonTest {
         Worker worker = new Worker(WorkerColor.BLUE, new Cell(3, 3));
         workers.add(worker);
         Board board = new Board(workers, towers, domes);
-        charon.optionalAction(worker, selectedCell, board);
+        charon.optionalAction(worker, selectedCell, board, false);
     }
 
     @Test
@@ -285,7 +285,7 @@ public class CharonTest {
         workers.add(worker);
         workers.add(opponent);
         Board board = new Board(workers, towers, domes);
-        charon.optionalAction(worker, selectedCell, board);
+        charon.optionalAction(worker, selectedCell, board, false);
     }
 
     @Test
@@ -303,7 +303,7 @@ public class CharonTest {
         workers.add(opponent);
         domes.add(new Cell(3, 3));
         Board board = new Board(workers, towers, domes);
-        charon.optionalAction(worker, selectedCell, board);
+        charon.optionalAction(worker, selectedCell, board, false);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -319,7 +319,7 @@ public class CharonTest {
         workers.add(opponent);
         workers.add(otherOpponent);
         Board board = new Board(workers, towers, domes);
-        charon.optionalAction(worker, selectedCell, board);
+        charon.optionalAction(worker, selectedCell, board, false);
     }
 
     @Test

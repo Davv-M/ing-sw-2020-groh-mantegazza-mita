@@ -22,7 +22,7 @@ import java.util.function.Function;
  */
 
 public class ClientHandler implements Observer, Runnable {
-    private String nickname = "anonymous";
+    private String nickname = "";
     private int clientNum;
     private static final Controller controller = new Controller();
     private ObjectOutputStream output;
@@ -127,10 +127,11 @@ public class ClientHandler implements Observer, Runnable {
      * Method used to ask an integer value to the client
      *
      * @param checkInt method that verifies the validity of the int received
+     * @param message the message to send in case the value is not valid
      * @return the integer read
      * @throws IOException if the client is unreachable
      */
-    public int askInt(Function<Integer, Integer> checkInt) throws IOException {
+    public int askInt(Function<Integer, Integer> checkInt, Message message) throws IOException {
         int num;
         do {
             try {
@@ -146,7 +147,7 @@ public class ClientHandler implements Observer, Runnable {
                 return num;
             } catch (IllegalArgumentException e) {
                 notifyMessageString(e.getMessage());
-                notifyMessage(Message.ILLEGAL_INT);
+                notifyMessage(message);
                 isDataReady = false;
             }
         } while (true);
@@ -156,10 +157,11 @@ public class ClientHandler implements Observer, Runnable {
      * Method used to ask a String value to the client
      *
      * @param checkString method that verifies the validity of the string received
+     * @param message the message to send in case the string is invalid
      * @return the String read
      * @throws IOException if the client is unreachable
      */
-    public String askString(Function<String, String> checkString) throws IOException {
+    public String askString(Function<String, String> checkString, Message message) throws IOException {
         String string;
         do {
             try {
@@ -175,11 +177,10 @@ public class ClientHandler implements Observer, Runnable {
                 return string;
             } catch (IllegalArgumentException e) {
                 notifyMessageString(e.getMessage());
-                notifyMessage(Message.ILLEGAL_STRING);
+                notifyMessage(message);
                 isDataReady = false;
             }
         } while (true);
-
     }
 
     /**
