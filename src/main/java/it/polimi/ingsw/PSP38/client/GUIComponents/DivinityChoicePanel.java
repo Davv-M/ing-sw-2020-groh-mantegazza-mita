@@ -40,23 +40,7 @@ public class DivinityChoicePanel implements ActionListener {
         return mainDivinityPanel;
     }
 
-    /*  */
 
-    /**
-     * This method is used to create the title panel
-     *
-     * @return the title panel
-     *//*
-    public JPanel createTitlePanel() {
-        JPanel titlePanel = new JPanel();
-        title = new JLabel("");
-        title.setFont(new Font("font message", Font.BOLD, 30));
-        titlePanel.setBackground(SantoriniColor.white);
-        title.setForeground(SantoriniColor.blue);
-        titlePanel.add(title);
-        titlePanel.add(new HourglassPanel().createHourglassPanel());
-        return titlePanel;
-    }*/
     public JPanel createMessagePanel() {
         hourglassPanel = new HourglassPanel().createHourglassPanel();
         JPanel messagePanel = new JPanel(new FlowLayout());

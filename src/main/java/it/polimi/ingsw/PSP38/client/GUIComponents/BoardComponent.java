@@ -14,8 +14,8 @@ import java.util.Map;
  * @author Maximilien Groh (10683107)
  */
 public class BoardComponent extends JComponent {
-    private static final int PREFERRED_WIDTH = 615;
-    private static final int PREFERRED_HEIGHT = 615;
+    public static final int PREFERRED_WIDTH = 615;
+    public static final int PREFERRED_HEIGHT = 615;
     public static final int CELL_OFFSET_X = 8;
     public static final int CELL_OFFSET_Y = 8;
     private final Map<Byte, ImageIcon> boardImages = new HashMap<>();

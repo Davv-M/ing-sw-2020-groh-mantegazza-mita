@@ -7,13 +7,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 
 public class GameModeGUI implements GameMode {
     private int numOfPlayers = 0;
-    private volatile boolean isDataReady = false;
-    private String dataReadFromClient;
+    private final Queue<String> clientInputs = new LinkedList<>();
     private static String nickname = "anonymous";
     private static String age;
     private Map<String, String> playersDivinities = new HashMap<>();
@@ -23,9 +24,6 @@ public class GameModeGUI implements GameMode {
     private String availableDivinities;
     private JPanel cardButtons;
     private boolean isMyTurn = false;
-    private static String columnSelected;
-    private static String rowSelected;
-    private volatile boolean isCoordinateReady = false;
 
     /**
      * This method is used to invoke the GUI and create the main frame
@@ -83,12 +81,6 @@ public class GameModeGUI implements GameMode {
             case PLACE_A_WORKER:
                 placeAWorker();
                 break;
-            case SET_CELL_COLUMN_COORD:
-                setCellColumnCoordinate();
-                break;
-            case SET_CELL_ROW_COORD:
-                setCellRowCoordinate();
-                break;
             case YOU_WIN:
                 youWin();
                 break;
@@ -113,8 +105,6 @@ public class GameModeGUI implements GameMode {
                 displayAvailableDivinities();
                 break;
             case ILLEGAL_INT:
-                illegalInt();
-                break;
             case ILLEGAL_STRING:
                 illegalString();
                 break;
@@ -175,16 +165,19 @@ public class GameModeGUI implements GameMode {
     }
 
     private void illegalString() {
-        String newString;
-        newString = JOptionPane.showInputDialog(null, customStringRead, "Error:", JOptionPane.QUESTION_MESSAGE);
-        setStringRead(newString);
+        String[] options = {"OK"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel(customStringRead);
+        JTextField text = new JTextField(10);
+        panel.add(label);
+        panel.add(text);
+        int selectedOption = JOptionPane.showOptionDialog(null, panel, "Error:", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+        if(selectedOption == 0)
+        {
+            setStringRead(text.getText());
+        }
     }
 
-    private void illegalInt() {
-        String newStringInt;
-        newStringInt = JOptionPane.showInputDialog(null, customStringRead, "Error:", JOptionPane.QUESTION_MESSAGE);
-        setStringRead(newStringInt);
-    }
 
 
     private void waitForNumPlayer() {
@@ -250,10 +243,17 @@ public class GameModeGUI implements GameMode {
     }
 
     private void illegalNickname() {
-        String newNickname;
-        newNickname = JOptionPane.showInputDialog("This nickname is unavailable, please choose another one:");
-        nickname = newNickname;
-        setStringRead(newNickname);
+        String[] options = {"OK"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("This nickname is unavailable, please choose another one");
+        JTextField text = new JTextField(10);
+        panel.add(label);
+        panel.add(text);
+        int selectedOption = JOptionPane.showOptionDialog(null, panel, "Error:", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+        if(selectedOption == 0)
+        {
+            setStringRead(text.getText());
+        }
     }
 
     private void setAge() {
@@ -289,22 +289,6 @@ public class GameModeGUI implements GameMode {
         getSantoriniWindow().getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
         santoriniWindow.getGamePanel().setMessage("Place your worker number " + customStringRead);
 
-    }
-
-    public void setCellColumnCoordinate() {
-        while (!isCoordinateReady) {
-            Thread.onSpinWait();
-        }
-        setStringRead(columnSelected);
-
-    }
-
-    public void setCellRowCoordinate() {
-        while (!isCoordinateReady) {
-            Thread.onSpinWait();
-        }
-        setStringRead(rowSelected);
-        isCoordinateReady = false;
     }
 
     private void youWin() {
@@ -446,23 +430,19 @@ public class GameModeGUI implements GameMode {
      */
     @Override
     public String nextInput() {
-        while (!isDataReady) {
+        while (clientInputs.isEmpty()) {
             Thread.onSpinWait();
         }
-        isDataReady = false;
-        return dataReadFromClient;
-
+        return clientInputs.remove();
     }
 
     /**
      * This method is used to update the next data that will be inputted onto the server
      *
-     * @return the inputted string
      */
     @Override
     public void setStringRead(String dataRead) {
-        dataReadFromClient = dataRead;
-        isDataReady = true;
+        clientInputs.add(dataRead);
     }
 
     /**
@@ -540,15 +520,6 @@ public class GameModeGUI implements GameMode {
     }
 
     /**
-     * This method is used to set <code>isCoordinateReady</code> to <code>coordinateReady</code>
-     *
-     * @param coordinateReady coordinate ready
-     */
-    public void setCoordinateReady(boolean coordinateReady) {
-        isCoordinateReady = coordinateReady;
-    }
-
-    /**
      * Getter method of available divinities
      *
      * @return <code>availableDivinities</code>
@@ -562,8 +533,8 @@ public class GameModeGUI implements GameMode {
      *
      * @param columnSelectedRead is the row selected
      */
-    public static void setColumnSelected(String columnSelectedRead) {
-        columnSelected = columnSelectedRead;
+    public void setColumnSelected(String columnSelectedRead) {
+        clientInputs.add(columnSelectedRead);
     }
 
     /**
@@ -572,8 +543,8 @@ public class GameModeGUI implements GameMode {
      * @param rowSelectedRead is the row selected
      */
 
-    public static void setRowSelected(String rowSelectedRead) {
-        rowSelected = rowSelectedRead;
+    public void setRowSelected(String rowSelectedRead) {
+        clientInputs.add(rowSelectedRead);
     }
 
 

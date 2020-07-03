@@ -21,7 +21,6 @@ import java.util.Map;
  */
 public class GamePanel {
     private GameModeGUI gameModeGUI;
-    private JPanel mainGamePanel;
     private JPanel divinityInfoPanel;
     private JLabel messageLabel;
     private BoardComponent boardComponent;
@@ -37,7 +36,7 @@ public class GamePanel {
      */
     public JPanel createMainGamePanel(GameModeGUI gmg) {
         gameModeGUI = gmg;
-        mainGamePanel = new JPanel();
+        JPanel mainGamePanel = new JPanel();
         mainGamePanel.setLayout(new BorderLayout());
         mainGamePanel.setBackground(SantoriniColor.white);
         mainGamePanel.add(new LogoPanel().createImagePanel(SantoriniColor.white), BorderLayout.NORTH);
@@ -62,7 +61,6 @@ public class GamePanel {
                 if (gameModeGUI.isMyTurn()) {
                     gameModeGUI.setColumnSelected(Integer.toString(CellX));
                     gameModeGUI.setRowSelected(Integer.toString(CellY));
-                    gameModeGUI.setCoordinateReady(true);
                 } else {
                     gameModeGUI.decodeMessage(Message.WAIT);
                 }
@@ -79,7 +77,7 @@ public class GamePanel {
         hourglassPanel = new HourglassPanel().createHourglassPanel();
         JPanel messagePanel = new JPanel(new FlowLayout());
         messageLabel = new JLabel("");
-        messageLabel.setFont(new Font("font message", Font.BOLD, 30));
+        messageLabel.setFont(new Font("font message", Font.BOLD, 20));
         messageLabel.setForeground(SantoriniColor.blue);
         messagePanel.setBackground(SantoriniColor.white);
         messagePanel.add(messageLabel);
@@ -131,10 +129,10 @@ public class GamePanel {
             divinityImageScaled = divinityImage.getScaledInstance(200, -1, Image.SCALE_SMOOTH);
             JLabel divinityImageLabel = new JLabel(new ImageIcon(divinityImageScaled));
             JLabel divinityNicknameLabel = new JLabel(nickname.toUpperCase());
-            divinityNicknameLabel.setFont(new Font("font message", Font.BOLD, 30));
+            divinityNicknameLabel.setFont(new Font("font message", Font.BOLD, 20));
             divinityNicknameLabel.setForeground(SantoriniColor.blue);
             JLabel divinityNameLabel = new JLabel(divinity);
-            divinityNameLabel.setFont(new Font("font message", Font.BOLD, 20));
+            divinityNameLabel.setFont(new Font("font message", Font.BOLD, 15));
             divinityNameLabel.setForeground(SantoriniColor.lightBlue);
             divinityNicknameInfoPanel.add(divinityNicknameLabel, BorderLayout.NORTH);
             divinityNicknameInfoPanel.add(divinityNameLabel, BorderLayout.CENTER);

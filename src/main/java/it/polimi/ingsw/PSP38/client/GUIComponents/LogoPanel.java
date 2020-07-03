@@ -22,7 +22,7 @@ public class LogoPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        santoriniLogoScaled = santoriniLogo.getScaledInstance(400, -1, Image.SCALE_SMOOTH);
+        santoriniLogoScaled = santoriniLogo.getScaledInstance(200, -1, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(santoriniLogoScaled));
         imagePanel.add(logoLabel);
         return imagePanel;

@@ -2,12 +2,8 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.BytesForBoard;
 import it.polimi.ingsw.PSP38.common.WorkerColor;
-import it.polimi.ingsw.PSP38.server.model.Board;
-import it.polimi.ingsw.PSP38.server.model.Tower;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
