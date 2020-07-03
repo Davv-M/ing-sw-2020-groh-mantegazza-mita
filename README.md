@@ -3,7 +3,7 @@
 ## Componenti del gruppo
 * Maximilien Groh (10683107)
 * Davide Mantegazza (10568661)
-* Matteo  (10487862)
+* Matteo Mita (10487862)
 
 ## Funzionalità implementate
 - Regole complete
