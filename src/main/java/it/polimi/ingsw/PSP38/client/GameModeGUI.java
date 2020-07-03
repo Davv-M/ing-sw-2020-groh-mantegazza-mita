@@ -202,7 +202,7 @@ public class GameModeGUI implements GameMode {
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Please wait for the first player to select the number of players.");
-
+        santoriniWindow.getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     private void gameFull() {
@@ -255,7 +255,7 @@ public class GameModeGUI implements GameMode {
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Please wait for " + customStringRead + " to choose the divinity cards that will be used in this game");
-
+        santoriniWindow.getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     private void unreachable(String message) {
@@ -311,7 +311,7 @@ public class GameModeGUI implements GameMode {
         CardLayout cl = (CardLayout) (getSantoriniWindow().getCardHolder().getLayout());
         cl.show(getSantoriniWindow().getCardHolder(), "waiting");
         santoriniWindow.getWaitingPanel().setMessage("Hold on, all the players will be ready in a few seconds");
-
+        santoriniWindow.getMainFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
 
@@ -326,6 +326,9 @@ public class GameModeGUI implements GameMode {
 
     }
 
+    /**
+     * This method is used to set the string read, to the selected column coordinates
+     */
     public void setCellColumnCoordinate() {
         while (!isCoordinateReady) {
             Thread.onSpinWait();
@@ -334,6 +337,9 @@ public class GameModeGUI implements GameMode {
 
     }
 
+    /**
+     * This method is used to set the string read, to the selected row coordinates
+     */
     public void setCellRowCoordinate() {
         while (!isCoordinateReady) {
             Thread.onSpinWait();
