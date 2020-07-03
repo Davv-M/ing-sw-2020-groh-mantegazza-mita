@@ -448,7 +448,6 @@ public class GameModeGUI implements GameMode {
     /**
      * This method is used to update the next data that will be inputted onto the server
      *
-     * @return the inputted string
      */
     @Override
     public void setStringRead(String dataRead) {
