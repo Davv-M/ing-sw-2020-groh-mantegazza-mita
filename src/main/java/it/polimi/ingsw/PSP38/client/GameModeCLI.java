@@ -196,15 +196,27 @@ public class GameModeCLI implements GameMode {
         BoardPrinter.printBoard(ServerHandler.readBoard());
     }
 
+    /**
+     * This method is used to save the string coming from the client
+     * @param dataRead is the string read by the client
+     */
     @Override
     public void setStringRead(String dataRead) {
     }
 
+    /**
+     * This method is used to comunicate the number of players
+     * @param numOfPlayers
+     */
     @Override
     public void setNumOfPlayers(int numOfPlayers) {
         System.out.println("There will be " + numOfPlayers + " players in the game.");
     }
 
+    /**
+     * This method is used to print out the chosen divinities
+     * @param playersDivinities
+     */
     @Override
     public void setPlayersDivinities(Map<String, String> playersDivinities) {
         this.playersDivinities = playersDivinities;

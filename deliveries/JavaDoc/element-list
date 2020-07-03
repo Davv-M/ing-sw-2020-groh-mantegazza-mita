@@ -1,0 +1,8 @@
+it.polimi.ingsw.PSP38.client
+it.polimi.ingsw.PSP38.client.GUIComponents
+it.polimi.ingsw.PSP38.common
+it.polimi.ingsw.PSP38.common.utilities
+it.polimi.ingsw.PSP38.server.controller
+it.polimi.ingsw.PSP38.server.controller.divinityCards
+it.polimi.ingsw.PSP38.server.model
+it.polimi.ingsw.PSP38.server.virtualView

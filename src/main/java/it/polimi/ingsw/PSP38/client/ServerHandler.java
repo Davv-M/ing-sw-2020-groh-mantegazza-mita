@@ -147,9 +147,7 @@ public class ServerHandler extends Observable implements Observer, Runnable {
         customMessageString = (String) input.readObject();
     }
 
-    /**
-     *
-     */
+
     public static String getCustomMessageString() {
         return customMessageString;
     }
@@ -223,7 +221,7 @@ public class ServerHandler extends Observable implements Observer, Runnable {
     }
 
     /**
-     * If required write the new client input to the server by using </writeString()> or </writeInt()>
+     * If required write the new client input to the server by using <code>writeString</code> or <code>writeInt</code>
      */
     @Override
     public void update() {

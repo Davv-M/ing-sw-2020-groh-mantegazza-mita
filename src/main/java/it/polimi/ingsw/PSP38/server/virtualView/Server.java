@@ -23,6 +23,7 @@ public class Server {
     /**
      * Main method of the server side of Santorini that supervises the creation of a thread for each client connected to
      * the server
+     * @param args
      */
     public static void main(String[] args) {
         ServerSocket serverSocket;
@@ -84,8 +85,8 @@ public class Server {
     }
 
     /**
-     * Void method used to decrement <code>ClientNum<code> for all clients who have
-     * <code>ClientNum<code> higher than <code>clientLostNum</code>
+     * Void method used to decrement <code>ClientNum</code> for all clients who have
+     * <code>ClientNum</code> higher than <code>clientLostNum</code>
      *
      * @param clientLostNum ClientNum of client that lost connection
      */

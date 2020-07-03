@@ -31,6 +31,10 @@ public interface GameMode {
      */
     void displayBoard();
 
+    /**
+     * This method is used to save the string coming from the client
+     * @param dataRead is the string read by the client
+     */
     void setStringRead(String dataRead);
 
     void setNumOfPlayers(int numOfPlayers);
