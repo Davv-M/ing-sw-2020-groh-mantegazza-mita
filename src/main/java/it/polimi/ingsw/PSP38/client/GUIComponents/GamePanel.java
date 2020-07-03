@@ -14,6 +14,7 @@ import java.util.Map;
 
 /**
  * This class contains the methods needed to take care of the game interface
+ *
  * @author Maximilien Groh (10683107)
  * @author Davide Mantegazza (10568661)
  * @author Matteo Mita (10487862)
@@ -120,8 +121,9 @@ public class GamePanel {
             Image divinityImage = null;
             Image divinityImageScaled;
             String nickname = playerIterator.next();
+            String divinity = playersDivinities.get(nickname);
             try {
-                divinityImage = ImageIO.read(getClass().getResource("/divinities/" + playersDivinities.get(nickname)
+                divinityImage = ImageIO.read(getClass().getResource("/divinities/" + divinity
                         .toLowerCase() + ".png"));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -131,16 +133,16 @@ public class GamePanel {
             JLabel divinityNicknameLabel = new JLabel(nickname.toUpperCase());
             divinityNicknameLabel.setFont(new Font("font message", Font.BOLD, 30));
             divinityNicknameLabel.setForeground(SantoriniColor.blue);
+            JLabel divinityNameLabel = new JLabel(divinity);
+            divinityNameLabel.setFont(new Font("font message", Font.BOLD, 20));
+            divinityNameLabel.setForeground(SantoriniColor.lightBlue);
             divinityNicknameInfoPanel.add(divinityNicknameLabel, BorderLayout.NORTH);
-            divinityNicknameInfoPanel.add(divinityImageLabel, BorderLayout.CENTER);
+            divinityNicknameInfoPanel.add(divinityNameLabel, BorderLayout.CENTER);
+            divinityNicknameInfoPanel.add(divinityImageLabel, BorderLayout.SOUTH);
             divinityInfoPanel.add(divinityNicknameInfoPanel);
-            divinityNicknameInfoPanel.repaint();
-            divinityImageLabel.repaint();
-            divinityImageLabel.repaint();
 
         }
         divinityInfoPanel.repaint();
-        mainGamePanel.repaint();
     }
 
     public BoardComponent getBoardComponent() {

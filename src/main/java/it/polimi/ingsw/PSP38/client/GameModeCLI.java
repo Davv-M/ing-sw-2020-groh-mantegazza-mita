@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP38.client;
 
 import it.polimi.ingsw.PSP38.common.Message;
 
-import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -10,9 +10,12 @@ import java.util.Scanner;
 public class GameModeCLI implements GameMode {
     private String customStringRead;
     private final Scanner scanner = new Scanner(System.in);
+    private Map<String, String> playersDivinities = new HashMap<>();
+    private static String nickname = "anonymous";
 
     /**
      * This method is used to decode messages coming from the server
+     *
      * @param m is the message coming from the server
      */
     @Override
@@ -112,7 +115,7 @@ public class GameModeCLI implements GameMode {
                 System.out.println("Select the cell where you want to build");
                 break;
             case WORKER_OPTIONAL_ABILITY:
-                System.out.println("Select the cell where you want to DAFARE");
+                //workerOptionalAbility();
                 break;
             case ILLEGAL_ACTION:
                 System.out.println("Unknown worker action");
@@ -144,6 +147,29 @@ public class GameModeCLI implements GameMode {
         }
     }
 
+    private void workerOptionalAbility() {
+        switch (playersDivinities.get(nickname).toUpperCase()) {
+            case "ARES":
+                System.out.println("Select the cell where you want to remove a tower block.");
+                break;
+            case "ARTEMIS":
+                System.out.println("Select the cell where you want to move.");
+                break;
+            case "ATLAS":
+            case "DEMETER":
+            case "HEPHAESTUS":
+            case "HESTIA":
+            case "PROMETHEUS":
+                System.out.println("Select the cell where you want to build.");
+                break;
+            case "CHARON":
+                System.out.println("Select the worker you want to push on the other side.");
+                break;
+            default:
+        }
+    }
+
+
     /**
      * This method is used to save a non - standard string coming from the server
      */
@@ -154,6 +180,7 @@ public class GameModeCLI implements GameMode {
 
     /**
      * This method is used to update the next data that will be inputted onto the server
+     *
      * @return the inputted string
      */
     @Override
@@ -171,7 +198,6 @@ public class GameModeCLI implements GameMode {
 
     @Override
     public void setStringRead(String dataRead) {
-
     }
 
     @Override
@@ -181,9 +207,10 @@ public class GameModeCLI implements GameMode {
 
     @Override
     public void setPlayersDivinities(Map<String, String> playersDivinities) {
+        this.playersDivinities = playersDivinities;
         System.out.println("These are the chosen divinities :");
-        for (String player : playersDivinities.keySet()) {
-            System.out.println(player + " : " + playersDivinities.get(player));
+        for (String player : this.playersDivinities.keySet()) {
+            System.out.println(player + " : " + this.playersDivinities.get(player));
         }
     }
 }
