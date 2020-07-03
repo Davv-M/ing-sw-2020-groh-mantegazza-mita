@@ -496,6 +496,7 @@ public class GameModeGUI implements GameMode {
      *
      * @param nicknameRead nickname
      */
+    @Override
     public void setNickname(String nicknameRead) {
         nickname = nicknameRead;
     }

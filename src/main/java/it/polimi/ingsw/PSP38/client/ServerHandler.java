@@ -25,6 +25,7 @@ public class ServerHandler extends Observable implements Observer, Runnable {
     private static String customMessageString;
     private static List<Byte> board;
     private static int numOfPlayers = 0;
+    private static String nickname;
     private static Map<String, String> playersDivinities = null;
     private static final Object lock = new Object();
 
@@ -80,6 +81,12 @@ public class ServerHandler extends Observable implements Observer, Runnable {
                     case NOTIFY_NUM_PLAYERS: {
                         protocolRead = Protocol.NOTIFY_NUM_PLAYERS;
                         numOfPlayers = input.readInt();
+                        notifyClient();
+                        break;
+                    }
+                    case NOTIFY_NICKNAME: {
+                        protocolRead = Protocol.NOTIFY_NICKNAME;
+                        nickname = (String) input.readObject();
                         notifyClient();
                         break;
                     }

@@ -206,7 +206,7 @@ public class GameModeCLI implements GameMode {
 
     /**
      * This method is used to comunicate the number of players
-     * @param numOfPlayers
+     * @param numOfPlayers the number of players
      */
     @Override
     public void setNumOfPlayers(int numOfPlayers) {
@@ -214,8 +214,8 @@ public class GameModeCLI implements GameMode {
     }
 
     /**
-     * This method is used to print out the chosen divinities
-     * @param playersDivinities
+     * This method is used to set the players nicknames associates to the chosen divinities
+     * @param playersDivinities the nicknames associates to the chosen divinities
      */
     @Override
     public void setPlayersDivinities(Map<String, String> playersDivinities) {
@@ -224,5 +224,15 @@ public class GameModeCLI implements GameMode {
         for (String player : this.playersDivinities.keySet()) {
             System.out.println(player + " : " + this.playersDivinities.get(player));
         }
+    }
+
+    /**
+     * This method is used to set <code>nickname</code>
+     *
+     * @param nicknameRead nickname
+     */
+    @Override
+    public void setNickname(String nicknameRead) {
+        nickname = nicknameRead;
     }
 }
